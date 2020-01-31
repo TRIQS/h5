@@ -23,7 +23,7 @@ namespace h5 {
 
   // ------------------------------------------------------------------
 
-  void h5_write(group g, std::string const &name, std::string const &value, bool force_utf8 = false) {
+  void h5_write(group g, std::string const &name, std::string const &value, bool force_utf8) {
 
     datatype dt     = force_utf8 ? str_datatype(value.size()+1,true) : str_datatype(value);
     dataspace space = H5Screate(H5S_SCALAR);
@@ -37,7 +37,7 @@ namespace h5 {
 
   // ------------------------------------------------------------------
 
-  void h5_write_attribute(hid_t id, std::string const &name, std::string const &value, bool force_utf8 = false) {
+  void h5_write_attribute(hid_t id, std::string const &name, std::string const &value, bool force_utf8) {
 
     datatype dt     = force_utf8 ? str_datatype(value.size()+1,true) : str_datatype(value);
     dataspace space = H5Screate(H5S_SCALAR);
