@@ -7,29 +7,25 @@
 
 namespace h5 {
 
-  static datatype str_datatype(long size, bool is_utf8 = false) {
+  static datatype str_datatype(long size) {
     datatype dt = H5Tcopy(H5T_C_S1);
     auto err    = H5Tset_size(dt, size);
-    if (is_utf8) H5Tset_cset(dt, H5T_CSET_UTF8);
+    H5Tset_cset(dt, H5T_CSET_UTF8); // Always use UTF8 encoding
     if (err < 0) throw std::runtime_error("Internal error in H5Tset_size");
     return dt;
   }
 
   static datatype str_datatype(std::string const &s) {
-    auto is_nonascii = [](char c) { return static_cast<unsigned char>(c) > 127; };
-    bool is_utf8 = std::any_of(begin(s), end(s), is_nonascii);
-    return str_datatype(s.size() + 1, is_utf8);
+    return str_datatype(s.size() + 1);
   }
 
   // ------------------------------------------------------------------
 
-  void h5_write(group g, std::string const &name, std::string const &value, bool force_utf8) {
+  void h5_write(group g, std::string const &name, std::string const &value) {
 
-    datatype dt     = force_utf8 ? str_datatype(value.size()+1,true) : str_datatype(value);
+    datatype dt     = str_datatype(value);
     dataspace space = H5Screate(H5S_SCALAR);
-
-    // FIXME : remove create_dataset
-    dataset ds = g.create_dataset(name, dt, space);
+    dataset ds      = g.create_dataset(name, dt, space);
 
     auto err = H5Dwrite(ds, dt, H5S_ALL, H5S_ALL, H5P_DEFAULT, (void *)(value.c_str()));
     if (err < 0) throw std::runtime_error("Error writing the string named" + name + " in the group" + g.name());
@@ -37,9 +33,9 @@ namespace h5 {
 
   // ------------------------------------------------------------------
 
-  void h5_write_attribute(hid_t id, std::string const &name, std::string const &value, bool force_utf8) {
+  void h5_write_attribute(hid_t id, std::string const &name, std::string const &value) {
 
-    datatype dt     = force_utf8 ? str_datatype(value.size()+1,true) : str_datatype(value);
+    datatype dt     = str_datatype(value);
     dataspace space = H5Screate(H5S_SCALAR);
 
     attribute attr = H5Acreate2(id, name.c_str(), dt, space, H5P_DEFAULT, H5P_DEFAULT);

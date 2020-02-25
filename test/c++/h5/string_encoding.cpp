@@ -10,26 +10,31 @@ TEST(H5, Encoding) {
   std::string utf8_str  = "Price: 10 €";
 
   {
-    h5::file file("encoding.h5", 'w');
+    h5::file file("string.h5", 'w');
 
-    // Store ASCII
+    // Store ASCII (internally uses UTF8 encoding)
     h5_write(file, "ASCII", ascii_str);
     h5_write_attribute(file, "ASCII_Attr", ascii_str);
 
     // Store UTF8
     h5_write(file, "UTF8", utf8_str);
     h5_write_attribute(file, "UTF8_Attr", utf8_str);
-
-    // Store ASCII string as UTF8
-    bool force_utf8 = true;
-    h5_write(file, "ASCII_as_UTF8", utf8_str,force_utf8);
-    h5_write_attribute(file, "ASCII_as_UTF8_Attr", utf8_str,force_utf8);
   }
 
   {
-    h5::file file("encoding.h5", 'r');
+    h5::file file("ascii.ref.h5", 'r');
+    // Read ASCII stored with H5T_CSET_ASCII
+    std::string ascii_str_read = "";
+    h5_read(file, "ASCII", ascii_str_read);
+    EXPECT_EQ(ascii_str, ascii_str_read);
+    h5_read_attribute(file, "ASCII_Attr", ascii_str_read);
+    EXPECT_EQ(ascii_str, ascii_str_read);
+  }
 
-    // Read ASCII
+  {
+    h5::file file("string.h5", 'r');
+
+    // Read ASCII stored with UTF8 encoding
     std::string ascii_str_read = "";
     h5_read(file, "ASCII", ascii_str_read);
     EXPECT_EQ(ascii_str, ascii_str_read);
@@ -42,12 +47,5 @@ TEST(H5, Encoding) {
     EXPECT_EQ(utf8_str, utf8_str_read);
     h5_read_attribute(file, "UTF8_Attr", utf8_str_read);
     EXPECT_EQ(utf8_str, utf8_str_read);
-
-    // Read ASCII as UTF8
-    std::string au_str_read = "";
-    h5_read(file, "ASCII_as_UTF8", au_str_read);
-    EXPECT_EQ(ascii_str, au_str_read);
-    h5_read_attribute(file, "ASCII_as_UTF8_Attr", au_str_read);
-    EXPECT_EQ(ascii_str, au_str_read);
   }
 }
