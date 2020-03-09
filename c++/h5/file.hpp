@@ -12,6 +12,8 @@ namespace h5 {
   class file : public h5_object {
 
     public:
+    file() = default; // for python converter only
+
     /**
      * Open the file
      *
@@ -40,9 +42,6 @@ namespace h5 {
      * NB : invalidates all groups currently open on this file
      */
     void close();
-
-    protected:
-    file() = default;
   };
 
   /**
