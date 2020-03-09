@@ -98,4 +98,10 @@ namespace h5 {
   // A function to get the name of a datatype in clear (for error messages)
   std::string get_name_of_h5_type(datatype ty);
 
+  // Get hdf5 type of a dataset
+  hid_t get_hdf5_type(dataset);
+
+  // Check equality of datatypes
+  bool hdf5_type_equal(datatype, datatype);
+
 } // namespace h5
