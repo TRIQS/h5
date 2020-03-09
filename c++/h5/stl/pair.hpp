@@ -36,7 +36,7 @@ namespace h5 {
   template <typename T1, typename T2>
   void h5_write(group f, std::string const &name, std::pair<T1, T2> const &p) {
     auto gr = f.create_group(name);
-    gr.write_hdf5_format(p);
+    write_hdf5_format(gr, p);
     h5_write(gr, "0", p.first);
     h5_write(gr, "1", p.second);
   }
