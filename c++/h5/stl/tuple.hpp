@@ -31,8 +31,8 @@ namespace h5 {
   template <typename... T>
   void h5_write(group f, std::string const &name, std::tuple<T...> const &tpl) {
     auto gr = f.create_group(name);
-    gr.write_hdf5_format(tpl);
-    h5_write_tuple_impl(gr, name, tpl, std::index_sequence_for<T...>{});
+    write_hdf5_format(gr, tpl);
+    details::h5_write_tuple_impl(gr, name, tpl, std::index_sequence_for<T...>{});
   }
 
   /**
@@ -41,6 +41,6 @@ namespace h5 {
   template <typename... T>
   void h5_read(group f, std::string const &name, std::tuple<T...> &tpl) {
     auto gr = f.open_group(name);
-    h5_read_tuple_impl(gr, name, tpl, std::index_sequence_for<T...>{});
+    details::h5_read_tuple_impl(gr, name, tpl, std::index_sequence_for<T...>{});
   }
 } // namespace h5

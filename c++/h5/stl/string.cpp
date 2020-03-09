@@ -15,9 +15,7 @@ namespace h5 {
     return dt;
   }
 
-  static datatype str_datatype(std::string const &s) {
-    return str_datatype(s.size() + 1);
-  }
+  static datatype str_datatype(std::string const &s) { return str_datatype(s.size() + 1); }
 
   // ------------------------------------------------------------------
 
@@ -48,9 +46,9 @@ namespace h5 {
   // -------------------- Read ----------------------------------------------
 
   void h5_read(group g, std::string const &name, std::string &value) {
-    dataset ds            = g.open_dataset(name);
-    h5::dataspace d_space = H5Dget_space(ds);
-    int rank              = H5Sget_simple_extent_ndims(d_space);
+    dataset ds        = g.open_dataset(name);
+    dataspace d_space = H5Dget_space(ds);
+    int rank          = H5Sget_simple_extent_ndims(d_space);
     if (rank != 0) throw std::runtime_error("Reading a string and got rank !=0");
     size_t size = H5Dget_storage_size(ds);
 
@@ -94,9 +92,7 @@ namespace h5 {
 
   // -------------------------------------------------------------------
   // the string datatype
-  datatype char_buf::dtype() const {
-    return str_datatype(lengths.back());
-  }
+  datatype char_buf::dtype() const { return str_datatype(lengths.back()); }
 
   // the dataspace (without last dim, which is the string).
   dataspace char_buf::dspace() const {
@@ -111,7 +107,7 @@ namespace h5 {
     auto dt     = cb.dtype();
     auto dspace = cb.dspace();
 
-    h5::dataset ds = g.create_dataset(name, dt, dspace);
+    dataset ds = g.create_dataset(name, dt, dspace);
 
     auto err = H5Dwrite(ds, dt, dspace, H5S_ALL, H5P_DEFAULT, (void *)cb.buffer.data());
     if (err < 0) throw make_runtime_error("Error writing the vector<string> ", name, " in the group", g.name());
@@ -133,9 +129,9 @@ namespace h5 {
   // -----------  READ  ------------
 
   void h5_read(group g, std::string const &name, char_buf &_cb) {
-    dataset ds            = g.open_dataset(name);
-    h5::dataspace d_space = H5Dget_space(ds);
-    datatype ty           = H5Dget_type(ds);
+    dataset ds        = g.open_dataset(name);
+    dataspace d_space = H5Dget_space(ds);
+    datatype ty       = H5Dget_type(ds);
 
     char_buf cb_out;
 
