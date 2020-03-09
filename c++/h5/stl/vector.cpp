@@ -75,7 +75,6 @@ namespace h5 {
     v.resize(cb.lengths[0]);
     auto inner_vec_size = cb.lengths[1];
     auto len_string     = cb.lengths[2];
-
     long k = 0;
     for (auto &v_inner : v) {
       for (int j = 0; j < inner_vec_size; ++j, ++k) {
@@ -86,34 +85,14 @@ namespace h5 {
     }
   }
 
-  // -----------   WRITE  ------------
-
-  //  void h5_write(group g, std::string const &name, std::vector<std::string> const &v) { return h5_write(g, name, to_char_buf(v)); }
-  //  void h5_write(group g, std::string const &name, std::vector<std::vector<std::string>> const &v) { return h5_write(g, name, to_char_buf(v)); }
-
   // -----------   WRITE  ATTRIBUTE ------------
 
   void h5_write_attribute(hid_t id, std::string const &name, std::vector<std::string> const &v) { h5_write_attribute(id, name, to_char_buf(v)); }
 
-  //void h5_write_attribute(hid_t id, std::string const &name, std::vector<std::vector<std::string>> const &v) {
-  //h5_write_attribute(id, name, to_char_buf(v));
-  //}
-
-  // -----------  READ  ------------
-
-  /*
-  void h5_read(group g, std::string const &name, std::vector<std::string> &v) {
-    char_buf cb;
-    h5_read(g, name, cb);
-    from_char_buf(cb, v);
+  void h5_write_attribute(hid_t id, std::string const &name, std::vector<std::vector<std::string>> const &v) {
+    h5_write_attribute(id, name, to_char_buf(v));
   }
 
-  void h5_read(group g, std::string const &name, std::vector<std::vector<std::string>> &v) {
-    char_buf cb;
-    h5_read(g, name, cb);
-    from_char_buf(cb, v);
-  }
-*/
   // -----------   READ  ATTRIBUTE ------------
 
   void h5_read_attribute(hid_t id, std::string const &name, std::vector<std::string> &v) {
@@ -122,10 +101,10 @@ namespace h5 {
     from_char_buf(cb, v);
   }
 
-  //void h5_read_attribute(hid_t id, std::string const &name, std::vector<std::vector<std::string>> &v) {
-  //char_buf cb;
-  //h5_read_attribute(id, name, cb);
-  //from_char_buf(cb, v);
-  //}
+  void h5_read_attribute(hid_t id, std::string const &name, std::vector<std::vector<std::string>> &v) {
+    char_buf cb;
+    h5_read_attribute(id, name, cb);
+    from_char_buf(cb, v);
+  }
 
 } // namespace h5
