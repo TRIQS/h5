@@ -39,7 +39,7 @@ namespace h5 {
     // name is a group --> triqs object
     // assume for the moment, name is a dataset.
     dataset ds  = gr.open_dataset(name);
-    datatype dt = H5Dget_type(ds);
+    datatype dt = get_hdf5_type(ds);
     h5_read_variant_helper<std::variant<T...>, T...>(v, dt, gr, name);
   }
 
