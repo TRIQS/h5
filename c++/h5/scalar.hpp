@@ -18,6 +18,17 @@ namespace h5 {
 
   template <typename T>
   void h5_read(group g, std::string const &name, T &x) H5_REQUIRES(std::is_arithmetic_v<T> or is_complex_v<T>) {
+    if constexpr(is_complex_v<T>){
+      // Backward compatibility to read complex stored the old way
+      h5::group gr = g.open_group(name);
+      if(gr.has_key("r") and gr.has_key("i")){
+        double r, i;
+        h5_read(gr, "r", r);
+        h5_read(gr, "i", i);
+        x = std::complex<double>{r, i};
+        return;
+      }
+    }
     array_interface::read(g, name, array_interface::h5_array_view_from_scalar(x), array_interface::get_h5_lengths_type(g, name));
   }
 
