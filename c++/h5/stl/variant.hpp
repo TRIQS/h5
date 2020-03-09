@@ -1,6 +1,7 @@
 #pragma once
 
-#include <triqs/utility/variant.hpp>
+#include <variant>
+
 #include "../group.hpp"
 #include "./string.hpp"
 #include "../generic.hpp"
