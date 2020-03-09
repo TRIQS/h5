@@ -8,21 +8,18 @@
 
 namespace h5 {
 
-  // FIXME : vector of vector string unused.
-  // REMOVE CODE but KEEP IT in the history at final cleaning
-
   //------------------  to_char_buf ------------------------------
 
   // copy to the buffer, with each string having the same length
   char_buf to_char_buf(std::vector<std::string> const &v) {
 
-    size_t s = 0;
+    size_t s = 1;
     for (auto &x : v) s = std::max(s, x.size() + 1);
     auto len = v_t{v.size(), s};
 
     // copy to the buffer
     std::vector<char> buf;
-    buf.resize(v.size() * s, 0x00);
+    buf.resize(std::max(v.size() * s, 1ul), 0x00);
     size_t i = 0;
     for (auto &x : v) {
       strcpy(&buf[i * s], x.c_str());
@@ -35,7 +32,7 @@ namespace h5 {
   // copy to the buffer, with each string having the same length
   char_buf to_char_buf(std::vector<std::vector<std::string>> const &v) {
 
-    size_t s = 0, lv = 0;
+    size_t s = 1, lv = 0;
     for (auto &v1 : v) {
       lv = std::max(lv, v1.size());
       for (auto &x : v1) s = std::max(s, x.size() + 1);
@@ -44,7 +41,7 @@ namespace h5 {
 
     // copy to the buffer
     std::vector<char> buf;
-    buf.resize(v.size() * lv * s, 0x00);
+    buf.resize(std::max(v.size() * lv * s, 1ul), 0x00);
     for (int i = 0, k = 0; i < v.size(); i++)
       for (int j = 0; j < lv; j++, k++) {
         if (j < v[i].size()) strcpy(&buf[k * s], v[i][j].c_str());
@@ -80,7 +77,7 @@ namespace h5 {
       for (int j = 0; j < inner_vec_size; ++j, ++k) {
         std::string s = "";
         s.append(&cb.buffer[k * len_string]);
-        if (!s.empty()) v_inner.push_back(s);
+        v_inner.push_back(s);
       }
     }
   }
