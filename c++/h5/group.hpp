@@ -2,7 +2,6 @@
 #include <utility>
 
 #include "./file.hpp"
-#include "./format.hpp"
 
 namespace h5 {
 

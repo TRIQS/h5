@@ -1,5 +1,6 @@
 #pragma once
 #include "../group.hpp"
+#include "../format.hpp"
 #include <string>
 
 namespace h5 {

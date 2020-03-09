@@ -1,6 +1,6 @@
 #pragma once
 
-#include "std_addons/complex.hpp"
+#include "./std_addons/complex.hpp"
 
 #include "./file.hpp"
 #include "./group.hpp"
@@ -9,11 +9,11 @@
 #include "./generic.hpp"
 #include "./stl/string.hpp"
 #include "./stl/vector.hpp"
-//#include "./stl/map.hpp"
-//#include "./stl/pair.hpp"
-//#include "./stl/tuple.hpp"
-//#include "./stl/optional.hpp"
-//#include "./stl/variant.hpp"
+#include "./stl/map.hpp"
+#include "./stl/pair.hpp"
+#include "./stl/tuple.hpp"
+#include "./stl/optional.hpp"
+#include "./stl/variant.hpp"
 
 // FIXME : Still needed ?
 // for python code generator, we need to know what has to been included.

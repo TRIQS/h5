@@ -11,6 +11,7 @@
 #include "./h5object.hpp"
 #include <vector>
 #include <algorithm>
+#include <string>
 
 namespace h5 {
 
