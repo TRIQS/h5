@@ -46,10 +46,10 @@ namespace h5 {
   /// Read the triqs tag of the group if it is an object. Returns the empty string "" if attribute is not present
   std::string read_hdf5_format(group g);
 
-  /// Asserts that the tag of the group is the same as for T. Throws H5_ERROR if
+  /// Asserts that the tag of the group is the same as the given string. Throws std::runtime_error if incompatible
   void assert_hdf5_format_as_string(group g, const char *tag_expected, bool ignore_if_absent = false);
 
-  /// Asserts that the tag of the group is the same as for T. Throws H5_ERROR if
+  /// Asserts that the tag of the group is the same as for T. Throws std::runtime_error if incompatible
   template <typename T> void assert_hdf5_format(group g, T const &, bool ignore_if_absent = false) {
     assert_hdf5_format_as_string(g, get_hdf5_format<T>().c_str(), ignore_if_absent);
   }
