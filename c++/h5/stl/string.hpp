@@ -73,6 +73,14 @@ namespace h5 {
   // forbidden
   inline void h5_read_attribute(hid_t id, std::string const &name, char *s) = delete;
 
+  // ---------------------  hdf5 format -----------------------
+
+  // Write the triqs tag
+  inline void write_hdf5_format_as_string(group g, const char *a) { h5_write_attribute(g, "TRIQS_HDF5_data_scheme", a); }
+
+  // Write the triqs tag of the group if it is an object.
+  template <typename T> void write_hdf5_format(group g, T const &) { write_hdf5_format_as_string(g, get_hdf5_format<T>().c_str()); }
+
   // ---------------------   char_buf -----------------------
 
   // char_buf contains an n dimensional array of strings as fixed size strings, flatten in a 1d array of char.
