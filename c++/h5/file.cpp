@@ -11,9 +11,6 @@ using namespace std::string_literals;
 namespace h5 {
 
   file::file(const char *name, char mode) {
-
-    std::cerr << "OPENING file " << name << "in mode " << mode << std::endl;
-
     switch (mode) {
       case 'r': id = H5Fopen(name, H5F_ACC_RDONLY, H5P_DEFAULT); break;
       case 'w': id = H5Fcreate(name, H5F_ACC_TRUNC, H5P_DEFAULT, H5P_DEFAULT); break;
