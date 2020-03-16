@@ -46,7 +46,6 @@ namespace h5 {
 
   void file::close() {
     if (not is_valid()) return;
-    std::cerr << "CLOSING file " << name() << std::endl;
     auto err = H5Fclose(id);
     CHECK_OR_THROW((err >= 0), "closing the file");
   }

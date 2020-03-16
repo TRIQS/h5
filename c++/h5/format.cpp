@@ -15,7 +15,7 @@ namespace h5 {
     auto tag_file = read_hdf5_format(g);
     if (ignore_if_absent and tag_file.empty()) return;
     if (tag_file != tag_expected)
-      throw std::runtime_error("h5_read : mismatch of the tag TRIQS_HDF5_data_format tag in the h5 group : found " + tag_file + " while I expected "
+      throw std::runtime_error("h5_read : mismatch of the tag TRIQS_HDF5_data_scheme tag in the h5 group : found " + tag_file + " while I expected "
                                + tag_expected);
   }
 
