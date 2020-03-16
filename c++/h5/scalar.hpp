@@ -20,8 +20,9 @@ namespace h5 {
   void h5_read(group g, std::string const &name, T &x) H5_REQUIRES(std::is_arithmetic_v<T> or is_complex_v<T>) {
     if constexpr(is_complex_v<T>){
       // Backward compatibility to read complex stored the old way
-      h5::group gr = g.open_group(name);
-      if(gr.has_key("r") and gr.has_key("i")){
+      if(g.has_subgroup(name)){
+        group gr = g.open_group(name);
+        H5_ASSERT(gr.has_key("r") and gr.has_key("i"));
         double r, i;
         h5_read(gr, "r", r);
         h5_read(gr, "i", i);
