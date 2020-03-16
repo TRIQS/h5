@@ -180,12 +180,10 @@ namespace h5 {
       write(g, name, make_av_from_py(arr_obj), true);
     } else if (PyFloat_Check(ob)) {
       h5_write(g, name, PyFloat_AsDouble(ob));
-    } else if (PyInt_Check(ob)) {
-      h5_write(g, name, long(PyInt_AsLong(ob)));
     } else if (PyLong_Check(ob)) {
       h5_write(g, name, long(PyLong_AsLong(ob)));
-    } else if (PyString_Check(ob)) {
-      h5_write(g, name, (const char *)PyString_AsString(ob));
+    } else if (PyUnicode_Check(ob)) {
+      h5_write(g, name, (const char *)PyUnicode_AsUTF8(ob));
     } else if (PyComplex_Check(ob)) {
       h5_write(g, name, std::complex<double>{PyComplex_RealAsDouble(ob), PyComplex_ImagAsDouble(ob)});
     } else {
@@ -218,7 +216,7 @@ namespace h5 {
       if (H5Tget_class(lt.ty) == H5T_STRING) {
         std::string x;
         h5_read(g, name, x);
-        return PyString_FromString(x.c_str());
+        return PyUnicode_FromString(x.c_str());
       }
       // Default case : error, we can not read
       PyErr_SetString(PyExc_RuntimeError, "h5_read to Python: unknown scalar type");

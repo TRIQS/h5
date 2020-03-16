@@ -21,9 +21,10 @@
 ################################################################################
 
 import sys,numpy
-from hdf_archive_basic_layer_h5py import HDFArchiveGroupBasicLayer
+from importlib import import_module
+from .hdf_archive_basic_layer_h5py import HDFArchiveGroupBasicLayer
 
-from hdf_archive_schemes import hdf_scheme_access_for_write, hdf_scheme_access_for_read, register_class
+from .hdf_archive_schemes import hdf_scheme_access_for_write, hdf_scheme_access_for_read, register_class
 
 # -------------------------------------------
 #
@@ -37,7 +38,7 @@ class PythonListWrap:
         return {str(n):v for n,v in enumerate(self.ob)}
     @classmethod
     def __factory_from_dict__(cls, name, D) :
-        return [x for n,x in sorted([(int(n), x) for n,x in D.items()])]
+        return [x for n,x in sorted([(int(n), x) for n,x in list(D.items())])]
 
 class PythonTupleWrap:
     def __init__(self,ob) :
@@ -46,16 +47,16 @@ class PythonTupleWrap:
         return {str(n):v for n,v in enumerate(self.ob)}
     @classmethod
     def __factory_from_dict__(cls, name, D) :
-        return tuple(x for n,x in sorted([(int(n), x) for n,x in D.items()]))
+        return tuple(x for n,x in sorted([(int(n), x) for n,x in list(D.items())]))
 
 class PythonDictWrap:
     def __init__(self,ob) :
         self.ob = ob
     def __reduce_to_dict__(self) :
-        return {str(n):v for n,v in self.ob.items()}
+        return {str(n):v for n,v in list(self.ob.items())}
     @classmethod
     def __factory_from_dict__(cls, name, D) :
-        return {n:x for n,x in D.items()}
+        return {n:x for n,x in list(D.items())}
 
 register_class (PythonListWrap)
 register_class (PythonTupleWrap)
@@ -87,19 +88,19 @@ class HDFArchiveGroup (HDFArchiveGroupBasicLayer) :
     #-------------------------------------------------------------------------
     def _key_cipher(self,key) :
         if key in self.ignored_keys :
-            raise KeyError, "key %s is reserved"%key
+            raise KeyError("key %s is reserved"%key)
         if self.key_as_string_only : # for bacward compatibility
-            if type(key) not in (str,unicode):
-                raise KeyError, "Key must be string only !"
+            if type(key) is not str:
+                raise KeyError("Key must be string only !")
             return key
         r = repr(key)
         if len (r)> self._MaxLengthKey :
-            raise KeyError, "The Key is too large !"
+            raise KeyError("The Key is too large !")
         # check that the key is ok (it can be reconstructed)
         try :
             if eval(r) != key: raise KeyError
         except :
-            raise KeyError, "The Key *%s*cannot be serialized properly by repr !"%key
+            raise KeyError("The Key *%s*cannot be serialized properly by repr !"%key)
         return r
 
     #-------------------------------------------------------------------------
@@ -109,7 +110,7 @@ class HDFArchiveGroup (HDFArchiveGroupBasicLayer) :
     #-------------------------------------------------------------------------
     def __contains__(self,key) :
         key= self._key_cipher(key)
-        return key in self.keys()
+        return key in list(self.keys())
 
     #-------------------------------------------------------------------------
     def values(self) :
@@ -117,7 +118,7 @@ class HDFArchiveGroup (HDFArchiveGroupBasicLayer) :
         Generator returning the values in the group
         """
         def res() :
-            for name in self.keys() :
+            for name in list(self.keys()) :
                 yield self[name]
         return res()
 
@@ -127,7 +128,7 @@ class HDFArchiveGroup (HDFArchiveGroupBasicLayer) :
         Generator returning couples (key, values) in the group.
         """
         def res() :
-            for name in self.keys():
+            for name in list(self.keys()):
                 yield name, self[name]
         return res()
 
@@ -135,18 +136,18 @@ class HDFArchiveGroup (HDFArchiveGroupBasicLayer) :
     def __iter__(self) :
         """Returns the keys, like a dictionary"""
         def res() :
-            for name in self.keys() :
+            for name in list(self.keys()) :
                 yield name
         return res()
 
     #-------------------------------------------------------------------------
     def __len__(self) :
         """Returns the length of the keys list """
-        return  len(self.keys())
+        return  len(list(self.keys()))
 
     #-------------------------------------------------------------------------
     def update(self,object_with_dict_protocol):
-        for k,v in object_with_dict_protocol.items() : self[k] = v
+        for k,v in list(object_with_dict_protocol.items()) : self[k] = v
 
     #-------------------------------------------------------------------------
     def __delitem__(self,key) :
@@ -158,8 +159,8 @@ class HDFArchiveGroup (HDFArchiveGroupBasicLayer) :
         assert '/' not in key, "/ can not be part of a key"
         key= self._key_cipher(key)# first look if key is a string or key
 
-        if key in self.keys() :
-            if self.options['do_not_overwrite_entries'] : raise KeyError, "key %s already exist."%key
+        if key in list(self.keys()) :
+            if self.options['do_not_overwrite_entries'] : raise KeyError("key %s already exist."%key)
             self._clean_key(key) # clean things
 
         # Transform list, dict, etc... into a wrapped type that will allow HDF reduction
@@ -177,7 +178,7 @@ class HDFArchiveGroup (HDFArchiveGroupBasicLayer) :
                But that data_scheme is not registered, so you will not be able to reread the class.
                Didn't you forget to register your class in pytriqs.archive.hdf_archive_schemes?
                """ %(val.__class__.__name__,ds)
-             raise IOError,err
+             raise IOError(err)
            g.write_attr("TRIQS_HDF5_data_scheme", ds)
 
         if hasattr(val,'__write_hdf5__') : # simplest protocol
@@ -189,20 +190,20 @@ class HDFArchiveGroup (HDFArchiveGroupBasicLayer) :
         elif hasattr(val,'__reduce_to_dict__') : # Is it a HDF_compliant object
             self.create_group(key) # create a new group
             d = val.__reduce_to_dict__()
-            if not isinstance(d,dict) : raise ValueError, " __reduce_to_dict__ method does not return a dict. See the doc !"
+            if not isinstance(d,dict) : raise ValueError(" __reduce_to_dict__ method does not return a dict. See the doc !")
             SUB = HDFArchiveGroup(self,key)
-            for n,v in d.items() : SUB[n] = v
+            for n,v in list(d.items()) : SUB[n] = v
             write_attributes(SUB)
         elif isinstance(val,numpy.ndarray) : # it is a numpy
             try :
                self._write( key, numpy.array(val,copy=1,order='C') )
             except RuntimeError:
-               print "HDFArchive is in trouble with the array %s"%val
+               print("HDFArchive is in trouble with the array %s"%val)
                raise
         elif isinstance(val, HDFArchiveGroup) : # will copy the group recursively
             # we could add this for any object that has .items() in fact...
             SUB = HDFArchiveGroup(self, key)
-            for k,v in val.items() : SUB[k]=v
+            for k,v in list(val.items()) : SUB[k]=v
         else : # anything else... expected to be a scalar
             try :
                self._write( key, val)
@@ -232,17 +233,15 @@ class HDFArchiveGroup (HDFArchiveGroupBasicLayer) :
 
         if key not in self :
             key = self._key_cipher(key)
-            if key not in self  : raise KeyError, "Key %s does not exist."%key
+            if key not in self  : raise KeyError("Key %s does not exist."%key)
 
-        #print key, self.is_group(key) ,self.is_data(key) 
         if self.is_group(key) :
             SUB = HDFArchiveGroup(self,key) # View of the subgroup
             bare_return = lambda: SUB
         elif self.is_data(key) :
-            #bare_return = lambda: self._read(key)
             return self._read(key)
         else :
-            raise KeyError, "Key %s is of unknown type !!"%Key
+            raise KeyError("Key %s is of unknown type !!"%Key)
 
         if not reconstruct_python_object : return bare_return()
 
@@ -251,17 +250,17 @@ class HDFArchiveGroup (HDFArchiveGroupBasicLayer) :
         try :
             sch, group_to_scheme = hdf_scheme_access_for_read(hdf_data_scheme)
         except KeyError:
-            print "Warning : The TRIQS_HDF5_data_scheme %s is not recognized. Returning as a group. Hint : did you forgot to import this python class ?"%hdf_data_scheme
+            print("Warning : The TRIQS_HDF5_data_scheme %s is not recognized. Returning as a group. Hint : did you forgot to import this python class ?"%hdf_data_scheme)
             return bare_return()
 
         r_class_name  = sch.classname
         r_module_name = sch.modulename
         r_readfun = sch.read_fun
         if not (r_class_name and r_module_name) : return bare_return()
-        try :
-            exec("from %s import %s as r_class" %(r_module_name,r_class_name)) in globals(), locals()
-        except KeyError :
-            raise RuntimeError, "I cannot find the class %s to reconstruct the object !"%r_class_name
+        try:
+            r_class = getattr(import_module(r_module_name),r_class_name)
+        except KeyError:
+            raise RuntimeError("I cannot find the class %s to reconstruct the object !"%r_class_name)
         if r_readfun :
             return r_readfun(self._group,str(key)) # str transforms unicode string to regular python string
         if hasattr(r_class,"__factory_from_dict__"):
@@ -270,7 +269,7 @@ class HDFArchiveGroup (HDFArchiveGroupBasicLayer) :
             values = {self._key_decipher(str(K)): f(K) for K in SUB}  # str transforms unicode string to regular python string
             return r_class.__factory_from_dict__(key,values)
 
-        raise ValueError, "Impossible to reread the class %s for group %s and key %s"%(r_class_name,self, key)
+        raise ValueError("Impossible to reread the class %s for group %s and key %s"%(r_class_name,self, key))
 
     #---------------------------------------------------------------------------
     def __str__(self) :
@@ -280,10 +279,10 @@ class HDFArchiveGroup (HDFArchiveGroupBasicLayer) :
             elif self.is_data(name) : # can be an array of a number
                 return "%s : data "%name
             else :
-                raise ValueError, "oopps %s"%name
+                raise ValueError("oopps %s"%name)
 
         s= "HDFArchive%s with the following content:\n"%(" (partial view)" if self.is_top_level else '')
-        s+='\n'.join([ '  '+ pr(n) for n in self.keys() ])
+        s+='\n'.join([ '  '+ pr(n) for n in list(self.keys()) ])
         return s
 
     #-------------------------------------------------------------------------
@@ -321,7 +320,7 @@ class HDFArchiveGroup (HDFArchiveGroupBasicLayer) :
 class HDFArchive(HDFArchiveGroup):
     """
     """
-    _class_version = "HDFArchive | 1.0"
+    _class_version = 1
 
     def __init__(self, url_name, open_flag = 'a', key_as_string_only = True,
             reconstruct_python_object = True, init = {}):
@@ -374,13 +373,16 @@ class HDFArchive(HDFArchiveGroup):
         assert open_flag in ['r','w','a'], "Invalid mode"
         assert isinstance(url_name,str), "url_name must be a string"
 
-        # If it is an url , retrieve if and check mode is read only
-        import urllib
-        LocalFileName, http_message = urllib.urlretrieve (url_name) if open_flag == 'r' else (url_name, None)
-        if LocalFileName != url_name : # this was not a local file, so it must be read only
+        # If it is a url, retrieve it and check mode is read only
+        import urllib.request
+        try:
+            LocalFileName, http_message = urllib.request.urlretrieve(url_name)
+            # a url must be read only
             assert open_flag == 'r', "You retrieve a distant Url %s which is not local, so it must be read-only. Use 'r' option"%url_name
+        except ValueError: # Not a valid URL -> Local File
+            LocalFileName, http_message = url_name, None
 
-        if open_flag == 'w' :
+        if open_flag == 'w':
             # destroys the file, ignoring errors
             try: os.remove(os.path.abspath(LocalFileName))
             except OSError: pass
@@ -396,9 +398,8 @@ class HDFArchive(HDFArchiveGroup):
         for k,v in init : self[k]=v
 
     def __del__(self):
-      print "ENTER __del__"
-      #self._flush()
-      #self._close()
+      self._flush()
+      self._close()
 
     # These two methods are necessary for "with"
     def __enter__(self): return self

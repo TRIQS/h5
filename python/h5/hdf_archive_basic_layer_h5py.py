@@ -1,4 +1,3 @@
-
 ################################################################################
 #
 # TRIQS: a Toolbox for Research in Interacting Quantum Systems
@@ -21,10 +20,10 @@
 ################################################################################
 
 import numpy,string
-from hdf_archive import *
-import _h5py as h5
+from .hdf_archive import *
+from . import _h5py as h5
  
-class HDFArchiveGroupBasicLayer :
+class HDFArchiveGroupBasicLayer:
     _class_version = 1
 
     def __init__(self, parent, subpath ):
@@ -32,13 +31,13 @@ class HDFArchiveGroupBasicLayer :
         self.options = parent.options
         self._group = parent._group.open_group(subpath) if subpath else parent._group
         self.ignored_keys = [] 
-        self.cached_keys = self._group.keys()
+        self.cached_keys = list(self._group.keys())
 
     def _init_root(self, LocalFileName, open_flag) :
         try :
             fich = h5.File(LocalFileName, open_flag)
         except :
-            print "Cannot open the HDF file %s"%LocalFileName
+            print("Cannot open the HDF file %s"%LocalFileName)
             raise
         # checking the version
         if open_flag not in ['r','r+','a'] :
@@ -49,7 +48,7 @@ class HDFArchiveGroupBasicLayer :
             except :
                 self._version = 1
             if self._version > self._class_version :
-                raise IOError, "File %s is too recent for this version of HDFArchive module"%Filename
+                raise IOError("File %s is too recent for this version of HDFArchive module"%Filename)
         self._group =  h5.Group(fich)
 
     def is_group(self,p) :
@@ -86,10 +85,10 @@ class HDFArchiveGroupBasicLayer :
 
     def _clean_key(self,key, report_error=False) :
         if report_error and key not in self.cached_keys :
-             raise KeyError, "Key %s is not in archive !!"%key
+             raise KeyError("Key %s is not in archive !!"%key)
         if key in self.cached_keys :
           # FIXME
-          #del self._group[key]
+          # del self._group[key]
           self.cached_keys.remove(key)
-        else: raise KeyError, "Key %s is not in archive !!"%key
+        else: raise KeyError("Key %s is not in archive !!"%key)
 

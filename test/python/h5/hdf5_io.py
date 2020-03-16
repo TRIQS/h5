@@ -37,10 +37,10 @@ class TestHdf5Io(unittest.TestCase):
         d = {'dbl' : 1.0, 'lst' : [1,[1],'a']}
         
         # === Write to archive
-        with HDFArchive('hdf5_io.out1.h5','w', init = d.items()) as arch:
+        with HDFArchive('hdf5_io.out1.h5','w', init = list(d.items())) as arch:
         
             arch._flush()
-            print "----------- ok "
+            print("----------- ok ")
             arch['int'] = 100
             arch['arr'] = np.array([[1,2,3],[4,5,6]])
             arch['tpl'] = (2,[2],'b')
@@ -58,7 +58,7 @@ class TestHdf5Io(unittest.TestCase):
         d = {'dbl' : 1.0, 'lst' : [1,[1],'a']}
         
         # === Write to archive
-        with HDFArchive('hdf5_io.out.h5','w', init = d.items()) as arch:
+        with HDFArchive('hdf5_io.out.h5','w', init = list(d.items())) as arch:
         
             arch['int'] = 100
             arch['arr'] = np.array([[1,2,3],[4,5,6]])
@@ -98,7 +98,7 @@ class TestHdf5Io(unittest.TestCase):
         
         self.assertEqual( arch['dbl'] , 1.0 )
         
-        print arch['lst'] 
+        print(arch['lst'])
 
         self.assertEqual( arch['lst'] , [1,[1],'a'] )
         self.assertEqual( arch['int'] , 100 )

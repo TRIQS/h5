@@ -32,7 +32,7 @@ class test_operators(unittest.TestCase):
         g = h5.Group(ff)
         g.open_group("GG")
         assert_arrays_are_close(h5.h5_read(g2, 'a'), a)
-        print g.keys()
+        print(list(g.keys()))
 
         self.assertEqual(g.has_subgroup('GG'), True)
         self.assertEqual(g.has_subgroup('GG4'), False)
