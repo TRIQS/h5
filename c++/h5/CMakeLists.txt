@@ -1,5 +1,4 @@
-#file(GLOB_RECURSE sources *.cpp)
-set(sources h5object.cpp file.cpp group.cpp array_interface.cpp stl/string.cpp stl/vector.cpp)
+file(GLOB_RECURSE sources *.cpp)
 add_library(h5_interface SHARED ${sources})
 
 # Enable warnings
@@ -9,12 +8,12 @@ target_link_libraries(h5_interface PRIVATE project_warnings)
 target_compile_options(h5_interface PUBLIC -fPIC -std=c++17 $<$<CXX_COMPILER_ID:GNU>:-fconcepts>)
 target_include_directories(h5_interface PUBLIC $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/c++>)
 target_compile_definitions(h5_interface PUBLIC
-				APP4TRIQS_GIT_HASH=${PROJECT_GIT_HASH}
-				$<$<CONFIG:Debug>:APP4TRIQS_DEBUG>
+  				NDA_GIT_HASH=${PROJECT_GIT_HASH}
+				$<$<CONFIG:Debug>:NDA_DEBUG>
 			  )
 
 # Install library and headers
-install(TARGETS h5_interface EXPORT hdf5-targets DESTINATION lib)
+install(TARGETS h5_interface EXPORT nda-targets DESTINATION lib)
 install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} DESTINATION include FILES_MATCHING PATTERN "*.hpp" PATTERN "*.h")
 
 
@@ -32,7 +31,7 @@ target_compile_options(hdf5 INTERFACE ${HDF5_DEFINITIONS})
 
 # Link against interface target and export
 target_link_libraries(h5_interface PRIVATE hdf5)
-install(TARGETS hdf5 EXPORT hdf5-targets)
+install(TARGETS hdf5 EXPORT nda-targets)
 
 
 # ========= Static Analyzer Checks ==========
@@ -80,10 +79,10 @@ option(UBSAN OFF "Compile library and executables with LLVM Undefined Behavior S
 if(ASAN)
   # Already found by nda
   target_link_libraries(h5_interface PUBLIC asan)
-  install(TARGETS asan EXPORT hdf5-targets)
+  install(TARGETS asan EXPORT nda-targets)
 endif()
 if(UBSAN)
   # Already found by nda
   target_link_libraries(h5_interface PUBLIC ubsan)
-  install(TARGETS ubsan EXPORT hdf5-targets)
+  install(TARGETS ubsan EXPORT nda-targets)
 endif()
