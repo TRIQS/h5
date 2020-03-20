@@ -2,6 +2,8 @@
 #define TRIQS_GUARD_STD_ADDONS_COMPLEX_H
 #include <complex>
 
+using namespace std::literals::complex_literals;
+
 namespace std { // has to be in the right namespace for ADL !
 
   // clang-format off
