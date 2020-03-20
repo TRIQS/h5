@@ -19,5 +19,3 @@ namespace std { // has to be in the right namespace for ADL !
 
 } // namespace std
 #endif
-
-
