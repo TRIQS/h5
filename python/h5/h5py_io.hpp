@@ -1,4 +1,5 @@
 #pragma once
+#include <h5/h5.hpp>
 #include <h5/array_interface.hpp>
 #include <Python.h>
 
