@@ -23,10 +23,10 @@ namespace h5 {
 
   static void init_h5_c_size_table() {
     h5_c_size_table = std::vector<h5_c_size_t>{
-       {hdf5_type<bool>(), sizeof(bool)},
        {hdf5_type<char>(), sizeof(char)},
        {hdf5_type<signed char>(), sizeof(signed char)},
        {hdf5_type<unsigned char>(), sizeof(unsigned char)},
+       {hdf5_type<bool>(), sizeof(bool)},
        {hdf5_type<short>(), sizeof(short)},
        {hdf5_type<unsigned short>(), sizeof(unsigned short)},
        {hdf5_type<int>(), sizeof(int)},
@@ -70,10 +70,10 @@ namespace h5 {
 
   static void init_h5py() {
     h5_py_type_table = std::vector<h5_py_type_t>{
-       //  {hdf5_type<bool>(), NPY_BOOL, sizeof(bool)},
        {hdf5_type<char>(), NPY_STRING, sizeof(char)},
        {hdf5_type<signed char>(), NPY_BYTE, sizeof(signed char)},
        {hdf5_type<unsigned char>(), NPY_UBYTE, sizeof(unsigned char)},
+       {hdf5_type<bool>(), NPY_BOOL, sizeof(bool)},
        {hdf5_type<short>(), NPY_SHORT, sizeof(short)},
        {hdf5_type<unsigned short>(), NPY_USHORT, sizeof(unsigned short)},
        {hdf5_type<int>(), NPY_INT, sizeof(int)},
@@ -180,6 +180,8 @@ namespace h5 {
       write(g, name, make_av_from_py(arr_obj), true);
     } else if (PyFloat_Check(ob)) {
       h5_write(g, name, PyFloat_AsDouble(ob));
+    } else if (PyBool_Check(ob)) {
+      h5_write(g, name, bool(PyLong_AsLong(ob)));
     } else if (PyLong_Check(ob)) {
       h5_write(g, name, long(PyLong_AsLong(ob)));
     } else if (PyUnicode_Check(ob)) {
@@ -202,16 +204,19 @@ namespace h5 {
     // First case, we have a scalar
     if (lt.rank() == 0) {
       if (H5Tget_class(lt.ty) == H5T_FLOAT) {
-        //if (H5Tequal(lt.ty, hdf5_type<double>) > 0) {
         double x;
         h5_read(g, name, x);
         return PyFloat_FromDouble(x);
       }
       if (H5Tget_class(lt.ty) == H5T_INTEGER) {
-        // if (H5Tequal(lt.ty, hdf5_type<long>) > 0) {
         long x;
         h5_read(g, name, x);
         return PyLong_FromLong(x);
+      }
+      if (H5Tequal(lt.ty, h5::hdf5_type<bool>())) {
+        bool x;
+        h5_read(g, name, x);
+        return PyBool_FromLong(long(x));
       }
       if (H5Tget_class(lt.ty) == H5T_STRING) {
         std::string x;

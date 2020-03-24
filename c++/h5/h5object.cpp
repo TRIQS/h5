@@ -74,6 +74,7 @@ namespace h5 {
        {hdf5_type<char>(), H5_AS_STRING(char)},
        {hdf5_type<signed char>(), H5_AS_STRING(signed char)},
        {hdf5_type<unsigned char>(), H5_AS_STRING(unsigned char)},
+       {hdf5_type<bool>(), H5_AS_STRING(bool)},
        {hdf5_type<short>(), H5_AS_STRING(short)},
        {hdf5_type<unsigned short>(), H5_AS_STRING(unsigned short)},
        {hdf5_type<int>(), H5_AS_STRING(int)},
