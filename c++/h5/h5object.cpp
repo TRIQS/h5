@@ -49,7 +49,7 @@ namespace h5 {
   // bool. Use a lambda to initialize it.
   template <>
   hid_t hdf5_type<bool>() {
-    datatype bool_enum_h5type = H5Tenum_create(H5T_NATIVE_CHAR);
+    hid_t bool_enum_h5type = H5Tenum_create(H5T_NATIVE_CHAR);
     char val;
     H5Tenum_insert(bool_enum_h5type, "FALSE", (val = 0, &val));
     H5Tenum_insert(bool_enum_h5type, "TRUE", (val = 1, &val));
