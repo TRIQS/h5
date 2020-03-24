@@ -77,12 +77,10 @@ option(ASAN OFF "Compile library and executables with LLVM Address Sanitizer")
 option(UBSAN OFF "Compile library and executables with LLVM Undefined Behavior Sanitizer")
 
 if(ASAN)
-  # Already found by nda
+  # Already found and exported by nda
   target_link_libraries(h5_interface PUBLIC asan)
-  install(TARGETS asan EXPORT nda-targets)
 endif()
 if(UBSAN)
-  # Already found by nda
+  # Already found and exported by nda
   target_link_libraries(h5_interface PUBLIC ubsan)
-  install(TARGETS ubsan EXPORT nda-targets)
 endif()
