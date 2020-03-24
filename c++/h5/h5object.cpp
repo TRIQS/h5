@@ -153,6 +153,10 @@ namespace h5 {
     id = 0;
   } // e.g. to close a file explicitely.
 
+  int h5_object::get_ref_count() const{
+    return H5Iget_ref(id);
+  }
+
   bool h5_object::is_valid() const { return H5Iis_valid(id) == 1; }
 
 } // namespace h5
