@@ -49,7 +49,7 @@ namespace h5 {
   int h5_c_size(datatype t) {
     if (h5_c_size_table.empty()) init_h5_c_size_table();
     auto _end = h5_c_size_table.end();
-    auto pos  = std::find_if(h5_c_size_table.begin(), _end, [t](auto const &x) { return x.hdf5_type == t; });
+    auto pos  = std::find_if(h5_c_size_table.begin(), _end, [t](auto const &x) { return hdf5_type_equal(x.hdf5_type, t); });
     if (pos == _end) std::runtime_error("HDF5/Python Internal Error : can not find the numpy type from the HDF5 type");
     return pos->c_size;
   }
@@ -98,7 +98,7 @@ namespace h5 {
 
     if (h5_py_type_table.empty()) init_h5py();
     auto _end = h5_py_type_table.end();
-    auto pos  = std::find_if(h5_py_type_table.begin(), _end, [t](auto const &x) { return H5Tequal(x.hdf5_type, t) > 0; });
+    auto pos  = std::find_if(h5_py_type_table.begin(), _end, [t](auto const &x) { return hdf5_type_equal(x.hdf5_type, t); });
     if (pos == _end) throw std::runtime_error("HDF5/Python Internal Error : can not find the numpy type from the HDF5 type");
     int res = pos->numpy_type;
     if (is_complex) {
