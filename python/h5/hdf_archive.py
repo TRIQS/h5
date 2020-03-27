@@ -1,4 +1,3 @@
-
 ################################################################################
 #
 # TRIQS: a Toolbox for Research in Interacting Quantum Systems
@@ -24,7 +23,7 @@ import sys,numpy
 from importlib import import_module
 from .hdf_archive_basic_layer_h5py import HDFArchiveGroupBasicLayer
 
-from .hdf_archive_schemes import hdf_scheme_access_for_write, hdf_scheme_access_for_read, register_class
+from .hdf_formats import hdf_format_access_for_write, hdf_format_access_for_read, register_class
 
 # -------------------------------------------
 #
@@ -168,15 +167,15 @@ class HDFArchiveGroup (HDFArchiveGroupBasicLayer) :
 
         # write the attributes
         def write_attributes(g) :
-           """Use the _hdf5_data_scheme_ if it exists otherwise the class name"""
-           ds = val._hdf5_data_scheme_ if hasattr(val,"_hdf5_data_scheme_") else val.__class__.__name__
+           """Use the _hdf5_format_ if it exists otherwise the class name"""
+           ds = val._hdf5_format_ if hasattr(val,"_hdf5_format_") else val.__class__.__name__
            try :
-             sch = hdf_scheme_access_for_write(ds)
+             sch = hdf_format_access_for_write(ds)
            except :
              err = """
                You are trying to store an object of type "%s", with the TRIQS_HDF5_data_scheme "%s".
-               But that data_scheme is not registered, so you will not be able to reread the class.
-               Didn't you forget to register your class in pytriqs.archive.hdf_archive_schemes?
+               But that format is not registered, so you will not be able to reread the class.
+               Didn't you forget to register your class in h5.hdf_formats?
                """ %(val.__class__.__name__,ds)
              raise IOError(err)
            g.write_attr("TRIQS_HDF5_data_scheme", ds)
@@ -229,7 +228,7 @@ class HDFArchiveGroup (HDFArchiveGroupBasicLayer) :
         return self.__getitem1__(key,self._reconstruct_python_objects)
 
     #-------------------------------------------------------------------------
-    def __getitem1__(self, key, reconstruct_python_object, scheme = None) :
+    def __getitem1__(self, key, reconstruct_python_object, hdf_format = None) :
 
         if key not in self :
             key = self._key_cipher(key)
@@ -239,18 +238,24 @@ class HDFArchiveGroup (HDFArchiveGroupBasicLayer) :
             SUB = HDFArchiveGroup(self,key) # View of the subgroup
             bare_return = lambda: SUB
         elif self.is_data(key) :
-            return self._read(key)
+            bare_return = lambda: self._read(key)
         else :
             raise KeyError("Key %s is of unknown type !!"%Key)
 
         if not reconstruct_python_object : return bare_return()
 
-        # try to find the scheme
-        hdf_data_scheme = scheme if scheme else self._group.open_group(key).read_attribute("TRIQS_HDF5_data_scheme")
+        # try to find the format
+        if hdf_format is None:
+            print("Reading data_scheme from key {}".format(key))
+            hdf_format = self._group.read_key_attribute(key, "TRIQS_HDF5_data_scheme")
+            if hdf_format == "":
+                return bare_return()
+
         try :
-            sch, group_to_scheme = hdf_scheme_access_for_read(hdf_data_scheme)
+            print("Format ", hdf_format)
+            sch, group_to_format = hdf_format_access_for_read(hdf_format)
         except KeyError:
-            print("Warning : The TRIQS_HDF5_data_scheme %s is not recognized. Returning as a group. Hint : did you forgot to import this python class ?"%hdf_data_scheme)
+            print("Warning : The TRIQS_HDF5_data_scheme %s is not recognized. Returning as a group. Hint : did you forgot to import this python class ?"%hdf_format)
             return bare_return()
 
         r_class_name  = sch.classname
@@ -265,7 +270,7 @@ class HDFArchiveGroup (HDFArchiveGroupBasicLayer) :
             return r_readfun(self._group,str(key)) # str transforms unicode string to regular python string
         if hasattr(r_class,"__factory_from_dict__"):
             assert self.is_group(key), "__factory_from_dict__ requires a subgroup"
-            f = lambda K : SUB.__getitem1__(K, reconstruct_python_object, group_to_scheme.get(K, None) if group_to_scheme else None)
+            f = lambda K : SUB.__getitem1__(K, reconstruct_python_object, group_to_format.get(K, None) if group_to_format else None)
             values = {self._key_decipher(str(K)): f(K) for K in SUB}  # str transforms unicode string to regular python string
             return r_class.__factory_from_dict__(key,values)
 
