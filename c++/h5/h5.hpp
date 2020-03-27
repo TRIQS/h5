@@ -15,9 +15,8 @@
 #include "./stl/optional.hpp"
 #include "./stl/variant.hpp"
 
-// FIXME : Still needed ?
-// for python code generator, we need to know what has to been included.
-//#define TRIQS_INCLUDED_H5
+// Define this so cpp2py modules know whether hdf5 was included
+#define H5_INTERFACE_INCLUDED
 
 // in some old version of hdf5 (Ubuntu 12.04 e.g.), the macro is not yet defined.
 #ifndef H5_VERSION_GE
