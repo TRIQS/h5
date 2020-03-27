@@ -1,9 +1,9 @@
 # Generated automatically using the command :
-# c++2py storable.hpp -a storable -m storable -o storable --cxxflags="-std=c++17" --includes=./../../../c++ --includes=./../../../python --target_file_only
+# c++2py storable.hpp -m storable -o storable --cxxflags="-std=c++17" --includes=./../../../c++ --includes=./../../../python --target_file_only
 from cpp2py.wrap_generator import *
 
 # The module
-module = module_(full_name = "storable", doc = r"", app_name = "storable")
+module = module_(full_name = "storable", doc = r"")
 
 # Imports
 module.add_imports(*['_h5py'])

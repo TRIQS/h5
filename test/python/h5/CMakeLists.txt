@@ -1,5 +1,5 @@
 # List of all tests
-set(all_tests h5_interface hdf5_io)
+set(all_tests h5_interface hdf5_io hdf5_class)
 
 # Generate the C++2Py Module for an hdf5 storable class
 add_cpp2py_module(storable)

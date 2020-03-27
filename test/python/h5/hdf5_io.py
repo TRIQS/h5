@@ -112,23 +112,5 @@ class TestHdf5Io(unittest.TestCase):
         self.assertEqual( arch['grp']['x'] , 1.5 )
         self.assertEqual( arch['grp']['y'] , 'zzz' )
 
-
-    def test_hdf5_class(self):
-
-        from storable import Storable
-
-        obj = Storable()
-        obj.vec = [1, 2, 4, 5]
-        obj.s = "some other string"
-
-        with HDFArchive('hdf5_class.h5','w') as arch:
-            arch['obj'] = obj
-
-        with HDFArchive('hdf5_class.h5','r') as arch:
-            obj_in = arch['obj']
-
-        self.assertEqual(obj.vec, obj_in.vec)
-        self.assertEqual(obj.s, obj_in.s)
-
 if __name__ == '__main__':
     unittest.main()
