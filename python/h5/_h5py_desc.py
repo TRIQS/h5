@@ -99,6 +99,8 @@ key""")
 
 c.add_method("void write_attribute(std::string key, std::string val)", calling_pattern = "h5_write_attribute(self_c, key, val)", doc = "Write an attribute")
 
+c.add_method("std::string read_attribute(std::string key)", calling_pattern = "std::string result = h5_read_attribute<std::string>(self_c, key)", doc = "Read an attribute")
+
 c.add_method("std::string read_key_attribute(std::string key, std::string attr)", calling_pattern = """h5_object obj;
         if(self_c.has_subgroup(key)) { obj = self_c.open_group(key); }
         else { obj = self_c.open_dataset(key); }
