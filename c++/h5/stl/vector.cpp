@@ -60,7 +60,14 @@ namespace h5 {
     size_t i = 0;
     for (auto &x : v) {
       x = "";
-      x.append(&cb.buffer[i * len_string]);
+
+      // We append the chars one to stay backward compatible
+      // Certain hdf5 files contain strings without null-termination
+      for (int j = 0; j < len_string; ++j) {
+        char c = cb.buffer[i * len_string + j];
+        if (c == 0x00) break;
+        x.append(1, c);
+      }
       ++i;
     }
   }
@@ -76,6 +83,14 @@ namespace h5 {
     for (auto &v_inner : v) {
       for (int j = 0; j < inner_vec_size; ++j, ++k) {
         std::string s = "";
+
+        // We append the chars one to stay backward compatible
+        // Certain hdf5 files contain strings without null-termination
+        for (int l = 0; l < len_string; ++l) {
+          char c = cb.buffer[k * len_string + l];
+          if (c == 0x00) break;
+          x.append(1, c);
+        }
         s.append(&cb.buffer[k * len_string]);
         v_inner.push_back(s);
       }
