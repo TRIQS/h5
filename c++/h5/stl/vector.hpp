@@ -28,7 +28,7 @@ namespace h5 {
   template <typename T>
   struct hdf5_format_impl<std::vector<T>> {
     static std::string invoke() { return "PythonListWrap"; }
-    //static std::string invoke() { return "std::vector<" + get_hdf5_format<T>() + ">"; }
+    //static std::string invoke() { return "vector<" + get_hdf5_format<T>() + ">"; }
   };
 
   // ----------------------------------------------------------------------------
@@ -68,7 +68,7 @@ namespace h5 {
     } else { // generic type
 
       auto gr = g.create_group(name);
-      h5_write_attribute(gr, "format", get_hdf5_format(v));
+      write_hdf5_format(gr, v);
       for (int i = 0; i < v.size(); ++i) h5_write(gr, std::to_string(i), v[i]);
     }
   }
@@ -112,10 +112,10 @@ namespace h5 {
     }
   }
 
-  void h5_write_attribute(hid_t ob, std::string const &name, std::vector<std::vector<std::string>> const &V);
-  void h5_read_attribute(hid_t ob, std::string const &name, std::vector<std::vector<std::string>> &V);
+  void h5_write_attribute(hid_t id, std::string const &name, std::vector<std::vector<std::string>> const &V);
+  void h5_read_attribute(hid_t id, std::string const &name, std::vector<std::vector<std::string>> &V);
 
-  void h5_write_attribute(hid_t ob, std::string const &name, std::vector<std::string> const &V);
-  void h5_read_attribute(hid_t ob, std::string const &name, std::vector<std::string> &V);
+  void h5_write_attribute(hid_t id, std::string const &name, std::vector<std::string> const &V);
+  void h5_read_attribute(hid_t id, std::string const &name, std::vector<std::string> &V);
 
 } // namespace h5

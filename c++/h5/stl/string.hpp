@@ -8,69 +8,53 @@ namespace h5 {
   H5_SPECIALIZE_FORMAT2(std::string, string);
 
   /**
-   * Write a string  into an hdf5 file
+   * Write a string into an h5::group
    *
    * Format : Fixed size string
    *
-   * @tparam T
-   * @param g HDF5 group
-   * @param name Name of the object in the HDF5 file
+   * @param g The h5::group
+   * @param name The name of the dataset
    * @param s String to be saved.
    */
   void h5_write(group g, std::string const &name, std::string const &s);
 
-  /**
-   * Write a string  into an hdf5 file
-   *
-   * Format : Fixed size string
-   *
-   * @tparam T
-   * @param g HDF5 group
-   * @param name Name of the object in the HDF5 file
-   * @param s String to be saved.
-   */
+  /// Write a const char array as a string
   inline void h5_write(group g, std::string const &name, const char *s) { h5_write(g, name, std::string{s}); }
 
   /**
-   * Read a string from an hdf5 file
+   * Read a string from an h5::group
    *
-   * @param f The h5 file or group
-   * @param name The name of the hdf5 array in the file/group where the stack will be stored
-   * @param value The string to read into
+   * @param g The h5::group
+   * @param name The name of the dataset
+   * @param s The string to read into
    */
-  void h5_read(group g, std::string const &name, std::string &value);
+  void h5_read(group g, std::string const &name, std::string &s);
 
   // Explicitly forbidden.
   inline void h5_read(group g, std::string const &name, char *s) = delete;
 
   /**
-   * Write a string attribute
+   * Write a string attribute to an object
    *
-   * @param f The h5 file or group
-   * @param name The name of the hdf5 array in the file/group where the stack will be stored
-   * @param s The string.
+   * @param id The object id
+   * @param name The name of the attribute
+   * @param s The string attribute
   */
   void h5_write_attribute(hid_t id, std::string const &name, std::string const &s);
 
-  /**
-   * Write a string attribute
-   *
-   * @param f The h5 file or group
-   * @param name The name of the hdf5 array in the file/group where the stack will be stored
-   * @param s The string.
-  */
+  /// Write a const char array as a string attribute of an h5::h5_object
   inline void h5_write_attribute(hid_t id, std::string const &name, const char *s) { h5_write_attribute(id, name, std::string{s}); }
 
   /**
-  * Read a string attribute from id.
-  * 
-  * @param id  The object to which the attribute is attached
-  * @param name The name of the attribute
-  * @param value The string to fill
-  */
+   * Read a string attribute from an object
+   *
+   * @param id The object id
+   * @param name The name of the attribute
+   * @param value The string to read into
+   */
   void h5_read_attribute(hid_t id, std::string const &name, std::string &s);
 
-  // forbidden
+  // Explicitly forbidden
   inline void h5_read_attribute(hid_t id, std::string const &name, char *s) = delete;
 
   /**
@@ -100,8 +84,27 @@ namespace h5 {
 
   // ---------------------  hdf5 format -----------------------
 
-  // Write the triqs tag of the group if it is an object.
-  template <typename T> void write_hdf5_format(group g, T const &) { write_hdf5_format_as_string(g, get_hdf5_format<T>().c_str()); }
+  inline void write_hdf5_format_as_string(hid_t id, std::string const &s) { h5_write_attribute(id, "TRIQS_HDF5_data_scheme", s); }
+
+  // Add the h5 format tag to the group
+  template <typename T>
+  inline void write_hdf5_format(hid_t id, T const &) {
+    h5_write_attribute(id, "TRIQS_HDF5_data_scheme", get_hdf5_format<T>());
+  }
+
+  // Add the h5 format tag to the group
+  inline void read_hdf5_format(hid_t id, std::string &s) { h5_read_attribute(id, "TRIQS_HDF5_data_scheme", s); }
+
+  // Add the h5 format tag to the key in the group
+  template <typename T>
+  inline void write_hdf5_format_to_key(group g, std::string const &key, T const &) {
+    h5_write_attribute_to_key(g, key, "TRIQS_HDF5_data_scheme", get_hdf5_format<T>());
+  }
+
+  // Add the h5 format tag to the key in the group
+  inline void read_hdf5_format_from_key(group g, std::string const &key, std::string &s) {
+    h5_write_attribute_to_key(g, key, "TRIQS_HDF5_data_scheme", s);
+  }
 
   // ---------------------   char_buf -----------------------
 

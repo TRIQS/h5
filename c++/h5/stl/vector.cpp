@@ -72,7 +72,7 @@ namespace h5 {
     v.resize(cb.lengths[0]);
     auto inner_vec_size = cb.lengths[1];
     auto len_string     = cb.lengths[2];
-    long k = 0;
+    long k              = 0;
     for (auto &v_inner : v) {
       for (int j = 0; j < inner_vec_size; ++j, ++k) {
         std::string s = "";

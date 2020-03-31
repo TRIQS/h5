@@ -19,33 +19,19 @@ namespace h5 {
 
   // ------------------------------------------------------------------
 
-  void h5_write(group g, std::string const &name, std::string const &value) {
+  void h5_write(group g, std::string const &name, std::string const &s) {
 
-    datatype dt     = str_datatype(value);
+    datatype dt     = str_datatype(s);
     dataspace space = H5Screate(H5S_SCALAR);
     dataset ds      = g.create_dataset(name, dt, space);
 
-    auto err = H5Dwrite(ds, dt, H5S_ALL, H5S_ALL, H5P_DEFAULT, (void *)(value.c_str()));
+    auto err = H5Dwrite(ds, dt, H5S_ALL, H5S_ALL, H5P_DEFAULT, (void *)(s.c_str()));
     if (err < 0) throw std::runtime_error("Error writing the string named" + name + " in the group" + g.name());
-  }
-
-  // ------------------------------------------------------------------
-
-  void h5_write_attribute(hid_t id, std::string const &name, std::string const &value) {
-
-    datatype dt     = str_datatype(value);
-    dataspace space = H5Screate(H5S_SCALAR);
-
-    attribute attr = H5Acreate2(id, name.c_str(), dt, space, H5P_DEFAULT, H5P_DEFAULT);
-    if (!attr.is_valid()) throw std::runtime_error("Cannot create the attribute " + name);
-
-    herr_t err = H5Awrite(attr, dt, (void *)(value.c_str()));
-    if (err < 0) throw std::runtime_error("Cannot write the attribute " + name);
   }
 
   // -------------------- Read ----------------------------------------------
 
-  void h5_read(group g, std::string const &name, std::string &value) {
+  void h5_read(group g, std::string const &name, std::string &s) {
     dataset ds        = g.open_dataset(name);
     dataspace d_space = H5Dget_space(ds);
     int rank          = H5Sget_simple_extent_ndims(d_space);
@@ -59,8 +45,22 @@ namespace h5 {
     auto err = H5Dread(ds, dt, H5S_ALL, H5S_ALL, H5P_DEFAULT, &buf[0]);
     if (err < 0) throw std::runtime_error("Error reading the string named" + name + " in the group" + g.name());
 
-    value = "";
-    value.append(&(buf.front()));
+    s = "";
+    s.append(&(buf.front()));
+  }
+
+  // ------------------------------------------------------------------
+
+  void h5_write_attribute(hid_t id, std::string const &name, std::string const &s) {
+
+    datatype dt     = str_datatype(s);
+    dataspace space = H5Screate(H5S_SCALAR);
+
+    attribute attr = H5Acreate2(id, name.c_str(), dt, space, H5P_DEFAULT, H5P_DEFAULT);
+    if (!attr.is_valid()) throw std::runtime_error("Cannot create the attribute " + name);
+
+    herr_t err = H5Awrite(attr, dt, (void *)(s.c_str()));
+    if (err < 0) throw std::runtime_error("Cannot write the attribute " + name);
   }
 
   // -------------------- Read ----------------------------------------------
@@ -154,19 +154,6 @@ namespace h5 {
     if (err < 0) throw make_runtime_error("Error writing the vector<string> ", name, " in the group", g.name());
   }
 
-  // -----------   WRITE  ATTRIBUTE ------------
-
-  void h5_write_attribute(hid_t id, std::string const &name, char_buf const &cb) {
-    auto dt     = cb.dtype();
-    auto dspace = cb.dspace();
-
-    attribute attr = H5Acreate2(id, name.c_str(), dt, dspace, H5P_DEFAULT, H5P_DEFAULT);
-    if (!attr.is_valid()) throw make_runtime_error("Cannot create the attribute ", name);
-
-    herr_t status = H5Awrite(attr, dt, (void *)cb.buffer.data());
-    if (status < 0) throw make_runtime_error("Cannot write the attribute ", name);
-  }
-
   // -----------  READ  ------------
 
   void h5_read(group g, std::string const &name, char_buf &_cb) {
@@ -191,6 +178,19 @@ namespace h5 {
     if (err < 0) throw make_runtime_error("Error reading the vector<string> ", name, " in the group", g.name());
 
     _cb = std::move(cb_out);
+  }
+
+  // -----------   WRITE  ATTRIBUTE ------------
+
+  void h5_write_attribute(hid_t id, std::string const &name, char_buf const &cb) {
+    auto dt     = cb.dtype();
+    auto dspace = cb.dspace();
+
+    attribute attr = H5Acreate2(id, name.c_str(), dt, dspace, H5P_DEFAULT, H5P_DEFAULT);
+    if (!attr.is_valid()) throw make_runtime_error("Cannot create the attribute ", name);
+
+    herr_t status = H5Awrite(attr, dt, (void *)cb.buffer.data());
+    if (status < 0) throw make_runtime_error("Cannot write the attribute ", name);
   }
 
   // ----- read attribute -----
