@@ -41,7 +41,6 @@ def register_class (cls, doc = None, read_fun = None, hdf5_format = None):
          register_class (GfImFreq, doc= doc_if_different_from cls._hdf5_format_doc_ )
 
     """
-    print("REGISTER", hdf5_format)
     hdf_format = hdf5_format or (cls._hdf5_format_ if hasattr(cls,"_hdf5_format_") else cls.__name__) 
     assert hdf_format not in _hdf5_formats_dict, "class %s is already registered"%hdf_format
     doc = doc if doc else (cls._hdf5_format_doc_ if hasattr(cls,"_hdf5_format_doc_") else {})
