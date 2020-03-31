@@ -247,7 +247,7 @@ class HDFArchiveGroup (HDFArchiveGroupBasicLayer) :
         # try to find the format
         if hdf_format is None:
             print("Reading data_scheme from key {}".format(key))
-            hdf_format = self._group.read_key_attribute(key, "TRIQS_HDF5_data_scheme")
+            hdf_format = self._group.read_attribute_from_key(key, "TRIQS_HDF5_data_scheme")
             if hdf_format == "":
                 return bare_return()
 

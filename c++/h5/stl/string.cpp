@@ -90,6 +90,47 @@ namespace h5 {
     s.append(&(buf.front()));
   }
 
+  // ------------------------------------------------------------------
+
+  void h5_write_attribute_to_key(group g, std::string const &key, std::string const &name, std::string const &s) {
+
+    datatype dt     = str_datatype(s);
+    dataspace space = H5Screate(H5S_SCALAR);
+
+    attribute attr = H5Acreate_by_name(g, key.c_str(), name.c_str(), dt, space, H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT);
+    if (!attr.is_valid()) throw std::runtime_error("Cannot create the attribute " + name);
+
+    herr_t err = H5Awrite(attr, dt, (void *)(s.c_str()));
+    if (err < 0) throw std::runtime_error("Cannot write the attribute " + name);
+  }
+
+  // -------------------- Read ----------------------------------------------
+
+  /// Return the attribute name of obj, and "" if the attribute does not exist.
+  void h5_read_attribute_from_key(group g, std::string const &key, std::string const &name, std::string &s) {
+    s = "";
+
+    // if the attribute is not present, return 0
+    if (H5Aexists_by_name(g, key.c_str(), name.c_str(), H5P_DEFAULT) == 0) return; // not present
+
+    attribute attr = H5Aopen_by_name(g, key.c_str(), name.c_str(), H5P_DEFAULT, H5P_DEFAULT);
+    if (!attr.is_valid()) throw std::runtime_error("Cannot open the attribute " + name);
+
+    dataspace space = H5Aget_space(attr);
+
+    int rank = H5Sget_simple_extent_ndims(space);
+    if (rank != 0) throw std::runtime_error("Reading a string attribute and got rank !=0");
+
+    datatype strdatatype = H5Aget_type(attr);
+    H5_ASSERT(H5Tget_class(strdatatype) == H5T_STRING);
+
+    std::vector<char> buf(H5Aget_storage_size(attr) + 1, 0x00);
+    auto err = H5Aread(attr, strdatatype, (void *)(&buf[0]));
+    if (err < 0) throw std::runtime_error("Cannot read the attribute " + name);
+
+    s.append(&(buf.front()));
+  }
+
   // -------------------------------------------------------------------
   // the string datatype
   datatype char_buf::dtype() const { return str_datatype(lengths.back()); }
