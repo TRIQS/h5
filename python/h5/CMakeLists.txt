@@ -9,7 +9,7 @@ endforeach()
 
 # Build the h5py_io library
 add_library(h5py_io STATIC h5py_io.cpp)
-target_link_libraries(h5py_io PUBLIC h5_interface hdf5 python_and_numpy)
+target_link_libraries(h5py_io PUBLIC h5_interface hdf5 cpp2py python_and_numpy)
 target_include_directories(h5py_io PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 
 # Build the cpp2py module

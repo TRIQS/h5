@@ -7,6 +7,9 @@
 #include <h5/stl/string.hpp>
 #include <h5/array_interface.hpp>
 
+#include <cpp2py.hpp>
+#include <cpp2py/converters/vector.hpp>
+
 #include <hdf5.h>
 #include <hdf5_hl.h>
 
@@ -235,8 +238,24 @@ namespace h5 {
       return PyComplex_FromDoubles(z.real(), z.imag());
     }
 
-    // Last case : it is an array
+    if (H5Tget_class(lt.ty) == H5T_STRING) {
+      if (lt.rank() == 1) {
+	auto x = h5_read<std::vector<std::string>>(g, name);
+        return cpp2py::convert_to_python(x);
+      }
 
+      if (lt.rank() == 2) {
+	auto x = h5_read<std::vector<std::vector<std::string>>>(g, name);
+        return cpp2py::convert_to_python(x);
+      }
+
+      PyErr_SetString(PyExc_RuntimeError, "Unknown string dataset format");
+      return NULL;
+    }
+
+
+
+    // Last case : it is an array
     std::vector<npy_intp> L(lt.rank());                            // Make the lengths
     std::copy(lt.lengths.begin(), lt.lengths.end(), L.begin());    //npy_intp and size_t may differ, so I can not use =
     int elementsType = h5_to_npy(lt.ty, lt.has_complex_attribute); // element_type in Python from the hdf5 type and complex tag
