@@ -6,7 +6,6 @@
 #include "./group.hpp"
 #include "./format.hpp"
 #include "./scalar.hpp"
-#include "./generic.hpp"
 #include "./stl/string.hpp"
 #include "./stl/vector.hpp"
 #include "./stl/map.hpp"
@@ -14,6 +13,7 @@
 #include "./stl/tuple.hpp"
 #include "./stl/optional.hpp"
 #include "./stl/variant.hpp"
+#include "./generic.hpp"
 
 // Define this so cpp2py modules know whether hdf5 was included
 #define H5_INTERFACE_INCLUDED
