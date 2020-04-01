@@ -89,9 +89,8 @@ namespace h5 {
         for (int l = 0; l < len_string; ++l) {
           char c = cb.buffer[k * len_string + l];
           if (c == 0x00) break;
-          x.append(1, c);
+          s.append(1, c);
         }
-        s.append(&cb.buffer[k * len_string]);
         v_inner.push_back(s);
       }
     }
