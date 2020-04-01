@@ -1,6 +1,7 @@
 #pragma once
 #include "./macros.hpp"
 #include "./group.hpp"
+#include "./stl/string.hpp"
 #include <complex>
 #include <string>
 
@@ -43,8 +44,20 @@ namespace h5 {
 
   template <typename T> std::string get_hdf5_format(T const &) { return hdf5_format_impl<T>::invoke(); }
 
-  /// Read the triqs tag of the group if it is an object. Returns the empty string "" if attribute is not present
+  inline void write_hdf5_format_as_string(hid_t id, std::string const &s) { h5_write_attribute(id, "Format", s); }
+
+  // Write the h5 format tag to the object
+  template <typename T>
+  inline void write_hdf5_format(hid_t id, T const &) {
+    h5_write_attribute(id, "Format", get_hdf5_format<T>());
+  }
+
+  /// Read h5 format tag from the object
+  void read_hdf5_format(hid_t id, std::string &s);
   std::string read_hdf5_format(group g);
+
+  /// Add the h5 format tag to the key in the group
+  void read_hdf5_format_from_key(group g, std::string const &key, std::string &s);
 
   /// Asserts that the tag of the group is the same as the given string. Throws std::runtime_error if incompatible
   void assert_hdf5_format_as_string(group g, const char *tag_expected, bool ignore_if_absent = false);

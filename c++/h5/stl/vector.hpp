@@ -3,6 +3,7 @@
 #include <complex>
 #include "../group.hpp"
 #include "./string.hpp"
+#include "../format.hpp"
 #include "../scalar.hpp"
 
 namespace h5 {

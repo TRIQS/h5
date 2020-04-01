@@ -16,7 +16,7 @@ class storable {
 
   friend void h5_write(h5::group g, std::string const &name, storable const &obj) {
     auto gr = g.create_group(name);
-    h5_write_attribute(gr, "TRIQS_HDF5_data_scheme", storable::hdf5_format());
+    write_hdf5_format(gr, obj);
     h5_write(gr, "vec", obj.vec);
     h5_write(gr, "s", obj.s);
   }

@@ -1,11 +1,16 @@
 #pragma once
 #include "../group.hpp"
-#include "../format.hpp"
 #include <string>
 
 namespace h5 {
 
-  H5_SPECIALIZE_FORMAT2(std::string, string);
+  template <typename T>
+  struct hdf5_format_impl;
+
+  template <>
+  struct hdf5_format_impl<std::string> {
+    static std::string invoke() { return "string"; }
+  };
 
   /**
    * Write a string into an h5::group
@@ -81,30 +86,6 @@ namespace h5 {
    * @param s The string to read into
   */
   void h5_read_attribute_from_key(group g, std::string const &key, std::string const &name, std::string &s);
-
-  // ---------------------  hdf5 format -----------------------
-
-  inline void write_hdf5_format_as_string(hid_t id, std::string const &s) { h5_write_attribute(id, "TRIQS_HDF5_data_scheme", s); }
-
-  // Add the h5 format tag to the group
-  template <typename T>
-  inline void write_hdf5_format(hid_t id, T const &) {
-    h5_write_attribute(id, "TRIQS_HDF5_data_scheme", get_hdf5_format<T>());
-  }
-
-  // Add the h5 format tag to the group
-  inline void read_hdf5_format(hid_t id, std::string &s) { h5_read_attribute(id, "TRIQS_HDF5_data_scheme", s); }
-
-  // Add the h5 format tag to the key in the group
-  template <typename T>
-  inline void write_hdf5_format_to_key(group g, std::string const &key, T const &) {
-    h5_write_attribute_to_key(g, key, "TRIQS_HDF5_data_scheme", get_hdf5_format<T>());
-  }
-
-  // Add the h5 format tag to the key in the group
-  inline void read_hdf5_format_from_key(group g, std::string const &key, std::string &s) {
-    h5_write_attribute_to_key(g, key, "TRIQS_HDF5_data_scheme", s);
-  }
 
   // ---------------------   char_buf -----------------------
 

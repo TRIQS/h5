@@ -101,7 +101,7 @@ c.add_method("void write_attribute(std::string key, std::string val)", calling_p
 
 c.add_method("std::string read_attribute(std::string name)", calling_pattern = "std::string result = h5_read_attribute<std::string>(self_c, name)", doc = "Read an attribute")
 
-c.add_method("std::string read_attribute_from_key(std::string key, std::string attr)", calling_pattern = "std::string result = h5_read_attribute_from_key<std::string>(self_c, key, attr)", doc = "Read an attribute of a key")
+c.add_method("std::string read_hdf5_format_from_key(std::string key)", calling_pattern = "std::string result; read_hdf5_format_from_key(self_c, key, result);", doc = "Read the format string from the key in the group")
 
 module.add_class(c)
 

@@ -173,12 +173,12 @@ class HDFArchiveGroup (HDFArchiveGroupBasicLayer) :
              sch = hdf_format_access_for_write(ds)
            except :
              err = """
-               You are trying to store an object of type "%s", with the TRIQS_HDF5_data_scheme "%s".
-               But that format is not registered, so you will not be able to reread the class.
+               You are trying to store an object of type "%s", with the format "%s".
+               This format is not registered, so you will not be able to reread the class.
                Didn't you forget to register your class in h5.hdf_formats?
                """ %(val.__class__.__name__,ds)
              raise IOError(err)
-           g.write_attr("TRIQS_HDF5_data_scheme", ds)
+           g.write_attr("Format", ds)
 
         if hasattr(val,'__write_hdf5__') : # simplest protocol
             val.__write_hdf5__(self._group,key)
@@ -246,8 +246,7 @@ class HDFArchiveGroup (HDFArchiveGroupBasicLayer) :
 
         # try to find the format
         if hdf_format is None:
-            print("Reading data_scheme from key {}".format(key))
-            hdf_format = self._group.read_attribute_from_key(key, "TRIQS_HDF5_data_scheme")
+            hdf_format = self._group.read_hdf5_format_from_key(key)
             if hdf_format == "":
                 return bare_return()
 
@@ -255,7 +254,7 @@ class HDFArchiveGroup (HDFArchiveGroupBasicLayer) :
             print("Format ", hdf_format)
             sch, group_to_format = hdf_format_access_for_read(hdf_format)
         except KeyError:
-            print("Warning : The TRIQS_HDF5_data_scheme %s is not recognized. Returning as a group. Hint : did you forgot to import this python class ?"%hdf_format)
+            print("Warning : The hdf5 format %s is not recognized. Returning as a group. Hint : did you forgot to import this python class ?"%hdf_format)
             return bare_return()
 
         r_class_name  = sch.classname
