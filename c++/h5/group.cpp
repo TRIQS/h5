@@ -68,17 +68,17 @@ namespace h5 {
   group group::open_group(std::string const &key) const {
     if (key.empty()) return *this;
     if (!has_key(key)) throw std::runtime_error("no subgroup " + key + " in the group");
-    hid_t sg = H5Gopen2(id, key.c_str(), H5P_DEFAULT);
+    h5_object sg = H5Gopen2(id, key.c_str(), H5P_DEFAULT);
     if (sg < 0) throw std::runtime_error("Error in opening the subgroup " + key);
-    return group(h5_object{sg}, parent_file);
+    return group(sg, parent_file);
   }
 
   group group::create_group(std::string const &key, bool delete_if_exists) const {
     if (key.empty()) return *this;
     if (delete_if_exists) unlink(key);
-    hid_t id_g = H5Gcreate2(id, key.c_str(), H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT);
-    if (id_g < 0) throw std::runtime_error("Cannot create the subgroup " + key + " of the group " + name());
-    return group(h5_object{id_g}, parent_file);
+    h5_object obj = H5Gcreate2(id, key.c_str(), H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT);
+    if (not obj.is_valid()) throw std::runtime_error("Cannot create the subgroup " + key + " of the group " + name());
+    return group(obj, parent_file);
   }
 
   /// Open an existing DataSet. Throw if it does not exist.
