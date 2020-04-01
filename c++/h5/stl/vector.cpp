@@ -57,17 +57,12 @@ namespace h5 {
     v.resize(cb.lengths[0]);
     auto len_string = cb.lengths[1];
 
-    size_t i = 0;
+    long i = 0;
     for (auto &x : v) {
-      x = "";
-
-      // We append the chars one to stay backward compatible
-      // Certain hdf5 files contain strings without null-termination
-      for (int j = 0; j < len_string; ++j) {
-        char c = cb.buffer[i * len_string + j];
-        if (c == 0x00) break;
-        x.append(1, c);
-      }
+      // Use full range from char_buf and remove null characters
+      const char *bptr = &cb.buffer[i * len_string];
+      x                = std::string(bptr, bptr + len_string);
+      x.erase(std::remove(begin(x), end(x), '\0'), end(x));
       ++i;
     }
   }
@@ -79,18 +74,14 @@ namespace h5 {
     v.resize(cb.lengths[0]);
     auto inner_vec_size = cb.lengths[1];
     auto len_string     = cb.lengths[2];
-    long k              = 0;
-    for (auto &v_inner : v) {
-      for (int j = 0; j < inner_vec_size; ++j, ++k) {
-        std::string s = "";
 
-        // We append the chars one to stay backward compatible
-        // Certain hdf5 files contain strings without null-termination
-        for (int l = 0; l < len_string; ++l) {
-          char c = cb.buffer[k * len_string + l];
-          if (c == 0x00) break;
-          s.append(1, c);
-        }
+    long i = 0;
+    for (auto &v_inner : v) {
+      for (int j = 0; j < inner_vec_size; ++j, ++i) {
+        // Use full range from char_buf and remove null characters
+        const char *bptr = &cb.buffer[i * len_string];
+        auto s           = std::string(bptr, bptr + len_string);
+        s.erase(std::remove(begin(s), end(s), '\0'), end(s));
         v_inner.push_back(s);
       }
     }
