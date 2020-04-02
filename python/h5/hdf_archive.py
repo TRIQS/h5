@@ -57,8 +57,13 @@ class Dict:
         return {n:x for n,x in list(D.items())}
 
 register_class(List)
+register_backward_compatibility_method('PythonListWrap', 'List')
+
 register_class(Tuple)
+register_backward_compatibility_method('PythonTupleWrap', 'Tuple')
+
 register_class(Dict)
+register_backward_compatibility_method('PythonDictWrap', 'Dict')
 
 # -------------------------------------------
 #
