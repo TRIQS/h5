@@ -8,7 +8,7 @@ namespace h5 {
   /**
    *  HDF5 group
    */
-  class group : public h5_object {
+  class group : public object {
 
     file parent_file;
 
@@ -24,7 +24,7 @@ namespace h5 {
     private:
     // construct from the bare object and the parent
     // internal use only for open/create subgroup
-    group(h5_object obj, file _parent_file) : h5_object{obj}, parent_file(std::move(_parent_file)) {}
+    group(object obj, file _parent_file) : object{obj}, parent_file(std::move(_parent_file)) {}
 
     public:
     /// Name of the group

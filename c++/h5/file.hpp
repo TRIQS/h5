@@ -1,6 +1,6 @@
 #pragma once
 #include <vector>
-#include "./h5object.hpp"
+#include "./object.hpp"
 
 namespace h5 {
 
@@ -9,7 +9,7 @@ namespace h5 {
    *
    *  The class is basically a pointer to the file.
    */
-  class file : public h5_object {
+  class file : public object {
 
     public:
     file() = default; // for python converter only

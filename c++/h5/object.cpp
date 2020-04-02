@@ -8,7 +8,7 @@
 // FIXME
 //static_assert(std::is_same_v<hid_t, int64_t>, "Configuration error in HDF5. Check version.");
 
-#include "./h5object.hpp"
+#include "./object.hpp"
 #include <vector>
 #include <algorithm>
 #include <string>
@@ -131,32 +131,32 @@ namespace h5 {
     if (H5Iis_valid(id)) H5Iinc_ref(id);
   }
 
-  // -----------------------  h5_object  ---------------------------
+  // -----------------------  object  ---------------------------
 
-  h5_object::h5_object(h5_object const &x) : id(x.id) { xincref(id); } // a new copy, a new ref.
+  object::object(object const &x) : id(x.id) { xincref(id); } // a new copy, a new ref.
 
-  // make an h5_object when the id is now owned (simply inc. the ref).
-  h5_object h5_object::from_borrowed(hid_t id) {
+  // make an object when the id is now owned (simply inc. the ref).
+  object object::from_borrowed(hid_t id) {
     xincref(id);
-    return h5_object(id);
+    return object(id);
   }
 
-  h5_object &h5_object::operator=(h5_object &&x) noexcept { //steals the ref, after properly decref its own.
+  object &object::operator=(object &&x) noexcept { //steals the ref, after properly decref its own.
     xdecref(id);
     id   = x.id;
     x.id = 0;
     return *this;
   }
 
-  void h5_object::close() {
+  void object::close() {
     xdecref(id);
     id = 0;
   } // e.g. to close a file explicitely.
 
-  int h5_object::get_ref_count() const{
+  int object::get_ref_count() const{
     return H5Iget_ref(id);
   }
 
-  bool h5_object::is_valid() const { return H5Iis_valid(id) == 1; }
+  bool object::is_valid() const { return H5Iis_valid(id) == 1; }
 
 } // namespace h5

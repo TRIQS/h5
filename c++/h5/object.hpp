@@ -40,38 +40,38 @@ namespace h5 {
    * A handle to the a general HDF5 object
    *
    * HDF5 uses a reference counting system, similar to python.
-   * h5_object handles the proper reference couting (similar to pybind11::object e.g.)
+   * h5::object handles the proper reference couting (similar to pybind11::object e.g.)
    * using a RAII pattern (hence exception safety).
    */
-  class h5_object {
+  class object {
 
     protected:
     hid_t id = 0; //NOLINT Ok, I want a protected variable ...
 
     public:
-    /// make an h5_object from a simple borrowed ref (simply inc. the ref).
-    static h5_object from_borrowed(hid_t id);
+    /// make an h5::object from a simple borrowed ref (simply inc. the ref).
+    static object from_borrowed(hid_t id);
 
     /// Constructor from an owned id (or 0). It steals (take ownership) of the reference.
-    h5_object(hid_t id = 0) : id(id) {}
+    object(hid_t id = 0) : id(id) {}
 
     /// A new ref. No deep copy.
-    h5_object(h5_object const &x);
+    object(object const &x);
 
     /// Steals the reference
-    h5_object(h5_object &&x) noexcept : id(x.id) { x.id = 0; }
+    object(object &&x) noexcept : id(x.id) { x.id = 0; }
 
     /// Copy the reference and incref
-    h5_object &operator=(h5_object const &x) {
-      operator=(h5_object(x));
+    object &operator=(object const &x) {
+      operator=(object(x));
       return *this;
     }
 
     /// Steals the ref.
-    h5_object &operator=(h5_object &&x) noexcept;
+    object &operator=(object &&x) noexcept;
 
     ///
-    ~h5_object() { close(); }
+    ~object() { close(); }
 
     /// Release the HDF5 handle and reset the object to default state (id =0).
     void close();
@@ -90,11 +90,11 @@ namespace h5 {
 
   // simple but useful aliases. It does NOT check the h5 type of the object.
   // FIXME : derive and make a check ??
-  using dataset   = h5_object;
-  using datatype  = h5_object;
-  using dataspace = h5_object;
-  using proplist  = h5_object;
-  using attribute = h5_object;
+  using dataset   = object;
+  using datatype  = object;
+  using dataspace = object;
+  using proplist  = object;
+  using attribute = object;
 
   // ------------------------------
 

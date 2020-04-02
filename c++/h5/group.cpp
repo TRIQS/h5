@@ -13,17 +13,17 @@ namespace h5 {
 
   //static_assert(std::is_same<::hid_t, hid_t>::value, "Internal error");
 
-  group::group(file f) : h5_object(), parent_file(f) {
+  group::group(file f) : object(), parent_file(f) {
     id = H5Gopen2(f, "/", H5P_DEFAULT);
     if (id < 0) throw std::runtime_error("Cannot open the root group / in the file " + f.name());
   }
 
-  //group::group(h5_object obj) : h5_object(std::move(obj)) {
+  //group::group(object obj) : object(std::move(obj)) {
   //if (!H5Iis_valid(this->id)) throw std::runtime_error("Invalid input in group constructor from id");
   //if (H5Iget_type(this->id) != H5I_GROUP) throw std::runtime_error("Group constructor must take the id of a group or a file ");
   //}
 
-  //group::group(hid_t id_) : group(h5_object(id_)) {}
+  //group::group(hid_t id_) : group(object(id_)) {}
 
   std::string group::name() const {
     char _n[1];
@@ -68,7 +68,7 @@ namespace h5 {
   group group::open_group(std::string const &key) const {
     if (key.empty()) return *this;
     if (!has_key(key)) throw std::runtime_error("no subgroup " + key + " in the group");
-    h5_object sg = H5Gopen2(id, key.c_str(), H5P_DEFAULT);
+    object sg = H5Gopen2(id, key.c_str(), H5P_DEFAULT);
     if (sg < 0) throw std::runtime_error("Error in opening the subgroup " + key);
     return group(sg, parent_file);
   }
@@ -76,7 +76,7 @@ namespace h5 {
   group group::create_group(std::string const &key, bool delete_if_exists) const {
     if (key.empty()) return *this;
     if (delete_if_exists) unlink(key);
-    h5_object obj = H5Gcreate2(id, key.c_str(), H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT);
+    object obj = H5Gcreate2(id, key.c_str(), H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT);
     if (not obj.is_valid()) throw std::runtime_error("Cannot create the subgroup " + key + " of the group " + name());
     return group(obj, parent_file);
   }
