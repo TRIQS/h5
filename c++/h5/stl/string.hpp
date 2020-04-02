@@ -41,26 +41,26 @@ namespace h5 {
   /**
    * Write a string attribute to an object
    *
-   * @param id The object id
+   * @param obj The object to write the attribute to
    * @param name The name of the attribute
    * @param s The string attribute
   */
-  void h5_write_attribute(hid_t id, std::string const &name, std::string const &s);
+  void h5_write_attribute(object obj, std::string const &name, std::string const &s);
 
-  /// Write a const char array as a string attribute of an h5::h5_object
-  inline void h5_write_attribute(hid_t id, std::string const &name, const char *s) { h5_write_attribute(id, name, std::string{s}); }
+  /// Write a const char array as a string attribute of an h5::object
+  inline void h5_write_attribute(object obj, std::string const &name, const char *s) { h5_write_attribute(obj, name, std::string{s}); }
 
   /**
    * Read a string attribute from an object
    *
-   * @param id The object id
+   * @param obj The object to read the attribute from
    * @param name The name of the attribute
    * @param value The string to read into
    */
-  void h5_read_attribute(hid_t id, std::string const &name, std::string &s);
+  void h5_read_attribute(object obj, std::string const &name, std::string &s);
 
   // Explicitly forbidden
-  inline void h5_read_attribute(hid_t id, std::string const &name, char *s) = delete;
+  inline void h5_read_attribute(object obj, std::string const &name, char *s) = delete;
 
   /**
    * Write a string attribute to a key in an h5::group
@@ -104,8 +104,8 @@ namespace h5 {
 
   // read/write for char_buf
   void h5_write(group g, std::string const &name, char_buf const &cb);
-  void h5_write_attribute(hid_t id, std::string const &name, char_buf const &cb);
+  void h5_write_attribute(object obj, std::string const &name, char_buf const &cb);
   void h5_read(group g, std::string const &name, char_buf &_cb);
-  void h5_read_attribute(hid_t id, std::string const &name, char_buf &_cb);
+  void h5_read_attribute(object obj, std::string const &name, char_buf &_cb);
 
 } // namespace h5

@@ -51,12 +51,12 @@ namespace h5 {
 
   // ------------------------------------------------------------------
 
-  void h5_write_attribute(hid_t id, std::string const &name, std::string const &s) {
+  void h5_write_attribute(object obj, std::string const &name, std::string const &s) {
 
     datatype dt     = str_datatype(s);
     dataspace space = H5Screate(H5S_SCALAR);
 
-    attribute attr = H5Acreate2(id, name.c_str(), dt, space, H5P_DEFAULT, H5P_DEFAULT);
+    attribute attr = H5Acreate2(obj, name.c_str(), dt, space, H5P_DEFAULT, H5P_DEFAULT);
     if (!attr.is_valid()) throw std::runtime_error("Cannot create the attribute " + name);
 
     herr_t err = H5Awrite(attr, dt, (void *)(s.c_str()));
@@ -66,13 +66,13 @@ namespace h5 {
   // -------------------- Read ----------------------------------------------
 
   /// Return the attribute name of obj, and "" if the attribute does not exist.
-  void h5_read_attribute(hid_t id, std::string const &name, std::string &s) {
+  void h5_read_attribute(object obj, std::string const &name, std::string &s) {
     s = "";
 
     // if the attribute is not present, return 0
-    if (H5LTfind_attribute(id, name.c_str()) == 0) return; // not present
+    if (H5LTfind_attribute(obj, name.c_str()) == 0) return; // not present
 
-    attribute attr = H5Aopen(id, name.c_str(), H5P_DEFAULT);
+    attribute attr = H5Aopen(obj, name.c_str(), H5P_DEFAULT);
     if (!attr.is_valid()) throw std::runtime_error("Cannot open the attribute " + name);
 
     dataspace space = H5Aget_space(attr);
@@ -182,11 +182,11 @@ namespace h5 {
 
   // -----------   WRITE  ATTRIBUTE ------------
 
-  void h5_write_attribute(hid_t id, std::string const &name, char_buf const &cb) {
+  void h5_write_attribute(object obj, std::string const &name, char_buf const &cb) {
     auto dt     = cb.dtype();
     auto dspace = cb.dspace();
 
-    attribute attr = H5Acreate2(id, name.c_str(), dt, dspace, H5P_DEFAULT, H5P_DEFAULT);
+    attribute attr = H5Acreate2(obj, name.c_str(), dt, dspace, H5P_DEFAULT, H5P_DEFAULT);
     if (!attr.is_valid()) throw make_runtime_error("Cannot create the attribute ", name);
 
     herr_t status = H5Awrite(attr, dt, (void *)cb.buffer.data());
@@ -195,8 +195,8 @@ namespace h5 {
 
   // ----- read attribute -----
 
-  void h5_read_attribute(hid_t id, std::string const &name, char_buf &_cb) {
-    attribute attr = H5Aopen(id, name.c_str(), H5P_DEFAULT);
+  void h5_read_attribute(object obj, std::string const &name, char_buf &_cb) {
+    attribute attr = H5Aopen(obj, name.c_str(), H5P_DEFAULT);
     if (!attr.is_valid()) throw make_runtime_error("Cannot open the attribute ", name);
 
     dataspace d_space = H5Aget_space(attr);

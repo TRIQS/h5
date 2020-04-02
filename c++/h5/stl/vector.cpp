@@ -89,23 +89,23 @@ namespace h5 {
 
   // -----------   WRITE  ATTRIBUTE ------------
 
-  void h5_write_attribute(hid_t id, std::string const &name, std::vector<std::string> const &v) { h5_write_attribute(id, name, to_char_buf(v)); }
+  void h5_write_attribute(object obj, std::string const &name, std::vector<std::string> const &v) { h5_write_attribute(obj, name, to_char_buf(v)); }
 
-  void h5_write_attribute(hid_t id, std::string const &name, std::vector<std::vector<std::string>> const &v) {
-    h5_write_attribute(id, name, to_char_buf(v));
+  void h5_write_attribute(object obj, std::string const &name, std::vector<std::vector<std::string>> const &v) {
+    h5_write_attribute(obj, name, to_char_buf(v));
   }
 
   // -----------   READ  ATTRIBUTE ------------
 
-  void h5_read_attribute(hid_t id, std::string const &name, std::vector<std::string> &v) {
+  void h5_read_attribute(object obj, std::string const &name, std::vector<std::string> &v) {
     char_buf cb;
-    h5_read_attribute(id, name, cb);
+    h5_read_attribute(obj, name, cb);
     from_char_buf(cb, v);
   }
 
-  void h5_read_attribute(hid_t id, std::string const &name, std::vector<std::vector<std::string>> &v) {
+  void h5_read_attribute(object obj, std::string const &name, std::vector<std::vector<std::string>> &v) {
     char_buf cb;
-    h5_read_attribute(id, name, cb);
+    h5_read_attribute(obj, name, cb);
     from_char_buf(cb, v);
   }
 

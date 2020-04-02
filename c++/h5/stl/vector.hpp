@@ -112,10 +112,10 @@ namespace h5 {
     }
   }
 
-  void h5_write_attribute(hid_t id, std::string const &name, std::vector<std::vector<std::string>> const &V);
-  void h5_read_attribute(hid_t id, std::string const &name, std::vector<std::vector<std::string>> &V);
+  void h5_write_attribute(object obj, std::string const &name, std::vector<std::vector<std::string>> const &V);
+  void h5_read_attribute(object obj, std::string const &name, std::vector<std::vector<std::string>> &V);
 
-  void h5_write_attribute(hid_t id, std::string const &name, std::vector<std::string> const &V);
-  void h5_read_attribute(hid_t id, std::string const &name, std::vector<std::string> &V);
+  void h5_write_attribute(object obj, std::string const &name, std::vector<std::string> const &V);
+  void h5_read_attribute(object obj, std::string const &name, std::vector<std::string> &V);
 
 } // namespace h5

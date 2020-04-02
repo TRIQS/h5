@@ -26,14 +26,14 @@ namespace h5 {
    * A generic attribute read from an object
    *
    * @tparam T The C++ type of the attribute
-   * @param id The object id
+   * @param obj The object to read the attribute from
    * @param name Name of the attribute
    * @return The attribute object, and "" if the attribute does not exist.
    */
   template <typename T>
-  T h5_read_attribute(hid_t id, std::string const &name) {
+  T h5_read_attribute(object obj, std::string const &name) {
     T x;
-    h5_read_attribute(id, name, x);
+    h5_read_attribute(obj, name, x);
     return x;
   }
 

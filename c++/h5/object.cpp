@@ -103,19 +103,13 @@ namespace h5 {
     return pos->name;
   }
 
-  hid_t get_hdf5_type(dataset ds){
-    return H5Dget_type(ds);
-  }
+  hid_t get_hdf5_type(dataset ds) { return H5Dget_type(ds); }
 
-  bool hdf5_type_equal(datatype dt1, datatype dt2){
+  bool hdf5_type_equal(datatype dt1, datatype dt2) {
     // For string do not compare size, cset..
-    if(H5Tget_class(dt1) == H5T_STRING){
-      return H5Tget_class(dt2) == H5T_STRING;
-    }
+    if (H5Tget_class(dt1) == H5T_STRING) { return H5Tget_class(dt2) == H5T_STRING; }
     auto res = H5Tequal(dt1, dt2);
-    if (res < 0){
-      throw std::runtime_error("Failure it hdf5 type comparison");
-    }
+    if (res < 0) { throw std::runtime_error("Failure it hdf5 type comparison"); }
     return res > 0;
   }
 
@@ -153,9 +147,7 @@ namespace h5 {
     id = 0;
   } // e.g. to close a file explicitely.
 
-  int object::get_ref_count() const{
-    return H5Iget_ref(id);
-  }
+  int object::get_ref_count() const { return H5Iget_ref(id); }
 
   bool object::is_valid() const { return H5Iis_valid(id) == 1; }
 

@@ -77,9 +77,9 @@ namespace h5::array_interface {
   void read(group g, std::string const &name, h5_array_view v, h5_lengths_type lt);
 
   // Write as attribute
-  void write_attribute(hid_t id, std::string const &name, h5_array_view v);
+  void write_attribute(object obj, std::string const &name, h5_array_view v);
 
   // Read as attribute
-  void read_attribute(hid_t id, std::string const &name, h5_array_view v);
+  void read_attribute(object obj, std::string const &name, h5_array_view v);
 
 } // namespace h5::array_interface

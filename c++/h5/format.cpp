@@ -4,10 +4,10 @@
 
 namespace h5 {
 
-  void read_hdf5_format(hid_t id, std::string &s) {
-    h5_read_attribute(id, "Format", s);
+  void read_hdf5_format(object obj, std::string &s) {
+    h5_read_attribute(obj, "Format", s);
     if (s == "") { // Backward compatibility
-      h5_read_attribute(id, "TRIQS_HDF5_data_scheme", s);
+      h5_read_attribute(obj, "TRIQS_HDF5_data_scheme", s);
     }
   }
 

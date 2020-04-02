@@ -44,16 +44,16 @@ namespace h5 {
 
   template <typename T> std::string get_hdf5_format(T const &) { return hdf5_format_impl<T>::invoke(); }
 
-  inline void write_hdf5_format_as_string(hid_t id, std::string const &s) { h5_write_attribute(id, "Format", s); }
+  inline void write_hdf5_format_as_string(object obj, std::string const &s) { h5_write_attribute(obj, "Format", s); }
 
   // Write the h5 format tag to the object
   template <typename T>
-  inline void write_hdf5_format(hid_t id, T const &) {
-    h5_write_attribute(id, "Format", get_hdf5_format<T>());
+  inline void write_hdf5_format(object obj, T const &) {
+    h5_write_attribute(obj, "Format", get_hdf5_format<T>());
   }
 
   /// Read h5 format tag from the object
-  void read_hdf5_format(hid_t id, std::string &s);
+  void read_hdf5_format(object obj, std::string &s);
   std::string read_hdf5_format(group g);
 
   /// Add the h5 format tag to the key in the group

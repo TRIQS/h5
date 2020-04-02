@@ -84,13 +84,13 @@ namespace h5::array_interface {
 
   //-------------------------------------------------------------
 
-  void write_attribute(hid_t id, std::string const &name, h5_array_view v) {
+  void write_attribute(object obj, std::string const &name, h5_array_view v) {
 
-    if (H5LTfind_attribute(id, name.c_str()) != 0) throw std::runtime_error("The attribute " + name + " is already present. Can not overwrite");
+    if (H5LTfind_attribute(obj, name.c_str()) != 0) throw std::runtime_error("The attribute " + name + " is already present. Can not overwrite");
 
     dataspace mem_d_space = make_mem_dpace(v);
 
-    attribute attr = H5Acreate2(id, name.c_str(), v.ty, mem_d_space, H5P_DEFAULT, H5P_DEFAULT);
+    attribute attr = H5Acreate2(obj, name.c_str(), v.ty, mem_d_space, H5P_DEFAULT, H5P_DEFAULT);
     if (!attr.is_valid()) throw std::runtime_error("Cannot create the attribute " + name);
 
     herr_t err = H5Awrite(attr, v.ty, v.start);
@@ -147,11 +147,11 @@ namespace h5::array_interface {
 
   //-------------------------------------------------------------
 
-  void read_attribute(hid_t id, std::string const &name, h5_array_view v) {
+  void read_attribute(object obj, std::string const &name, h5_array_view v) {
 
     //if (v.rank() != 0) throw std::runtime_error("Non scalar attribute not implemented");
 
-    attribute attr = H5Aopen(id, name.c_str(), H5P_DEFAULT);
+    attribute attr = H5Aopen(obj, name.c_str(), H5P_DEFAULT);
     if (!attr.is_valid()) throw std::runtime_error("Cannot open the attribute " + name);
 
     dataspace space = H5Aget_space(attr);

@@ -34,13 +34,13 @@ namespace h5 {
   }
 
   template <typename T>
-  void h5_write_attribute(hid_t id, std::string const &name, T const &x) H5_REQUIRES(std::is_arithmetic_v<T> or is_complex_v<T>) {
-    array_interface::write_attribute(id, name, array_interface::h5_array_view_from_scalar(x));
+  void h5_write_attribute(object obj, std::string const &name, T const &x) H5_REQUIRES(std::is_arithmetic_v<T> or is_complex_v<T>) {
+    array_interface::write_attribute(obj, name, array_interface::h5_array_view_from_scalar(x));
   }
 
   template <typename T>
-  void h5_read_attribute(hid_t id, std::string const &name, T &x) H5_REQUIRES(std::is_arithmetic_v<T> or is_complex_v<T>) {
-    array_interface::read_attribute(id, name, array_interface::h5_array_view_from_scalar(x));
+  void h5_read_attribute(object obj, std::string const &name, T &x) H5_REQUIRES(std::is_arithmetic_v<T> or is_complex_v<T>) {
+    array_interface::read_attribute(obj, name, array_interface::h5_array_view_from_scalar(x));
   }
 
 } // namespace h5
