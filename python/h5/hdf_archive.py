@@ -88,30 +88,7 @@ class HDFArchiveGroup(HDFArchiveGroupBasicLayer):
         self.is_top_level = False
 
     #-------------------------------------------------------------------------
-    def _key_cipher(self,key) :
-        if key in self.ignored_keys :
-            raise KeyError("key %s is reserved"%key)
-        if self.key_as_string_only : # for bacward compatibility
-            if type(key) is not str:
-                raise KeyError("Key must be string only !")
-            return key
-        r = repr(key)
-        if len (r)> self._MaxLengthKey :
-            raise KeyError("The Key is too large !")
-        # check that the key is ok (it can be reconstructed)
-        try :
-            if eval(r) != key: raise KeyError
-        except :
-            raise KeyError("The Key *%s*cannot be serialized properly by repr !"%key)
-        return r
-
-    #-------------------------------------------------------------------------
-    def _key_decipher(self,key) :
-        return key if self.key_as_string_only else eval(key)
-
-    #-------------------------------------------------------------------------
     def __contains__(self,key) :
-        key= self._key_cipher(key)
         return key in list(self.keys())
 
     #-------------------------------------------------------------------------
@@ -153,13 +130,11 @@ class HDFArchiveGroup(HDFArchiveGroupBasicLayer):
 
     #-------------------------------------------------------------------------
     def __delitem__(self,key) :
-        key= self._key_cipher(key)
         self._clean_key(key,True)
 
     #-------------------------------------------------------------------------
     def __setitem__(self,key,val) :
         assert '/' not in key, "/ can not be part of a key"
-        key= self._key_cipher(key)# first look if key is a string or key
 
         if key in list(self.keys()) :
             if self.options['do_not_overwrite_entries'] : raise KeyError("key %s already exist."%key)
