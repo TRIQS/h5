@@ -22,7 +22,7 @@
 import sys,numpy
 from importlib import import_module
 from .hdf_archive_basic_layer_h5py import HDFArchiveGroupBasicLayer
-from .hdf_formats import hdf_format_access_for_write, hdf_format_access_for_read, register_class
+from .hdf_formats import register_class, get_format_info
 
 # -------------------------------------------
 #
@@ -148,7 +148,7 @@ class HDFArchiveGroup(HDFArchiveGroupBasicLayer):
            """Use the _hdf5_format_ if it exists otherwise the class name"""
            ds = val._hdf5_format_ if hasattr(val,"_hdf5_format_") else val.__class__.__name__
            try :
-             sch = hdf_format_access_for_write(ds)
+             get_format_info(ds)
            except :
              err = """
                You are trying to store an object of type "%s", with the format "%s".
@@ -162,15 +162,15 @@ class HDFArchiveGroup(HDFArchiveGroupBasicLayer):
             val.__write_hdf5__(self._group,key)
             self.cached_keys.append(key) # I need to do this here
             # Should be done in the __write_hdf5__ function
-            #SUB = HDFArchiveGroup(self,key)
-            #write_attributes(SUB)
+            #SubGroup = HDFArchiveGroup(self,key)
+            #write_attributes(SubGroup)
         elif hasattr(val,'__reduce_to_dict__') : # Is it a HDF_compliant object
             self.create_group(key) # create a new group
             d = val.__reduce_to_dict__()
             if not isinstance(d,dict) : raise ValueError(" __reduce_to_dict__ method does not return a dict. See the doc !")
-            SUB = HDFArchiveGroup(self,key)
-            for n,v in list(d.items()) : SUB[n] = v
-            write_attributes(SUB)
+            SubGroup = HDFArchiveGroup(self,key)
+            for k, v in list(d.items()) : SubGroup[k] = v
+            write_attributes(SubGroup)
         elif isinstance(val,numpy.ndarray) : # it is a numpy
             try :
                self._write( key, numpy.array(val,copy=1,order='C') )
@@ -179,8 +179,8 @@ class HDFArchiveGroup(HDFArchiveGroupBasicLayer):
                raise
         elif isinstance(val, HDFArchiveGroup) : # will copy the group recursively
             # we could add this for any object that has .items() in fact...
-            SUB = HDFArchiveGroup(self, key)
-            for k,v in list(val.items()) : SUB[k]=v
+            SubGroup = HDFArchiveGroup(self, key)
+            for k,v in list(val.items()) : SubGroup[k]=v
         else : # anything else... expected to be a scalar
             try :
                self._write( key, val)
@@ -209,12 +209,11 @@ class HDFArchiveGroup(HDFArchiveGroupBasicLayer):
     def __getitem1__(self, key, reconstruct_python_object, hdf_format = None) :
 
         if key not in self :
-            key = self._key_cipher(key)
-            if key not in self  : raise KeyError("Key %s does not exist."%key)
+            raise KeyError("Key %s does not exist."%key)
 
         if self.is_group(key) :
-            SUB = HDFArchiveGroup(self,key) # View of the subgroup
-            bare_return = lambda: SUB
+            SubGroup = HDFArchiveGroup(self,key) # View of the subgroup
+            bare_return = lambda: SubGroup
         elif self.is_data(key) :
             bare_return = lambda: self._read(key)
         else :
@@ -230,26 +229,26 @@ class HDFArchiveGroup(HDFArchiveGroupBasicLayer):
 
         try :
             print("Format ", hdf_format)
-            sch, group_to_format = hdf_format_access_for_read(hdf_format)
+            fmt_info = get_format_info(hdf_format)
         except KeyError:
             print("Warning : The hdf5 format %s is not recognized. Returning as a group. Hint : did you forgot to import this python class ?"%hdf_format)
             return bare_return()
 
-        r_class_name  = sch.classname
-        r_module_name = sch.modulename
-        r_readfun = sch.read_fun
+        r_class_name  = fmt_info.classname
+        r_module_name = fmt_info.modulename
+        r_readfun = fmt_info.read_fun
         if not (r_class_name and r_module_name) : return bare_return()
         try:
             r_class = getattr(import_module(r_module_name),r_class_name)
         except KeyError:
             raise RuntimeError("I cannot find the class %s to reconstruct the object !"%r_class_name)
-        if r_readfun :
-            return r_readfun(self._group,str(key)) # str transforms unicode string to regular python string
+        if r_readfun:
+            return r_readfun(self._group, key)
         if hasattr(r_class,"__factory_from_dict__"):
             assert self.is_group(key), "__factory_from_dict__ requires a subgroup"
-            f = lambda K : SUB.__getitem1__(K, reconstruct_python_object, group_to_format.get(K, None) if group_to_format else None)
-            values = {self._key_decipher(str(K)): f(K) for K in SUB}  # str transforms unicode string to regular python string
-            return r_class.__factory_from_dict__(key,values)
+            reconstruct = lambda k: SubGroup.__getitem1__(k, reconstruct_python_object, fmt_info.backward_compat.get(k, None))
+            values = {k: reconstruct(k) for k in SubGroup}
+            return r_class.__factory_from_dict__(key, values)
 
         raise ValueError("Impossible to reread the class %s for group %s and key %s"%(r_class_name,self, key))
 
