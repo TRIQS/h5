@@ -7,7 +7,7 @@ namespace h5 {
 
   template <typename T>
   struct hdf5_format_impl<std::map<std::string, T>> {
-    static std::string invoke() { return "PythonDictWrap"; } //"std::map<string," + hdf5_format_impl<T>::invoke() + ">"; }
+    static std::string invoke() { return "Dict"; }
   };
 
   /**

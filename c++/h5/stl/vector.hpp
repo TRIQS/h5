@@ -28,8 +28,7 @@ namespace h5 {
 
   template <typename T>
   struct hdf5_format_impl<std::vector<T>> {
-    static std::string invoke() { return "PythonListWrap"; }
-    //static std::string invoke() { return "vector<" + get_hdf5_format<T>() + ">"; }
+    static std::string invoke() { return "List"; }
   };
 
   // ----------------------------------------------------------------------------

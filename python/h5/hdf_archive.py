@@ -22,7 +22,6 @@
 import sys,numpy
 from importlib import import_module
 from .hdf_archive_basic_layer_h5py import HDFArchiveGroupBasicLayer
-
 from .hdf_formats import hdf_format_access_for_write, hdf_format_access_for_read, register_class
 
 # -------------------------------------------
@@ -30,7 +29,7 @@ from .hdf_formats import hdf_format_access_for_write, hdf_format_access_for_read
 #  Various wrappers for basic python types.
 #
 # --------------------------------------------
-class PythonListWrap:
+class List:
     def __init__(self,ob) :
         self.ob = ob
     def __reduce_to_dict__(self) :
@@ -39,7 +38,7 @@ class PythonListWrap:
     def __factory_from_dict__(cls, name, D) :
         return [x for n,x in sorted([(int(n), x) for n,x in list(D.items())])]
 
-class PythonTupleWrap:
+class Tuple:
     def __init__(self,ob) :
         self.ob = ob
     def __reduce_to_dict__(self) :
@@ -48,7 +47,7 @@ class PythonTupleWrap:
     def __factory_from_dict__(cls, name, D) :
         return tuple(x for n,x in sorted([(int(n), x) for n,x in list(D.items())]))
 
-class PythonDictWrap:
+class Dict:
     def __init__(self,ob) :
         self.ob = ob
     def __reduce_to_dict__(self) :
@@ -57,9 +56,9 @@ class PythonDictWrap:
     def __factory_from_dict__(cls, name, D) :
         return {n:x for n,x in list(D.items())}
 
-register_class (PythonListWrap)
-register_class (PythonTupleWrap)
-register_class (PythonDictWrap)
+register_class(List)
+register_class(Tuple)
+register_class(Dict)
 
 # -------------------------------------------
 #
@@ -67,10 +66,14 @@ register_class (PythonDictWrap)
 #
 # --------------------------------------------
 
-class HDFArchiveGroup (HDFArchiveGroupBasicLayer) :
+class HDFArchiveGroup(HDFArchiveGroupBasicLayer):
     """
     """
-    _wrappedType = {list : PythonListWrap, tuple : PythonTupleWrap, dict : PythonDictWrap}
+    _wrappedType = {
+        list : List,
+        tuple : Tuple,
+        dict : Dict
+    }
     _MaxLengthKey = 500
 
     def __init__(self, parent, subpath) :
