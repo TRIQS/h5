@@ -20,7 +20,7 @@
 ################################################################################
 
 import numpy,string
-from .hdf_archive import *
+from .archive import *
 from . import _h5py as h5
  
 class HDFArchiveGroupBasicLayer:

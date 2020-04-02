@@ -21,8 +21,8 @@
 
 import sys,numpy
 from importlib import import_module
-from .hdf_archive_basic_layer_h5py import HDFArchiveGroupBasicLayer
-from .hdf_formats import register_class, get_format_info
+from .archive_basic_layer import HDFArchiveGroupBasicLayer
+from .formats import register_class, register_backward_compatibility_method, get_format_info
 
 # -------------------------------------------
 #
@@ -158,7 +158,7 @@ class HDFArchiveGroup(HDFArchiveGroupBasicLayer):
              err = """
                You are trying to store an object of type "%s", with the format "%s".
                This format is not registered, so you will not be able to reread the class.
-               Didn't you forget to register your class in h5.hdf_formats?
+               Didn't you forget to register your class in h5.formats?
                """ %(val.__class__.__name__,ds)
              raise IOError(err)
            g.write_attr("Format", ds)
@@ -211,7 +211,7 @@ class HDFArchiveGroup(HDFArchiveGroupBasicLayer):
         return self.__getitem1__(key,self._reconstruct_python_objects)
 
     #-------------------------------------------------------------------------
-    def __getitem1__(self, key, reconstruct_python_object, hdf_format = None) :
+    def __getitem1__(self, key, reconstruct_python_object, hdf5_format = None) :
 
         if key not in self :
             raise KeyError("Key %s does not exist."%key)
@@ -227,16 +227,16 @@ class HDFArchiveGroup(HDFArchiveGroupBasicLayer):
         if not reconstruct_python_object : return bare_return()
 
         # try to find the format
-        if hdf_format is None:
-            hdf_format = self._group.read_hdf5_format_from_key(key)
-            if hdf_format == "":
+        if hdf5_format is None:
+            hdf5_format = self._group.read_hdf5_format_from_key(key)
+            if hdf5_format == "":
                 return bare_return()
 
         try :
-            print("Format ", hdf_format)
-            fmt_info = get_format_info(hdf_format)
+            print("Format ", hdf5_format)
+            fmt_info = get_format_info(hdf5_format)
         except KeyError:
-            print("Warning : The hdf5 format %s is not recognized. Returning as a group. Hint : did you forgot to import this python class ?"%hdf_format)
+            print("Warning : The hdf5 format %s is not recognized. Returning as a group. Hint : did you forgot to import this python class ?"%hdf5_format)
             return bare_return()
 
         r_class_name  = fmt_info.classname

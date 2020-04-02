@@ -23,7 +23,7 @@ import numpy as np
 
 
 from storable import Storable
-from h5.hdf_archive import HDFArchive # HDFArchiveGroup, HDFArchiveInert
+from h5 import HDFArchive
 
 class TestHdf5Class(unittest.TestCase):
 
