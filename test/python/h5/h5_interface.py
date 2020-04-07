@@ -85,5 +85,3 @@ class test_operators(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
-
-

@@ -16,9 +16,6 @@ class test_operators(unittest.TestCase):
 
     def test_h5_arch(self):
 
-        
-
-
         # Open a file and write a few things into it
         f = h5.File("test2.h5", 'w')
         g = h5.Group(f)
