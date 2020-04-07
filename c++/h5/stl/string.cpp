@@ -7,7 +7,8 @@
 
 namespace h5 {
 
-  static datatype str_datatype(long size) {
+  // Returns a str datatype of a particular size (default=variable)
+  static datatype str_dtype(size_t size = H5T_VARIABLE) {
     datatype dt = H5Tcopy(H5T_C_S1);
     auto err    = H5Tset_size(dt, size);
     H5Tset_cset(dt, H5T_CSET_UTF8); // Always use UTF8 encoding
@@ -15,51 +16,61 @@ namespace h5 {
     return dt;
   }
 
-  static datatype str_datatype(std::string const &s) { return str_datatype(s.size() + 1); }
-
   // ------------------------------------------------------------------
 
   void h5_write(group g, std::string const &name, std::string const &s) {
 
-    datatype dt     = str_datatype(s);
+    datatype dt     = str_dtype();
     dataspace space = H5Screate(H5S_SCALAR);
     dataset ds      = g.create_dataset(name, dt, space);
 
-    auto err = H5Dwrite(ds, dt, H5S_ALL, H5S_ALL, H5P_DEFAULT, (void *)(s.c_str()));
+    auto *s_ptr = s.c_str();
+    auto err    = H5Dwrite(ds, dt, H5S_ALL, H5S_ALL, H5P_DEFAULT, &s_ptr);
     if (err < 0) throw std::runtime_error("Error writing the string named" + name + " in the group" + g.name());
   }
 
   // -------------------- Read ----------------------------------------------
 
   void h5_read(group g, std::string const &name, std::string &s) {
-    dataset ds        = g.open_dataset(name);
-    dataspace d_space = H5Dget_space(ds);
-    int rank          = H5Sget_simple_extent_ndims(d_space);
+    s = "";
+
+    dataset ds       = g.open_dataset(name);
+    dataspace dspace = H5Dget_space(ds);
+    int rank         = H5Sget_simple_extent_ndims(dspace);
     if (rank != 0) throw std::runtime_error("Reading a string and got rank !=0");
-    size_t size = H5Dget_storage_size(ds);
 
     datatype dt = H5Dget_type(ds);
     H5_ASSERT(H5Tget_class(dt) == H5T_STRING);
 
-    std::vector<char> buf(size + 1, 0x00);
-    auto err = H5Dread(ds, dt, H5S_ALL, H5S_ALL, H5P_DEFAULT, &buf[0]);
-    if (err < 0) throw std::runtime_error("Error reading the string named" + name + " in the group" + g.name());
+    if (H5Tis_variable_str(dt)) {
+      char *rd_ptr[1];
+      auto err = H5Dread(ds, dt, H5S_ALL, H5S_ALL, H5P_DEFAULT, rd_ptr);
+      if (err < 0) throw std::runtime_error("Error reading the string named" + name + " in the group" + g.name());
+      s.append(*rd_ptr);
 
-    s = "";
-    s.append(&(buf.front()));
+      // Free the resources allocated in the variable length read
+      err = H5Dvlen_reclaim(dt, dspace, H5P_DEFAULT, rd_ptr);
+      if (err < 0) throw std::runtime_error("Error in freeing resources in h5_read of variable-length string type");
+    } else {
+      std::vector<char> buf(H5Tget_size(dt) + 1, 0x00);
+      auto err = H5Dread(ds, dt, H5S_ALL, H5S_ALL, H5P_DEFAULT, &buf[0]);
+      if (err < 0) throw std::runtime_error("Error reading the string named" + name + " in the group" + g.name());
+      s.append(&buf.front());
+    }
   }
 
   // ------------------------------------------------------------------
 
   void h5_write_attribute(object obj, std::string const &name, std::string const &s) {
 
-    datatype dt     = str_datatype(s);
+    datatype dt     = str_dtype();
     dataspace space = H5Screate(H5S_SCALAR);
 
     attribute attr = H5Acreate2(obj, name.c_str(), dt, space, H5P_DEFAULT, H5P_DEFAULT);
     if (!attr.is_valid()) throw std::runtime_error("Cannot create the attribute " + name);
 
-    herr_t err = H5Awrite(attr, dt, (void *)(s.c_str()));
+    auto *s_ptr = s.c_str();
+    herr_t err  = H5Awrite(attr, dt, &s_ptr);
     if (err < 0) throw std::runtime_error("Cannot write the attribute " + name);
   }
 
@@ -69,35 +80,42 @@ namespace h5 {
   void h5_read_attribute(object obj, std::string const &name, std::string &s) {
     s = "";
 
-    // if the attribute is not present, return 0
-    if (H5LTfind_attribute(obj, name.c_str()) == 0) return; // not present
+    // if the attribute is not present, return ""
+    if (H5LTfind_attribute(obj, name.c_str()) == 0) return;
 
-    attribute attr = H5Aopen(obj, name.c_str(), H5P_DEFAULT);
-    if (!attr.is_valid()) throw std::runtime_error("Cannot open the attribute " + name);
-
-    dataspace space = H5Aget_space(attr);
-
-    int rank = H5Sget_simple_extent_ndims(space);
+    attribute attr   = H5Aopen(obj, name.c_str(), H5P_DEFAULT);
+    dataspace dspace = H5Aget_space(attr);
+    int rank         = H5Sget_simple_extent_ndims(dspace);
     if (rank != 0) throw std::runtime_error("Reading a string attribute and got rank !=0");
 
-    datatype strdatatype = H5Aget_type(attr);
-    H5_ASSERT(H5Tget_class(strdatatype) == H5T_STRING);
+    datatype dt = H5Aget_type(attr);
+    H5_ASSERT(H5Tget_class(dt) == H5T_STRING);
 
-    std::vector<char> buf(H5Aget_storage_size(attr) + 1, 0x00);
-    auto err = H5Aread(attr, strdatatype, (void *)(&buf[0]));
-    if (err < 0) throw std::runtime_error("Cannot read the attribute " + name);
+    if (H5Tis_variable_str(dt)) {
+      char *rd_ptr[1];
+      auto err = H5Aread(attr, dt, rd_ptr);
+      if (err < 0) throw std::runtime_error("Cannot read the attribute " + name);
+      s.append(*rd_ptr);
 
-    s.append(&(buf.front()));
+      // Free the resources allocated in the variable length read
+      err = H5Dvlen_reclaim(dt, dspace, H5P_DEFAULT, rd_ptr);
+      if (err < 0) throw std::runtime_error("Error in freeing resources in h5_read of variable-length string type");
+    } else {
+      std::vector<char> buf(H5Tget_size(dt) + 1, 0x00);
+      auto err = H5Aread(attr, dt, (void *)(&buf[0]));
+      if (err < 0) throw std::runtime_error("Cannot read the attribute " + name);
+      s.append(&buf.front());
+    }
   }
 
   // ------------------------------------------------------------------
 
   void h5_write_attribute_to_key(group g, std::string const &key, std::string const &name, std::string const &s) {
 
-    datatype dt     = str_datatype(s);
-    dataspace space = H5Screate(H5S_SCALAR);
+    datatype dt      = str_dtype();
+    dataspace dspace = H5Screate(H5S_SCALAR);
 
-    attribute attr = H5Acreate_by_name(g, key.c_str(), name.c_str(), dt, space, H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT);
+    attribute attr = H5Acreate_by_name(g, key.c_str(), name.c_str(), dt, dspace, H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT);
     if (!attr.is_valid()) throw std::runtime_error("Cannot create the attribute " + name);
 
     herr_t err = H5Awrite(attr, dt, (void *)(s.c_str()));
@@ -106,34 +124,41 @@ namespace h5 {
 
   // -------------------- Read ----------------------------------------------
 
-  /// Return the attribute name of obj, and "" if the attribute does not exist.
+  /// Return the attribute name of key in group, and "" if the attribute does not exist.
   void h5_read_attribute_from_key(group g, std::string const &key, std::string const &name, std::string &s) {
     s = "";
 
-    // if the attribute is not present, return 0
-    if (H5Aexists_by_name(g, key.c_str(), name.c_str(), H5P_DEFAULT) == 0) return; // not present
+    // if the attribute is not present, return ""
+    if (H5Aexists_by_name(g, key.c_str(), name.c_str(), H5P_DEFAULT) == 0) return;
 
-    attribute attr = H5Aopen_by_name(g, key.c_str(), name.c_str(), H5P_DEFAULT, H5P_DEFAULT);
-    if (!attr.is_valid()) throw std::runtime_error("Cannot open the attribute " + name);
-
-    dataspace space = H5Aget_space(attr);
-
-    int rank = H5Sget_simple_extent_ndims(space);
+    attribute attr   = H5Aopen_by_name(g, key.c_str(), name.c_str(), H5P_DEFAULT, H5P_DEFAULT);
+    dataspace dspace = H5Aget_space(attr);
+    int rank         = H5Sget_simple_extent_ndims(dspace);
     if (rank != 0) throw std::runtime_error("Reading a string attribute and got rank !=0");
 
-    datatype strdatatype = H5Aget_type(attr);
-    H5_ASSERT(H5Tget_class(strdatatype) == H5T_STRING);
+    datatype dt = H5Aget_type(attr);
+    H5_ASSERT(H5Tget_class(dt) == H5T_STRING);
 
-    std::vector<char> buf(H5Aget_storage_size(attr) + 1, 0x00);
-    auto err = H5Aread(attr, strdatatype, (void *)(&buf[0]));
-    if (err < 0) throw std::runtime_error("Cannot read the attribute " + name);
+    if (H5Tis_variable_str(dt)) {
+      char *rd_ptr[1];
+      auto err = H5Aread(attr, dt, rd_ptr);
+      if (err < 0) throw std::runtime_error("Cannot read the attribute " + name);
+      s.append(*rd_ptr);
 
-    s.append(&(buf.front()));
+      // Free the resources allocated in the variable length read
+      err = H5Dvlen_reclaim(dt, dspace, H5P_DEFAULT, rd_ptr);
+      if (err < 0) throw std::runtime_error("Error in freeing resources in h5_read of variable-length string type");
+    } else {
+      std::vector<char> buf(H5Tget_size(dt) + 1, 0x00);
+      auto err = H5Aread(attr, dt, &buf[0]);
+      if (err < 0) throw std::runtime_error("Cannot read the attribute " + name);
+      s.append(&buf.front());
+    }
   }
 
-  // -------------------------------------------------------------------
-  // the string datatype
-  datatype char_buf::dtype() const { return str_datatype(lengths.back()); }
+  // --------------------------- char_buf -------------------------------------
+
+  datatype char_buf::dtype() const { return str_dtype(lengths.back()); }
 
   // the dataspace (without last dim, which is the string).
   dataspace char_buf::dspace() const {
