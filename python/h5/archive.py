@@ -233,7 +233,6 @@ class HDFArchiveGroup(HDFArchiveGroupBasicLayer):
                 return bare_return()
 
         try :
-            print("Format ", hdf5_format)
             fmt_info = get_format_info(hdf5_format)
         except KeyError:
             print("Warning : The hdf5 format %s is not recognized. Returning as a group. Hint : did you forgot to import this python class ?"%hdf5_format)
