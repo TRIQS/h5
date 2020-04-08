@@ -372,7 +372,7 @@ class HDFArchive(HDFArchiveGroup):
             try: os.remove(os.path.abspath(LocalFileName))
             except OSError: pass
 
-        self._init_root( LocalFileName, open_flag)
+        self._init_root(LocalFileName, open_flag)
         self.options = {'key_as_string_only' : key_as_string_only,
                         'do_not_overwrite_entries' : False,
                         'reconstruct_python_object': reconstruct_python_object,
@@ -384,14 +384,16 @@ class HDFArchive(HDFArchiveGroup):
 
     def __del__(self):
       self._flush()
-      self._close()
+      # We must ensure the root group is closed before closing the file
+      if hasattr(self, '_group'):
+          del self._group
 
     # These two methods are necessary for "with"
     def __enter__(self): return self
 
     def __exit__(self, type, value, traceback):
       self._flush()
-      self._close()
+      del self._group
 
 #--------------------------------------------------------------------------------
 

@@ -49,7 +49,7 @@ class HDFArchiveGroupBasicLayer:
                 self._version = 1
             if self._version > self._class_version :
                 raise IOError("File %s is too recent for this version of HDFArchive module"%Filename)
-        self._group =  h5.Group(fich)
+        self._group = h5.Group(fich)
 
     def is_group(self,p) :
         """Is p a subgroup ?"""

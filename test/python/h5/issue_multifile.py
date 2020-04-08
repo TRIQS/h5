@@ -29,7 +29,7 @@ class TestIssueMultifile(unittest.TestCase):
     def test_issue_multifile(self):
 
         # Open a file more than once and write to it
-        with HDFArchive("multifile.h5", 'a') as arch:
+        with HDFArchive("multifile.h5", 'w') as arch:
             arch['i'] = 14
 
         with HDFArchive("multifile.h5", 'a') as arch:
