@@ -383,9 +383,9 @@ class HDFArchive(HDFArchiveGroup):
         for k,v in init : self[k]=v
 
     def __del__(self):
-      self._flush()
       # We must ensure the root group is closed before closing the file
       if hasattr(self, '_group'):
+          self._flush()
           del self._group
 
     # These two methods are necessary for "with"
