@@ -45,14 +45,6 @@ namespace h5 {
     CHECK_OR_THROW((err >= 0), "flushing the file");
   }
 
-  //---------------------------------------------
-
-  void file::close() {
-    if (not is_valid()) return;
-    auto err = H5Fclose(id);
-    CHECK_OR_THROW((err >= 0), "closing the file");
-  }
-
   // ======================= MEMORY FILE  ============================
 
   memory_file::memory_file() {

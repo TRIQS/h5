@@ -37,10 +37,6 @@ c.add_property(name = "name", getter = cfunction("""std::string name ()"""),
 c.add_method("""void flush ()""",
              doc = r"""Flush the file""")
 
-c.add_method("""void close ()""",
-             doc = r"""Close the file
- NB : invalidates all groups currently open on this file""")
-
 module.add_class(c)
 
 

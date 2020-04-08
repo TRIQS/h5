@@ -73,9 +73,6 @@ class HDFArchiveGroupBasicLayer:
     def _flush(self):
         if bool(self._group): self._group.file.flush()
 
-    def _close(self):
-        if bool(self._group): self._group.file.close()
-
     def create_group (self,key):
         self._group.create_group(key)
         self.cached_keys.append(key)
