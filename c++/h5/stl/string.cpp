@@ -239,7 +239,8 @@ namespace h5 {
     long ltot = std::accumulate(cb_out.lengths.begin(), cb_out.lengths.end(), 1, std::multiplies<>());
     cb_out.buffer.resize(std::max(ltot, 1l), 0x00);
 
-    auto err = H5Aread(attr, cb_out.dtype(), (void *)cb_out.buffer.data());
+    H5_ASSERT(hdf5_type_equal(ty, cb_out.dtype()));
+    auto err = H5Aread(attr, ty, (void *)cb_out.buffer.data());
     if (err < 0) throw make_runtime_error("Cannot read the attribute ", name);
 
     _cb = std::move(cb_out);
