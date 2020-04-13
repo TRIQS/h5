@@ -36,12 +36,6 @@ namespace h5 {
 
     /// Flush the file
     void flush();
-
-    /** 
-     * Close the file
-     * NB : invalidates all groups currently open on this file
-     */
-    void close();
   };
 
   /**
