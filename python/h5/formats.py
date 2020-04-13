@@ -19,6 +19,7 @@
 #
 ################################################################################
 import re
+from copy import deepcopy
 
 class FormatInfo:
     """
@@ -57,7 +58,6 @@ def register_class (cls, doc = None, read_fun = None, hdf5_format = None):
     _formats_dict[hdf5_format] = FormatInfo(cls.__name__, cls.__module__, doc, hdf5_format, read_fun)
 
 
-
 def register_backward_compatibility_method(regex, clsname, fun = lambda s: {}):
     """
     regex : the regular expression to match the hdf5_format (e.g. "Gf" for GfImfreq_x_whatever....)
@@ -66,23 +66,27 @@ def register_backward_compatibility_method(regex, clsname, fun = lambda s: {}):
           field_name -> hdf5_format
           to read old data where not every subobjects have a hdf5_format.
     """
-    _formats_backward_compat.append((regex,_formats_dict[clsname], fun))
+    _formats_backward_compat.append((regex, clsname, fun))
+
 
 def get_format_info(hdf5_format):
     """
     Given an hdf5_format string, return the associated FormatInfo object.
     """
     # If present exactly, we return it
-    if hdf5_format in _formats_dict :
+    if hdf5_format in _formats_dict:
         return _formats_dict[hdf5_format]
 
     # Enter compatibility mode.
-    l = [(r,fmt,l) for (r,fmt,l) in _formats_backward_compat if re.match(r, hdf5_format)]
-    if len(l) ==0 :
+    match_lst = [(regex,clsname,fun) for (regex,clsname,fun) in _formats_backward_compat if re.match(regex,hdf5_format)]
+    if len(match_lst) == 0:
         raise KeyError("H5 Format %s is not registered and no backward compatibility found"%hdf5_format)
-    if len(l) >1 :
-        raise KeyError("H5 Format %s : ambiguous backward compatibility layers : %s"%([r for (r,s,ll) in l]))
-    r,fmt,l = l[0]
-    fmt.backward_compat = l(hdf5_format)
+    if len(match_lst) > 1:
+        raise KeyError("H5 Format %s : ambiguous backward compatibility layers : %s"%([regex for (regex,clsname,fun) in match_lst]))
+    regex,clsname,fun = match_lst[0]
+
+    # Make a copy of the associated Format object and supplement it with backward compatibility information
+    fmt = deepcopy(_formats_dict[clsname])
+    fmt.backward_compat = fun(hdf5_format)
 
     return fmt
