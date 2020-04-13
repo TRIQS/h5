@@ -15,8 +15,20 @@ namespace h5 {
       case 'r': id = H5Fopen(name, H5F_ACC_RDONLY, H5P_DEFAULT); break;
       case 'w': id = H5Fcreate(name, H5F_ACC_TRUNC, H5P_DEFAULT, H5P_DEFAULT); break;
       case 'a':
-        id = H5Fopen(name, H5F_ACC_RDWR, H5P_DEFAULT);
-        if (id < 0) id = H5Fcreate(name, H5F_ACC_TRUNC, H5P_DEFAULT, H5P_DEFAULT);
+        // Turn off error handling
+        herr_t (*old_func)(void *);
+        void *old_client_data;
+        H5Eget_auto1(&old_func, &old_client_data);
+        H5Eset_auto1(NULL, NULL);
+
+        // This may fail
+        id = H5Fcreate(name, H5F_ACC_EXCL, H5P_DEFAULT, H5P_DEFAULT);
+
+        // Turn on error handling
+        H5Eset_auto1(old_func, old_client_data);
+
+        // Open in RDWR if creation failed
+        if (id < 0) id = H5Fopen(name, H5F_ACC_RDWR, H5P_DEFAULT);
         break;
       case 'e': id = H5Fopen(name, H5F_ACC_EXCL, H5P_DEFAULT); break;
       default: throw std::runtime_error("HDF5 file opening : mode is not r, w, a, e. Cf documentation");
