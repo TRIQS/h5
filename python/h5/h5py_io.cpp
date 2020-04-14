@@ -243,20 +243,18 @@ namespace h5 {
 
     if (H5Tget_class(lt.ty) == H5T_STRING) {
       if (lt.rank() == 1) {
-	auto x = h5_read<std::vector<std::string>>(g, name);
+        auto x = h5_read<std::vector<std::string>>(g, name);
         return cpp2py::convert_to_python(x);
       }
 
       if (lt.rank() == 2) {
-	auto x = h5_read<std::vector<std::vector<std::string>>>(g, name);
+        auto x = h5_read<std::vector<std::vector<std::string>>>(g, name);
         return cpp2py::convert_to_python(x);
       }
 
       PyErr_SetString(PyExc_RuntimeError, "Unknown string dataset format");
       return NULL;
     }
-
-
 
     // Last case : it is an array
     std::vector<npy_intp> L(lt.rank());                            // Make the lengths
