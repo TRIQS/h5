@@ -3,6 +3,8 @@
 # TRIQS: a Toolbox for Research in Interacting Quantum Systems
 #
 # Copyright (C) 2011 by M. Ferrero, O. Parcollet
+# Copyright (C) 2020 Simons Foundation
+#    authors: N. Wentzell
 #
 # TRIQS is free software: you can redistribute it and/or modify it under the
 # terms of the GNU General Public License as published by the Free Software
@@ -20,6 +22,7 @@
 ################################################################################
 import unittest
 import numpy as np
+from math import isnan
 
 from h5 import HDFArchive
 
@@ -33,32 +36,35 @@ def assert_array_close_to_scalar(a, x, precision = 1.e-6):
 
 class TestHdf5Io(unittest.TestCase):
 
-    def test_hdf5_io1(self):
+    def test_hdf_archive1(self):
         d = {'dbl' : 1.0, 'lst' : [1,[1],'a']}
         
         # === Write to archive
-        with HDFArchive('hdf5_io.out1.h5','w', init = list(d.items())) as arch:
+        with HDFArchive('hdf_archive1.h5','w', init = list(d.items())) as arch:
         
             arch._flush()
-            print("----------- ok ")
             arch['int'] = 100
             arch['arr'] = np.array([[1,2,3],[4,5,6]])
             arch['tpl'] = (2,[2],'b')
             arch['dct'] = { 'a':[10], 'b':20 }
+            arch['nan'] = float('nan')
+            arch['nanarr'] = np.array([np.nan, 1.0])
         
         # === Final check
-        arch = HDFArchive('hdf5_io.out1.h5','r')
+        arch = HDFArchive('hdf_archive1.h5','r')
         
         self.assertEqual( arch['dbl'] , 1.0 )
         self.assertEqual( arch['lst'] , [1,[1],'a'] )
         self.assertEqual( arch['dct'] , {'a':[10], 'b':20} )
+        self.assertTrue( isnan(arch['nan']) )
+        self.assertTrue( np.array_equal(np.isnan(arch['nanarr']), np.array([True, False])) )
 
 
-    def test_hdf5_io(self):
+    def test_hdf_archive2(self):
         d = {'dbl' : 1.0, 'lst' : [1,[1],'a']}
         
         # === Write to archive
-        with HDFArchive('hdf5_io.out.h5','w', init = list(d.items())) as arch:
+        with HDFArchive('hdf_archive2.h5','w', init = list(d.items())) as arch:
         
             arch['int'] = 100
             arch['arr'] = np.array([[1,2,3],[4,5,6]])
@@ -72,12 +78,12 @@ class TestHdf5Io(unittest.TestCase):
             grp['dct'] = { 'a':[30], 'b':40 }
         
         # === Read access
-        with HDFArchive('hdf5_io.out.h5','r') as arch:  
+        with HDFArchive('hdf_archive2.h5','r') as arch:  
             dct = arch['dct']
             grp = arch['grp']
         
         # === Read/Write access
-        with HDFArchive('hdf5_io.out.h5','a') as arch:
+        with HDFArchive('hdf_archive2.h5','a') as arch:
         
             dct = arch['dct']
             dct['c'] = 'triqs'
@@ -94,12 +100,10 @@ class TestHdf5Io(unittest.TestCase):
         
         
         # === Final check
-        arch = HDFArchive('hdf5_io.out.h5','r')
+        arch = HDFArchive('hdf_archive2.h5','r')
         
         self.assertEqual( arch['dbl'] , 1.0 )
         
-        print(arch['lst'])
-
         self.assertEqual( arch['lst'] , [1,[1],'a'] )
         self.assertEqual( arch['int'] , 100 )
         assert_arrays_are_close( arch['arr'] , np.array([[1, 2, 3], [4, 5, 6]]) )

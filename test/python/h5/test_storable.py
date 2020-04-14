@@ -2,7 +2,8 @@
 #
 # TRIQS: a Toolbox for Research in Interacting Quantum Systems
 #
-# Copyright (C) 2011 by M. Ferrero, O. Parcollet
+# Copyright (C) 2020 Simons Foundation
+#    author: N. Wentzell
 #
 # TRIQS is free software: you can redistribute it and/or modify it under the
 # terms of the GNU General Public License as published by the Free Software
@@ -21,22 +22,21 @@
 import unittest
 import numpy as np
 
-
 from storable import Storable
 from h5 import HDFArchive
 
-class TestHdf5Class(unittest.TestCase):
+class TestStorable(unittest.TestCase):
 
-    def test_hdf5_class(self):
+    def test_storable(self):
 
         obj = Storable()
         obj.vec = [1, 2, 4, 5]
         obj.s = "some other string"
 
-        with HDFArchive('hdf5_class.h5','w') as arch:
+        with HDFArchive('h5_class.h5','w') as arch:
             arch['obj'] = obj
 
-        with HDFArchive('hdf5_class.h5','r') as arch:
+        with HDFArchive('h5_class.h5','r') as arch:
             obj_in = arch['obj']
 
         self.assertEqual(obj.vec, obj_in.vec)
