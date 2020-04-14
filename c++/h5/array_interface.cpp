@@ -28,6 +28,8 @@ namespace h5::array_interface {
   //------------------------------------------------
 
   std::pair<v_t, v_t> get_L_tot_and_strides_h5(long const *stri, int rank, long total_size) {
+    if (rank == 0) return {};
+
     v_t Ltot(rank), strides_h5(rank);
     for (int u = 0; u < rank; ++u) strides_h5[u] = stri[u];
     Ltot[0] = total_size;

@@ -126,7 +126,7 @@ namespace h5 {
   //--------------------------------------
 
   // Make a h5_array_view from the numpy object
-  static array_interface::h5_array_view make_av_from_py(PyArrayObject *arr_obj) {
+  static array_interface::h5_array_view make_av_from_npy(PyArrayObject *arr_obj) {
 
 #ifdef PYTHON_NUMPY_VERSION_LT_17
     int elementsType = arr_obj->descr->type_num;
@@ -177,10 +177,13 @@ namespace h5 {
 
     import_numpy();
 
-    // if numpy
     if (PyArray_Check(ob)) {
       PyArrayObject *arr_obj = (PyArrayObject *)ob;
-      write(g, name, make_av_from_py(arr_obj), true);
+      write(g, name, make_av_from_npy(arr_obj), true);
+    } else if (PyArray_CheckScalar(ob)) {
+      // Treat numpy scalars as 0-dimensional ndarrays
+      cpp2py::pyref obsc = PyArray_FromScalar(ob, NULL);
+      h5_write_bare(g, name, obsc);
     } else if (PyFloat_Check(ob)) {
       h5_write(g, name, PyFloat_AsDouble(ob));
     } else if (PyBool_Check(ob)) {
@@ -269,7 +272,7 @@ namespace h5 {
     // in case of allocation error
 
     // read from the file
-    read(g, name, make_av_from_py((PyArrayObject *)ob), lt);
+    read(g, name, make_av_from_npy((PyArrayObject *)ob), lt);
     return ob;
   }
 

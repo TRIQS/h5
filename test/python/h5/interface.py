@@ -59,6 +59,8 @@ class TestH5Interface(unittest.TestCase):
         h5.h5_write(g, 's', "a string")
         h5.h5_write(g, 'c', 1.2 + 3j)
         h5.h5_write(g, 'nan', float('nan'))
+        h5.h5_write(g, 'npyarr_rank0', np.zeros((), dtype=np.int64))
+        h5.h5_write(g, 'npy_int', np.int64(4))
 
         c = 1
         for types in [np.int, np.float, np.complex]:
@@ -79,6 +81,8 @@ class TestH5Interface(unittest.TestCase):
         c = h5.h5_read(g, 'c')
         self.assertEqual(type(c), type(1j))
         self.assertTrue( isnan(h5.h5_read(g, 'nan')) )
+        self.assertEqual(h5.h5_read(g, 'npyarr_rank0'), 0)
+        self.assertEqual(h5.h5_read(g, 'npy_int'), 4)
 
         c = 1
         for types in [np.int, np.float, np.complex]:
