@@ -107,18 +107,6 @@ endif()
 # Build and install the h5 library
 add_subdirectory(c++/h5)
 
-# Build and install the h5 library
-add_subdirectory(c++/h5)
-
-# Create interface target for mpi library
-add_subdirectory(c++/mpi)
-
-# Create interface target for itertools library
-add_subdirectory(c++/itertools)
-
-# Create interface target for and install clef library
-add_subdirectory(c++/clef)
-
 # Build and install the Python modules
 add_subdirectory(python)
 
@@ -127,12 +115,6 @@ option(Build_Tests "Build tests" ON)
 if(Build_Tests AND NOT IS_SUBPROJECT)
   enable_testing()
   add_subdirectory(test)
-endif()
-
-# Benchmarks
-option(Build_Bench "Benchmarks" ON)
-if(Build_Bench AND NOT ASAN AND NOT UBSAN)
-  add_subdirectory(benchmarks)
 endif()
 
 # Build the documentation

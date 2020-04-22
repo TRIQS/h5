@@ -2,7 +2,3 @@
 add_subdirectory(gtest EXCLUDE_FROM_ALL)
 
 add_subdirectory(h5)
-add_subdirectory(h5)
-add_subdirectory(mpi)
-add_subdirectory(itertools)
-add_subdirectory(clef)

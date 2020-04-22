@@ -11,4 +11,3 @@ endif()
 #endif()
 
 add_subdirectory(h5)
-add_subdirectory(h5_py)
