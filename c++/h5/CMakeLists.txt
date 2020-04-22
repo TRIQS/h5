@@ -1,19 +1,19 @@
 file(GLOB_RECURSE sources *.cpp)
-add_library(h5_interface SHARED ${sources})
+add_library(h5_c SHARED ${sources})
 
 # Enable warnings
-target_link_libraries(h5_interface PRIVATE project_warnings)
+target_link_libraries(h5_c PRIVATE project_warnings)
 
 # Configure compilation
-target_compile_options(h5_interface PUBLIC -fPIC -std=c++17 $<$<CXX_COMPILER_ID:GNU>:-fconcepts>)
-target_include_directories(h5_interface PUBLIC $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/c++>)
-target_compile_definitions(h5_interface PUBLIC
+target_compile_options(h5_c PUBLIC -fPIC -std=c++17 $<$<CXX_COMPILER_ID:GNU>:-fconcepts>)
+target_include_directories(h5_c PUBLIC $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/c++>)
+target_compile_definitions(h5_c PUBLIC
   				H5_GIT_HASH=${PROJECT_GIT_HASH}
 				$<$<CONFIG:Debug>:H5_DEBUG>
 			  )
 
 # Install library and headers
-install(TARGETS h5_interface EXPORT h5-targets DESTINATION lib)
+install(TARGETS h5_c EXPORT h5-targets DESTINATION lib)
 install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} DESTINATION include FILES_MATCHING PATTERN "*.hpp" PATTERN "*.h")
 
 
@@ -33,7 +33,7 @@ if(HDF5_VERSION VERSION_GREATER 1.10)
 endif()
 
 # Link against interface target and export
-target_link_libraries(h5_interface PRIVATE hdf5)
+target_link_libraries(h5_c PRIVATE hdf5)
 install(TARGETS hdf5 EXPORT h5-targets)
 
 
@@ -49,7 +49,7 @@ if(ANALYZE_SOURCES)
   # Run clang-tidy if found
   if(CLANG_TIDY_EXECUTABLE)
     message(STATUS "clang-tidy found: ${CLANG_TIDY_EXECUTABLE}")
-    set_target_properties(h5_interface PROPERTIES CXX_CLANG_TIDY "${CLANG_TIDY_EXECUTABLE}")
+    set_target_properties(h5_c PROPERTIES CXX_CLANG_TIDY "${CLANG_TIDY_EXECUTABLE}")
   else()
     message(STATUS "clang-tidy not found in $PATH. Please consider installing clang-tidy for additional checks!")
   endif()
@@ -58,7 +58,7 @@ if(ANALYZE_SOURCES)
   if(CPPCHECK_EXECUTABLE)
     message(STATUS "cppcheck found: ${CPPCHECK_EXECUTABLE}")
     add_custom_command(
-	TARGET h5_interface
+	TARGET h5_c
 	COMMAND ${CPPCHECK_EXECUTABLE}
 	  --enable=warning,style,performance,portability
 	  --std=c++17
@@ -81,9 +81,9 @@ option(UBSAN OFF "Compile library and executables with LLVM Undefined Behavior S
 
 if(ASAN)
   # Already found and exported by h5
-  target_link_libraries(h5_interface PUBLIC asan)
+  target_link_libraries(h5_c PUBLIC asan)
 endif()
 if(UBSAN)
   # Already found and exported by h5
-  target_link_libraries(h5_interface PUBLIC ubsan)
+  target_link_libraries(h5_c PUBLIC ubsan)
 endif()

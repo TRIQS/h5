@@ -9,7 +9,7 @@ endforeach()
 
 # Build the h5py_io library
 add_library(h5py_io STATIC h5py_io.cpp)
-target_link_libraries(h5py_io PUBLIC h5_interface hdf5 cpp2py python_and_numpy)
+target_link_libraries(h5py_io PUBLIC h5_c hdf5 cpp2py python_and_numpy)
 target_include_directories(h5py_io PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 
 # Build the cpp2py module
@@ -19,7 +19,7 @@ target_compile_options(_h5py PUBLIC $<$<CXX_COMPILER_ID:GNU>:-Wno-attributes>)
 
 ## Build the pybind11 module
 #pybind11_add_module(_h5py _h5py.cpp h5py_io.cpp)
-#target_link_libraries(_h5py PRIVATE pybind11 h5_interface hdf5 python_and_numpy)
+#target_link_libraries(_h5py PRIVATE pybind11 h5_c hdf5 python_and_numpy)
 #target_compile_options(_h5py PUBLIC $<$<CXX_COMPILER_ID:GNU>:-Wno-attributes>)
 
 ## Install python modules to proper location
