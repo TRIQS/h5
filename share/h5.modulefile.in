@@ -1,13 +1,13 @@
 #%Module1.0
 #
-# To be installed as ${MODULEPATH}/nda/@PROJECT_VERSION@
+# To be installed as ${MODULEPATH}/h5/@PROJECT_VERSION@
 
-set     name        nda
+set     name        h5
 set     version     @PROJECT_VERSION@
 set     root        @CMAKE_INSTALL_PREFIX@
 set     git_hash    @PROJECT_GIT_HASH@
 
-set     url         "https://github.com/TRIQS/nda"
+set     url         "https://github.com/TRIQS/h5"
 set     description "An example application using cpp2py and triqs."
 
 module-whatis   "$description"
@@ -20,15 +20,15 @@ proc ModulesHelp { } {
     puts stderr "Git hash:    $git_hash"
 }
 
-# Only one version of nda can be loaded at a time
+# Only one version of h5 can be loaded at a time
 conflict $name
 
-setenv          NDA_ROOT      $root
-setenv          NDA_VERSION   $version
-setenv          NDA_GIT_HASH  $git_hash
+setenv          H5_ROOT      $root
+setenv          H5_VERSION   $version
+setenv          H5_GIT_HASH  $git_hash
 
 prepend-path    PATH                $root/bin
 prepend-path    CPLUS_INCLUDE_PATH  $root/include
 prepend-path    LIBRARY_PATH        $root/lib
 prepend-path    LD_LIBRARY_PATH     $root/lib
-prepend-path    CMAKE_PREFIX_PATH   $root/lib/cmake/nda
+prepend-path    CMAKE_PREFIX_PATH   $root/lib/cmake/h5

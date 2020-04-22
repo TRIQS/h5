@@ -1,10 +1,10 @@
-configure_file(nda-config.cmake.in nda-config.cmake @ONLY)
-configure_file(nda-config-version.cmake.in nda-config-version.cmake @ONLY)
+configure_file(h5-config.cmake.in h5-config.cmake @ONLY)
+configure_file(h5-config-version.cmake.in h5-config-version.cmake @ONLY)
 install(
   FILES
-    ${CMAKE_CURRENT_BINARY_DIR}/nda-config.cmake
-    ${CMAKE_CURRENT_BINARY_DIR}/nda-config-version.cmake
-  DESTINATION lib/cmake/nda
+    ${CMAKE_CURRENT_BINARY_DIR}/h5-config.cmake
+    ${CMAKE_CURRENT_BINARY_DIR}/h5-config-version.cmake
+  DESTINATION lib/cmake/h5
 )
 
-install(EXPORT nda-targets NAMESPACE nda:: DESTINATION lib/cmake/nda)
+install(EXPORT h5-targets NAMESPACE h5:: DESTINATION lib/cmake/h5)

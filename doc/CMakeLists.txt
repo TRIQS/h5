@@ -6,8 +6,8 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/conf.py.in ${CMAKE_CURRENT_BINARY_DIR
 # -----------------------------------------------------------------------------
 add_custom_target(docs_cpp2rst)
 include(${PROJECT_SOURCE_DIR}/share/cmake/extract_flags.cmake)
-extract_flags(nda_c)
-separate_arguments(nda_c_CXXFLAGS)
+extract_flags(h5_c)
+separate_arguments(h5_c_CXXFLAGS)
 macro(generate_docs header_file)
   add_custom_command(
     TARGET docs_cpp2rst
@@ -15,14 +15,14 @@ macro(generate_docs header_file)
     COMMAND
       c++2rst
       ${header_file}
-      -N nda
+      -N h5
       --output_directory ${CMAKE_CURRENT_SOURCE_DIR}/cpp2rst_generated
       -I${PROJECT_SOURCE_DIR}/c++
-      --cxxflags="${nda_c_CXXFLAGS}"
+      --cxxflags="${h5_c_CXXFLAGS}"
   )
 endmacro(generate_docs)
 
-generate_docs(${PROJECT_SOURCE_DIR}/c++/nda/nda.hpp)
+generate_docs(${PROJECT_SOURCE_DIR}/c++/h5/h5.hpp)
 
 # --------------------------------------------------------
 # Build & Run the C++ doc examples and capture the output
@@ -61,7 +61,7 @@ endif()
 # ---------------------------------
 # Install
 # ---------------------------------
-install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/html/ COMPONENT documentation DESTINATION share/doc/nda
+install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/html/ COMPONENT documentation DESTINATION share/doc/h5
   FILES_MATCHING
   REGEX "\\.(html|pdf|png|gif|jpg|svg|js|xsl|css|py|txt|inv|bib)$"
   PATTERN "_*"

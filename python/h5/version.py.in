@@ -1,8 +1,8 @@
 version = "@PROJECT_VERSION@"
-nda_hash = "@PROJECT_GIT_HASH@"
+h5_hash = "@PROJECT_GIT_HASH@"
 
 def show_version():
-  print "\nYou are using nda version %s\n"%version
+  print "\nYou are using h5 version %s\n"%version
 
 def show_git_hash():
-  print "\nYou are using nda git hash %s\n"%nda_hash
+  print "\nYou are using h5 git hash %s\n"%h5_hash

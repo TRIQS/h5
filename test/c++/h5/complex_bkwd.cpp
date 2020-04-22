@@ -19,7 +19,7 @@
  *
  ******************************************************************************/
 
-#include "./../nda/test_common.hpp"
+#include "./../h5/test_common.hpp"
 
 #include <h5/h5.hpp>
 

@@ -8,12 +8,12 @@ target_link_libraries(h5_interface PRIVATE project_warnings)
 target_compile_options(h5_interface PUBLIC -fPIC -std=c++17 $<$<CXX_COMPILER_ID:GNU>:-fconcepts>)
 target_include_directories(h5_interface PUBLIC $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/c++>)
 target_compile_definitions(h5_interface PUBLIC
-  				NDA_GIT_HASH=${PROJECT_GIT_HASH}
-				$<$<CONFIG:Debug>:NDA_DEBUG>
+  				H5_GIT_HASH=${PROJECT_GIT_HASH}
+				$<$<CONFIG:Debug>:H5_DEBUG>
 			  )
 
 # Install library and headers
-install(TARGETS h5_interface EXPORT nda-targets DESTINATION lib)
+install(TARGETS h5_interface EXPORT h5-targets DESTINATION lib)
 install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} DESTINATION include FILES_MATCHING PATTERN "*.hpp" PATTERN "*.h")
 
 
@@ -34,7 +34,7 @@ endif()
 
 # Link against interface target and export
 target_link_libraries(h5_interface PRIVATE hdf5)
-install(TARGETS hdf5 EXPORT nda-targets)
+install(TARGETS hdf5 EXPORT h5-targets)
 
 
 # ========= Static Analyzer Checks ==========
@@ -80,10 +80,10 @@ option(ASAN OFF "Compile library and executables with LLVM Address Sanitizer")
 option(UBSAN OFF "Compile library and executables with LLVM Undefined Behavior Sanitizer")
 
 if(ASAN)
-  # Already found and exported by nda
+  # Already found and exported by h5
   target_link_libraries(h5_interface PUBLIC asan)
 endif()
 if(UBSAN)
-  # Already found and exported by nda
+  # Already found and exported by h5
   target_link_libraries(h5_interface PUBLIC ubsan)
 endif()

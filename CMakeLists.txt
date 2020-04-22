@@ -1,20 +1,20 @@
 # ##############################################################################
 #
-# nda - An example application using triqs and cpp2py
+# h5 - An example application using triqs and cpp2py
 #
 # Copyright (C) ...
 #
-# nda is free software: you can redistribute it and/or modify it under the
+# h5 is free software: you can redistribute it and/or modify it under the
 # terms of the GNU General Public License as published by the Free Software
 # Foundation, either version 3 of the License, or (at your option) any later
 # version.
 #
-# nda is distributed in the hope that it will be useful, but WITHOUT ANY
+# h5 is distributed in the hope that it will be useful, but WITHOUT ANY
 # WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
 # A PARTICULAR PURPOSE. See the GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License along with
-# nda (in the file COPYING.txt in this directory). If not, see
+# h5 (in the file COPYING.txt in this directory). If not, see
 # <http://www.gnu.org/licenses/>.
 #
 # ##############################################################################
@@ -26,7 +26,7 @@ endif()
 
 # ############
 # Define Project
-project(NDA VERSION 2.2.0 LANGUAGES C CXX)
+project(H5 VERSION 2.2.0 LANGUAGES C CXX)
 get_directory_property(IS_SUBPROJECT PARENT_DIRECTORY)
 
 # Get the git hash & print status
@@ -39,7 +39,7 @@ if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT OR (NOT IS_ABSOLUTE ${CMAKE_INSTA
   message(FATAL_ERROR "No install prefix given (or invalid)")
 endif()
 message(STATUS "-------- CMAKE_INSTALL_PREFIX: ${CMAKE_INSTALL_PREFIX} --------")
-set(NDA_BINARY_DIR ${PROJECT_BINARY_DIR} CACHE STRING "Binary directory of the NDA Project")
+set(H5_BINARY_DIR ${PROJECT_BINARY_DIR} CACHE STRING "Binary directory of the H5 Project")
 
 # ############
 # Options
@@ -66,7 +66,7 @@ add_compile_options(
 if(NOT TARGET project_warnings)
   add_library(project_warnings INTERFACE)
 endif()
-install(TARGETS project_warnings EXPORT nda-targets)
+install(TARGETS project_warnings EXPORT h5-targets)
 target_compile_options(project_warnings
   INTERFACE
     -Wall
@@ -104,8 +104,8 @@ endif()
 # #############
 # Build Project
 
-# Build and install the nda library
-add_subdirectory(c++/nda)
+# Build and install the h5 library
+add_subdirectory(c++/h5)
 
 # Build and install the h5 library
 add_subdirectory(c++/h5)
@@ -153,10 +153,10 @@ if(BUILD_DEBIAN_PACKAGE AND NOT IS_SUBPROJECT)
   if(NOT CMAKE_INSTALL_PREFIX STREQUAL "/usr")
     message(FATAL_ERROR "CMAKE_INSTALL_PREFIX must be /usr for packaging")
   endif()
-  set(CPACK_PACKAGE_NAME nda)
+  set(CPACK_PACKAGE_NAME h5)
   set(CPACK_GENERATOR "DEB")
   set(CPACK_PACKAGE_VERSION ${PROJECT_VERSION})
-  set(CPACK_PACKAGE_CONTACT "https://github.com/TRIQS/nda")
+  set(CPACK_PACKAGE_CONTACT "https://github.com/TRIQS/h5")
   execute_process(COMMAND dpkg --print-architecture OUTPUT_VARIABLE CMAKE_DEBIAN_PACKAGE_ARCHITECTURE OUTPUT_STRIP_TRAILING_WHITESPACE)
   set(CPACK_DEBIAN_PACKAGE_SHLIBDEPS ON)
   set(CPACK_DEBIAN_PACKAGE_GENERATE_SHLIBS ON)

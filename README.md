@@ -1,3 +1,3 @@
-# nda
+# h5
 
-cmake ~/src/nda -DANALYZE_SOURCE=ON -DUBSAN=ON -DASAN=ON
+cmake ~/src/h5 -DANALYZE_SOURCE=ON -DUBSAN=ON -DASAN=ON

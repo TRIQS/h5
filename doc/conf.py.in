@@ -14,7 +14,7 @@ extensions = ['sphinx.ext.autodoc',
 
 source_suffix = '.rst'
 
-project = u'NDA - An example triqs application'
+project = u'H5 - An example triqs application'
 copyright = u'2017-2018 N. Wentzell, O. Parcollet 2018-2019 The Simons Foundation, authors: N. Wentzell, D. Simons, H. Strand, O. Parcollet'
 version = '@PROJECT_VERSION@'
 
@@ -24,15 +24,15 @@ templates_path = ['@PROJECT_SOURCE_DIR@/doc/_templates']
 html_theme = 'triqs'
 html_theme_path = ['@PROJECT_SOURCE_DIR@/doc/themes']
 html_show_sphinx = False
-html_context = {'header_title': 'nda',
+html_context = {'header_title': 'h5',
                 'header_subtitle': 'An example application using cpp2py and <a class="triqs" style="font-size: 12px" href="https://triqs.github.io">TRIQS</a>',
                 'header_links': [['Install', 'install'],
                                  ['Documentation', 'documentation'],
                                  ['Issues', 'issues'],
-                                 ['About nda', 'about']]}
+                                 ['About h5', 'about']]}
 html_static_path = ['@PROJECT_SOURCE_DIR@/doc/_static']
 html_sidebars = {'index': ['sideb.html', 'searchbox.html']}
 
-htmlhelp_basename = 'NDAdoc'
+htmlhelp_basename = 'H5doc'
 
 intersphinx_mapping = {'python': ('http://docs.python.org/2.7', None), 'triqslibs': ('https://triqs.github.io/triqs/latest', None)}

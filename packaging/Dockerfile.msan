@@ -56,13 +56,13 @@ ENV SRC=/src \
     BUILD=/home/build \
     INSTALL=/usr/local \
     PYTHONPATH=/usr/local/lib/python2.7/site-packages:${PYTHONPATH} \
-    CMAKE_PREFIX_PATH=/usr/lib/cmake/nda:${CMAKE_PREFIX_PATH}
+    CMAKE_PREFIX_PATH=/usr/lib/cmake/h5:${CMAKE_PREFIX_PATH}
 
-COPY . ${SRC}/nda
-WORKDIR ${BUILD}/nda
-RUN chown -R build ${SRC}/nda .
+COPY . ${SRC}/h5
+WORKDIR ${BUILD}/h5
+RUN chown -R build ${SRC}/h5 .
 USER build
-RUN cmake $SRC/nda -DCMAKE_INSTALL_PREFIX=$INSTALL -DMSAN=ON -DPYTHON_EXECUTABLE=$(which python)
+RUN cmake $SRC/h5 -DCMAKE_INSTALL_PREFIX=$INSTALL -DMSAN=ON -DPYTHON_EXECUTABLE=$(which python)
 RUN make VERBOSE=1 -j8
 ENV MSAN_SYMBOLIZER_PATH=/usr/lib/llvm-${LLVM}/bin/llvm-symbolizer CTEST_OUTPUT_ON_FAILURE=1
 RUN make test || true
