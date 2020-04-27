@@ -19,11 +19,12 @@
  *
  ******************************************************************************/
 
-#include "./../h5/test_common.hpp"
+#include "./test_common.hpp"
 
 #include <h5/h5.hpp>
 
-TEST(H5, ComplexBkwd) {
+// clang-format off
+TEST(H5, ComplexBkwd){
 
   {
     h5::file file("complex_old.h5", 'w');
@@ -46,5 +47,6 @@ TEST(H5, ComplexBkwd) {
     EXPECT_EQ(c, exact);
   }
 };
+// clang-format on
 
 MAKE_MAIN;

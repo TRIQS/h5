@@ -29,6 +29,10 @@ endif()
 project(H5 VERSION 2.2.0 LANGUAGES C CXX)
 get_directory_property(IS_SUBPROJECT PARENT_DIRECTORY)
 
+# ############
+# Load CPP2PY
+find_package(Cpp2Py 1.6 REQUIRED)
+
 # Get the git hash & print status
 execute_process(COMMAND git rev-parse HEAD WORKING_DIRECTORY ${PROJECT_SOURCE_DIR} OUTPUT_VARIABLE PROJECT_GIT_HASH OUTPUT_STRIP_TRAILING_WHITESPACE)
 message(STATUS "${PROJECT_NAME} version : ${PROJECT_VERSION}")
@@ -75,12 +79,12 @@ target_compile_options(project_warnings
     -Wno-sign-compare
     $<$<CXX_COMPILER_ID:GNU>:-Wshadow=local>
     $<$<CXX_COMPILER_ID:GNU>:-Wno-attributes>
-    $<$<CXX_COMPILER_ID:GNU>:-Wno-unused-but-set-parameter>
     $<$<CXX_COMPILER_ID:Clang>:-Wshadow>
     $<$<CXX_COMPILER_ID:Clang>:-Wno-gcc-compat>
     $<$<CXX_COMPILER_ID:AppleClang>:-Wshadow>
     $<$<CXX_COMPILER_ID:AppleClang>:-Wno-gcc-compat>
 )
+target_link_libraries(project_warnings INTERFACE $<$<CXX_COMPILER_ID:GNU>:-Wno-unused-but-set-parameter>)
 
 # ---------------------------------
 # Resolve Clang Linktime Problems
@@ -108,7 +112,7 @@ endif()
 add_subdirectory(c++/h5)
 
 # Build and install the Python modules
-add_subdirectory(python)
+add_subdirectory(python/h5)
 
 # Tests
 option(Build_Tests "Build tests" ON)

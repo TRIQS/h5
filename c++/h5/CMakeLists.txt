@@ -1,5 +1,5 @@
 file(GLOB_RECURSE sources *.cpp)
-add_library(h5_c SHARED ${sources})
+add_library(h5_c STATIC ${sources})
 
 # Enable warnings
 target_link_libraries(h5_c PRIVATE project_warnings)
@@ -64,8 +64,11 @@ if(ANALYZE_SOURCES)
 	  --std=c++17
 	  --template=gcc
 	  --verbose
+	  --force
 	  --quiet
           ${sources}
+	WORKING_DIRECTORY
+	  ${CMAKE_CURRENT_SOURCE_DIR}
     )
   else()
     message(STATUS "cppcheck not found in $PATH. Please consider installing cppcheck for additional checks!")
@@ -80,10 +83,16 @@ option(ASAN OFF "Compile library and executables with LLVM Address Sanitizer")
 option(UBSAN OFF "Compile library and executables with LLVM Undefined Behavior Sanitizer")
 
 if(ASAN)
-  # Already found and exported by h5
+  if(NOT TARGET asan)
+    find_package(sanitizer REQUIRED "asan")
+  endif()
   target_link_libraries(h5_c PUBLIC asan)
+  install(targets asan export h5-targets)
 endif()
 if(UBSAN)
-  # Already found and exported by h5
+  if(NOT TARGET ubsan)
+    find_package(sanitizer REQUIRED "ubsan")
+  endif()
   target_link_libraries(h5_c PUBLIC ubsan)
+  install(TARGETS ubsan EXPORT h5-targets)
 endif()
