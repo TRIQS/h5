@@ -1,5 +1,5 @@
 file(GLOB_RECURSE sources *.cpp)
-add_library(h5_c STATIC ${sources})
+add_library(h5_c ${sources})
 
 # Enable warnings
 target_link_libraries(h5_c PRIVATE project_warnings)
@@ -7,6 +7,7 @@ target_link_libraries(h5_c PRIVATE project_warnings)
 # Configure compilation
 target_compile_options(h5_c PUBLIC -fPIC -std=c++17 $<$<CXX_COMPILER_ID:GNU>:-fconcepts>)
 target_include_directories(h5_c PUBLIC $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/c++>)
+target_include_directories(h5_c SYSTEM INTERFACE $<INSTALL_INTERFACE:${CMAKE_INSTALL_PREFIX}/include>)
 target_compile_definitions(h5_c PUBLIC
   				H5_GIT_HASH=${PROJECT_GIT_HASH}
 				$<$<CONFIG:Debug>:H5_DEBUG>

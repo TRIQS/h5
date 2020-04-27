@@ -14,7 +14,7 @@ extensions = ['sphinx.ext.autodoc',
 
 source_suffix = '.rst'
 
-project = u'H5 - An example triqs application'
+project = u'H5 - A lightweight C++ and Python hdf5 interface'
 copyright = u'2017-2018 N. Wentzell, O. Parcollet 2018-2019 The Simons Foundation, authors: N. Wentzell, D. Simons, H. Strand, O. Parcollet'
 version = '@PROJECT_VERSION@'
 

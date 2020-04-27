@@ -29,10 +29,6 @@ endif()
 project(H5 VERSION 2.2.0 LANGUAGES C CXX)
 get_directory_property(IS_SUBPROJECT PARENT_DIRECTORY)
 
-# ############
-# Load CPP2PY
-find_package(Cpp2Py 1.6 REQUIRED)
-
 # Get the git hash & print status
 execute_process(COMMAND git rev-parse HEAD WORKING_DIRECTORY ${PROJECT_SOURCE_DIR} OUTPUT_VARIABLE PROJECT_GIT_HASH OUTPUT_STRIP_TRAILING_WHITESPACE)
 message(STATUS "${PROJECT_NAME} version : ${PROJECT_VERSION}")
@@ -42,8 +38,11 @@ message(STATUS "${PROJECT_NAME} Git hash: ${PROJECT_GIT_HASH}")
 if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT OR (NOT IS_ABSOLUTE ${CMAKE_INSTALL_PREFIX}))
   message(FATAL_ERROR "No install prefix given (or invalid)")
 endif()
-message(STATUS "-------- CMAKE_INSTALL_PREFIX: ${CMAKE_INSTALL_PREFIX} --------")
+if(NOT IS_SUBPROJECT)
+  message(STATUS "-------- CMAKE_INSTALL_PREFIX: ${CMAKE_INSTALL_PREFIX} --------")
+endif()
 set(H5_BINARY_DIR ${PROJECT_BINARY_DIR} CACHE STRING "Binary directory of the H5 Project")
+
 
 # ############
 # Options
@@ -55,12 +54,15 @@ list(APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
 if(NOT CMAKE_BUILD_TYPE)
   set(CMAKE_BUILD_TYPE Release CACHE STRING "Type of build" FORCE)
 endif()
-message(STATUS "-------- BUILD-TYPE: ${CMAKE_BUILD_TYPE} --------")
+if(NOT IS_SUBPROJECT)
+  message(STATUS "-------- BUILD-TYPE: ${CMAKE_BUILD_TYPE} --------")
+endif()
 
 # Export the list of compile-commands into compile_commands.json
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 # Global compiler options
+option(BUILD_SHARED_LIBS "Enable compilation of shared libraries" OFF)
 add_compile_options(
   $<$<CONFIG:Debug>:-Og>
   $<$<CONFIG:Debug>:-ggdb3>
@@ -69,22 +71,22 @@ add_compile_options(
 # Create an Interface target for compiler warnings
 if(NOT TARGET project_warnings)
   add_library(project_warnings INTERFACE)
+  target_compile_options(project_warnings
+    INTERFACE
+      -Wall
+      -Wextra
+      -Wpedantic
+      -Wno-sign-compare
+      $<$<CXX_COMPILER_ID:GNU>:-Wshadow=local>
+      $<$<CXX_COMPILER_ID:GNU>:-Wno-attributes>
+      $<$<CXX_COMPILER_ID:Clang>:-Wshadow>
+      $<$<CXX_COMPILER_ID:Clang>:-Wno-gcc-compat>
+      $<$<CXX_COMPILER_ID:AppleClang>:-Wshadow>
+      $<$<CXX_COMPILER_ID:AppleClang>:-Wno-gcc-compat>
+  )
 endif()
-install(TARGETS project_warnings EXPORT h5-targets)
-target_compile_options(project_warnings
-  INTERFACE
-    -Wall
-    -Wextra
-    -Wpedantic
-    -Wno-sign-compare
-    $<$<CXX_COMPILER_ID:GNU>:-Wshadow=local>
-    $<$<CXX_COMPILER_ID:GNU>:-Wno-attributes>
-    $<$<CXX_COMPILER_ID:Clang>:-Wshadow>
-    $<$<CXX_COMPILER_ID:Clang>:-Wno-gcc-compat>
-    $<$<CXX_COMPILER_ID:AppleClang>:-Wshadow>
-    $<$<CXX_COMPILER_ID:AppleClang>:-Wno-gcc-compat>
-)
 target_link_libraries(project_warnings INTERFACE $<$<CXX_COMPILER_ID:GNU>:-Wno-unused-but-set-parameter>)
+install(TARGETS project_warnings EXPORT h5-targets)
 
 # ---------------------------------
 # Resolve Clang Linktime Problems
@@ -108,6 +110,9 @@ endif()
 # #############
 # Build Project
 
+# Find / Build dependencies
+add_subdirectory(deps)
+
 # Build and install the h5 library
 add_subdirectory(c++/h5)
 
@@ -130,6 +135,7 @@ endif()
 
 # Additional configuration files
 add_subdirectory(share)
+
 
 # #############
 # Debian Package
