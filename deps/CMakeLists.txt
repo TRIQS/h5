@@ -55,4 +55,5 @@ external_dependency(GTest
 external_dependency(Cpp2Py
   GIT_REPO https://github.com/TRIQS/cpp2py
   GIT_TAG py3
+  EXCLUDE_FROM_ALL
 )
