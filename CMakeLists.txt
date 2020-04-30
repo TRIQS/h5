@@ -24,6 +24,9 @@ cmake_policy(VERSION 3.3.2)
 if(POLICY CMP0074)
   cmake_policy(SET CMP0074 NEW)
 endif()
+if(POLICY CMP0077)
+  cmake_policy(SET CMP0077 NEW)
+endif()
 
 # ############
 # Define Project
@@ -59,6 +62,12 @@ if(NOT IS_SUBPROJECT)
   message(STATUS "-------- BUILD-TYPE: ${CMAKE_BUILD_TYPE} --------")
 endif()
 
+# Testing
+option(Build_Tests "Build tests" ON)
+if(Build_Tests)
+  enable_testing()
+endif()
+
 # Export the list of compile-commands into compile_commands.json
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
@@ -70,23 +79,20 @@ add_compile_options(
 )
 
 # Create an Interface target for compiler warnings
-if(NOT TARGET project_warnings)
-  add_library(project_warnings INTERFACE)
-  target_compile_options(project_warnings
-    INTERFACE
-      -Wall
-      -Wextra
-      -Wpedantic
-      -Wno-sign-compare
-      $<$<CXX_COMPILER_ID:GNU>:-Wshadow=local>
-      $<$<CXX_COMPILER_ID:GNU>:-Wno-attributes>
-      $<$<CXX_COMPILER_ID:Clang>:-Wshadow>
-      $<$<CXX_COMPILER_ID:Clang>:-Wno-gcc-compat>
-      $<$<CXX_COMPILER_ID:AppleClang>:-Wshadow>
-      $<$<CXX_COMPILER_ID:AppleClang>:-Wno-gcc-compat>
-  )
-endif()
-install(TARGETS project_warnings EXPORT h5-targets)
+add_library(h5_warnings INTERFACE)
+target_compile_options(h5_warnings
+  INTERFACE
+    -Wall
+    -Wextra
+    -Wpedantic
+    -Wno-sign-compare
+    $<$<CXX_COMPILER_ID:GNU>:-Wshadow=local>
+    $<$<CXX_COMPILER_ID:GNU>:-Wno-attributes>
+    $<$<CXX_COMPILER_ID:Clang>:-Wshadow>
+    $<$<CXX_COMPILER_ID:Clang>:-Wno-gcc-compat>
+    $<$<CXX_COMPILER_ID:AppleClang>:-Wshadow>
+    $<$<CXX_COMPILER_ID:AppleClang>:-Wno-gcc-compat>
+)
 
 # ---------------------------------
 # Resolve Clang Linktime Problems
@@ -120,9 +126,7 @@ add_subdirectory(c++/h5)
 add_subdirectory(python/h5)
 
 # Tests
-option(Build_Tests "Build tests" ON)
-if(Build_Tests AND NOT IS_SUBPROJECT)
-  enable_testing()
+if(Build_Tests)
   add_subdirectory(test)
 endif()
 

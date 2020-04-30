@@ -13,6 +13,10 @@ set(H5_GIT_HASH @PROJECT_GIT_HASH@)
 # Root of the installation
 set(H5_ROOT  @CMAKE_INSTALL_PREFIX@)
 
+## Find the target dependencies
+#include(CMakeFindDependencyMacro)
+#find_dependency(...)
+
 # Include the exported targets of this project
 include(@CMAKE_INSTALL_PREFIX@/lib/cmake/h5/h5-targets.cmake)
 

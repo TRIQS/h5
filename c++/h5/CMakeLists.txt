@@ -2,7 +2,7 @@ file(GLOB_RECURSE sources *.cpp)
 add_library(h5_c ${sources})
 
 # Enable warnings
-target_link_libraries(h5_c PRIVATE project_warnings)
+target_link_libraries(h5_c PRIVATE $<BUILD_INTERFACE:h5_warnings>)
 
 # Configure compilation
 target_compile_options(h5_c PUBLIC -fPIC -std=c++17 $<$<CXX_COMPILER_ID:GNU>:-fconcepts>)
