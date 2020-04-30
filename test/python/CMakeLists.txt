@@ -9,7 +9,7 @@ set(all_tests interface archive test_storable issue_multifile)
 
 # Generate the C++2Py Module for an hdf5 storable class
 add_cpp2py_module(storable)
-target_link_libraries(storable PRIVATE h5_c)
+target_link_libraries(storable h5_c)
 target_include_directories(storable PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
 
 foreach(test ${all_tests})
