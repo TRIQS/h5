@@ -42,7 +42,18 @@ namespace h5 {
   template <> hid_t hdf5_type<std::complex<double>>      (){return  H5T_NATIVE_DOUBLE;}
   template <> hid_t hdf5_type<std::complex<long double>> (){return  H5T_NATIVE_LDOUBLE;}
 
-  template <> hid_t hdf5_type<std::string>       (){return  H5T_C_S1;}
+  namespace details {
+    hid_t const str_dtype = [](){
+      hid_t dt = H5Tcopy(H5T_C_S1);
+      H5Tset_size(dt, H5T_VARIABLE);
+      H5Tset_cset(dt, H5T_CSET_UTF8);
+      H5Tlock(dt);
+      return dt;
+    }();
+  }
+  template <> hid_t hdf5_type<std::string>  (){return  details::str_dtype;}
+  template <> hid_t hdf5_type<char *>       (){return  details::str_dtype;}
+  template <> hid_t hdf5_type<const char *> (){return  details::str_dtype;}
 
   // clang-format on
 
@@ -88,20 +99,12 @@ namespace h5 {
        {hdf5_type<long double>(), H5_AS_STRING(long double)},
        {hdf5_type<std::complex<float>>(), H5_AS_STRING(std::complex<float>)},
        {hdf5_type<std::complex<double>>(), H5_AS_STRING(std::complex<double>)},
-       {hdf5_type<std::complex<long double>>(), H5_AS_STRING(std::complex<long double>)} //
+       {hdf5_type<std::complex<long double>>(), H5_AS_STRING(std::complex<long double>)},
+       {hdf5_type<std::string>(), H5_AS_STRING(std::string)},
     };
   }
 
   //--------
-
-  std::string get_name_of_h5_type(datatype t) {
-
-    if (h5_name_table.empty()) init_h5_name_table();
-    auto _end = h5_name_table.end();
-    auto pos  = std::find_if(h5_name_table.begin(), _end, [t](auto const &x) { return H5Tequal(x.hdf5_type, t) > 0; });
-    if (pos == _end) throw std::logic_error("HDF5/Python : impossible error");
-    return pos->name;
-  }
 
   hid_t get_hdf5_type(dataset ds) { return H5Dget_type(ds); }
 
@@ -111,6 +114,15 @@ namespace h5 {
     auto res = H5Tequal(dt1, dt2);
     if (res < 0) { throw std::runtime_error("Failure it hdf5 type comparison"); }
     return res > 0;
+  }
+
+  std::string get_name_of_h5_type(datatype t) {
+
+    if (h5_name_table.empty()) init_h5_name_table();
+    auto _end = h5_name_table.end();
+    auto pos  = std::find_if(h5_name_table.begin(), _end, [t](auto const &x) { return hdf5_type_equal(t, x.hdf5_type); });
+    if (pos == _end) throw std::logic_error("HDF5/Python : impossible error");
+    return pos->name;
   }
 
   // -----------------------   Reference counting ---------------------------
