@@ -22,6 +22,7 @@
 #include "./test_common.hpp"
 
 #include <h5/h5.hpp>
+#include <complex>
 
 // clang-format off
 TEST(H5, ComplexBkwd){
@@ -48,5 +49,3 @@ TEST(H5, ComplexBkwd){
   }
 };
 // clang-format on
-
-MAKE_MAIN;

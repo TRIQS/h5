@@ -1,8 +1,8 @@
-#include <gtest/gtest.h>
+
+#include "./test_common.hpp"
 
 #include <h5/h5.hpp>
-
-using namespace h5;
+#include <string>
 
 TEST(H5, Encoding) {
 
@@ -10,7 +10,7 @@ TEST(H5, Encoding) {
   std::string utf8_str  = "Price: 10 €";
 
   {
-    h5::file file("string.h5", 'w');
+    h5::file file("test_string.h5", 'w');
 
     // Store ASCII (internally uses UTF8 encoding)
     h5_write(file, "ASCII", ascii_str);
@@ -32,7 +32,7 @@ TEST(H5, Encoding) {
   }
 
   {
-    h5::file file("string.h5", 'r');
+    h5::file file("test_string.h5", 'r');
 
     // Read ASCII stored with UTF8 encoding
     std::string ascii_str_read = "";
