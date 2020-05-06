@@ -1,5 +1,6 @@
 file(GLOB_RECURSE sources *.cpp)
 add_library(h5_c ${sources})
+add_library(h5::h5_c ALIAS h5_c)
 
 # Enable warnings
 target_link_libraries(h5_c PRIVATE $<BUILD_INTERFACE:h5_warnings>)
@@ -26,6 +27,7 @@ find_package(HDF5 REQUIRED C HL)
 
 # Create an interface target
 add_library(hdf5 INTERFACE)
+add_library(h5::hdf5 ALIAS hdf5)
 target_include_directories(hdf5 SYSTEM INTERFACE ${HDF5_INCLUDE_DIRS})
 target_link_libraries(hdf5 INTERFACE "${HDF5_LIBRARIES}" ${HDF5_HL_LIBRARIES})
 target_compile_options(hdf5 INTERFACE ${HDF5_DEFINITIONS})
