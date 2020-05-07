@@ -2,6 +2,11 @@ add_subdirectory(cmake)
 
 if(NOT IS_SUBPROJECT)
 
+  if(PythonSupport)
+    set(EXPORT_PYTHON_PATH "export PYTHONPATH=${CMAKE_INSTALL_PREFIX}/${CPP2PY_PYTHON_LIB_DEST_ROOT}:$PYTHONPATH")
+    set(MODFILE_PYTHON_PATH "prepend-path    PYTHONPATH          $root/${CPP2PY_PYTHON_LIB_DEST_ROOT}")
+  endif()
+
   configure_file(h5.modulefile.in h5.modulefile @ONLY)
   configure_file(h5vars.sh.in h5vars.sh @ONLY)
 

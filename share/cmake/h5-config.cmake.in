@@ -4,7 +4,8 @@
 
 # Multiple inclusion guard
 if(NOT H5_FOUND)
-set(H5_FOUND True)
+set(H5_FOUND TRUE)
+set_property(GLOBAL PROPERTY H5_FOUND TRUE)
 
 # version
 set(H5_VERSION @PROJECT_VERSION@)
