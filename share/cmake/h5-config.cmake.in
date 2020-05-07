@@ -26,4 +26,7 @@ message(STATUS "Found h5-config.cmake with version @PROJECT_VERSION@, hash = @PR
 # Was the Project built with Documentation?
 set(H5_WITH_DOCUMENTATION @Build_Documentation@)
 
+# Was the Project built with PythonSupport?
+set(H5_WITH_PYTHON_SUPPORT @PythonSupport@)
+
 endif()
