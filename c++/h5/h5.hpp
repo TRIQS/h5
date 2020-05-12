@@ -7,6 +7,7 @@
 #include "./format.hpp"
 #include "./scalar.hpp"
 #include "./stl/string.hpp"
+#include "./stl/array.hpp"
 #include "./stl/vector.hpp"
 #include "./stl/map.hpp"
 #include "./stl/pair.hpp"

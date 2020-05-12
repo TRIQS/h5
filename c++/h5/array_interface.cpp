@@ -5,6 +5,7 @@
 #include <hdf5_hl.h>
 
 #include <numeric>
+#include <algorithm>
 #include <iostream> // DEBUG
 
 namespace h5::array_interface {
@@ -128,7 +129,7 @@ namespace h5::array_interface {
     dataspace file_d_space = H5Dget_space(ds);
 
     // Checks
-    if (H5Tequal(v.ty, lt.ty) <= 0)
+    if (not hdf5_type_equal(v.ty, lt.ty))
       throw std::runtime_error("h5 read. Type mismatch : expecting a " + get_name_of_h5_type(v.ty)
                                + " while the array stored in the hdf5 file has type " + get_name_of_h5_type(lt.ty));
 
@@ -136,14 +137,12 @@ namespace h5::array_interface {
       throw std::runtime_error("h5 read. Rank mismatch : expecting in file a rank " + std::to_string(v.rank())
                                + " while the array stored in the hdf5 file has rank " + std::to_string(lt.rank()));
 
-    //if (lt.lengths != v.slab.count)
-    //throw std::runtime_error("h5 read. Lengths mismatch : expecting a rank " + std::to_string(v.rank())
-    //+ " while the array stored in the hdf5 file has rank = " + std::to_string(lt.rank()));
+    if (lt.lengths != v.slab.count) throw std::runtime_error("h5 read. Lengths mismatch");
 
     dataspace mem_d_space = make_mem_dpace(v);
     if (H5Sget_simple_extent_npoints(file_d_space) > 0) {
       herr_t err = H5Dread(ds, v.ty, mem_d_space, file_d_space, H5P_DEFAULT, v.start);
-      if (err < 0) throw std::runtime_error("Error reading the scalar dataset " + name + " in the group" + g.name());
+      if (err < 0) throw std::runtime_error("Error reading the scalar dataset " + name + " in the group " + g.name());
     }
   }
 
