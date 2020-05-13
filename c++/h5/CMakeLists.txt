@@ -6,7 +6,8 @@ add_library(h5::h5_c ALIAS h5_c)
 target_link_libraries(h5_c PRIVATE $<BUILD_INTERFACE:h5_warnings>)
 
 # Configure compilation
-target_compile_options(h5_c PUBLIC -fPIC -std=c++17 $<$<CXX_COMPILER_ID:GNU>:-fconcepts>)
+target_compile_options(h5_c PUBLIC -std=c++17 $<$<CXX_COMPILER_ID:GNU>:-fconcepts>)
+set_property(TARGET h5_c PROPERTY POSITION_INDEPENDENT_CODE ON)
 target_include_directories(h5_c PUBLIC $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/c++>)
 target_include_directories(h5_c SYSTEM INTERFACE $<INSTALL_INTERFACE:${CMAKE_INSTALL_PREFIX}/include>)
 target_compile_definitions(h5_c PUBLIC
