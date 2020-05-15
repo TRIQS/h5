@@ -58,7 +58,7 @@ namespace h5 {
       auto char_arr = std::array<char *, N>{};
       h5_read(g, name, char_arr);
       std::copy(cbegin(char_arr), cend(char_arr), begin(a));
-      std::for_each(begin(char_arr), end(char_arr), [](char *cb) { delete cb; });
+      std::for_each(begin(char_arr), end(char_arr), [](char *cb) { free(cb); });
 
     } else if constexpr (std::is_arithmetic_v<T> or is_complex_v<T> or std::is_same_v<T, char *> or std::is_same_v<T, const char *>) {
 
