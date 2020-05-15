@@ -6,7 +6,7 @@ from cpp2py.wrap_generator import *
 module = module_(full_name = "storable", doc = r"")
 
 # Imports
-module.add_imports(*['_h5py'])
+module.add_imports(*['h5._h5py'])
 
 # Add here all includes
 module.add_include("storable.hpp")
