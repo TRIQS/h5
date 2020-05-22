@@ -1,12 +1,13 @@
 #pragma once
-#include "./base.hpp"
+
+#include "./file.hpp"
 
 namespace h5 {
 
   template <typename T>
   std::vector<unsigned char> serialize(T const &x) {
     memory_file f;
-    h5_write(f, "X", x);
+    h5_write(f, "object", x);
     return f.as_buffer();
   }
 
@@ -14,6 +15,7 @@ namespace h5 {
 
   template <typename T>
   T deserialize(std::vector<unsigned char> const &buf) {
-    return h5_read<T>(memory_file f{buf}, "object");
+    memory_file f{buf};
+    return h5_read<T>(f, "object");
   }
 } // namespace h5
