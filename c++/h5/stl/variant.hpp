@@ -29,7 +29,7 @@ namespace h5 {
     if constexpr (sizeof...(T) > 0)
       h5_read_variant_helper<VT, T...>(v, dt, gr, name);
     else
-      throw std::runtime_error("Error in h5_read: std::variant<...> not compatible with TRIQS_HDF5_data_scheme \n");
+      throw std::runtime_error("Error in h5_read: std::variant<...> not compatible with Format \n");
   }
 
   /**
