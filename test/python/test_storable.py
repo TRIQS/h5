@@ -39,7 +39,7 @@ class TestStorable(unittest.TestCase):
         with HDFArchive('h5_class.h5','r') as arch:
             obj_in = arch['obj']
 
-        self.assertEqual(obj.vec, obj_in.vec)
+        self.assertTrue(all(obj.vec == obj_in.vec))
         self.assertEqual(obj.s, obj_in.s)
 
 if __name__ == '__main__':

@@ -12,7 +12,7 @@ endforeach()
 # Build the h5py_io library
 add_library(h5py_io STATIC h5py_io.cpp)
 set_property(TARGET h5py_io PROPERTY POSITION_INDEPENDENT_CODE ON)
-target_link_libraries(h5py_io h5_c hdf5 cpp2py python_and_numpy)
+target_link_libraries(h5py_io h5_c hdf5 cpp2py::cpp2py cpp2py::python_and_numpy)
 target_include_directories(h5py_io PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 
 # Build the cpp2py module

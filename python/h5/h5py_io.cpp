@@ -7,7 +7,7 @@
 #include <h5/stl/string.hpp>
 #include <h5/array_interface.hpp>
 
-#include <cpp2py.hpp>
+#include <cpp2py/cpp2py.hpp>
 #include <cpp2py/converters/vector.hpp>
 
 #include <hdf5.h>
