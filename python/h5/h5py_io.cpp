@@ -9,6 +9,7 @@
 
 #include <cpp2py/cpp2py.hpp>
 #include <cpp2py/converters/vector.hpp>
+#include <cpp2py/converters/string.hpp>
 
 #include <hdf5.h>
 #include <hdf5_hl.h>
