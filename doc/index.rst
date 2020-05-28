@@ -8,7 +8,7 @@ h5
    This is the homepage of h5 v2.2.0.
    For changes see the :ref:`changelog page <changelog>`.
 
-An example application using cpp2py and :ref:`TRIQS <triqslibs:welcome>`.
+An example application using cpp2py.
 
 This documentation is generated based on `rst <https://de.wikipedia.org/wiki/ReStructuredText>`_ files
 and the comments in the sources and headers.

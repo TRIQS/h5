@@ -30,7 +30,7 @@ endif()
 
 # ############
 # Define Project
-project(H5 VERSION 2.2.0 LANGUAGES C CXX)
+project(h5 VERSION 2.2.0 LANGUAGES C CXX)
 get_directory_property(IS_SUBPROJECT PARENT_DIRECTORY)
 
 # Get the git hash & print status
@@ -45,7 +45,7 @@ endif()
 if(NOT IS_SUBPROJECT)
   message(STATUS "-------- CMAKE_INSTALL_PREFIX: ${CMAKE_INSTALL_PREFIX} --------")
 endif()
-set(H5_BINARY_DIR ${PROJECT_BINARY_DIR} CACHE STRING "Binary directory of the H5 Project")
+set(${PROJECT_NAME}_BINARY_DIR ${PROJECT_BINARY_DIR} CACHE STRING "Binary directory of the ${PROJECT_NAME} Project")
 
 
 # ############
@@ -85,8 +85,8 @@ add_compile_options(
 )
 
 # Create an Interface target for compiler warnings
-add_library(h5_warnings INTERFACE)
-target_compile_options(h5_warnings
+add_library(${PROJECT_NAME}_warnings INTERFACE)
+target_compile_options(${PROJECT_NAME}_warnings
   INTERFACE
     -Wall
     -Wextra
@@ -125,17 +125,17 @@ endif()
 # Find / Build dependencies
 add_subdirectory(deps)
 
-# Build and install the h5 library
-add_subdirectory(c++/h5)
-
-# Build and install the Python modules
-if(PythonSupport)
-  add_subdirectory(python/h5)
-endif()
+# Build and install the library
+add_subdirectory(c++/${PROJECT_NAME})
 
 # Tests
 if(Build_Tests)
   add_subdirectory(test)
+endif()
+
+# Python
+if(PythonSupport)
+  add_subdirectory(python/${PROJECT_NAME})
 endif()
 
 # Docs
@@ -154,10 +154,10 @@ if(BUILD_DEBIAN_PACKAGE AND NOT IS_SUBPROJECT)
   if(NOT CMAKE_INSTALL_PREFIX STREQUAL "/usr")
     message(FATAL_ERROR "CMAKE_INSTALL_PREFIX must be /usr for packaging")
   endif()
-  set(CPACK_PACKAGE_NAME h5)
+  set(CPACK_PACKAGE_NAME ${PROJECT_NAME})
   set(CPACK_GENERATOR "DEB")
   set(CPACK_PACKAGE_VERSION ${PROJECT_VERSION})
-  set(CPACK_PACKAGE_CONTACT "https://github.com/TRIQS/h5")
+  set(CPACK_PACKAGE_CONTACT "https://github.com/TRIQS/${PROJECT_NAME}")
   execute_process(COMMAND dpkg --print-architecture OUTPUT_VARIABLE CMAKE_DEBIAN_PACKAGE_ARCHITECTURE OUTPUT_STRIP_TRAILING_WHITESPACE)
   set(CPACK_DEBIAN_PACKAGE_SHLIBDEPS ON)
   set(CPACK_DEBIAN_PACKAGE_GENERATE_SHLIBS ON)

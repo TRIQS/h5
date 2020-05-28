@@ -21,10 +21,10 @@
 ################################################################################
 
 version = "@PROJECT_VERSION@"
-h5_hash = "@PROJECT_GIT_HASH@"
+@PROJECT_NAME@_hash = "@PROJECT_GIT_HASH@"
 
 def show_version():
-  print("\nYou are using h5 version %s\n"%version)
+  print("\nYou are using @PROJECT_NAME@ version %s\n"%version)
 
 def show_git_hash():
-  print("\nYou are using h5 git hash %s\n"%h5_hash)
+  print("\nYou are using @PROJECT_NAME@ git hash %s\n"%("@PROJECT_GIT_HASH@"))
