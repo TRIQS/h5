@@ -24,6 +24,8 @@
 #include <h5/h5.hpp>
 #include <complex>
 
+#include <hdf5.h>
+
 // clang-format off
 TEST(H5, ComplexBkwd){
 
@@ -48,4 +50,65 @@ TEST(H5, ComplexBkwd){
     EXPECT_EQ(c, exact);
   }
 };
+
+TEST(H5, ComplexCompound){
+
+  // Create the compound datatype for memory.
+  h5::datatype mem_dt = H5Tcreate(H5T_COMPOUND, sizeof(h5::cplx_t));
+  H5Tinsert(mem_dt, "r", HOFFSET(h5::cplx_t, r), H5T_NATIVE_DOUBLE);
+  H5Tinsert(mem_dt, "i", HOFFSET(h5::cplx_t, i), H5T_NATIVE_DOUBLE);
+
+  // Create the compound datatype for the file.
+  h5::datatype file_dt = H5Tcreate(H5T_COMPOUND, 16);
+  H5Tinsert(file_dt, "r", 0, H5T_IEEE_F64LE);
+  H5Tinsert(file_dt, "i", 8, H5T_IEEE_F64LE);
+
+  std::array<hsize_t, 1> dims = {4};
+  std::array<h5::cplx_t, 4> arr = { h5::cplx_t{0.0, 0.0}, h5::cplx_t{0.0, 1.0}, h5::cplx_t{1.0, 0.0}, h5::cplx_t{1.0, 1.0} };
+
+  {  // Write array
+
+    h5::file file("complex_compound.h5", 'w');
+
+    h5::dataspace dspace = H5Screate_simple(1, dims.data(), nullptr);
+    h5::dataset ds = H5Dcreate(file, "cplx_arr", file_dt, dspace, H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT);
+    H5Dwrite(ds, mem_dt, H5S_ALL, H5S_ALL, H5P_DEFAULT, arr.data());
+
+  }
+
+  auto scal = h5::cplx_t{2.0, 2.0};
+
+  { // Write Scalar
+    
+    h5::file file("complex_compound.h5", 'a');
+
+    h5::dataspace dspace = H5Screate(H5S_SCALAR);
+    h5::dataset ds = H5Dcreate(file, "cplx_scal", file_dt, dspace, H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT);
+    H5Dwrite(ds, mem_dt, H5S_ALL, H5S_ALL, H5P_DEFAULT, &scal);
+  }
+
+  {
+    h5::file file("complex_compound.h5", 'r');
+
+    std::array<std::complex<double>, 4> arr_in;
+    std::complex<double> scal_in;
+
+    h5_read(file, "cplx_arr", arr_in);
+    h5_read(file, "cplx_scal", scal_in);
+
+    //h5::dataset ds = H5Dopen(file, "cplx", H5P_DEFAULT);
+    //h5::dataspace dspace = H5Dget_space(ds);
+    //H5Dread(ds, mem_dt, H5S_ALL, H5S_ALL, H5P_DEFAULT, arr_in.data());
+
+    for(int i = 0; i < dims[0]; ++i){
+      EXPECT_EQ(arr_in[i].real(), arr[i].r);
+      EXPECT_EQ(arr_in[i].imag(), arr[i].i);
+    }
+
+    EXPECT_EQ(scal_in.real(), scal.r);
+    EXPECT_EQ(scal_in.imag(), scal.i);
+  }
+
+};
+
 // clang-format on

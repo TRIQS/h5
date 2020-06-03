@@ -60,27 +60,31 @@ namespace h5 {
       std::copy(cbegin(char_arr), cend(char_arr), begin(a));
       std::for_each(begin(char_arr), end(char_arr), [](char *cb) { free(cb); });
 
-    } else if constexpr (std::is_arithmetic_v<T> or is_complex_v<T> or std::is_same_v<T, char *> or std::is_same_v<T, const char *>) {
-
-      static constexpr bool is_complex = is_complex_v<T>;
+    } else if constexpr (std::is_arithmetic_v<
+                            T> or is_complex_v<T> or std::is_same_v<T, cplx_t> or std::is_same_v<T, char *> or std::is_same_v<T, const char *>) {
 
       auto lt = array_interface::get_h5_lengths_type(g, name);
 
-      // Allow to read non-complex data into array<complex>
-      if constexpr (is_complex) {
+      H5_EXPECTS(lt.rank() == 1 + lt.has_complex_attribute);
+      H5_EXPECTS(N == lt.lengths[0]);
+
+      if constexpr (is_complex_v<T>) {
+        // Allow reading complex as a compound hdf5 dataype
+        if (hdf5_type_equal(lt.ty, hdf5_type<cplx_t>())) {
+          h5_read(g, name, reinterpret_cast<std::array<cplx_t, N> &>(a));
+          return;
+        }
+
+        // Allow to read non-complex data into array<complex>
         if (!lt.has_complex_attribute) {
           std::array<double, N> tmp;
           h5_read(g, name, tmp);
-          a = tmp;
+          std::copy(begin(tmp), end(tmp), begin(a));
           return;
         }
       }
 
-      int rank_in_file = lt.rank() - (is_complex ? 1 : 0);
-      H5_EXPECTS(rank_in_file == 1);
-      H5_EXPECTS(N == lt.lengths[0]);
-
-      array_interface::h5_array_view v{hdf5_type<T>(), (void *)(a.data()), 1, is_complex};
+      array_interface::h5_array_view v{hdf5_type<T>(), (void *)(a.data()), 1 /*rank*/, is_complex_v<T>};
       v.slab.count[0]  = N;
       v.slab.stride[0] = 1;
       v.L_tot[0]       = N;
