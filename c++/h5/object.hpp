@@ -20,7 +20,7 @@ namespace h5 {
 
   // A complex compound type consisting of two doubles
   // This type is stored and loaded as an hdf5 compound datatype
-  struct cplx_t {
+  struct dcplx_t {
     double r, i;
   };
 

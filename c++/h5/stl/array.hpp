@@ -61,7 +61,7 @@ namespace h5 {
       std::for_each(begin(char_arr), end(char_arr), [](char *cb) { free(cb); });
 
     } else if constexpr (std::is_arithmetic_v<
-                            T> or is_complex_v<T> or std::is_same_v<T, cplx_t> or std::is_same_v<T, char *> or std::is_same_v<T, const char *>) {
+                            T> or is_complex_v<T> or std::is_same_v<T, dcplx_t> or std::is_same_v<T, char *> or std::is_same_v<T, const char *>) {
 
       auto lt = array_interface::get_h5_lengths_type(g, name);
 
@@ -70,8 +70,8 @@ namespace h5 {
 
       if constexpr (is_complex_v<T>) {
         // Allow reading complex as a compound hdf5 dataype
-        if (hdf5_type_equal(lt.ty, hdf5_type<cplx_t>())) {
-          h5_read(g, name, reinterpret_cast<std::array<cplx_t, N> &>(a));
+        if (hdf5_type_equal(lt.ty, hdf5_type<dcplx_t>())) {
+          h5_read(g, name, reinterpret_cast<std::array<dcplx_t, N> &>(a));
           return;
         }
 

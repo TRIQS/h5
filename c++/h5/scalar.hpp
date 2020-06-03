@@ -17,7 +17,7 @@ namespace h5 {
   }
 
   template <typename T>
-  void h5_read(group g, std::string const &name, T &x) H5_REQUIRES(std::is_arithmetic_v<T> or is_complex_v<T> or std::is_same_v<T, cplx_t>) {
+  void h5_read(group g, std::string const &name, T &x) H5_REQUIRES(std::is_arithmetic_v<T> or is_complex_v<T> or std::is_same_v<T, dcplx_t>) {
 
     if constexpr (is_complex_v<T>) {
       // Backward compatibility to read complex stored the old way
@@ -36,8 +36,8 @@ namespace h5 {
 
     if constexpr (is_complex_v<T>) {
       // Allow reading complex as a compound hdf5 dataype
-      if (hdf5_type_equal(lt.ty, hdf5_type<cplx_t>())) {
-        h5_read(g, name, reinterpret_cast<cplx_t &>(x));
+      if (hdf5_type_equal(lt.ty, hdf5_type<dcplx_t>())) {
+        h5_read(g, name, reinterpret_cast<dcplx_t &>(x));
         return;
       }
     }
