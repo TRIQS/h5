@@ -43,7 +43,7 @@ namespace h5 {
   template <> hid_t hdf5_type<std::complex<long double>> (){return  H5T_NATIVE_LDOUBLE;}
 
   namespace details {
-    hid_t const str_dtype = [](){
+    hid_t const str_dt = [](){
       hid_t dt = H5Tcopy(H5T_C_S1);
       H5Tset_size(dt, H5T_VARIABLE);
       H5Tset_cset(dt, H5T_CSET_UTF8);
@@ -51,9 +51,20 @@ namespace h5 {
       return dt;
     }();
   }
-  template <> hid_t hdf5_type<std::string>  (){return  details::str_dtype;}
-  template <> hid_t hdf5_type<char *>       (){return  details::str_dtype;}
-  template <> hid_t hdf5_type<const char *> (){return  details::str_dtype;}
+  template <> hid_t hdf5_type<std::string>  (){return  details::str_dt;}
+  template <> hid_t hdf5_type<char *>       (){return  details::str_dt;}
+  template <> hid_t hdf5_type<const char *> (){return  details::str_dt;}
+
+  namespace details {
+    hid_t const cplx_cmpd_dt = [](){
+      hid_t dt = H5Tcreate(H5T_COMPOUND, 16);
+      H5Tinsert(dt, "r", 0, H5T_NATIVE_DOUBLE);
+      H5Tinsert(dt, "i", 8, H5T_NATIVE_DOUBLE);
+      H5Tlock(dt);
+      return dt;
+    }();
+  }
+  template <> hid_t hdf5_type<dcplx_t>  (){return  details::cplx_cmpd_dt;}
 
   // clang-format on
 
@@ -101,6 +112,7 @@ namespace h5 {
        {hdf5_type<std::complex<double>>(), H5_AS_STRING(std::complex<double>)},
        {hdf5_type<std::complex<long double>>(), H5_AS_STRING(std::complex<long double>)},
        {hdf5_type<std::string>(), H5_AS_STRING(std::string)},
+       {hdf5_type<dcplx_t>(), "Complex Compound Datatype"} //
     };
   }
 

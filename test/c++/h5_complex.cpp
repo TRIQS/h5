@@ -24,6 +24,8 @@
 #include <h5/h5.hpp>
 #include <complex>
 
+#include <hdf5.h>
+
 // clang-format off
 TEST(H5, ComplexBkwd){
 
@@ -48,4 +50,58 @@ TEST(H5, ComplexBkwd){
     EXPECT_EQ(c, exact);
   }
 };
+
+TEST(H5, ComplexCompound){
+
+  // Create the compound datatype for memory.
+  hid_t dt = h5::hdf5_type<h5::dcplx_t>();
+
+  std::array<hsize_t, 1> dims = {4};
+  std::array<h5::dcplx_t, 4> arr = { h5::dcplx_t{0.0, 0.0}, h5::dcplx_t{0.0, 1.0}, h5::dcplx_t{1.0, 0.0}, h5::dcplx_t{1.0, 1.0} };
+
+  {  // Write array
+
+    h5::file file("complex_compound.h5", 'w');
+
+    h5::dataspace dspace = H5Screate_simple(1, dims.data(), nullptr);
+    h5::dataset ds = H5Dcreate(file, "cplx_arr", dt, dspace, H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT);
+    H5Dwrite(ds, dt, H5S_ALL, H5S_ALL, H5P_DEFAULT, arr.data());
+
+  }
+
+  auto scal = h5::dcplx_t{2.0, 2.0};
+
+  { // Write Scalar
+    
+    h5::file file("complex_compound.h5", 'a');
+
+    h5::dataspace dspace = H5Screate(H5S_SCALAR);
+    h5::dataset ds = H5Dcreate(file, "cplx_scal", dt, dspace, H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT);
+    H5Dwrite(ds, dt, H5S_ALL, H5S_ALL, H5P_DEFAULT, &scal);
+  }
+
+  {
+    h5::file file("complex_compound.h5", 'r');
+
+    std::array<std::complex<double>, 4> arr_in;
+    std::complex<double> scal_in;
+
+    h5_read(file, "cplx_arr", arr_in);
+    h5_read(file, "cplx_scal", scal_in);
+
+    //h5::dataset ds = H5Dopen(file, "cplx", H5P_DEFAULT);
+    //h5::dataspace dspace = H5Dget_space(ds);
+    //H5Dread(ds, mem_dt, H5S_ALL, H5S_ALL, H5P_DEFAULT, arr_in.data());
+
+    for(int i = 0; i < dims[0]; ++i){
+      EXPECT_EQ(arr_in[i].real(), arr[i].r);
+      EXPECT_EQ(arr_in[i].imag(), arr[i].i);
+    }
+
+    EXPECT_EQ(scal_in.real(), scal.r);
+    EXPECT_EQ(scal_in.imag(), scal.i);
+  }
+
+};
+
 // clang-format on

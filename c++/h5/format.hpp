@@ -17,12 +17,14 @@ namespace h5 {
   //  specialize with a struct similarly to hdf5_format_impl
   // to be implemented if needed.
 
-  template <typename T> struct hdf5_format_impl {
+  template <typename T>
+  struct hdf5_format_impl {
     static std::string invoke() { return T::hdf5_format(); }
   };
 
 #define H5_SPECIALIZE_FORMAT2(X, Y)                                                                                                                  \
-  template <> struct hdf5_format_impl<X> {                                                                                                           \
+  template <>                                                                                                                                        \
+  struct hdf5_format_impl<X> {                                                                                                                       \
     static std::string invoke() { return H5_AS_STRING(Y); }                                                                                          \
   }
 
@@ -40,9 +42,15 @@ namespace h5 {
   H5_SPECIALIZE_FORMAT(long double);
   H5_SPECIALIZE_FORMAT2(std::complex<double>, complex);
 
-  template <typename T> std::string get_hdf5_format() { return hdf5_format_impl<T>::invoke(); }
+  template <typename T>
+  std::string get_hdf5_format() {
+    return hdf5_format_impl<T>::invoke();
+  }
 
-  template <typename T> std::string get_hdf5_format(T const &) { return hdf5_format_impl<T>::invoke(); }
+  template <typename T>
+  std::string get_hdf5_format(T const &) {
+    return hdf5_format_impl<T>::invoke();
+  }
 
   inline void write_hdf5_format_as_string(object obj, std::string const &s) { h5_write_attribute(obj, "Format", s); }
 
@@ -63,7 +71,8 @@ namespace h5 {
   void assert_hdf5_format_as_string(group g, const char *tag_expected, bool ignore_if_absent = false);
 
   /// Asserts that the tag of the group is the same as for T. Throws std::runtime_error if incompatible
-  template <typename T> void assert_hdf5_format(group g, T const &, bool ignore_if_absent = false) {
+  template <typename T>
+  void assert_hdf5_format(group g, T const &, bool ignore_if_absent = false) {
     assert_hdf5_format_as_string(g, get_hdf5_format<T>().c_str(), ignore_if_absent);
   }
 

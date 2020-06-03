@@ -18,6 +18,12 @@ namespace h5 {
   template <typename T>
   hid_t hdf5_type();
 
+  // A complex compound type consisting of two doubles
+  // This type is stored and loaded as an hdf5 compound datatype
+  struct dcplx_t {
+    double r, i;
+  };
+
   // impl trait to detect complex numbers
   template <typename T>
   struct _is_complex : std::false_type {};

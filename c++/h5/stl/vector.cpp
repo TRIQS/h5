@@ -3,7 +3,7 @@
 #include <hdf5_hl.h>
 #include <array>
 #include <cstring>
-#include <algorithm> 
+#include <algorithm>
 
 #include "./string.hpp"
 

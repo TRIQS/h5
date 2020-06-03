@@ -230,6 +230,11 @@ namespace h5 {
         h5_read(g, name, x);
         return PyUnicode_FromString(x.c_str());
       }
+      if (H5Tequal(lt.ty, hdf5_type<dcplx_t>())) {
+        dcplx_t x;
+        h5_read(g, name, x);
+        return PyComplex_FromDoubles(x.r, x.i);
+      }
       // Default case : error, we can not read
       PyErr_SetString(PyExc_RuntimeError, "h5_read to Python: unknown scalar type");
       return NULL;
