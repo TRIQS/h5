@@ -12,7 +12,7 @@ namespace h5::array_interface {
 
   //------------------------------------------------
   // the dataspace corresponding to the array. Contiguous data only...
-  dataspace make_mem_dpace(h5_array_view const &v) {
+  dataspace make_mem_dspace(h5_array_view const &v) {
 
     if (v.rank() == 0) return H5Screate(H5S_SCALAR);
 
@@ -50,7 +50,7 @@ namespace h5::array_interface {
 
   //-------------------------------------------------------
   //                    write
-  //--------------------------------------------------------
+  //-------------------------------------------------------
 
   void write(group g, std::string const &name, h5_array_view const &v, bool compress) {
 
@@ -75,9 +75,9 @@ namespace h5::array_interface {
     if (!ds.is_valid()) throw std::runtime_error("Cannot create the dataset " + name + " in the group " + g.name());
 
     // memory data space
-    dataspace mem_d_space = make_mem_dpace(v);
-    if (H5Sget_simple_extent_npoints(mem_d_space) > 0) { // avoid writing empty arrays
-      herr_t err = H5Dwrite(ds, v.ty, mem_d_space, H5S_ALL, H5P_DEFAULT, v.start);
+    dataspace mem_dspace = make_mem_dspace(v);
+    if (H5Sget_simple_extent_npoints(mem_dspace) > 0) { // avoid writing empty arrays
+      herr_t err = H5Dwrite(ds, v.ty, mem_dspace, H5S_ALL, H5P_DEFAULT, v.start);
       if (err < 0) throw std::runtime_error("Error writing the scalar dataset " + name + " in the group" + g.name());
     }
 
@@ -91,9 +91,9 @@ namespace h5::array_interface {
 
     if (H5LTfind_attribute(obj, name.c_str()) != 0) throw std::runtime_error("The attribute " + name + " is already present. Can not overwrite");
 
-    dataspace mem_d_space = make_mem_dpace(v);
+    dataspace mem_dspace = make_mem_dspace(v);
 
-    attribute attr = H5Acreate2(obj, name.c_str(), v.ty, mem_d_space, H5P_DEFAULT, H5P_DEFAULT);
+    attribute attr = H5Acreate2(obj, name.c_str(), v.ty, mem_dspace, H5P_DEFAULT, H5P_DEFAULT);
     if (!attr.is_valid()) throw std::runtime_error("Cannot create the attribute " + name);
 
     herr_t err = H5Awrite(attr, v.ty, v.start);
@@ -102,19 +102,19 @@ namespace h5::array_interface {
 
   //-------------------------------------------------------
   //                    READ
-  //--------------------------------------------------------
+  //-------------------------------------------------------
 
   h5_lengths_type get_h5_lengths_type(group g, std::string const &name) {
 
     dataset ds = g.open_dataset(name);
 
     bool has_complex_attribute = H5LTfind_attribute(ds, "__complex__"); // the array in file should be interpreted as a complex
-    dataspace d_space          = H5Dget_space(ds);
-    int rank                   = H5Sget_simple_extent_ndims(d_space);
+    dataspace dspace           = H5Dget_space(ds);
+    int rank                   = H5Sget_simple_extent_ndims(dspace);
 
     // need to use hsize_t here and the vector is truncated at rank
     v_t dims_out(rank);
-    H5Sget_simple_extent_dims(d_space, dims_out.data(), nullptr);
+    H5Sget_simple_extent_dims(dspace, dims_out.data(), nullptr);
 
     //  get the type from the file
     datatype ty = H5Dget_type(ds);
@@ -125,8 +125,8 @@ namespace h5::array_interface {
 
   void read(group g, std::string const &name, h5_array_view v, h5_lengths_type lt) {
 
-    dataset ds             = g.open_dataset(name);
-    dataspace file_d_space = H5Dget_space(ds);
+    dataset ds            = g.open_dataset(name);
+    dataspace file_dspace = H5Dget_space(ds);
 
     // Checks
     if (not hdf5_type_equal(v.ty, lt.ty))
@@ -139,9 +139,9 @@ namespace h5::array_interface {
 
     if (lt.lengths != v.slab.count) throw std::runtime_error("h5 read. Lengths mismatch");
 
-    dataspace mem_d_space = make_mem_dpace(v);
-    if (H5Sget_simple_extent_npoints(file_d_space) > 0) {
-      herr_t err = H5Dread(ds, v.ty, mem_d_space, file_d_space, H5P_DEFAULT, v.start);
+    dataspace mem_dspace = make_mem_dspace(v);
+    if (H5Sget_simple_extent_npoints(file_dspace) > 0) {
+      herr_t err = H5Dread(ds, v.ty, mem_dspace, file_dspace, H5P_DEFAULT, v.start);
       if (err < 0) throw std::runtime_error("Error reading the scalar dataset " + name + " in the group " + g.name());
     }
   }

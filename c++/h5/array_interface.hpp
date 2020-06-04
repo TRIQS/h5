@@ -67,19 +67,19 @@ namespace h5::array_interface {
   //     stride[0]        =   L[rank-1] * L[rank-2] * L[1] * strides_h5 [0]
   std::pair<v_t, v_t> get_L_tot_and_strides_h5(long const *stri, int rank, long total_size);
 
-  // Retrieve lengths and hdf5 type from a file
+  // Retrieve lengths and hdf5 type from a dataset g[name] or attribute obj[name]
   h5_lengths_type get_h5_lengths_type(group g, std::string const &name);
 
   // Write the view of the array to the group
   void write(group g, std::string const &name, h5_array_view const &a, bool compress);
 
-  // EXPLAIN
+  // Read into an array_view from the group
   void read(group g, std::string const &name, h5_array_view v, h5_lengths_type lt);
 
-  // Write as attribute
+  // Write the view of the array to the attribute
   void write_attribute(object obj, std::string const &name, h5_array_view v);
 
-  // Read as attribute
+  // Read into a contiguous array_view from the attribute
   void read_attribute(object obj, std::string const &name, h5_array_view v);
 
 } // namespace h5::array_interface
