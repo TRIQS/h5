@@ -23,11 +23,10 @@ namespace h5 {
       std::transform(cbegin(a), cend(a), begin(char_arr), [](std::string const &s) { return s.c_str(); });
       h5_write(g, name, char_arr);
 
-    } else if constexpr (std::is_arithmetic_v<T> or is_complex_v<T> or std::is_same_v<T, char *> or std::is_same_v<T, const char *>) {
+    } else if constexpr (std::is_arithmetic_v<
+                            T> or is_complex_v<T> or std::is_same_v<T, dcplx_t> or std::is_same_v<T, char *> or std::is_same_v<T, const char *>) {
 
-      static constexpr bool is_complex = is_complex_v<T>;
-
-      h5::array_interface::h5_array_view v{hdf5_type<T>(), (void *)a.data(), 1, is_complex};
+      h5::array_interface::h5_array_view v{hdf5_type<T>(), (void *)a.data(), 1, is_complex_v<T>};
       v.slab.count[0]  = N;
       v.slab.stride[0] = 1;
       v.L_tot[0]       = N;
@@ -69,7 +68,7 @@ namespace h5 {
       H5_EXPECTS(N == lt.lengths[0]);
 
       if constexpr (is_complex_v<T>) {
-        // Allow reading complex as a compound hdf5 dataype
+        // Allow reading compound hdf5 dataype into array<complex>
         if (hdf5_type_equal(lt.ty, hdf5_type<dcplx_t>())) {
           h5_read(g, name, reinterpret_cast<std::array<dcplx_t, N> &>(a));
           return;

@@ -12,7 +12,7 @@ namespace h5 {
   } // namespace array_interface
 
   template <typename T>
-  void h5_write(group g, std::string const &name, T const &x) H5_REQUIRES(std::is_arithmetic_v<T> or is_complex_v<T>) {
+  void h5_write(group g, std::string const &name, T const &x) H5_REQUIRES(std::is_arithmetic_v<T> or is_complex_v<T> or std::is_same_v<T, dcplx_t>) {
     array_interface::write(g, name, array_interface::h5_array_view_from_scalar(x), false);
   }
 
@@ -35,7 +35,7 @@ namespace h5 {
     auto lt = array_interface::get_h5_lengths_type(g, name);
 
     if constexpr (is_complex_v<T>) {
-      // Allow reading complex as a compound hdf5 dataype
+      // Allow reading compound hdf5 dataype into complex
       if (hdf5_type_equal(lt.ty, hdf5_type<dcplx_t>())) {
         h5_read(g, name, reinterpret_cast<dcplx_t &>(x));
         return;
