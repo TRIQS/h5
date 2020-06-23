@@ -53,6 +53,30 @@ TEST(H5, Vector) {
   EXPECT_EQ(mv, mmv);
 }
 
+TEST(H5, VectorEmpty) {
+
+  // write
+  std::vector<double> v = {};
+
+  {
+    h5::file file{"test_vec_empty.h5", 'w'};
+    h5::group grp{file};
+    h5_write(grp, "vec", v);
+  }
+
+  // read
+  std::vector<double> vv;
+
+  {
+    h5::file file{"test_vec_empty.h5", 'r'};
+    h5::group grp{file};
+    h5_read(grp, "vec", vv);
+  }
+
+  // compare
+  EXPECT_EQ(v, vv);
+}
+
 TEST(H5, VectorAttribute) {
   // write
   std::vector<std::vector<std::string>> vvs  = {{"a", "b"}, {"c", "d"}, {"e", "f"}};
