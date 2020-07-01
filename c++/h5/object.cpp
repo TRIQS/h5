@@ -15,34 +15,35 @@
 
 namespace h5 {
 
-  //static_assert(std::is_same<::hid_t, hid_t>::value, "Internal error");
-  static_assert(std::is_same<::hsize_t, hsize_t>::value, "Internal error");
-
-  // specializations for all basic types
-  // clang-format off
-  template <> hid_t hdf5_type<char>          (){return  H5T_NATIVE_CHAR;}
-  template <> hid_t hdf5_type<signed char>   (){return  H5T_NATIVE_SCHAR;}
-  template <> hid_t hdf5_type<unsigned char> (){return  H5T_NATIVE_UCHAR;}
-
-  template <> hid_t hdf5_type<short>     (){return  H5T_NATIVE_SHORT;}
-  template <> hid_t hdf5_type<int>       (){return  H5T_NATIVE_INT;}
-  template <> hid_t hdf5_type<long>      (){return  H5T_NATIVE_LONG;}
-  template <> hid_t hdf5_type<long long> (){return  H5T_NATIVE_LLONG;}
-
-  template <> hid_t hdf5_type<unsigned short>     (){return  H5T_NATIVE_USHORT;}
-  template <> hid_t hdf5_type<unsigned int>       (){return  H5T_NATIVE_UINT;}
-  template <> hid_t hdf5_type<unsigned long>      (){return  H5T_NATIVE_ULONG;}
-  template <> hid_t hdf5_type<unsigned long long> (){return  H5T_NATIVE_ULLONG;}
-
-  template <> hid_t hdf5_type<float>       (){return  H5T_NATIVE_FLOAT;}
-  template <> hid_t hdf5_type<double>      (){return  H5T_NATIVE_DOUBLE;}
-  template <> hid_t hdf5_type<long double> (){return  H5T_NATIVE_LDOUBLE;}
-
-  template <> hid_t hdf5_type<std::complex<float>>       (){return  H5T_NATIVE_FLOAT;}
-  template <> hid_t hdf5_type<std::complex<double>>      (){return  H5T_NATIVE_DOUBLE;}
-  template <> hid_t hdf5_type<std::complex<long double>> (){return  H5T_NATIVE_LDOUBLE;}
-
   namespace details {
+
+    //static_assert(std::is_same<::hid_t, hid_t>::value, "Internal error");
+    static_assert(std::is_same<::hsize_t, hsize_t>::value, "Internal error");
+
+    // specializations for all basic types
+    // clang-format off
+    template <> hid_t hid_t_of<char>          (){return  H5T_NATIVE_CHAR;}
+    template <> hid_t hid_t_of<signed char>   (){return  H5T_NATIVE_SCHAR;}
+    template <> hid_t hid_t_of<unsigned char> (){return  H5T_NATIVE_UCHAR;}
+ 
+    template <> hid_t hid_t_of<short>     (){return  H5T_NATIVE_SHORT;}
+    template <> hid_t hid_t_of<int>       (){return  H5T_NATIVE_INT;}
+    template <> hid_t hid_t_of<long>      (){return  H5T_NATIVE_LONG;}
+    template <> hid_t hid_t_of<long long> (){return  H5T_NATIVE_LLONG;}
+ 
+    template <> hid_t hid_t_of<unsigned short>     (){return  H5T_NATIVE_USHORT;}
+    template <> hid_t hid_t_of<unsigned int>       (){return  H5T_NATIVE_UINT;}
+    template <> hid_t hid_t_of<unsigned long>      (){return  H5T_NATIVE_ULONG;}
+    template <> hid_t hid_t_of<unsigned long long> (){return  H5T_NATIVE_ULLONG;}
+ 
+    template <> hid_t hid_t_of<float>       (){return  H5T_NATIVE_FLOAT;}
+    template <> hid_t hid_t_of<double>      (){return  H5T_NATIVE_DOUBLE;}
+    template <> hid_t hid_t_of<long double> (){return  H5T_NATIVE_LDOUBLE;}
+ 
+    template <> hid_t hid_t_of<std::complex<float>>       (){return  H5T_NATIVE_FLOAT;}
+    template <> hid_t hid_t_of<std::complex<double>>      (){return  H5T_NATIVE_DOUBLE;}
+    template <> hid_t hid_t_of<std::complex<long double>> (){return  H5T_NATIVE_LDOUBLE;}
+
     hid_t const str_dt = [](){
       hid_t dt = H5Tcopy(H5T_C_S1);
       H5Tset_size(dt, H5T_VARIABLE);
@@ -50,12 +51,11 @@ namespace h5 {
       H5Tlock(dt);
       return dt;
     }();
-  }
-  template <> hid_t hdf5_type<std::string>  (){return  details::str_dt;}
-  template <> hid_t hdf5_type<char *>       (){return  details::str_dt;}
-  template <> hid_t hdf5_type<const char *> (){return  details::str_dt;}
-
-  namespace details {
+  
+    template <> hid_t hid_t_of<std::string>  (){return  details::str_dt;}
+    template <> hid_t hid_t_of<char *>       (){return  details::str_dt;}
+    template <> hid_t hid_t_of<const char *> (){return  details::str_dt;}
+    
     hid_t const cplx_cmpd_dt = [](){
       hid_t dt = H5Tcreate(H5T_COMPOUND, 16);
       H5Tinsert(dt, "r", 0, H5T_NATIVE_DOUBLE);
@@ -63,20 +63,19 @@ namespace h5 {
       H5Tlock(dt);
       return dt;
     }();
-  }
-  template <> hid_t hdf5_type<dcplx_t>  (){return  details::cplx_cmpd_dt;}
+    template <> hid_t hid_t_of<dcplx_t>  (){return  details::cplx_cmpd_dt;}
+    // clang-format on
 
-  // clang-format on
-
-  // bool. Use a lambda to initialize it.
-  template <>
-  hid_t hdf5_type<bool>() {
-    hid_t bool_enum_h5type = H5Tenum_create(H5T_NATIVE_CHAR);
-    char val;
-    H5Tenum_insert(bool_enum_h5type, "FALSE", (val = 0, &val));
-    H5Tenum_insert(bool_enum_h5type, "TRUE", (val = 1, &val));
-    return bool_enum_h5type;
-  }
+    // bool. Use a lambda to initialize it.
+    template <>
+    hid_t hid_t_of<bool>() {
+      hid_t bool_enum_h5type = H5Tenum_create(H5T_NATIVE_CHAR);
+      char val;
+      H5Tenum_insert(bool_enum_h5type, "FALSE", (val = 0, &val));
+      H5Tenum_insert(bool_enum_h5type, "TRUE", (val = 1, &val));
+      return bool_enum_h5type;
+    }
+  } // namespace details
 
   // -----------------------  name  ---------------------------
 
@@ -118,7 +117,7 @@ namespace h5 {
 
   //--------
 
-  hid_t get_hdf5_type(dataset ds) { return H5Dget_type(ds); }
+  object get_hdf5_type(dataset ds) { return H5Dget_type(ds); }
 
   bool hdf5_type_equal(datatype dt1, datatype dt2) {
     // For string do not compare size, cset..
