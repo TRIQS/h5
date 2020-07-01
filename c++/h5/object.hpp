@@ -14,10 +14,6 @@ namespace h5 {
   using hsize_t = unsigned long long;
   using v_t     = std::vector<hsize_t>;
 
-  // Correspondance T -> hdf5 type
-  template <typename T>
-  hid_t hdf5_type();
-
   // A complex compound type consisting of two doubles
   // This type is stored and loaded as an hdf5 compound datatype
   struct dcplx_t {
@@ -102,13 +98,25 @@ namespace h5 {
   using proplist  = object;
   using attribute = object;
 
+  // -----------------------  hdf5_type  ---------------------------
+  // Correspondance T -> hdf5 type
+  namespace details {
+    template <typename T>
+    hid_t hid_t_of();
+  }
+
+  template <typename T>
+  datatype hdf5_type() {
+    return object::from_borrowed(details::hid_t_of<T>());
+  }
+
   // ------------------------------
 
   // A function to get the name of a datatype in clear (for error messages)
   std::string get_name_of_h5_type(datatype ty);
 
   // Get hdf5 type of a dataset
-  hid_t get_hdf5_type(dataset);
+  object get_hdf5_type(dataset);
 
   // Check equality of datatypes
   bool hdf5_type_equal(datatype, datatype);
