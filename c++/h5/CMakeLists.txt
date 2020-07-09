@@ -16,6 +16,7 @@ endif()
 
 # Configure target and compilation
 set_property(TARGET ${PROJECT_NAME}_c PROPERTY POSITION_INDEPENDENT_CODE ON)
+target_compile_options(${PROJECT_NAME}_c PUBLIC -std=c++17)
 target_include_directories(${PROJECT_NAME}_c PUBLIC $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/c++>)
 target_include_directories(${PROJECT_NAME}_c SYSTEM INTERFACE $<INSTALL_INTERFACE:${CMAKE_INSTALL_PREFIX}/include>)
 target_compile_definitions(${PROJECT_NAME}_c PUBLIC
@@ -27,6 +28,10 @@ target_compile_definitions(${PROJECT_NAME}_c PUBLIC
 install(TARGETS ${PROJECT_NAME}_c EXPORT ${PROJECT_NAME}-targets DESTINATION lib)
 install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} DESTINATION include FILES_MATCHING PATTERN "*.hpp" PATTERN "*.h")
 
+# ========= Additional Depdencies ==========
+
+# Link against HDF5 C++ Interface
+target_link_libraries(${PROJECT_NAME}_c PUBLIC h5::h5_c)
 
 # ========= Additional Depdencies ==========
 

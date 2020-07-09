@@ -14,7 +14,8 @@ macro(generate_docs header_file)
     COMMAND rm -rf ${CMAKE_CURRENT_SOURCE_DIR}/cpp2rst_generated
     COMMAND
       PYTHONPATH=${CPP2PY_BINARY_DIR}:$ENV{PYTHONPATH}
-      ${CPP2PY_BINARY_DIR}/bin/c++2rst
+      PATH=${CPP2PY_BINARY_DIR}/bin:${CPP2PY_ROOT}/bin:$ENV{PATH}
+      c++2rst
       ${header_file}
       -N ${PROJECT_NAME}
       --output_directory ${CMAKE_CURRENT_SOURCE_DIR}/cpp2rst_generated
@@ -54,7 +55,7 @@ endif()
 add_custom_target(${PROJECT_NAME}_docs_sphinx ALL)
 add_custom_command(
   TARGET ${PROJECT_NAME}_docs_sphinx
-  COMMAND PYTHONPATH=${PROJECT_BINARY_DIR}/python:$ENV{PYTHONPATH} ${SPHINXBUILD_EXECUTABLE} -c . -j8 -b html ${CMAKE_CURRENT_SOURCE_DIR} html
+  COMMAND PYTHONPATH=${PROJECT_BINARY_DIR}/python:${h5_BINARY_DIR}/python:$ENV{PYTHONPATH} ${SPHINXBUILD_EXECUTABLE} -c . -j8 -b html ${CMAKE_CURRENT_SOURCE_DIR} html
 )
 
 option(Sphinx_Only "When building the documentation, skip the Python Modules and the generation of C++ Api and example outputs" OFF)

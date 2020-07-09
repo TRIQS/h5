@@ -13,13 +13,6 @@ Installation steps
 
      $ git clone https://github.com/TRIQS/h5 h5.src
 
-#. Make sure that all additional dependencies are installed on your system and available in your environment.
-   Alternatively build the dependencies from source instead with::
-
-     $ (cd deps && ./download.sh)
-
-   In this case they will be installed together with your application.
-
 #. Create and move to a new directory where you will compile the code::
 
      $ mkdir h5.build && cd h5.build
@@ -52,7 +45,7 @@ Custom CMake options
 
 The compilation of ``h5`` can be configured using CMake-options::
 
-    cmake ../h5.src -DOPTION1=value1 -DOPTION2=value2 ... ../h5.src
+    cmake ../h5.src -DOPTION1=value1 -DOPTION2=value2 ...
 
 +-----------------------------------------------------------------+-----------------------------------------------+
 | Options                                                         | Syntax                                        |
