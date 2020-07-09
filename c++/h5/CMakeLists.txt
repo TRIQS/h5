@@ -30,11 +30,6 @@ install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} DESTINATION include FILES_MATCHING
 
 # ========= Additional Depdencies ==========
 
-# Link against HDF5 C++ Interface
-target_link_libraries(${PROJECT_NAME}_c PUBLIC h5::h5_c)
-
-# ========= Additional Depdencies ==========
-
 message(STATUS "-------- HDF5 detection -------------")
 
 find_package(HDF5 REQUIRED C HL)
