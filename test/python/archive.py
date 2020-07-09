@@ -3,6 +3,7 @@
 # TRIQS: a Toolbox for Research in Interacting Quantum Systems
 #
 # Copyright (C) 2011 by M. Ferrero, O. Parcollet
+# Copyright (C) 2017 by H. U.R. Strand
 # Copyright (C) 2020 Simons Foundation
 #    authors: N. Wentzell
 #
@@ -36,31 +37,7 @@ def assert_array_close_to_scalar(a, x, precision = 1.e-6):
 
 class TestHdf5Io(unittest.TestCase):
 
-    def test_hdf_archive1(self):
-        d = {'dbl' : 1.0, 'lst' : [1,[1],'a']}
-        
-        # === Write to archive
-        with HDFArchive('hdf_archive1.h5','w', init = list(d.items())) as arch:
-        
-            arch._flush()
-            arch['int'] = 100
-            arch['arr'] = np.array([[1,2,3],[4,5,6]])
-            arch['tpl'] = (2,[2],'b')
-            arch['dct'] = { 'a':[10], 'b':20 }
-            arch['nan'] = float('nan')
-            arch['nanarr'] = np.array([np.nan, 1.0])
-        
-        # === Final check
-        arch = HDFArchive('hdf_archive1.h5','r')
-        
-        self.assertEqual( arch['dbl'] , 1.0 )
-        self.assertEqual( arch['lst'] , [1,[1],'a'] )
-        self.assertEqual( arch['dct'] , {'a':[10], 'b':20} )
-        self.assertTrue( isnan(arch['nan']) )
-        self.assertTrue( np.array_equal(np.isnan(arch['nanarr']), np.array([True, False])) )
-
-
-    def test_hdf_archive2(self):
+    def test_archive_base(self):
         d = {'dbl' : 1.0, 'lst' : [1,[1],'a']}
         
         # === Write to archive
@@ -70,6 +47,8 @@ class TestHdf5Io(unittest.TestCase):
             arch['arr'] = np.array([[1,2,3],[4,5,6]])
             arch['tpl'] = (2,[2],'b')
             arch['dct'] = { 'a':[10], 'b':20 }
+            arch['nan'] = float('nan')
+            arch['nanarr'] = np.array([np.nan, 1.0])
         
             arch.create_group('grp')
             grp = arch['grp']
@@ -109,12 +88,64 @@ class TestHdf5Io(unittest.TestCase):
         assert_arrays_are_close( arch['arr'] , np.array([[1, 2, 3], [4, 5, 6]]) )
         self.assertEqual( arch['tpl'] , (2,[2],'b') )
         self.assertEqual( arch['dct'] , {'a':[10], 'b':20, 'c':'triqs'} )
+        self.assertTrue( isnan(arch['nan']) )
+        self.assertTrue( np.array_equal(np.isnan(arch['nanarr']), np.array([True, False])) )
+
         self.assertEqual( arch['grp']['int'] , 98 )
         self.assertEqual( arch['grp']['tpl'] , (3,[3],'c') )
         self.assertEqual( arch['grp']['dct'] , { 'a':[30], 'b':40, 'c':'qmc'} )
         self.assertEqual( arch['grp']['d'] , 700 )
         self.assertEqual( arch['grp']['x'] , 1.5 )
         self.assertEqual( arch['grp']['y'] , 'zzz' )
+
+    def test_hdf5_bool(self):
+
+        # Write
+        with HDFArchive('bool.h5','w') as arch:
+            arch['t'] = True
+            arch['f'] = False
+            arch['i'] = 10
+
+        with HDFArchive('bool.h5','r') as arch:
+            t = arch['t']
+            f = arch['f']
+            i = arch['i']
+
+        self.assertTrue(t)
+        self.assertFalse(f)
+        self.assertIs(type(t),bool)
+        self.assertIs(type(f),bool)
+        self.assertIs(type(i),int)
+
+    def test_hdf5_types(self):
+        filename = 'h5archive.h5'
+
+        p = dict(
+            my_flag=True,
+            my_int=1,
+            my_long=1,
+            my_float=1.,
+            my_complex=1.j,
+            my_string='foobar',
+            my_string_unicode='foobar',
+            my_ndarray_int=np.array([1]),
+            my_ndarray_float=np.array([1.]),
+            my_ndarray_complex=np.array([1.j]),
+            )
+
+        with HDFArchive(filename, 'w') as a:
+            a['p'] = p
+
+        with HDFArchive(filename, 'r') as a:
+            p_ref = a['p']
+
+        for key in list(p.keys()):
+            print(key, type(p[key]), type(p_ref[key]))
+            assert( type(p[key]) == type(p_ref[key]) )
+
+            if type(p[key]) == np.ndarray:
+                assert( p[key].dtype == p_ref[key].dtype )
+                print('dtypes: ', p[key].dtype, p_ref[key].dtype)
 
 if __name__ == '__main__':
     unittest.main()
