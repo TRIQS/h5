@@ -26,8 +26,8 @@ TEST(H5, Vector) {
   {
     h5::file file{"test_vec.h5", 'w'};
     h5::group grp{file};
-    h5_write(grp, "vec_str", m);
-    h5_write(grp, "vec_dbl", mv);
+    h5::write(grp, "vec_str", m);
+    h5::write(grp, "vec_dbl", mv);
   }
 
   // read
@@ -36,9 +36,8 @@ TEST(H5, Vector) {
 
   {
     h5::file file{"test_vec.h5", 'r'};
-    h5::group grp{file};
-    h5_read(grp, "vec_str", mm);
-    h5_read(grp, "vec_dbl", mmv);
+    h5::read(file, "vec_str", mm);
+    h5::read(file, "vec_dbl", mmv);
   }
 
   // compare
