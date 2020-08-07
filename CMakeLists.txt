@@ -30,7 +30,7 @@ endif()
 
 # ############
 # Define Project
-project(h5 VERSION 2.2.0 LANGUAGES C CXX)
+project(h5 VERSION 1.0.0 LANGUAGES C CXX)
 get_directory_property(IS_SUBPROJECT PARENT_DIRECTORY)
 
 # Get the git hash & print status
