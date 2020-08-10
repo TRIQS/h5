@@ -1,4 +1,4 @@
-[![build](https://github.com/TRIQS/h5/workflows/build/badge.svg?branch=notriqs)](https://github.com/TRIQS/h5/actions?query=workflow%3Abuild)
+[![build](https://github.com/TRIQS/h5/workflows/build/badge.svg?branch=unstable)](https://github.com/TRIQS/h5/actions?query=workflow%3Abuild)
 
 # h5
 
