@@ -32,7 +32,7 @@ html_theme = 'triqs'
 html_theme_path = ['@CMAKE_CURRENT_SOURCE_DIR@/themes']
 html_show_sphinx = False
 html_context = {'header_title': '@PROJECT_NAME@',
-                'header_subtitle': 'An example application using cpp2py',
+                'header_subtitle': 'A lightweight C++ and Python hdf5 interface',
                 'header_links': [['Install', 'install'],
                                  ['Documentation', 'documentation'],
                                  ['Issues', 'issues'],
