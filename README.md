@@ -1,3 +1,5 @@
+[![build](https://github.com/TRIQS/h5/workflows/build/badge.svg?branch=notriqs)](https://github.com/TRIQS/h5/actions?query=workflow%3Abuild)
+
 # h5
 
 h5 is a high-level C++ interface to the [hdf5 library](https://www.hdfgroup.org/solutions/hdf5/), which
