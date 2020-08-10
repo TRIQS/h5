@@ -2,9 +2,9 @@ name: build
 
 on:
   push:
-    branches: [ notriqs ]
+    branches: [ unstable ]
   pull_request:
-    branches: [ notriqs ]
+    branches: [ unstable ]
 
 jobs:
   build:
