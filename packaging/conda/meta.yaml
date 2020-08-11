@@ -42,8 +42,8 @@ test:
 
 about:
   home: https://triqs.github.io/h5
-  license: GPL-3.0-or-later
-  license_family: GPL
+  license: Apache-2.0
+  license_family: Apache
   license_file: LICENSE.txt
   summary: 'A high-level C++ interface to the hdf5 library'
 
