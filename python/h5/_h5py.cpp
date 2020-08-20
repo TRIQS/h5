@@ -40,6 +40,15 @@ PYBIND11_MODULE(_h5py, m) {
      .def(
         "read_attribute", [](h5::group g, std::string const &key) { return h5::h5_read_attribute<std::string>(g, key); }, "Read an attribute",
         "key"_a)
+     .def(
+        "read_hdf5_format_from_key",
+        [](h5::group g, std::string const &key) {
+          std::string result;
+          read_hdf5_format_from_key(g, key, result);
+          return result;
+        },
+        "Read the format string from the key in the group", "key"_a)
+
      .def_property_readonly("file", &h5::group::get_file, "The parent file")
 
      //

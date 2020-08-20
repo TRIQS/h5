@@ -6,8 +6,6 @@ add_library(${PROJECT_NAME}::${PROJECT_NAME}_c ALIAS ${PROJECT_NAME}_c)
 target_link_libraries(${PROJECT_NAME}_c PRIVATE $<BUILD_INTERFACE:${PROJECT_NAME}_warnings>)
 
 # Set C++ Standard
-include(CheckCXXCompilerFlag)
-CHECK_CXX_COMPILER_FLAG("-std=c++20" HAS_CPP20)
 if(HAS_CPP20)
   target_compile_options(${PROJECT_NAME}_c PUBLIC -std=c++20)
 else()

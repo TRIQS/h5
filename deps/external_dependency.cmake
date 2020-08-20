@@ -34,17 +34,17 @@ endif()
 
 # Define External Dependency Function
 function(external_dependency)
-  cmake_parse_arguments(ARG "EXCLUDE_FROM_ALL;BUILD_ALWAYS" "VERSION;GIT_REPO;GIT_TAG" "" ${ARGN})
+  cmake_parse_arguments(ARG "EXCLUDE_FROM_ALL;BUILD_ALWAYS;ALWAYS_ADD_SUBDIR" "VERSION;GIT_REPO;GIT_TAG" "" ${ARGN})
 
   # -- Was dependency already found?
   get_property(${ARGV0}_FOUND GLOBAL PROPERTY ${ARGV0}_FOUND)
-  if(${ARGV0}_FOUND)
+  if(${ARGV0}_FOUND AND NOT ARG_ALWAYS_ADD_SUBDIR)
     message(STATUS "Dependency ${ARGV0} was already resolved.")
     return()
   endif()
 
   # -- Try to find package in system.
-  if(NOT ARG_BUILD_ALWAYS AND NOT Build_Deps STREQUAL "Always")
+  if(NOT ${ARGV0}_FOUND AND NOT ARG_BUILD_ALWAYS AND NOT Build_Deps STREQUAL "Always")
     find_package(${ARGV0} ${ARG_VERSION} QUIET HINTS ${CMAKE_INSTALL_PREFIX})
     if(${ARGV0}_FOUND)
       message(STATUS "Found dependency ${ARGV0} in system ${${ARGV0}_ROOT}")

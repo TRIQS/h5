@@ -48,6 +48,14 @@ set(${PROJECT_NAME}_BINARY_DIR ${PROJECT_BINARY_DIR} CACHE STRING "Binary direct
 # Make additional Find Modules available
 list(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/share/cmake/Modules)
 
+include(CheckCXXCompilerFlag)
+CHECK_CXX_COMPILER_FLAG("-std=c++20" HAS_CPP20)
+if(HAS_CPP20)
+  set(CMAKE_CXX_STANDARD 20)
+else()
+ set(CMAKE_CXX_STANDARD 17)
+endif()
+
 # Default to Release build type
 if(NOT CMAKE_BUILD_TYPE)
   set(CMAKE_BUILD_TYPE Release CACHE STRING "Type of build" FORCE)

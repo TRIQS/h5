@@ -1,3 +1,5 @@
+#define NPY_NO_DEPRECATED_API NPY_1_7_API_VERSION
+
 #include <Python.h>
 #include <numpy/arrayobject.h>
 
@@ -7,9 +9,8 @@
 #include <h5/stl/string.hpp>
 #include <h5/array_interface.hpp>
 
-#include <cpp2py/cpp2py.hpp>
-#include <cpp2py/converters/vector.hpp>
-#include <cpp2py/converters/string.hpp>
+#include <pybind11/pybind11.h>
+#include <pybind11/stl.h>
 
 #include <hdf5.h>
 #include <hdf5_hl.h>
@@ -183,8 +184,9 @@ namespace h5 {
       write(g, name, make_av_from_npy(arr_obj), true);
     } else if (PyArray_CheckScalar(ob)) {
       // Treat numpy scalars as 0-dimensional ndarrays
-      cpp2py::pyref obsc = PyArray_FromScalar(ob, NULL);
+      PyObject* obsc= PyArray_FromScalar(ob, NULL);
       h5_write_bare(g, name, obsc);
+      Py_XDECREF(obsc);
     } else if (PyFloat_Check(ob)) {
       h5_write(g, name, PyFloat_AsDouble(ob));
     } else if (PyBool_Check(ob)) {
@@ -250,12 +252,14 @@ namespace h5 {
     if (H5Tget_class(lt.ty) == H5T_STRING) {
       if (lt.rank() == 1) {
         auto x = h5_read<std::vector<std::string>>(g, name);
-        return cpp2py::convert_to_python(x);
+        return pybind11::cast(x).inc_ref().ptr(); // increase by one since cast return a py::object and will decrease the ref
+        //return cpp2py::convert_to_python(x);
       }
 
       if (lt.rank() == 2) {
         auto x = h5_read<std::vector<std::vector<std::string>>>(g, name);
-        return cpp2py::convert_to_python(x);
+        return pybind11::cast(x).inc_ref().ptr(); // increase by one since cast return a py::object and will decrease the ref
+        //return cpp2py::convert_to_python(x);
       }
 
       PyErr_SetString(PyExc_RuntimeError, "Unknown string dataset format");
