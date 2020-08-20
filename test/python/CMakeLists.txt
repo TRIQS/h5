@@ -8,9 +8,9 @@ endforeach()
 set(all_tests interface archive test_storable issue_multifile)
 
 # Generate the C++2Py Module for an hdf5 storable class
-add_cpp2py_module(storable)
-target_link_libraries(storable h5_c)
-target_include_directories(storable PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
+pybind11_add_module(storable storable.cxx)
+target_link_libraries(storable PRIVATE h5_c hdf5)
+target_compile_options(storable PUBLIC $<$<CXX_COMPILER_ID:GNU>:-Wno-attributes>)
 
 foreach(test ${all_tests})
   get_filename_component(test_name ${test} NAME_WE)

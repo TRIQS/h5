@@ -43,4 +43,16 @@
 
 #endif
 
+// Concept for cpp2py detection. Expected to be present in the lib in C++20 mode
+#if (__cplusplus > 201703L)
+namespace h5 {
+
+  template <typename T>
+  concept HasH5ReadWrite = requires(T const &x, T &y, h5::group g, std::string n) {
+    {h5_write(g, n, x)};
+    {h5_read(g, n, y)};
+  };
+} // namespace h5
+#endif
+
 #endif // LIBH5_H5_HPP

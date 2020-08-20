@@ -47,8 +47,20 @@ else()
   endif()
 endif()
 
+# -- pybind11  --
+if(PythonSupport)
+  external_dependency(pybind11
+   GIT_REPO https://github.com/pybind/pybind11.git
+   GIT_TAG master
+   BUILD_ALWAYS
+   EXCLUDE_FROM_ALL
+  )
+  # Workaround cache variable pybind11_FOUND
+  unset(pybind11_FOUND CACHE)
+endif()
+
 # -- Cpp2Py --
-if(PythonSupport OR Build_Documentation)
+if(Build_Documentation)
   external_dependency(Cpp2Py
     GIT_REPO https://github.com/TRIQS/cpp2py
     VERSION 2.0
