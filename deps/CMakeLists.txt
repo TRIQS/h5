@@ -52,7 +52,6 @@ external_dependency(pybind11
  GIT_REPO https://github.com/pybind/pybind11.git
  GIT_TAG master
  BUILD_ALWAYS
- ALWAYS_ADD_SUBDIR 
  EXCLUDE_FROM_ALL
 )
 
