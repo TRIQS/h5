@@ -18,6 +18,9 @@
 #include <vector>
 #include "./object.hpp"
 
+struct _object;           // forward
+typedef _object PyObject; // forward
+
 namespace h5 {
 
   /**
@@ -59,6 +62,10 @@ namespace h5 {
    */
   class memory_file : public file {
 
+    size_t get_size() const;
+    void write_to_buffer(unsigned char *buf_ptr, ssize_t buf_size) const;
+    memory_file(unsigned char const *buf_ptr, ssize_t buf_size);
+
     public:
     /// A writable file in memory with a buffer
     memory_file();
@@ -68,7 +75,34 @@ namespace h5 {
 
     /// Get a copy of the buffer
     [[nodiscard]] std::vector<unsigned char> as_buffer() const;
+
+    /// A read_only file on top on the python bytearray. NB : implemented in the hdf5_io library.
+    memory_file(PyObject *py_byte_array);
+
+    /// Get a PyByteArray from the memory file. Returns a new reference. NB : implemented in the hdf5_io library.
+    [[nodiscard]] PyObject *as_py_byte_array() const;
   };
+
+  // -----------------------------
+  // NB : I don't need Python until I actually instantiate these templates
+  // in a module ...
+  // but it is better to have them included in the h5.hpp 
+  // FIXME : separate ? 
+
+  template <typename T>
+  PyObject *serialize_to_pybytearray(T const &x) {
+    memory_file f;
+    h5_write(f, "object", x);
+    return f.as_py_byte_array();
+  }
+
+  // -----------------------------
+
+  template <typename T>
+  T deserialize_from_pybytearray(PyObject *py_byte_array) {
+    memory_file f{py_byte_array};
+    return h5_read<T>(f, "object");
+  }
 
 } // namespace h5
 

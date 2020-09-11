@@ -18,6 +18,8 @@ import numpy as np
 from storable import Storable
 from h5 import HDFArchive
 
+import pickle
+
 class TestStorable(unittest.TestCase):
 
     def test_storable(self):
@@ -31,6 +33,22 @@ class TestStorable(unittest.TestCase):
 
         with HDFArchive('h5_class.h5','r') as arch:
             obj_in = arch['obj']
+
+        self.assertTrue(all(np.array(obj.vec)== np.array(obj_in.vec)))
+        self.assertEqual(obj.s, obj_in.s)
+
+    def test_pickle(self):
+
+        obj = Storable()
+        obj.vec = 10000*[1, 2, 4, 5]
+        obj.s = "some other string"
+
+        s = pickle.dumps(obj)
+        obj_in = pickle.loads(s)
+        
+        print("Length of dump string", len(s))
+
+        #obj.vec = [1, 2, 4, 5]
 
         self.assertTrue(all(np.array(obj.vec)== np.array(obj_in.vec)))
         self.assertEqual(obj.s, obj_in.s)

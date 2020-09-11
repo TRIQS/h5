@@ -87,7 +87,7 @@ namespace h5 {
 
   // -------------------------
 
-  memory_file::memory_file(std::vector<unsigned char> const &buf) {
+  memory_file::memory_file(unsigned char const *buf_ptr, ssize_t buf_size) {
 
     proplist fapl = H5Pcreate(H5P_FILE_ACCESS);
     CHECK_OR_THROW((fapl >= 0), "creating fapl");
@@ -95,7 +95,7 @@ namespace h5 {
     auto err = H5Pset_fapl_core(fapl, (size_t)(64 * 1024), false);
     CHECK_OR_THROW((err >= 0), "setting core file driver in fapl.");
 
-    err = H5Pset_file_image(fapl, (void *)buf.data(), buf.size());
+    err = H5Pset_file_image(fapl, (void *)buf_ptr, buf_size);
     CHECK_OR_THROW((err >= 0), "set file image in fapl.");
 
     this->id = H5Fopen("MemoryBuffer", H5F_ACC_RDONLY, fapl);
@@ -104,7 +104,11 @@ namespace h5 {
 
   // -------------------------
 
-  std::vector<unsigned char> memory_file::as_buffer() const {
+  memory_file::memory_file(std::vector<unsigned char> const &buf) : memory_file(buf.data(), buf.size()) {}
+
+  // -------------------------
+
+  size_t memory_file::get_size() const {
 
     auto f   = hid_t(*this);
     auto err = H5Fflush(f, H5F_SCOPE_GLOBAL);
@@ -113,11 +117,28 @@ namespace h5 {
     ssize_t image_len = H5Fget_file_image(f, nullptr, (size_t)0);
     CHECK_OR_THROW((image_len > 0), "got image file size");
 
+    return image_len;
+  }
+
+  // -------------------------
+
+  void memory_file::write_to_buffer(unsigned char *buf_ptr, ssize_t buf_size) const {
+
+    auto f = hid_t(*this);
+    // Not needed. get_size is always called first, these are internal methods used twice
+    //auto err = H5Fflush(f, H5F_SCOPE_GLOBAL);
+    //CHECK_OR_THROW((err >= 0), "flushed core file.");
+
+    ssize_t bytes_read = H5Fget_file_image(f, (void *)buf_ptr, (size_t)buf_size);
+    CHECK_OR_THROW(bytes_read == buf_size, "wrote file into image buffer");
+  }
+
+  // -----------------------------
+
+  std::vector<unsigned char> memory_file::as_buffer() const {
+    auto image_len = get_size();
     std::vector<unsigned char> buf(image_len, 0);
-
-    ssize_t bytes_read = H5Fget_file_image(f, (void *)buf.data(), (size_t)image_len);
-    CHECK_OR_THROW(bytes_read == image_len, "wrote file into image buffer");
-
+    write_to_buffer(buf.data(), image_len);
     return buf;
   }
 

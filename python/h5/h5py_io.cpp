@@ -17,6 +17,10 @@
 
 #include <algorithm>
 
+using namespace std::string_literals;
+#define CHECK_OR_THROW(Cond, Mess)                                                                                                                   \
+  if (!(Cond)) throw std::runtime_error("Error in h5 interface : "s + Mess);
+
 namespace h5 {
 
   struct h5_c_size_t {
@@ -184,7 +188,7 @@ namespace h5 {
       write(g, name, make_av_from_npy(arr_obj), true);
     } else if (PyArray_CheckScalar(ob)) {
       // Treat numpy scalars as 0-dimensional ndarrays
-      PyObject* obsc= PyArray_FromScalar(ob, NULL);
+      PyObject *obsc = PyArray_FromScalar(ob, NULL);
       h5_write_bare(g, name, obsc);
       Py_XDECREF(obsc);
     } else if (PyFloat_Check(ob)) {
@@ -283,5 +287,4 @@ namespace h5 {
     read(g, name, make_av_from_npy((PyArrayObject *)ob), lt);
     return ob;
   }
-
 } // namespace h5

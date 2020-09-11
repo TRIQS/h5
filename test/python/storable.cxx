@@ -23,6 +23,16 @@ PYBIND11_MODULE(storable, MODULE) {
   Storable.def(
      "__write_hdf5__", [](storable const &x, h5::group g, std::string const &key) { h5_write(g, key, x); }, "h5 writing");
 
+  Storable.def(py::pickle(
+     [](storable const &x) {
+       PyObject * pybuf = h5::serialize_to_pybytearray(x);
+       return py::make_tuple(py::reinterpret_steal<py::object>(pybuf)); // ?? Ref counting ?? NOT CLEAR : USE THE C API ?
+     },
+     [](py::tuple t) -> storable {
+       if (t.size() != 1) throw std::runtime_error("Invalid state!");
+       return h5::deserialize_from_pybytearray<storable>(t[0].ptr());
+     }));
+
   py::object h5_formats       = py::module::import("h5.formats");
   py::function register_class = py::object{h5_formats.attr("register_class")};
 
