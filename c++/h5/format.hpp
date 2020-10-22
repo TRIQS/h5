@@ -12,7 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#pragma once
+#ifndef LIBH5_FORMAT_HPP
+#define LIBH5_FORMAT_HPP
+
 #include "./macros.hpp"
 #include "./group.hpp"
 #include "./stl/string.hpp"
@@ -91,3 +93,5 @@ namespace h5 {
   }
 
 } // namespace h5
+
+#endif // LIBH5_FORMAT_HPP

@@ -12,7 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#pragma once
+#ifndef LIBH5_H5_HPP
+#define LIBH5_H5_HPP
 
 #include "./std_addons/complex.hpp"
 
@@ -41,3 +42,5 @@
    || (H5_VERS_MAJOR > Maj))
 
 #endif
+
+#endif // LIBH5_H5_HPP

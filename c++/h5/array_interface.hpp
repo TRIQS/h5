@@ -12,7 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#pragma once
+#ifndef LIBH5_ARRAY_INTERFACE_HPP
+#define LIBH5_ARRAY_INTERFACE_HPP
+
 #include <utility>
 #include <vector>
 #include <string>
@@ -97,3 +99,5 @@ namespace h5::array_interface {
   void read_attribute(object obj, std::string const &name, h5_array_view v);
 
 } // namespace h5::array_interface
+
+#endif // LIBH5_ARRAY_INTERFACE_HPP

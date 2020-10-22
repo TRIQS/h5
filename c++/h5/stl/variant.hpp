@@ -12,7 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#pragma once
+#ifndef LIBH5_STL_VARIANT_HPP
+#define LIBH5_STL_VARIANT_HPP
 
 #include <variant>
 
@@ -59,3 +60,5 @@ namespace h5 {
   }
 
 } // namespace h5
+
+#endif // LIBH5_STL_VARIANT_HPP

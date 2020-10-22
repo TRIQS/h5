@@ -12,7 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#pragma once
+#ifndef LIBH5_FILE_HPP
+#define LIBH5_FILE_HPP
+
 #include <vector>
 #include "./object.hpp"
 
@@ -69,3 +71,5 @@ namespace h5 {
   };
 
 } // namespace h5
+
+#endif // LIBH5_FILE_HPP

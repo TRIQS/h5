@@ -12,7 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#pragma once
+#ifndef LIBH5_GENERIC_HPP
+#define LIBH5_GENERIC_HPP
+
 #include <type_traits>
 
 namespace h5 {
@@ -116,3 +118,5 @@ namespace h5 {
   }
 
 } // namespace h5
+
+#endif // LIBH5_GENERIC_HPP

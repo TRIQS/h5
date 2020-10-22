@@ -12,7 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#pragma once
+#ifndef LIBH5_STL_VECTOR_HPP
+#define LIBH5_STL_VECTOR_HPP
+
 #include <vector>
 #include <complex>
 #include "../group.hpp"
@@ -133,3 +135,5 @@ namespace h5 {
   void h5_read_attribute(object obj, std::string const &name, std::vector<std::string> &V);
 
 } // namespace h5
+
+#endif // LIBH5_STL_VECTOR_HPP

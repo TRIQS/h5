@@ -12,7 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#pragma once
+#ifndef LIBH5_MACROS_HPP
+#define LIBH5_MACROS_HPP
 
 #include <iostream>
 
@@ -49,3 +50,5 @@
     std::cerr << "Postcondition " << H5_AS_STRING(X) << " violated at " << __FILE__ << ":" << __LINE__ << "\n";                                      \
     std::terminate();                                                                                                                                \
   }
+
+#endif // LIBH5_MACROS_HPP

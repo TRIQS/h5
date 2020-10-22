@@ -12,7 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#pragma once
+#ifndef LIBH5_SCALAR_HPP
+#define LIBH5_SCALAR_HPP
+
 #include "./group.hpp"
 #include "./array_interface.hpp"
 namespace h5 {
@@ -70,3 +72,5 @@ namespace h5 {
   }
 
 } // namespace h5
+
+#endif // LIBH5_SCALAR_HPP

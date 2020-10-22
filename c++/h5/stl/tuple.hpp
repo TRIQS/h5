@@ -12,7 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#pragma once
+#ifndef LIBH5_STL_TUPLE_HPP
+#define LIBH5_STL_TUPLE_HPP
+
 #include <tuple>
 #include "../group.hpp"
 #include "./string.hpp"
@@ -58,3 +60,5 @@ namespace h5 {
     details::h5_read_tuple_impl(gr, name, tpl, std::index_sequence_for<T...>{});
   }
 } // namespace h5
+
+#endif // LIBH5_STL_TUPLE_HPP

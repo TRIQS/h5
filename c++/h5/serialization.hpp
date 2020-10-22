@@ -12,7 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#pragma once
+#ifndef LIBH5_SERIALIZATION_HPP
+#define LIBH5_SERIALIZATION_HPP
 
 #include "./file.hpp"
 #include "./group.hpp"
@@ -35,3 +36,5 @@ namespace h5 {
     return h5_read<T>(f, "object");
   }
 } // namespace h5
+
+#endif // LIBH5_SERIALIZATION_HPP

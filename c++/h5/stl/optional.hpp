@@ -12,7 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#pragma once
+#ifndef LIBH5_STL_OPTIONAL_HPP
+#define LIBH5_STL_OPTIONAL_HPP
+
 #include <optional>
 #include "../group.hpp"
 #include "./string.hpp"
@@ -41,3 +43,5 @@ namespace h5 {
     if (gr.has_key(name)) v.emplace(h5_read<T>(gr, name));
   }
 } // namespace h5
+
+#endif // LIBH5_STL_OPTIONAL_HPP

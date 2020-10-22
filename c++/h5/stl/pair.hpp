@@ -12,7 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#pragma once
+#ifndef LIBH5_STL_PAIR_HPP
+#define LIBH5_STL_PAIR_HPP
+
 #include <utility>
 #include "../group.hpp"
 #include "./string.hpp"
@@ -47,3 +49,5 @@ namespace h5 {
     h5_read(gr, "1", p.second);
   }
 } // namespace h5
+
+#endif // LIBH5_STL_PAIR_HPP

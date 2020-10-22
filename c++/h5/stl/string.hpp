@@ -12,7 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#pragma once
+#ifndef LIBH5_STL_STRING_HPP
+#define LIBH5_STL_STRING_HPP
+
 #include "../group.hpp"
 #include <string>
 
@@ -123,3 +125,5 @@ namespace h5 {
   void h5_read_attribute(object obj, std::string const &name, char_buf &_cb);
 
 } // namespace h5
+
+#endif // LIBH5_STL_STRING_HPP

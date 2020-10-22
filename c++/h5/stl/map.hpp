@@ -12,7 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#pragma once
+#ifndef LIBH5_STL_MAP_HPP
+#define LIBH5_STL_MAP_HPP
+
 #include <map>
 #include "../group.hpp"
 #include "./string.hpp"
@@ -49,3 +51,5 @@ namespace h5 {
   }
 
 } // namespace h5
+
+#endif // LIBH5_STL_MAP_HPP

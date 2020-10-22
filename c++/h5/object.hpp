@@ -12,7 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#pragma once
+#ifndef LIBH5_OBJECT_HPP
+#define LIBH5_OBJECT_HPP
+
 #include <complex>
 #include <vector>
 #include <sstream>
@@ -136,3 +138,5 @@ namespace h5 {
   bool hdf5_type_equal(datatype, datatype);
 
 } // namespace h5
+
+#endif // LIBH5_OBJECT_HPP
