@@ -64,7 +64,7 @@ namespace h5 {
    * @tparam T
    * @param g HDF5 group
    * @param name Name of the object in the HDF5 file
-   * @param a Array to save from the file
+   * @param a Array to read into
    */
   template <typename T, size_t N>
   void h5_read(group g, std::string name, std::array<T, N> &a) {
