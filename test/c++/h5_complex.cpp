@@ -17,8 +17,6 @@
 #include <h5/h5.hpp>
 #include <complex>
 
-#include <hdf5.h>
-
 // clang-format off
 TEST(H5, ComplexBkwd){
 
