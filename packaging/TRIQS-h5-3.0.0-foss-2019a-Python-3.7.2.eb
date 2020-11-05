@@ -44,7 +44,7 @@ separate_build_dir = True
 runtest = 'test'
 
 sanity_check_paths = {
-    'files': ['lib/libh5_c.%s' % SHLIB_EXT],
+    'files': ['lib/libh5_c.a'],
     'dirs': ['include/h5', 'lib', 'share',
              'lib/python%(pyshortver)s/site-packages/h5'],
 }
