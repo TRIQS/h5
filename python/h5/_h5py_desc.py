@@ -49,6 +49,7 @@ c = class_(
 )
 
 c.add_constructor("""(file f)""", doc = r"""Takes the "/" group at the top of the file""")
+c.add_constructor("""(file f, std::size_t compress_level)""", doc = r"""Takes the "/" group at the top of the file""")
 
 c.add_property(name = "name", getter = cfunction("""std::string name ()"""),
              doc = r"""Name of the group""")

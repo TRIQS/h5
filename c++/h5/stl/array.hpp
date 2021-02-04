@@ -45,7 +45,7 @@ namespace h5 {
       v.slab.stride[0] = 1;
       v.L_tot[0]       = N;
 
-      h5::array_interface::write(g, name, v, true);
+      h5::array_interface::write(g, name, v, g.get_compress_level());
 
     } else { // generic unknown type to hdf5
       auto g2 = g.create_group(name);

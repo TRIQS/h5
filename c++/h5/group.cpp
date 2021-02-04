@@ -27,9 +27,12 @@ namespace h5 {
 
   //static_assert(std::is_same<::hid_t, hid_t>::value, "Internal error");
 
-  group::group(file f) : object(), parent_file(f) {
+  group::group(file f) : group(f, 1) {}
+
+  group::group(file f, std::size_t compress_level) : object(), parent_file(f), compress_level{compress_level} {
     id = H5Gopen2(f, "/", H5P_DEFAULT);
     if (id < 0) throw std::runtime_error("Cannot open the root group / in the file " + f.name());
+    if (compress_level > 9) throw std::runtime_error("compress_level must be between 0 and 9");
   }
 
   //group::group(object obj) : object(std::move(obj)) {
@@ -84,7 +87,7 @@ namespace h5 {
     if (!has_key(key)) throw std::runtime_error("no subgroup " + key + " in the group");
     object sg = H5Gopen2(id, key.c_str(), H5P_DEFAULT);
     if (sg < 0) throw std::runtime_error("Error in opening the subgroup " + key);
-    return group(sg, parent_file);
+    return group(sg, parent_file, compress_level);
   }
 
   group group::create_group(std::string const &key, bool delete_if_exists) const {
@@ -92,7 +95,7 @@ namespace h5 {
     if (delete_if_exists) unlink(key);
     object obj = H5Gcreate2(id, key.c_str(), H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT);
     if (not obj.is_valid()) throw std::runtime_error("Cannot create the subgroup " + key + " of the group " + name());
-    return group(obj, parent_file);
+    return group(obj, parent_file, compress_level);
   }
 
   /// Open an existing DataSet. Throw if it does not exist.

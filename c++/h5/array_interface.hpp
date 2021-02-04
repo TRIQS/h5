@@ -85,7 +85,7 @@ namespace h5::array_interface {
   h5_lengths_type get_h5_lengths_type(group g, std::string const &name);
 
   // Write the view of the array to the group
-  void write(group g, std::string const &name, h5_array_view const &a, bool compress);
+  void write(group g, std::string const &name, h5_array_view const &a, std::size_t compress_level);
 
   // Read into an array_view from the group
   void read(group g, std::string const &name, h5_array_view v, h5_lengths_type lt);

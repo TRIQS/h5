@@ -25,12 +25,14 @@ namespace h5 {
   class group : public object {
 
     file parent_file;
+    std::size_t compress_level;
 
     public:
     group() = default; // for python converter only
 
     /// Takes the "/" group at the top of the file
     group(file f);
+    group(file f, std::size_t compress_level);
 
     ///
     group(group const &) = default;
@@ -38,7 +40,11 @@ namespace h5 {
     private:
     // construct from the bare object and the parent
     // internal use only for open/create subgroup
-    group(object obj, file _parent_file) : object{obj}, parent_file(std::move(_parent_file)) {}
+    group(object obj, file _parent_file, std::size_t _compress_level)
+        : object{obj}
+        , parent_file(std::move(_parent_file))
+        , compress_level{_compress_level}
+    {}
 
     public:
     /// Name of the group
@@ -46,6 +52,9 @@ namespace h5 {
 
     /// Access to the parent file
     [[nodiscard]] file get_file() const { return parent_file; }
+
+    /// Access to the compression level
+    [[nodiscard]] std::size_t get_compress_level() const { return compress_level; }
 
     /**
      * True iff key is an object in the group

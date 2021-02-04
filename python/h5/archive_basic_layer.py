@@ -27,7 +27,7 @@ class HDFArchiveGroupBasicLayer:
         self.ignored_keys = [] 
         self.cached_keys = list(self._group.keys())
 
-    def _init_root(self, LocalFileName, open_flag) :
+    def _init_root(self, LocalFileName, open_flag, compress_level) :
         try :
             fich = h5.File(LocalFileName, open_flag)
         except :
@@ -43,7 +43,7 @@ class HDFArchiveGroupBasicLayer:
                 self._version = 1
             if self._version > self._class_version :
                 raise IOError("File %s is too recent for this version of HDFArchive module"%Filename)
-        self._group = h5.Group(fich)
+        self._group = h5.Group(fich, compress_level)
 
     def is_group(self,p) :
         """Is p a subgroup ?"""

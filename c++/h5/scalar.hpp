@@ -27,7 +27,7 @@ namespace h5 {
 
   template <typename T>
   void h5_write(group g, std::string const &name, T const &x) H5_REQUIRES(std::is_arithmetic_v<T> or is_complex_v<T> or std::is_same_v<T, dcplx_t>) {
-    array_interface::write(g, name, array_interface::h5_array_view_from_scalar(x), false);
+    array_interface::write(g, name, array_interface::h5_array_view_from_scalar(x), 0);
   }
 
   template <typename T>

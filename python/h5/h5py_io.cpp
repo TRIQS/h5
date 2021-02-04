@@ -180,7 +180,7 @@ namespace h5 {
 
     if (PyArray_Check(ob)) {
       PyArrayObject *arr_obj = (PyArrayObject *)ob;
-      write(g, name, make_av_from_npy(arr_obj), true);
+      write(g, name, make_av_from_npy(arr_obj), g.get_compress_level());
     } else if (PyArray_CheckScalar(ob)) {
       // Treat numpy scalars as 0-dimensional ndarrays
       cpp2py::pyref obsc = PyArray_FromScalar(ob, NULL);

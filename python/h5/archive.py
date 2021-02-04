@@ -302,7 +302,7 @@ class HDFArchive(HDFArchiveGroup):
     _class_version = 1
 
     def __init__(self, url_name, open_flag = 'a', key_as_string_only = True,
-            reconstruct_python_object = True, init = {}):
+            reconstruct_python_object = True, init = {}, compress_level = 1):
         r"""
            Parameters
            -----------
@@ -366,7 +366,7 @@ class HDFArchive(HDFArchiveGroup):
             try: os.remove(os.path.abspath(LocalFileName))
             except OSError: pass
 
-        self._init_root(LocalFileName, open_flag)
+        self._init_root(LocalFileName, open_flag, compress_level)
         self.options = {'key_as_string_only' : key_as_string_only,
                         'do_not_overwrite_entries' : False,
                         'reconstruct_python_object': reconstruct_python_object,
