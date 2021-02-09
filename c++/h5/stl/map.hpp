@@ -37,7 +37,7 @@ namespace h5 {
     write_hdf5_format(gr, M);
     
     if constexpr (std::is_same_v<keyT, std::string>){
-      for (auto &pvp : M) h5_write(gr, pvp.first, pvp.second);
+      for (auto const &[key, val] : M) h5_write(gr, key, val);
     }
     else {
       int indx = 0;
