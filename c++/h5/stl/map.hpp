@@ -69,7 +69,7 @@ namespace h5 {
         valueT value;
         h5_read(element_gr, "key", key);
         h5_read(element_gr, "val", value);
-        M.emplace(key, std::move(value));
+        M.emplace(std::move(key), std::move(value));
       }
     }
   }
