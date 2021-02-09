@@ -41,10 +41,10 @@ namespace h5 {
     }
     else {
       int indx = 0;
-      for (auto &pvp : M) {
-        auto element_gr = gr.create_group( std::to_string(indx) );
-        h5_write(element_gr, "key", pvp.first);
-        h5_write(element_gr, "val", pvp.second);
+      for (auto const &[key, val] : M) {
+        auto element_gr = gr.create_group(std::to_string(indx));
+        h5_write(element_gr, "key", key);
+        h5_write(element_gr, "val", val);
         ++indx;
       }
     }
