@@ -74,27 +74,5 @@ namespace h5 {
     }
   }
 
-  /*
-  template <typename T>
-  void h5_write(group f, std::string const &name, std::map<std::string, T> const &M) {
-    auto gr = f.create_group(name);
-    write_hdf5_format(gr, M);
-    
-    for (auto &pvp : M) h5_write(gr, pvp.first, pvp.second);
-  }
-
-  template <typename T>
-  void h5_read(group f, std::string const &name, std::map<std::string, T> &M) {
-    auto gr = f.open_group(name);
-    M.clear();
-    
-    for (auto const &x : gr.get_all_subgroup_dataset_names()) {
-      T value;
-      h5_read(gr, x, value);
-      M.emplace(x, std::move(value));
-    }
-
-  }*/
-
 
 } // namespace h5
