@@ -56,17 +56,17 @@ namespace h5 {
     M.clear();
     
     for (auto const &x : gr.get_all_subgroup_dataset_names()) {
-        valueT value;
+        valueT val;
         if constexpr (std::is_same_v<keyT, std::string>){
-          h5_read(gr, x, value);
-          M.emplace(x, std::move(value));
+          h5_read(gr, x, val);
+          M.emplace(x, std::move(val));
         }
         else{
           auto element_gr = gr.open_group(x);
           keyT key;
           h5_read(element_gr, "key", key);
-          h5_read(element_gr, "val", value);
-          M.emplace(std::move(key), std::move(value));
+          h5_read(element_gr, "val", val);
+          M.emplace(std::move(key), std::move(val));
         }
     }
   }
