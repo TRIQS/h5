@@ -55,22 +55,19 @@ namespace h5 {
     auto gr = f.open_group(name);
     M.clear();
     
-    if constexpr (std::is_same_v<keyT, std::string>){
-      for (auto const &x : gr.get_all_subgroup_dataset_names()) {
+    for (auto const &x : gr.get_all_subgroup_dataset_names()) {
         valueT value;
-        h5_read(gr, x, value);
-        M.emplace(x, std::move(value));
-      }
-    }
-    else {
-      for (auto const &x : gr.get_all_subgroup_dataset_names()) {
-        auto element_gr = gr.open_group(x);
-        keyT key;
-        valueT value;
-        h5_read(element_gr, "key", key);
-        h5_read(element_gr, "val", value);
-        M.emplace(std::move(key), std::move(value));
-      }
+        if constexpr (std::is_same_v<keyT, std::string>){
+          h5_read(gr, x, value);
+          M.emplace(x, std::move(value));
+        }
+        else{
+          auto element_gr = gr.open_group(x);
+          keyT key;
+          h5_read(element_gr, "key", key);
+          h5_read(element_gr, "val", value);
+          M.emplace(std::move(key), std::move(value));
+        }
     }
   }
 
