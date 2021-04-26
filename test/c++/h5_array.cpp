@@ -17,6 +17,7 @@
 #include <h5/h5.hpp>
 #include <array>
 #include <string>
+#include <complex>
 
 TEST(H5, Array) {
 
@@ -45,4 +46,35 @@ TEST(H5, Array) {
   // compare
   EXPECT_EQ(arr_str, arr_str_r);
   EXPECT_EQ(arr_dbl, arr_dbl_r);
+}
+
+TEST(H5, ArrayConvert) {
+
+  // write
+  auto arr_int = std::array<int, 2>{1, 2};
+  auto arr_dbl = std::array<double, 2>{1.5, 2.5};
+
+  {
+    h5::file file{"test_arr_convert.h5", 'w'};
+    h5::group grp{file};
+    h5_write(grp, "arr_int", arr_int);
+    h5_write(grp, "arr_dbl", arr_dbl);
+  }
+
+  // read
+  std::array<long, 2> arr_long;
+  using dcomplex = std::complex<double>;
+  std::array<dcomplex, 2> arr_cplx;
+
+  {
+    h5::file file{"test_arr_convert.h5", 'r'};
+    h5::group grp{file};
+    h5_read(grp, "arr_int", arr_long); // Issues Warning
+    h5_read(grp, "arr_dbl", arr_cplx); // Issues Warning
+  }
+
+  // compare
+  EXPECT_EQ((std::array{1l, 2l}), arr_long);
+  using namespace std::literals;
+  EXPECT_EQ((std::array{1.5 + 0i, 2.5 + 0i}), arr_cplx);
 }

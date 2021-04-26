@@ -144,9 +144,13 @@ namespace h5::array_interface {
     dataspace file_dspace = H5Dget_space(ds);
 
     // Checks
-    if (not hdf5_type_equal(v.ty, lt.ty))
-      throw std::runtime_error("h5 read. Type mismatch : expecting a " + get_name_of_h5_type(v.ty)
+    if (H5Tget_class(v.ty) != H5Tget_class(lt.ty))
+      throw std::runtime_error("Incompatible types in h5_read. Expecting a " + get_name_of_h5_type(v.ty)
                                + " while the array stored in the hdf5 file has type " + get_name_of_h5_type(lt.ty));
+
+    if (not hdf5_type_equal(v.ty, lt.ty))
+      std::cerr << "WARNING: Mismatching types in h5_read. Expecting a " + get_name_of_h5_type(v.ty)
+            + " while the array stored in the hdf5 file has type " + get_name_of_h5_type(lt.ty) + "\n";
 
     if (lt.rank() != v.rank())
       throw std::runtime_error("h5 read. Rank mismatch : expecting in file a rank " + std::to_string(v.rank())
