@@ -87,7 +87,7 @@ namespace h5 {
 
   // -------------------------
 
-  file::file(const char *buf, size_t size) {
+  file::file(const std::byte *buf, size_t size) {
 
     proplist fapl = H5Pcreate(H5P_FILE_ACCESS);
     CHECK_OR_THROW((fapl >= 0), "creating fapl");
@@ -98,13 +98,13 @@ namespace h5 {
     err = H5Pset_file_image(fapl, (void *)buf, size);
     CHECK_OR_THROW((err >= 0), "set file image in fapl.");
 
-    this->id = H5Fopen("MemoryBuffer", H5F_ACC_RDONLY, fapl);
+    this->id = H5Fopen("MemoryBuffer", H5F_ACC_RDWR, fapl);
     CHECK_OR_THROW((this->is_valid()), "opened received file image file");
   }
 
   // -------------------------
 
-  std::vector<char> file::as_buffer() const {
+  std::vector<std::byte> file::as_buffer() const {
 
     auto f   = hid_t(*this);
     auto err = H5Fflush(f, H5F_SCOPE_GLOBAL);
@@ -113,7 +113,7 @@ namespace h5 {
     ssize_t image_len = H5Fget_file_image(f, nullptr, (size_t)0);
     CHECK_OR_THROW((image_len > 0), "got image file size");
 
-    std::vector<char> buf(image_len, 0);
+    std::vector<std::byte> buf(image_len, std::byte{0});
 
     ssize_t bytes_read = H5Fget_file_image(f, (void *)buf.data(), (size_t)image_len);
     CHECK_OR_THROW(bytes_read == image_len, "wrote file into image buffer");

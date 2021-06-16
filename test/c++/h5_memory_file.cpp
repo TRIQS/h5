@@ -23,9 +23,10 @@ TEST(H5, MemoryFile) {
   // Some data to write
   auto vec_int = std::vector<int>{1, 2, 3};
   auto vec_dbl = std::vector<double>{4.0, 5.0, 6.0};
+  auto vec_str = std::vector<std::string>{"Hello", "there!"};
 
   // The data buffers
-  std::vector<char> buf_mem, buf_disk, buf_raw;
+  std::vector<std::byte> buf_mem, buf_disk, buf_raw;
 
   {
     // Create file in memory
@@ -36,7 +37,7 @@ TEST(H5, MemoryFile) {
     // Write memory file to disk as binary data
     buf_mem = f_mem.as_buffer();
     std::ofstream ostrm("h5_bin_out.h5", std::ios::binary);
-    ostrm.write(buf_mem.data(), buf_mem.size());
+    ostrm.write(reinterpret_cast<char *>(buf_mem.data()), buf_mem.size());
   }
 
   {
@@ -51,14 +52,16 @@ TEST(H5, MemoryFile) {
 
   {
     // Read from disk as raw data
-    std::ifstream istrm{"h5_bin_in.h5", std::ios::binary};
-    buf_raw = std::vector<char>(std::istreambuf_iterator<char>(istrm), std::istreambuf_iterator<char>());
-
+    std::ifstream istrm{"h5_bin_in.h5", std::ios::binary | std::ios::ate};
+    buf_raw.resize(istrm.tellg(), std::byte{0});
+    istrm.seekg(0);
+    istrm.read(reinterpret_cast<char *>(buf_raw.data()), buf_raw.size());
     EXPECT_EQ(buf_disk, buf_raw);
   }
 
   std::vector<int> vec_int_read;
   std::vector<double> vec_dbl_read;
+  std::vector<std::string> vec_str_read;
   {
     // Create file in memory from buffer
     auto f = h5::file{buf_raw};
@@ -66,7 +69,11 @@ TEST(H5, MemoryFile) {
     h5::read(f, "vec_int", vec_int_read);
     h5::read(f, "vec_dbl", vec_dbl_read);
 
+    h5::write(f, "vec_str", vec_str);
+    h5::read(f, "vec_str", vec_str_read);
+
     EXPECT_EQ(vec_int, vec_int_read);
     EXPECT_EQ(vec_dbl, vec_dbl_read);
+    EXPECT_EQ(vec_str, vec_str_read);
   }
 }

@@ -58,17 +58,17 @@ namespace h5 {
     void flush();
 
     private:
-    file(const char *buf, size_t size);
+    file(const std::byte *buf, size_t size);
 
     public:
     /// Create a file in memory from a byte buffer
-    file(std::span<char> const &buf) : file(buf.data(), buf.size()) {}
+    file(std::span<std::byte> const &buf) : file(buf.data(), buf.size()) {}
 
     /// Create a file in memory from a byte buffer
-    file(std::vector<char> const &buf) : file(buf.data(), buf.size()) {}
+    file(std::vector<std::byte> const &buf) : file(buf.data(), buf.size()) {}
 
     /// Get a copy of the associated byte buffer
-    [[nodiscard]] std::vector<char> as_buffer() const;
+    [[nodiscard]] std::vector<std::byte> as_buffer() const;
   };
 
   using memory_file = file;

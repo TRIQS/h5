@@ -34,7 +34,7 @@ c.add_constructor("""()""", doc = r"""Open a file in memory""")
 
 c.add_constructor("""(std::string name, char mode)""", doc = r"""""")
 
-c.add_constructor("""(std::span<char> buf)""", doc = r"""Create a file in memory from a byte buffer""")
+c.add_constructor("""(std::span<std::byte> buf)""", doc = r"""Create a file in memory from a byte buffer""")
 
 c.add_property(name = "name", getter = cfunction("""std::string name ()"""),
              doc = r"""Name of the file""")
