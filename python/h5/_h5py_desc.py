@@ -1,5 +1,5 @@
 # Generated automatically using the command :
-# c++2py h5py_io.hpp --members_read_only -N h5 -a _h5py -m _h5py -o _h5py --moduledoc="A lightweight hdf5 python interface" --cxxflags="-std=c++17" --includes=./../../c++ --only="h5_object file group h5_read_bare h5_write_bare"
+# c++2py h5py_io.hpp --members_read_only -N h5 -a _h5py -m _h5py -o _h5py --moduledoc="A lightweight hdf5 python interface" --cxxflags="-std=c++20" --includes=./../../c++ --only="object file group h5_read_bare h5_write_bare"
 from cpp2py.wrap_generator import *
 
 # The module
@@ -12,6 +12,7 @@ module.add_include("<h5py_io.hpp>")
 
 # Add here anything to add in the C++ code at the start, e.g. namespace using
 module.add_preamble("""
+#include <cpp2py/converters/span.hpp>
 #include <cpp2py/converters/string.hpp>
 #include <cpp2py/converters/vector.hpp>
 
@@ -29,7 +30,11 @@ c = class_(
         hdf5 = False,
 )
 
+c.add_constructor("""()""", doc = r"""Open a file in memory""")
+
 c.add_constructor("""(std::string name, char mode)""", doc = r"""""")
+
+c.add_constructor("""(std::span<char> buf)""", doc = r"""Create a file in memory from a byte buffer""")
 
 c.add_property(name = "name", getter = cfunction("""std::string name ()"""),
              doc = r"""Name of the file""")
@@ -38,7 +43,6 @@ c.add_method("""void flush ()""",
              doc = r"""Flush the file""")
 
 module.add_class(c)
-
 
 # The class group
 c = class_(

@@ -301,20 +301,24 @@ class HDFArchive(HDFArchiveGroup):
     """
     _class_version = 1
 
-    def __init__(self, url_name, open_flag = 'a', key_as_string_only = True,
+    def __init__(self, descriptor, open_flag = 'a', key_as_string_only = True,
             reconstruct_python_object = True, init = {}):
         r"""
            Parameters
            -----------
-           url_name : string
-             The url of the hdf5 file.
+           descriptor : string or bytes
 
-                  * If url is a simple string, it is interpreted as a local file name
+                  * If descriptor is a simple string, it is interpreted as a local file name
 
-                  * If url is a remote url (e.g. `http://ipht.cea.fr/triqs/data/single_site_bethe.output.h5` )
-                    then the h5 file is downloaded in temporary file and opened.
+                  * If descriptor is a remote url (e.g. `http://ipht.cea.fr/triqs/data/single_site_bethe.output.h5` )
+                    then the h5 file is downloaded as a temporary file and opened.
                     In that case, ``open_flag`` must be 'r', read-only mode.
                     The temporary file is deleted at exit.
+
+                  * If descriptor is a bytes object, we interpret the bytes as an hdf5 file
+                    and open it in memory only.
+                    In this case, ``open_flag`` must hold its default value 'a', read-write mode.
+                    
            open_flag : Legal modes: r, w, a (default)
            key_as_string_only : True (default)
            init : any generator of tuple (key,val), e.g. a dict.items().
@@ -324,7 +328,7 @@ class HDFArchive(HDFArchiveGroup):
            ----------
            LocalFileName : string
              the name of the file or of the local downloaded copy
-           url_name : string
+           descriptor : string
              the name of the Url
 
            Examples
@@ -348,25 +352,33 @@ class HDFArchive(HDFArchiveGroup):
            >>> HDFArchive( f, 'w', init = HDFArchive(fmp,'r').items(lambda k :  k in ['G'] ))
 
         """
-        import os,os.path
+        assert isinstance(descriptor,(str,bytes)), "descriptor must be a string or bytes"
         assert open_flag in ['r','w','a'], "Invalid mode"
-        assert isinstance(url_name,str), "url_name must be a string"
 
-        # If it is a url, retrieve it and check mode is read only
-        import urllib.request
-        try:
-            LocalFileName, http_message = urllib.request.urlretrieve(url_name)
-            # a url must be read only
-            assert open_flag == 'r', "You retrieve a distant Url %s which is not local, so it must be read-only. Use 'r' option"%url_name
-        except ValueError: # Not a valid URL -> Local File
-            LocalFileName, http_message = url_name, None
+        if isinstance(descriptor, bytes):
+            assert open_flag == 'a', "Memory files require read-write mode 'a'"
+            self._init_root(descriptor, None)
+            LocalFileName = "MemoryBuffer"
 
-        if open_flag == 'w':
-            # destroys the file, ignoring errors
-            try: os.remove(os.path.abspath(LocalFileName))
-            except OSError: pass
+        elif isinstance(descriptor, str):
+            import os,os.path
 
-        self._init_root(LocalFileName, open_flag)
+            # If it is a url, retrieve it and check mode is read only
+            import urllib.request
+            try:
+                LocalFileName, http_message = urllib.request.urlretrieve(descriptor)
+                # a url must be read only
+                assert open_flag == 'r', "You retrieve a distant Url %s which is not local, so it must be read-only. Use 'r' option"%descriptor
+            except ValueError: # Not a valid URL -> Local File
+                LocalFileName, http_message = descriptor, None
+
+            if open_flag == 'w':
+                # destroys the file, ignoring errors
+                try: os.remove(os.path.abspath(LocalFileName))
+                except OSError: pass
+
+            self._init_root(LocalFileName, open_flag)
+
         self.options = {'key_as_string_only' : key_as_string_only,
                         'do_not_overwrite_entries' : False,
                         'reconstruct_python_object': reconstruct_python_object,

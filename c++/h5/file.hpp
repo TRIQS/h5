@@ -16,6 +16,7 @@
 #define LIBH5_FILE_HPP
 
 #include <vector>
+#include <span>
 #include "./object.hpp"
 
 namespace h5 {
@@ -28,10 +29,13 @@ namespace h5 {
   class file : public object {
 
     public:
-    file() = default; // for python converter only
+    /**
+     * Open a file in memory
+     */
+    file();
 
     /**
-     * Open the file
+     * Open the file on disk
      *
      * @param name  name of the file
      *
@@ -44,7 +48,7 @@ namespace h5 {
      */
     file(const char *name, char mode);
 
-    ///
+    // Open the file on disk
     file(std::string const &name, char mode) : file(name.c_str(), mode) {}
 
     /// Name of the file
@@ -52,23 +56,22 @@ namespace h5 {
 
     /// Flush the file
     void flush();
-  };
 
-  /**
-   * An hdf5 file in memory buffer
-   */
-  class memory_file : public file {
+    private:
+    file(const char *buf, size_t size);
 
     public:
-    /// A writable file in memory with a buffer
-    memory_file();
+    /// Create a file in memory from a byte buffer
+    file(std::span<char> const &buf) : file(buf.data(), buf.size()) {}
 
-    /// A read_only file on top on the buffer.
-    memory_file(std::vector<unsigned char> const &buf);
+    /// Create a file in memory from a byte buffer
+    file(std::vector<char> const &buf) : file(buf.data(), buf.size()) {}
 
-    /// Get a copy of the buffer
-    [[nodiscard]] std::vector<unsigned char> as_buffer() const;
+    /// Get a copy of the associated byte buffer
+    [[nodiscard]] std::vector<char> as_buffer() const;
   };
+
+  using memory_file = file;
 
 } // namespace h5
 

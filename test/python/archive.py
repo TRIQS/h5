@@ -69,25 +69,33 @@ class TestHdf5Io(unittest.TestCase):
             grp['y'] = 'zzz'
         
         
-        # === Final check
-        arch = HDFArchive('hdf_archive2.h5','r')
-        
-        self.assertEqual( arch['dbl'] , 1.0 )
-        
-        self.assertEqual( arch['lst'] , [1,[1],'a'] )
-        self.assertEqual( arch['int'] , 100 )
-        assert_arrays_are_close( arch['arr'] , np.array([[1, 2, 3], [4, 5, 6]]) )
-        self.assertEqual( arch['tpl'] , (2,[2],'b') )
-        self.assertEqual( arch['dct'] , {'a':[10], 'b':20, 'c':'triqs'} )
-        self.assertTrue( isnan(arch['nan']) )
-        self.assertTrue( np.array_equal(np.isnan(arch['nanarr']), np.array([True, False])) )
+        # === Final checks
+        def check_archive_contents(arch):
+            self.assertEqual( arch['dbl'] , 1.0 )
+            
+            self.assertEqual( arch['lst'] , [1,[1],'a'] )
+            self.assertEqual( arch['int'] , 100 )
+            assert_arrays_are_close( arch['arr'] , np.array([[1, 2, 3], [4, 5, 6]]) )
+            self.assertEqual( arch['tpl'] , (2,[2],'b') )
+            self.assertEqual( arch['dct'] , {'a':[10], 'b':20, 'c':'triqs'} )
+            self.assertTrue( isnan(arch['nan']) )
+            self.assertTrue( np.array_equal(np.isnan(arch['nanarr']), np.array([True, False])) )
 
-        self.assertEqual( arch['grp']['int'] , 98 )
-        self.assertEqual( arch['grp']['tpl'] , (3,[3],'c') )
-        self.assertEqual( arch['grp']['dct'] , { 'a':[30], 'b':40, 'c':'qmc'} )
-        self.assertEqual( arch['grp']['d'] , 700 )
-        self.assertEqual( arch['grp']['x'] , 1.5 )
-        self.assertEqual( arch['grp']['y'] , 'zzz' )
+            self.assertEqual( arch['grp']['int'] , 98 )
+            self.assertEqual( arch['grp']['tpl'] , (3,[3],'c') )
+            self.assertEqual( arch['grp']['dct'] , { 'a':[30], 'b':40, 'c':'qmc'} )
+            self.assertEqual( arch['grp']['d'] , 700 )
+            self.assertEqual( arch['grp']['x'] , 1.5 )
+            self.assertEqual( arch['grp']['y'] , 'zzz' )
+
+        # === Read from disk
+        with HDFArchive('hdf_archive2.h5','r') as arch:
+            check_archive_contents(arch)
+
+        # === Read from disk as bytes and create file in memory
+        with open('hdf_archive2.h5', 'rb') as bytestream:
+            with HDFArchive(bytestream.read()) as arch:
+                check_archive_contents(arch)
 
     def test_hdf5_bool(self):
 

@@ -124,7 +124,7 @@ namespace h5 {
      */
     [[nodiscard]] dataset create_dataset(std::string const &key, datatype ty, dataspace sp, hid_t pl) const;
 
-    /// Returns all names of subgroup of  G
+    /// Returns all names of subgroup of G
     [[nodiscard]] std::vector<std::string> get_all_subgroup_names() const;
 
     /// Returns all names of dataset of G

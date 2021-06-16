@@ -27,12 +27,21 @@ class HDFArchiveGroupBasicLayer:
         self.ignored_keys = [] 
         self.cached_keys = list(self._group.keys())
 
-    def _init_root(self, LocalFileName, open_flag) :
-        try :
-            fich = h5.File(LocalFileName, open_flag)
-        except :
-            print("Cannot open the HDF file %s"%LocalFileName)
-            raise
+    def _init_root(self, descriptor, open_flag) :
+        if isinstance(descriptor, bytes):
+            try :
+                fich = h5.File(descriptor)
+            except :
+                print("Cannot open the HDF file in memory from the provided bytes")
+                raise
+        else:
+            assert(isinstance(descriptor, str))
+            try :
+                fich = h5.File(descriptor, open_flag)
+            except :
+                print("Cannot open the HDF file %s"%descriptor)
+                raise
+
         # checking the version
         if open_flag not in ['r','r+','a'] :
             self._version = self._class_version
