@@ -71,8 +71,6 @@ namespace h5 {
     [[nodiscard]] std::vector<std::byte> as_buffer() const;
   };
 
-  using memory_file = file;
-
 } // namespace h5
 
 #endif // LIBH5_FILE_HPP

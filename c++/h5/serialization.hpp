@@ -23,7 +23,7 @@ namespace h5 {
 
   template <typename T>
   std::vector<std::byte> serialize(T const &x) {
-    memory_file f;
+    file f{};
     h5_write(f, "object", x);
     return f.as_buffer();
   }
@@ -32,7 +32,7 @@ namespace h5 {
 
   template <typename T>
   T deserialize(std::vector<std::byte> const &buf) {
-    memory_file f{buf};
+    file f{buf};
     return h5_read<T>(f, "object");
   }
 } // namespace h5
