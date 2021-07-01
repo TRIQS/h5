@@ -391,6 +391,12 @@ class HDFArchive(HDFArchiveGroup):
         self.is_top_level = True
         for k,v in init : self[k]=v
 
+    def as_bytes(self):
+      """
+      Return a copy of the hdf5 file as bytes
+      """
+      return self._group.file.as_buffer()
+
     def __del__(self):
       # We must ensure the root group is closed before closing the file
       if hasattr(self, '_group'):

@@ -42,6 +42,9 @@ c.add_property(name = "name", getter = cfunction("""std::string name ()"""),
 c.add_method("""void flush ()""",
              doc = r"""Flush the file""")
 
+c.add_method("""std::vector<std::byte> as_buffer ()""",
+             doc = r"""Get a copy of the associated byte buffer""")
+
 module.add_class(c)
 
 # The class group
