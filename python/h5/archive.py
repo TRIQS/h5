@@ -301,7 +301,7 @@ class HDFArchive(HDFArchiveGroup):
     """
     _class_version = 1
 
-    def __init__(self, descriptor, open_flag = 'a', key_as_string_only = True,
+    def __init__(self, descriptor = None, open_flag = 'a', key_as_string_only = True,
             reconstruct_python_object = True, init = {}):
         r"""
            Parameters
@@ -317,6 +317,9 @@ class HDFArchive(HDFArchiveGroup):
 
                   * If descriptor is a bytes object, we interpret the bytes as an hdf5 file
                     and open it in memory only.
+                    In this case, ``open_flag`` must hold its default value 'a', read-write mode.
+
+                  * If descriptor is None, we create a new hdf5 file in memory only.
                     In this case, ``open_flag`` must hold its default value 'a', read-write mode.
                     
            open_flag : Legal modes: r, w, a (default)
@@ -355,7 +358,7 @@ class HDFArchive(HDFArchiveGroup):
         assert isinstance(descriptor,(str,bytes)), "descriptor must be a string or bytes"
         assert open_flag in ['r','w','a'], "Invalid mode"
 
-        if isinstance(descriptor, bytes):
+        if isinstance(descriptor, bytes) or descriptor is None:
             assert open_flag == 'a', "Memory files require read-write mode 'a'"
             self._init_root(descriptor, None)
             LocalFileName = "MemoryBuffer"
