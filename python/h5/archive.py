@@ -321,7 +321,7 @@ class HDFArchive(HDFArchiveGroup):
 
                   * If descriptor is None, we create a new hdf5 file in memory only.
                     In this case, ``open_flag`` must hold its default value 'a', read-write mode.
-                    
+
            open_flag : Legal modes: r, w, a (default)
            key_as_string_only : True (default)
            init : any generator of tuple (key,val), e.g. a dict.items().
@@ -355,7 +355,7 @@ class HDFArchive(HDFArchiveGroup):
            >>> HDFArchive( f, 'w', init = HDFArchive(fmp,'r').items(lambda k :  k in ['G'] ))
 
         """
-        assert isinstance(descriptor,(str,bytes)), "descriptor must be a string or bytes"
+        assert isinstance(descriptor,(str,bytes)) or descriptor is None, "descriptor must be a string or bytes"
         assert open_flag in ['r','w','a'], "Invalid mode"
 
         if isinstance(descriptor, bytes) or descriptor is None:
