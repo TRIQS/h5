@@ -32,7 +32,7 @@ class HDFArchiveGroupBasicLayer:
             try :
                 fich = h5.File()
             except :
-                print("Cannot open the HDF file in memory from the provided bytes")
+                print("Cannot open the HDF file in memory")
                 raise
         elif isinstance(descriptor, bytes):
             try :
