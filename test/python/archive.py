@@ -88,15 +88,18 @@ class TestHdf5Io(unittest.TestCase):
             self.assertEqual( arch['grp']['x'] , 1.5 )
             self.assertEqual( arch['grp']['y'] , 'zzz' )
 
-        # === Read from disk
+        # === Read from disk and check contents
         with HDFArchive('hdf_archive2.h5','r') as arch:
             check_archive_contents(arch)
-            as_bytes_from_memory = arch.as_bytes()
+
+        # === Check contents of file created from byte buffer
+        as_bytes_from_memory = arch.as_bytes()
+        with HDFArchive(as_bytes_from_memory) as arch:
+            check_archive_contents(arch)
 
         # === Read from disk as bytes and create file in memory
         with open('hdf_archive2.h5', 'rb') as bytestream:
             as_bytes_from_disk = bytestream.read()
-            self.assertEqual(as_bytes_from_memory, as_bytes_from_disk)
             with HDFArchive(as_bytes_from_disk) as arch:
                 check_archive_contents(arch)
 
