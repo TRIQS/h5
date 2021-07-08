@@ -91,9 +91,9 @@ class TestHdf5Io(unittest.TestCase):
         # === Read from disk and check contents
         with HDFArchive('hdf_archive2.h5','r') as arch:
             check_archive_contents(arch)
+            as_bytes_from_memory = arch.as_bytes()
 
         # === Check contents of file created from byte buffer
-        as_bytes_from_memory = arch.as_bytes()
         with HDFArchive(as_bytes_from_memory) as arch:
             check_archive_contents(arch)
 
