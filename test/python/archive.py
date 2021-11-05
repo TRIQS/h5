@@ -152,5 +152,38 @@ class TestHdf5Io(unittest.TestCase):
                 assert( p[key].dtype == p_ref[key].dtype )
                 print('dtypes: ', p[key].dtype, p_ref[key].dtype)
 
+    def test_hdf5_types(self):
+        filename = 'h5archive.h5'
+
+        # Test creation of softlinks
+        with HDFArchive(filename, 'w') as a:
+            a.create_group("group")
+            a['data'] = 11
+            a['group']['data'] = 22
+            a.create_softlink('data', 'link')
+            a.create_softlink('/group/data', '/group/link')
+
+        with HDFArchive(filename, 'r') as a:
+            link_data = a['link']
+            link_group_data = a['group']['link']
+
+        self.assertEqual(link_data, 11)
+        self.assertEqual(link_group_data, 22)
+
+        # Test overwriting of softlinks
+        with HDFArchive(filename, 'a') as a:
+            a['other data'] = 33
+            a.create_softlink('other data', 'link')
+
+        with HDFArchive(filename, 'r') as a:
+            link_data = a['link']
+
+        self.assertEqual(link_data, 33)
+
+        # Test exception on overwriting of softlinks
+        with HDFArchive(filename, 'a') as a:
+            with self.assertRaises(RuntimeError) :
+                a.create_softlink('data', 'link', delete_if_exists = False)
+
 if __name__ == '__main__':
     unittest.main()

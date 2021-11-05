@@ -86,6 +86,10 @@ class HDFArchiveGroupBasicLayer:
         self._group.create_group(key)
         self.cached_keys.append(key)
 
+    def create_softlink (self,target_key,key,delete_if_exists=True):
+        self._group.create_softlink(target_key,key,delete_if_exists)
+        self.cached_keys.append(key)
+
     def keys(self) :
         return self.cached_keys
 

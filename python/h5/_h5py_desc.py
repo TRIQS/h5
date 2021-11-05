@@ -80,6 +80,20 @@ key
 delete_if_exists
      Unlink the group if it exists""")
 
+c.add_method("""void create_softlink (std::string target_key, std::string key, bool delete_if_exists = true)""",
+             doc = r"""Create a softlink
+
+Parameters
+----------
+target_key
+     The path the link should point to. Has to exist.
+
+key
+     The link name that will point to the target path.
+
+delete_if_exists
+     Unlink the key first if it exists.""")
+
 c.add_method("""std::vector<std::string> get_all_subgroup_dataset_names ()""", name='keys',
              doc = r"""Returns all names of dataset of G""")
 

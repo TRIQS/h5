@@ -98,6 +98,15 @@ namespace h5 {
     group create_group(std::string const &key, bool delete_if_exists = true) const; // NOLINT
 
     /**
+     * Create a softlink in this group
+     * 
+     * @param target_key  The path the link should point to. Has to exist.
+     * @param key  The link name that will point to the target path.
+     * @param delete_if_exists  Unlink the key first if it exists.
+     */
+    void create_softlink(std::string const &target_key, std::string const &key, bool delete_if_exists = true) const;
+
+    /**
      * Open a existing DataSet in the group.
      * Throws std::runtime_error if it does not exist.
      *
