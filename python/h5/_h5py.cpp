@@ -30,6 +30,7 @@ PYBIND11_MODULE(_h5py, m) {
      .def(py::init<h5::file>(), "Constructor", "f"_a)
      .def_property_readonly("name", &h5::group::name, "Name of the group")
      .def("open_group", &h5::group::open_group, "Open the subgroup", "key"_a)
+     .def("create_softlink", &h5::group::create_softlink, "Create a softlink", "target_key"_a, "key"_a, "delete_if_exists"_a = true)
      .def("create_group", &h5::group::create_group, "Open the subgroup", "key"_a, "delete_if_exists"_a = true)
      .def("keys", &h5::group::get_all_subgroup_dataset_names, "All the keys")
      .def("has_subgroup", &h5::group::has_subgroup, "", "key"_a)
