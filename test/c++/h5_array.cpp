@@ -34,7 +34,7 @@ TEST(H5, Array) {
 
   // read
   std::array<std::string, 2> arr_str_r;
-  std::array<double, 2> arr_dbl_r;
+  std::array<double, 2> arr_dbl_r{};
 
   {
     h5::file file{"test_arr.h5", 'r'};
@@ -62,8 +62,7 @@ TEST(H5, ArrayConvert) {
   }
 
   // read
-  std::array<long, 2> arr_long;
-  using dcomplex = std::complex<double>;
+  std::array<long, 2> arr_long{};
   std::array<dcomplex, 2> arr_cplx;
 
   {

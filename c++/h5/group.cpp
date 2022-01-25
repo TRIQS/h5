@@ -84,7 +84,7 @@ namespace h5 {
     if (!has_key(key)) throw std::runtime_error("no subgroup " + key + " in the group");
     object sg = H5Gopen2(id, key.c_str(), H5P_DEFAULT);
     if (sg < 0) throw std::runtime_error("Error in opening the subgroup " + key);
-    return group(sg, parent_file);
+    return {sg, parent_file};
   }
 
   group group::create_group(std::string const &key, bool delete_if_exists) const {
@@ -92,7 +92,7 @@ namespace h5 {
     if (delete_if_exists) unlink(key);
     object obj = H5Gcreate2(id, key.c_str(), H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT);
     if (not obj.is_valid()) throw std::runtime_error("Cannot create the subgroup " + key + " of the group " + name());
-    return group(obj, parent_file);
+    return {obj, parent_file};
   }
 
   void group::create_softlink(std::string const &target_key, std::string const& key, bool delete_if_exists) const {

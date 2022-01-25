@@ -30,7 +30,7 @@ namespace h5 {
   template <typename T>
   T h5_read(group g, std::string const &key) {
     if constexpr (std::is_default_constructible_v<T>) {
-      T x;
+      T x{};
       h5_read(g, key, x);
       return x;
     } else {

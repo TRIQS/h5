@@ -15,6 +15,7 @@
 #ifndef LIBH5_SCALAR_HPP
 #define LIBH5_SCALAR_HPP
 
+#include <cmath>
 #include "./group.hpp"
 #include "./array_interface.hpp"
 namespace h5 {
@@ -40,7 +41,7 @@ namespace h5 {
       if (g.has_subgroup(name)) {
         group gr = g.open_group(name);
         H5_ASSERT(gr.has_key("r") and gr.has_key("i"));
-        double r, i;
+        double r = NAN, i = NAN;
         h5_read(gr, "r", r);
         h5_read(gr, "i", i);
         x = std::complex<double>{r, i};

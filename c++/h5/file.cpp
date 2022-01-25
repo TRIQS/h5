@@ -33,7 +33,7 @@ namespace h5 {
         herr_t (*old_func)(void *);
         void *old_client_data;
         H5Eget_auto1(&old_func, &old_client_data);
-        H5Eset_auto1(NULL, NULL);
+        H5Eset_auto1(nullptr, nullptr);
 
         // This may fail
         id = H5Fcreate(name, H5F_ACC_EXCL, H5P_DEFAULT, H5P_DEFAULT);

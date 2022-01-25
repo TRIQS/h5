@@ -84,7 +84,7 @@ namespace h5 {
     template <>
     hid_t hid_t_of<bool>() {
       hid_t bool_enum_h5type = H5Tenum_create(H5T_NATIVE_CHAR);
-      char val;
+      char val = 0;
       H5Tenum_insert(bool_enum_h5type, "FALSE", (val = 0, &val));
       H5Tenum_insert(bool_enum_h5type, "TRUE", (val = 1, &val));
       return bool_enum_h5type;
@@ -169,7 +169,7 @@ namespace h5 {
   // make an object when the id is now owned (simply inc. the ref).
   object object::from_borrowed(hid_t id) {
     xincref(id);
-    return object(id);
+    return {id};
   }
 
   object &object::operator=(object &&x) noexcept { //steals the ref, after properly decref its own.

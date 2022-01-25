@@ -98,7 +98,7 @@ namespace h5 {
     operator hid_t() const { return id; }
 
     /// Get the current number of references
-    int get_ref_count() const;
+    [[nodiscard]] int get_ref_count() const;
 
     /// Ensure the id is valid (by H5Iis_valid).
     [[nodiscard]] bool is_valid() const;
