@@ -27,7 +27,6 @@ namespace h5 {
     static std::string invoke() { return "Dict"; }
   };
 
-
   /**
    * Map of type keyT for the key and valueT for the value. keyT can be any 
    * class as long as it is writeable to h5 (an operator "<" is needed to 
@@ -37,11 +36,10 @@ namespace h5 {
   void h5_write(group f, std::string const &name, std::map<keyT, valueT> const &M) {
     auto gr = f.create_group(name);
     write_hdf5_format(gr, M);
-    
-    if constexpr (std::is_same_v<keyT, std::string>){
+
+    if constexpr (std::is_same_v<keyT, std::string>) {
       for (auto const &[key, val] : M) h5_write(gr, key, val);
-    }
-    else {
+    } else {
       int indx = 0;
       for (auto const &[key, val] : M) {
         auto element_gr = gr.create_group(std::to_string(indx));
@@ -56,23 +54,21 @@ namespace h5 {
   void h5_read(group f, std::string const &name, std::map<keyT, valueT> &M) {
     auto gr = f.open_group(name);
     M.clear();
-    
+
     for (auto const &x : gr.get_all_subgroup_dataset_names()) {
-        valueT val;
-        if constexpr (std::is_same_v<keyT, std::string>){
-          h5_read(gr, x, val);
-          M.emplace(x, std::move(val));
-        }
-        else{
-          auto element_gr = gr.open_group(x);
-          keyT key;
-          h5_read(element_gr, "key", key);
-          h5_read(element_gr, "val", val);
-          M.emplace(std::move(key), std::move(val));
-        }
+      valueT val;
+      if constexpr (std::is_same_v<keyT, std::string>) {
+        h5_read(gr, x, val);
+        M.emplace(x, std::move(val));
+      } else {
+        auto element_gr = gr.open_group(x);
+        keyT key;
+        h5_read(element_gr, "key", key);
+        h5_read(element_gr, "val", val);
+        M.emplace(std::move(key), std::move(val));
+      }
     }
   }
-
 
 } // namespace h5
 

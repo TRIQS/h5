@@ -48,7 +48,7 @@ namespace h5 {
 
   // impl
   template <typename... T>
-  std::runtime_error make_runtime_error(T const &... x) {
+  std::runtime_error make_runtime_error(T const &...x) {
     std::stringstream fs;
     (fs << ... << x);
     return std::runtime_error{fs.str()};

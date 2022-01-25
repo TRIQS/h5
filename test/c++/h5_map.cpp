@@ -46,33 +46,22 @@ TEST(H5, Map) {
   EXPECT_EQ(mv, mmv);
 }
 
-
-
-
 class custom_key_class {
-  
+
   int var;
-  
-  public: 
-  custom_key_class(int v = 0): var(v){};
+
+  public:
+  custom_key_class(int v = 0) : var(v){};
 
   static std::string hdf5_format() { return "TestkeyClass"; }
 
-  friend void h5_write(h5::group f, std::string const &name, custom_key_class const &c){
-    h5_write(f, name,  c.var );
-  };
+  friend void h5_write(h5::group f, std::string const &name, custom_key_class const &c) { h5_write(f, name, c.var); };
 
-  friend void h5_read(h5::group f, std::string const &name, custom_key_class &c){
-    h5_read(f, name,  c.var );
-  };
+  friend void h5_read(h5::group f, std::string const &name, custom_key_class &c) { h5_read(f, name, c.var); };
 
-  bool operator < (const custom_key_class& other) const{
-    return var < other.var;
-  }
-  
-  bool operator == (const custom_key_class& other) const{
-    return var == other.var;
-  }
+  bool operator<(const custom_key_class &other) const { return var < other.var; }
+
+  bool operator==(const custom_key_class &other) const { return var == other.var; }
 };
 
 TEST(H5, Map_customKey) {
@@ -81,7 +70,7 @@ TEST(H5, Map_customKey) {
   // write
   std::map<custom_key_class, std::string> m;
   m.emplace(custom_key_class(1), "hey");
-  m.emplace(custom_key_class(10),"you");
+  m.emplace(custom_key_class(10), "you");
 
   {
     h5::file file{"test_map_2.h5", 'w'};
@@ -101,18 +90,13 @@ TEST(H5, Map_customKey) {
   EXPECT_EQ(m, mm);
 }
 
-
-
-
-
 template <typename T>
 void h5_write_old(h5::group f, std::string const &name, std::map<std::string, T> const &M) {
   auto gr = f.create_group(name);
   write_hdf5_format(gr, M);
-  
+
   for (auto &pvp : M) h5_write(gr, pvp.first, pvp.second);
 }
-
 
 TEST(H5, Map_OldVsNew) {
   // Tests backwards compatibility by writing with the old function and reading
@@ -120,8 +104,8 @@ TEST(H5, Map_OldVsNew) {
 
   // write
   std::map<std::string, int> m;
-  m.emplace("hey",1);
-  m.emplace("you",15);
+  m.emplace("hey", 1);
+  m.emplace("you", 15);
 
   {
     h5::file file{"test_map_3.h5", 'w'};
@@ -140,4 +124,3 @@ TEST(H5, Map_OldVsNew) {
   // compare
   EXPECT_EQ(m, mm);
 }
-
