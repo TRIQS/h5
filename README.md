@@ -8,6 +8,8 @@ h5 is a high-level C++ interface to the [hdf5 library](https://www.hdfgroup.org/
 * Takes an [RAII](https://en.wikipedia.org/wiki/Resource_acquisition_is_initialization) approach to manage the reference counting.
 * Comes with Python bindings.
 
+A prelimenary reference documentation based on [Doxygen](https://www.doxygen.nl) is provided at [triqs.github.io/h5](https://triqs.github.io/h5/latest/).
+
 ## Simple Example
 
 Storing and loading a vector of string and a vector of doubles
