@@ -29,7 +29,7 @@
 
 namespace h5 {
 
-  namespace details {
+  namespace detail {
 
     //static_assert(std::is_same<::hid_t, hid_t>::value, "Internal error");
     static_assert(std::is_same<::hsize_t, hsize_t>::value, "Internal error");
@@ -66,9 +66,9 @@ namespace h5 {
       return dt;
     }();
   
-    template <> hid_t hid_t_of<std::string>  (){return  details::str_dt;}
-    template <> hid_t hid_t_of<char *>       (){return  details::str_dt;}
-    template <> hid_t hid_t_of<const char *> (){return  details::str_dt;}
+    template <> hid_t hid_t_of<std::string>  (){return  detail::str_dt;}
+    template <> hid_t hid_t_of<char *>       (){return  detail::str_dt;}
+    template <> hid_t hid_t_of<const char *> (){return  detail::str_dt;}
     
     hid_t const cplx_cmpd_dt = [](){
       hid_t dt = H5Tcreate(H5T_COMPOUND, 16);
@@ -77,7 +77,7 @@ namespace h5 {
       H5Tlock(dt);
       return dt;
     }();
-    template <> hid_t hid_t_of<dcplx_t>  (){return  details::cplx_cmpd_dt;}
+    template <> hid_t hid_t_of<dcplx_t>  (){return  detail::cplx_cmpd_dt;}
     // clang-format on
 
     // bool. Use a lambda to initialize it.
@@ -89,7 +89,7 @@ namespace h5 {
       H5Tenum_insert(bool_enum_h5type, "TRUE", (val = 1, &val));
       return bool_enum_h5type;
     }
-  } // namespace details
+  } // namespace detail
 
   // -----------------------  name  ---------------------------
 

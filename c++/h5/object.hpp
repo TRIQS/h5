@@ -116,14 +116,14 @@ namespace h5 {
 
   // -----------------------  hdf5_type  ---------------------------
   // Correspondance T -> hdf5 type
-  namespace details {
+  namespace detail {
     template <typename T>
     hid_t hid_t_of();
   }
 
   template <typename T>
   datatype hdf5_type() {
-    return object::from_borrowed(details::hid_t_of<T>());
+    return object::from_borrowed(detail::hid_t_of<T>());
   }
 
   // ------------------------------

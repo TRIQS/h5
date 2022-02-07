@@ -26,7 +26,7 @@ namespace h5 {
     static std::string invoke() { return "PythonTupleWrap"; }
   };
 
-  namespace details {
+  namespace detail {
     template <typename... T, std::size_t... Is>
     void h5_write_tuple_impl(group gr, std::string const &, std::tuple<T...> const &tpl, std::index_sequence<Is...>) {
       (h5_write(gr, std::to_string(Is), std::get<Is>(tpl)), ...);
@@ -39,7 +39,7 @@ namespace h5 {
       (h5_read(gr, std::to_string(Is), std::get<Is>(tpl)), ...);
     }
 
-  } // namespace details
+  } // namespace detail
 
   /**
    * Tuple of T... as a subgroup with numbers
@@ -48,7 +48,7 @@ namespace h5 {
   void h5_write(group f, std::string const &name, std::tuple<T...> const &tpl) {
     auto gr = f.create_group(name);
     write_hdf5_format(gr, tpl);
-    details::h5_write_tuple_impl(gr, name, tpl, std::index_sequence_for<T...>{});
+    detail::h5_write_tuple_impl(gr, name, tpl, std::index_sequence_for<T...>{});
   }
 
   /**
@@ -57,7 +57,7 @@ namespace h5 {
   template <typename... T>
   void h5_read(group f, std::string const &name, std::tuple<T...> &tpl) {
     auto gr = f.open_group(name);
-    details::h5_read_tuple_impl(gr, name, tpl, std::index_sequence_for<T...>{});
+    detail::h5_read_tuple_impl(gr, name, tpl, std::index_sequence_for<T...>{});
   }
 } // namespace h5
 
