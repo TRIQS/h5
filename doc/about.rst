@@ -1,8 +1,6 @@
 .. _about:
 
 About h5
-===============
+********
 
-An example application using ``cpp2py`` and TRIQS.
-
-Written and maintained by N. Wentzell with contributions from H. U.R. Strand.
+A high-level C++ interface to the [hdf5 library](https://www.hdfgroup.org/solutions/hdf5/).

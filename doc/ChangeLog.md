@@ -1,5 +1,8 @@
-Version 1.0.0
-=============
+(changelog)=
+
+# Changelog
+
+## Version 1.0.0
 
 h5 is a high-level C++ interface to the hdf5 library, which
 * Provides write and read functions for various STL container types
