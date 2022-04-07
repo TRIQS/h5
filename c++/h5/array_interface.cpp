@@ -32,14 +32,14 @@ namespace h5::array_interface {
 
     if (v.rank() == 0) return H5Screate(H5S_SCALAR);
 
-    dataspace ds = H5Screate_simple(v.slab.rank(), v.L_tot.data(), nullptr);
-    if (!ds.is_valid()) throw std::runtime_error("Cannot create the dataset");
+    dataspace dspace = H5Screate_simple(v.slab.rank(), v.L_tot.data(), nullptr);
+    if (!dspace.is_valid()) throw std::runtime_error("Cannot create the dataspace");
 
-    herr_t err = H5Sselect_hyperslab(ds, H5S_SELECT_SET, v.slab.offset.data(), v.slab.stride.data(), v.slab.count.data(),
+    herr_t err = H5Sselect_hyperslab(dspace, H5S_SELECT_SET, v.slab.offset.data(), v.slab.stride.data(), v.slab.count.data(),
                                      (v.slab.block.empty() ? nullptr : v.slab.block.data()));
     if (err < 0) throw std::runtime_error("Cannot set hyperslab");
 
-    return ds;
+    return dspace;
   }
 
   //------------------------------------------------
