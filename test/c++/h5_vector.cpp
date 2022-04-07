@@ -21,30 +21,37 @@
 
 TEST(H5, Vector) {
 
+  using dcomplex = std::complex<double>;
+
   // write
-  std::vector<std::string> m = {"a", "b"};
-  std::vector<double> mv     = {1.0, 2.0};
+  std::vector<std::string> vstr = {"a", "b"};
+  std::vector<double> vdbl      = {1.0, 2.0};
+  std::vector<dcomplex> vcplx   = {{1.1, 2.2}, {3.3, 4.5}};
 
   {
     h5::file file{"test_vec.h5", 'w'};
     h5::group grp{file};
-    h5::write(grp, "vec_str", m);
-    h5::write(grp, "vec_dbl", mv);
+    h5::write(grp, "vec_str", vstr);
+    h5::write(grp, "vec_dbl", vdbl);
+    h5::write(grp, "vec_cplx", vcplx);
   }
 
   // read
-  std::vector<std::string> mm;
-  std::vector<double> mmv;
+  std::vector<std::string> vstr_read;
+  std::vector<double> vdbl_read;
+  std::vector<dcomplex> vcplx_read;
 
   {
     h5::file file{"test_vec.h5", 'r'};
-    h5::read(file, "vec_str", mm);
-    h5::read(file, "vec_dbl", mmv);
+    h5::read(file, "vec_str", vstr_read);
+    h5::read(file, "vec_dbl", vdbl_read);
+    h5::read(file, "vec_cplx", vcplx_read);
   }
 
   // compare
-  EXPECT_EQ(m, mm);
-  EXPECT_EQ(mv, mmv);
+  EXPECT_EQ(vstr, vstr_read);
+  EXPECT_EQ(vdbl, vdbl_read);
+  EXPECT_EQ(vcplx, vcplx_read);
 }
 
 TEST(H5, VectorEmpty) {
