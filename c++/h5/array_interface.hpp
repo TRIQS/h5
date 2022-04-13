@@ -47,15 +47,21 @@ namespace h5::array_interface {
     // Constructor : unique to enforce the proper sizes of array
     // rank : the array will have rank + is_complex
     hyperslab(int rank, bool is_complex)
-       : offset(rank + is_complex, 0), stride(rank + is_complex, 1), count(rank + is_complex, 0), block() { // block is often unused
+       : offset(rank + is_complex, 0),
+         stride(rank + is_complex, 1),
+         count(rank + is_complex, 0),
+         block(rank + is_complex, 1) { // block is often unused
       if (is_complex) {
         stride[rank] = 1;
         count[rank]  = 2;
       }
     }
 
+    hyperslab() = default;
+
     //
     [[nodiscard]] int rank() const { return count.size(); }
+    [[nodiscard]] bool empty() const { return count.empty(); }
   };
 
   // Stores a view of an array.
@@ -92,7 +98,7 @@ namespace h5::array_interface {
   void write(group g, std::string const &name, h5_array_view const &a, bool compress);
 
   // Read into an array_view from the group
-  void read(group g, std::string const &name, h5_array_view v, h5_lengths_type lt);
+  void read(group g, std::string const &name, h5_array_view v, h5_lengths_type lt, hyperslab sl = {});
 
   // Write the view of the array to the attribute
   void write_attribute(object obj, std::string const &name, h5_array_view v);

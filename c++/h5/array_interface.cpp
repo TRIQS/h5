@@ -140,10 +140,17 @@ namespace h5::array_interface {
 
   //--------------------------------------------------------
 
-  void read(group g, std::string const &name, h5_array_view v, h5_lengths_type lt) {
+  void read(group g, std::string const &name, h5_array_view v, h5_lengths_type lt, hyperslab sl) {
 
     dataset ds            = g.open_dataset(name);
     dataspace file_dspace = H5Dget_space(ds);
+
+    // If provided, select the hyperslab of the file data
+    if (not sl.empty()) {
+      herr_t err = H5Sselect_hyperslab(file_dspace, H5S_SELECT_SET, sl.offset.data(), sl.stride.data(), sl.count.data(),
+                                       (sl.block.empty() ? nullptr : sl.block.data()));
+      if (err < 0) throw std::runtime_error("Cannot set hyperslab");
+    }
 
     // Checks
     if (H5Tget_class(v.ty) != H5Tget_class(lt.ty))
@@ -158,7 +165,7 @@ namespace h5::array_interface {
       throw std::runtime_error("h5 read. Rank mismatch : expecting in file a rank " + std::to_string(v.rank())
                                + " while the array stored in the hdf5 file has rank " + std::to_string(lt.rank()));
 
-    if (lt.lengths != v.slab.count) throw std::runtime_error("h5 read. Lengths mismatch");
+    if (sl.empty() and lt.lengths != v.slab.count) throw std::runtime_error("h5 read. Lengths mismatch");
 
     dataspace mem_dspace = make_mem_dspace(v);
     if (H5Sget_simple_extent_npoints(file_dspace) > 0) {
