@@ -97,6 +97,9 @@ namespace h5::array_interface {
   // Write the view of the array to the group
   void write(group g, std::string const &name, h5_array_view const &a, bool compress);
 
+  // Write to part of an existing dataset in file
+  void write_slice(group g, std::string const &name, h5_array_view const &a, h5_lengths_type lt, hyperslab sl);
+
   // Read into an array_view from the group
   void read(group g, std::string const &name, h5_array_view v, h5_lengths_type lt, hyperslab sl = {});
 

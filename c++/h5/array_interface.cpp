@@ -102,6 +102,30 @@ namespace h5::array_interface {
     if (v.is_complex) h5_write_attribute(ds, "__complex__", "1");
   }
 
+  //-------------------------------------------------------
+
+  void write_slice(group g, std::string const &name, h5_array_view const &v, h5_lengths_type lt, hyperslab sl) {
+
+    if (sl.empty()) return;
+
+    if (v.slab.count != sl.count) throw std::runtime_error("Error in h5::write_slice: Slab for memory and file incompatible");
+    if (not hdf5_type_equal(v.ty, lt.ty)) throw std::runtime_error("Error in h5::write_slice: Mismatching types. Expecting a " + get_name_of_h5_type(v.ty) + " while the array stored in the hdf5 file has type " + get_name_of_h5_type(lt.ty));
+
+    // For a sliced write we assume the dataset already exists
+    dataset ds            = g.open_dataset(name);
+    dataspace file_dspace = H5Dget_space(ds);
+
+    herr_t err = H5Sselect_hyperslab(file_dspace, H5S_SELECT_SET, sl.offset.data(), sl.stride.data(), sl.count.data(),
+                                       (sl.block.empty() ? nullptr : sl.block.data()));
+    if (err < 0) throw std::runtime_error("Cannot set hyperslab");
+
+    dataspace mem_dspace = make_mem_dspace(v);
+    if (H5Sget_simple_extent_npoints(file_dspace) > 0) {
+      herr_t err = H5Dwrite(ds, v.ty, mem_dspace, file_dspace, H5P_DEFAULT, v.start);
+      if (err < 0) throw std::runtime_error("Error opening the scalar dataset " + name + " for sliced write in the group " + g.name());
+    }
+  }
+
   //-------------------------------------------------------------
 
   void write_attribute(object obj, std::string const &name, h5_array_view v) {
