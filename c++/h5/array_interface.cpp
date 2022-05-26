@@ -78,7 +78,14 @@ namespace h5::array_interface {
     if (compress and (v.rank() != 0)) {
       int n_dims = v.rank();
       std::vector<hsize_t> chunk_dims(n_dims);
-      for (int i = 0; i < v.rank(); ++i) chunk_dims[i] = std::max(v.slab.count[i], hsize_t{1});
+      hsize_t const max_chunk_size = hsize_t{1UL << 32} - hsize_t{1}; // 2^32 - 1 = 4 GB
+      hsize_t chunk_size           = H5Tget_size(v.ty);
+      for (int i = v.rank() - 1; i >= 0; --i) {
+        ASSERT(max_chunk_size >= chunk_size);
+        hsize_t max_dim = max_chunk_size / chunk_size;
+        chunk_dims[i]   = std::clamp(v.slab.count[i], hsize_t{1}, max_dim);
+        chunk_size *= chunk_dims[i];
+      }
       cparms = H5Pcreate(H5P_DATASET_CREATE);
       H5Pset_chunk(cparms, n_dims, chunk_dims.data());
       H5Pset_deflate(cparms, 1);
