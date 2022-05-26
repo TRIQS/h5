@@ -81,7 +81,7 @@ namespace h5::array_interface {
       hsize_t const max_chunk_size = hsize_t{1UL << 32} - hsize_t{1}; // 2^32 - 1 = 4 GB
       hsize_t chunk_size           = H5Tget_size(v.ty);
       for (int i = v.rank() - 1; i >= 0; --i) {
-        ASSERT(max_chunk_size >= chunk_size);
+        H5_ASSERT(max_chunk_size >= chunk_size);
         hsize_t max_dim = max_chunk_size / chunk_size;
         chunk_dims[i]   = std::clamp(v.slab.count[i], hsize_t{1}, max_dim);
         chunk_size *= chunk_dims[i];
