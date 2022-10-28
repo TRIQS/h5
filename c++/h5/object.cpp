@@ -34,7 +34,7 @@ namespace h5 {
   namespace detail {
 
     //static_assert(std::is_same<::hid_t, hid_t>::value, "Internal error");
-    static_assert(std::is_same<::hsize_t, hsize_t>::value, "Internal error");
+    static_assert(sizeof(::hsize_t) == sizeof(hsize_t), "Mismatch in bitsize of h5::hsize_t and hsize_t");
 
     // specializations for all basic types
     // clang-format off
