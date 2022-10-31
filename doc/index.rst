@@ -3,9 +3,9 @@
 h5
 **
 
-.. sidebar:: h5 1.1.0
+.. sidebar:: h5 |PROJECT_VERSION|
 
-   This is the homepage of h5 v1.1.0.
+   This is the homepage of h5 |PROJECT_VERSION|.
    For changes see the :ref:`changelog page <changelog>`.
       
       .. image:: _static/logo_github.png
