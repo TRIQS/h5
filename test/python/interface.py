@@ -36,7 +36,7 @@ class TestH5Interface(unittest.TestCase):
         g = h5.Group(f)
         g2 = g.create_group("GG")
 
-        a = np.array(((1,2,3), (4,5,6)), np.int)
+        a = np.array(((1,2,3), (4,5,6)), int)
         h5.h5_write(g2, 'a', a)
         h5.h5_write(g, 'a1', a)
         g.write_attribute("ATTR1", "value1")
@@ -73,11 +73,11 @@ class TestH5Interface(unittest.TestCase):
         h5.h5_write(g, 's', "a string")
         h5.h5_write(g, 'c', 1.2 + 3j)
         h5.h5_write(g, 'nan', float('nan'))
-        h5.h5_write(g, 'npyarr_rank0', np.zeros((), dtype=np.int64))
-        h5.h5_write(g, 'npy_int', np.int64(4))
+        h5.h5_write(g, 'npyarr_rank0', np.zeros((), dtype=int))
+        h5.h5_write(g, 'npy_int', np.int_(4))
 
         c = 1
-        for types in [np.int, np.float, np.complex]:
+        for types in [int, float, complex]:
             a = np.array(((1,2,3), (4,5,6)), types)
             h5.h5_write(g, 'a%s'%c, a)
             c += 1 
@@ -99,7 +99,7 @@ class TestH5Interface(unittest.TestCase):
         self.assertEqual(h5.h5_read(g, 'npy_int'), 4)
 
         c = 1
-        for types in [np.int, np.float, np.complex]:
+        for types in [int, float, complex]:
             a = np.array(((1,2,3), (4,5,6)), types)
             r = h5.h5_read(g, 'a%s'%c)
             assert_arrays_are_close(r, a)
