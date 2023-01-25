@@ -42,8 +42,15 @@ add_library(hdf5 INTERFACE)
 add_library(h5::hdf5 ALIAS hdf5)
 target_include_directories(hdf5 SYSTEM INTERFACE ${HDF5_INCLUDE_DIRS})
 if(TARGET hdf5::hdf5 AND TARGET hdf5::hdf5_hl)
+  # Can't directly link against imported targets as they are not exportable
+  # Instead extract information on library locations
   get_target_property(HDF5_LIBRARIES hdf5::hdf5 IMPORTED_LOCATION)
   get_target_property(HDF5_HL_LIBRARIES hdf5::hdf5_hl IMPORTED_LOCATION)
+  # Starting with cmake 3.23 we may need to use IMPORTED_LOCATION_RELEASE property
+  if(NOT HDF5_LIBRARIES)
+    get_target_property(HDF5_LIBRARIES hdf5::hdf5 IMPORTED_LOCATION_RELEASE)
+    get_target_property(HDF5_HL_LIBRARIES hdf5::hdf5_hl IMPORTED_LOCATION_RELEASE)
+  endif()
 endif()
 target_link_libraries(hdf5 INTERFACE "${HDF5_LIBRARIES}" ${HDF5_HL_LIBRARIES})
 target_compile_options(hdf5 INTERFACE ${HDF5_DEFINITIONS})
