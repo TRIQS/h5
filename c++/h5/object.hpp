@@ -29,7 +29,12 @@ namespace h5 {
   // Hence complex installation paths to hdf5 are only needed in the cpp file,
   // not by the users of the library.
   using hid_t   = int64_t;
-  using hsize_t = unsigned long long;
+  using hsize_t =
+#ifdef H5_VER_GE_113
+     uint64_t;
+#else
+     unsigned long long;
+#endif
   using v_t     = std::vector<hsize_t>;
 
   // A complex compound type consisting of two doubles
