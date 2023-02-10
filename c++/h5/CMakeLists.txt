@@ -57,6 +57,9 @@ target_compile_options(hdf5 INTERFACE ${HDF5_DEFINITIONS})
 if(HDF5_VERSION VERSION_GREATER 1.10)
   target_compile_definitions(hdf5 INTERFACE H5_USE_110_API)
 endif()
+if(HDF5_VERSION VERSION_GREATER_EQUAL 1.13)
+  target_compile_definitions(hdf5 INTERFACE H5_VER_GE_113)
+endif()
 
 # Link against interface target and export
 target_link_libraries(h5_c PRIVATE hdf5)
