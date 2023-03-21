@@ -21,8 +21,6 @@
 
 TEST(H5, Vector) {
 
-  using dcomplex = std::complex<double>;
-
   // write
   std::vector<std::string> vstr = {"a", "b"};
   std::vector<double> vdbl      = {1.0, 2.0};
