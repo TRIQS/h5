@@ -128,7 +128,7 @@ namespace h5::array_interface {
 
     dataspace mem_dspace = make_mem_dspace(v);
     if (H5Sget_simple_extent_npoints(file_dspace) > 0) {
-      herr_t err = H5Dwrite(ds, v.ty, mem_dspace, file_dspace, H5P_DEFAULT, v.start);
+      err = H5Dwrite(ds, v.ty, mem_dspace, file_dspace, H5P_DEFAULT, v.start);
       if (err < 0) throw std::runtime_error("Error opening the scalar dataset " + name + " for sliced write in the group " + g.name());
     }
   }
