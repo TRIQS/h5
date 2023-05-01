@@ -111,7 +111,7 @@ namespace h5 {
    * @return true if the read succeeds, false if it fails
    */
   template <typename T>
-  inline bool h5_try_read(group g, std::string key, T &x) {
+  inline bool try_read(group g, std::string key, T &x) {
     if (g.has_key(key)) {
       h5_read(g, key, x);
       return true;
