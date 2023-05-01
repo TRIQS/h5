@@ -71,18 +71,18 @@ namespace h5 {
   }
 
   template <typename T>
-  T read_attribute(group g, std::string const &key) {
-    return h5_read_attribute<T>(g, key);
+  T read_attribute(object obj, std::string const &key) {
+    return h5_read_attribute<T>(obj, key);
   }
 
   template <typename T>
-  void read_attribute(group g, std::string const &key, T &x) {
-    h5_read(g, key, x);
+  void read_attribute(object obj, std::string const &key, T &x) {
+    h5_read_attribute(obj, key, x);
   }
 
   template <typename T>
-  void write_attribute(group g, std::string const &key, T const &x) {
-    h5_write(g, key, x);
+  void write_attribute(object obj, std::string const &key, T const &x) {
+    h5_write_attribute(obj, key, x);
   }
 
   /**
