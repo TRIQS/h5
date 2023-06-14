@@ -13,7 +13,7 @@
 # limitations under the License.
 
 
-import sys,numpy
+import sys,numpy, warnings
 from importlib import import_module
 from .archive_basic_layer import HDFArchiveGroupBasicLayer
 from .formats import register_class, register_backward_compatibility_method, get_format_info
@@ -229,7 +229,7 @@ class HDFArchiveGroup(HDFArchiveGroupBasicLayer):
         try :
             fmt_info = get_format_info(hdf5_format)
         except KeyError:
-            print("Warning : The hdf5 format %s is not recognized. Returning as a group. Hint : did you forgot to import this python class ?"%hdf5_format)
+            warnings.warn(f"The hdf5 format {hdf5_format} is not recognized. Returning as a group. Did you forgot to import this python class ?")
             return bare_return()
 
         r_class_name  = fmt_info.classname
