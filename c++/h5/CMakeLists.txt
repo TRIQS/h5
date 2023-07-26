@@ -5,10 +5,8 @@ add_library(${PROJECT_NAME}::${PROJECT_NAME}_c ALIAS ${PROJECT_NAME}_c)
 # Enable warnings
 target_link_libraries(${PROJECT_NAME}_c PRIVATE $<BUILD_INTERFACE:${PROJECT_NAME}_warnings>)
 
-# Set C++ Standard
-target_compile_features(${PROJECT_NAME}_c PUBLIC cxx_std_23)
-
 # Configure target and compilation
+target_compile_features(${PROJECT_NAME}_c PUBLIC cxx_std_23)
 set_target_properties(${PROJECT_NAME}_c PROPERTIES
   POSITION_INDEPENDENT_CODE ON
   VERSION ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}

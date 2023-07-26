@@ -14,15 +14,12 @@
 #
 # Authors: Philipp Dumitrescu, Olivier Parcollet, Dylan Simon, Nils Wentzell
 
-cmake_minimum_required(VERSION 3.12.4 FATAL_ERROR)
-cmake_policy(VERSION 3.12.4)
-if(POLICY CMP0077)
-  cmake_policy(SET CMP0077 NEW)
-endif()
+cmake_minimum_required(VERSION 3.20 FATAL_ERROR)
+cmake_policy(VERSION 3.20)
 
 # ############
 # Define Project
-project(h5 VERSION 1.1.0 LANGUAGES C CXX)
+project(h5 VERSION 1.2.0 LANGUAGES C CXX)
 get_directory_property(IS_SUBPROJECT PARENT_DIRECTORY)
 
 # Get the git hash & print status
@@ -89,6 +86,7 @@ target_compile_options(${PROJECT_NAME}_warnings
   INTERFACE
     -Wall
     -Wextra
+    -Wfloat-conversion
     -Wpedantic
     -Wno-sign-compare
     $<$<CXX_COMPILER_ID:GNU>:-Wno-comma-subscript>
@@ -99,11 +97,13 @@ target_compile_options(${PROJECT_NAME}_warnings
     $<$<CXX_COMPILER_ID:Clang>:-Wshadow>
     $<$<CXX_COMPILER_ID:Clang>:-Wno-gcc-compat>
     $<$<CXX_COMPILER_ID:Clang>:-Wno-c++20-extensions>
+    $<$<CXX_COMPILER_ID:Clang>:-Wno-c++20-compat>
     $<$<CXX_COMPILER_ID:AppleClang>:-Wno-deprecated-comma-subscript>
     $<$<CXX_COMPILER_ID:AppleClang>:-Wno-unknown-warning-option>
     $<$<CXX_COMPILER_ID:AppleClang>:-Wshadow>
     $<$<CXX_COMPILER_ID:AppleClang>:-Wno-gcc-compat>
     $<$<CXX_COMPILER_ID:AppleClang>:-Wno-c++20-extensions>
+    $<$<CXX_COMPILER_ID:AppleClang>:-Wno-c++20-compat>
 )
 
 # ---------------------------------

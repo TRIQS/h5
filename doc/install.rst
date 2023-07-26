@@ -8,7 +8,7 @@ Install h5
 Compiling h5 from source
 ========================
 
-.. note:: To guarantee reproducibility in scientific calculations we strongly recommend the use of a stable `release <https://github.com/TRIQS/triqs/releases>`_ of both TRIQS and its applications.
+.. note:: To guarantee reproducibility in scientific calculations we strongly recommend the use of a stable `release <https://github.com/TRIQS/h5/releases>`_ of h5.
 
 Installation steps
 ------------------
@@ -51,14 +51,14 @@ The compilation of ``h5`` can be configured using CMake-options::
 
     cmake ../h5.src -DOPTION1=value1 -DOPTION2=value2 ...
 
-+-----------------------------------------------------------------+-----------------------------------------------+
-| Options                                                         | Syntax                                        |
-+=================================================================+===============================================+
-| Specify an installation path other than path_to_triqs           | -DCMAKE_INSTALL_PREFIX=path_to_h5             |
-+-----------------------------------------------------------------+-----------------------------------------------+
-| Build in Debugging Mode                                         | -DCMAKE_BUILD_TYPE=Debug                      |
-+-----------------------------------------------------------------+-----------------------------------------------+
-| Disable testing (not recommended)                               | -DBuild_Tests=OFF                             |
-+-----------------------------------------------------------------+-----------------------------------------------+
-| Build the documentation                                         | -DBuild_Documentation=ON                      |
-+-----------------------------------------------------------------+-----------------------------------------------+
++-----------------------------------------+-----------------------------------------------+
+| Options                                 | Syntax                                        |
++=========================================+===============================================+
+| Specify an installation path            | -DCMAKE_INSTALL_PREFIX=path_to_h5             |
++-----------------------------------------+-----------------------------------------------+
+| Build in Debugging Mode                 | -DCMAKE_BUILD_TYPE=Debug                      |
++-----------------------------------------+-----------------------------------------------+
+| Disable testing (not recommended)       | -DBuild_Tests=OFF                             |
++-----------------------------------------+-----------------------------------------------+
+| Build the documentation                 | -DBuild_Documentation=ON                      |
++-----------------------------------------+-----------------------------------------------+
