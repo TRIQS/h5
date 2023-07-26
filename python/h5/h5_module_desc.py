@@ -1,27 +1,27 @@
 # Generated automatically using the command :
-# c++2py ../../c++/app4triqs/app4triqs.hpp -p --members_read_only -N app4triqs -a app4triqs -m app4triqs_module -o app4triqs_module --moduledoc="The app4triqs python module" --cxxflags="-std=c++17" --target_file_only
+# c++2py ../../c++/h5/h5.hpp -p --members_read_only -N h5 -a h5 -m h5_module -o h5_module --moduledoc="The h5 python module" --cxxflags="-std=c++17" --target_file_only
 from cpp2py.wrap_generator import *
 
 # The module
-module = module_(full_name = "app4triqs_module", doc = r"The app4triqs python module", app_name = "app4triqs")
+module = module_(full_name = "h5_module", doc = r"The h5 python module", app_name = "h5")
 
 # Imports
 
 # Add here all includes
-module.add_include("app4triqs/app4triqs.hpp")
+module.add_include("h5/h5.hpp")
 
 # Add here anything to add in the C++ code at the start, e.g. namespace using
 module.add_preamble("""
 #include <cpp2py/converters/string.hpp>
 
-using namespace app4triqs;
+using namespace h5;
 """)
 
 
 # The class toto
 c = class_(
         py_type = "Toto",  # name of the python class
-        c_type = "app4triqs::toto",   # name of the C++ class
+        c_type = "h5::toto",   # name of the C++ class
         doc = r"""A very useful and important class""",   # doc of the C++ class
         hdf5 = True,
         arithmetic = ("add_only"),
@@ -56,7 +56,7 @@ c.add_property(name = "i",
 
 module.add_class(c)
 
-module.add_function ("int app4triqs::chain (int i, int j)", doc = r"""Chain digits of two integers
+module.add_function ("int h5::chain (int i, int j)", doc = r"""Chain digits of two integers
 
 Parameters
 ----------
