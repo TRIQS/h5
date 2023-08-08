@@ -86,7 +86,7 @@ namespace h5 {
     template <>
     hid_t hid_t_of<bool>() {
       hid_t bool_enum_h5type = H5Tenum_create(H5T_NATIVE_CHAR);
-      char val = 0;
+      char val               = 0;
       H5Tenum_insert(bool_enum_h5type, "FALSE", (val = 0, &val));
       H5Tenum_insert(bool_enum_h5type, "TRUE", (val = 1, &val));
       return bool_enum_h5type;

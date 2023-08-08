@@ -49,11 +49,11 @@ namespace h5 {
 
   template <typename T>
   concept Storable = requires(T const &xc, T &x, h5::group g, std::string const &subgroup_name) {
-                         { T::hdf5_format() } -> std::convertible_to<std::string>;
-                         //{ get_hdf5_format(xc) } -> std::convertible_to<std::string>;
-                         { h5_write(g, subgroup_name, xc) };
-                         { h5_read(g, subgroup_name, x) };
-                       };
+    { T::hdf5_format() } -> std::convertible_to<std::string>;
+    //{ get_hdf5_format(xc) } -> std::convertible_to<std::string>;
+    { h5_write(g, subgroup_name, xc) };
+    { h5_read(g, subgroup_name, x) };
+  };
 
 } // namespace h5
 

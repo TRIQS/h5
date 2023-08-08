@@ -97,11 +97,13 @@ namespace h5 {
     return {obj, parent_file};
   }
 
-  void group::create_softlink(std::string const &target_key, std::string const& key, bool delete_if_exists) const {
+  void group::create_softlink(std::string const &target_key, std::string const &key, bool delete_if_exists) const {
     if (target_key.empty() || key.empty()) return;
     if (!has_key(target_key)) throw std::runtime_error("The target key " + target_key + " does not exist in group " + name());
-    if (delete_if_exists) unlink(key, false);
-    else if (has_key(key)) throw std::runtime_error("The key " + key + " already exists in group " + name());
+    if (delete_if_exists)
+      unlink(key, false);
+    else if (has_key(key))
+      throw std::runtime_error("The key " + key + " already exists in group " + name());
     auto const err = H5Lcreate_soft(target_key.c_str(), id, key.c_str(), H5P_DEFAULT, H5P_DEFAULT);
     if (err < 0) throw std::runtime_error("Cannot create softlink " + target_key + " <- " + key);
   }

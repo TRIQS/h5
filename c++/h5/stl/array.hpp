@@ -42,8 +42,8 @@ namespace h5 {
       std::transform(cbegin(a), cend(a), begin(char_arr), [](std::string const &s) { return s.c_str(); });
       h5_write(g, name, char_arr);
 
-    } else if constexpr (std::is_arithmetic_v<
-                            T> or is_complex_v<T> or std::is_same_v<T, dcplx_t> or std::is_same_v<T, char *> or std::is_same_v<T, const char *>) {
+    } else if constexpr (std::is_arithmetic_v<T> or is_complex_v<T> or std::is_same_v<T, dcplx_t> or std::is_same_v<T, char *>
+                         or std::is_same_v<T, const char *>) {
 
       h5::array_interface::h5_array_view v{hdf5_type<T>(), (void *)a.data(), 1, is_complex_v<T>};
       v.slab.count[0]  = N;
@@ -78,8 +78,8 @@ namespace h5 {
       std::copy(cbegin(char_arr), cend(char_arr), begin(a));
       std::for_each(begin(char_arr), end(char_arr), [](char *cb) { free(cb); });
 
-    } else if constexpr (std::is_arithmetic_v<
-                            T> or is_complex_v<T> or std::is_same_v<T, dcplx_t> or std::is_same_v<T, char *> or std::is_same_v<T, const char *>) {
+    } else if constexpr (std::is_arithmetic_v<T> or is_complex_v<T> or std::is_same_v<T, dcplx_t> or std::is_same_v<T, char *>
+                         or std::is_same_v<T, const char *>) {
 
       auto lt = array_interface::get_h5_lengths_type(g, name);
 
