@@ -2,6 +2,48 @@
 
 # Changelog
 
+## Version 1.2.0
+
+This is version 1.2.0 of h5, a high-level C++ interface to the hdf5 library.
+
+We thank all contributors: Thomas Hahn, Alexander Hampel, Olivier Parcollet, Dylan Simon, Nils Wentzell
+
+Find below an itemized list of changes in this release.
+
+### General
+* Remove redundant std_addons/complex.hpp header
+* Rename h5::h5_try_read -> h5::try_read
+* Add concept h5::Storable
+* Fix issue in previous commit: Use H5_ASSERT over ASSERT macro
+* Add function write_slice to enable updating part of an existing dataset
+* Allow to set hyperslab for filespace in h5_read
+* Extend vector test to cover complex numbers
+* Use warnings module to issue python warnings
+* clang-format all source files
+* Remove warnings
+* General cleanup
+
+### cmake
+* Add compiler warnings for IntelLLVM
+* Update Findsanitizer.cmake to include TSAN and MSAN
+* Do not build documentation as subproject
+* Fix FindHDF5 logic for cmake versions >=3.23
+* Fix h5::hdf5 interface target for cmake versions 3.20+
+
+### jenkins
+* Update packaging Dockerfiles
+
+### fixes
+* Fix hsize_t for hdf5 versions >=1.13
+* Loosen type-check of hsize_t to restore hdf5 1.13 compatibility Fix #11
+* Fix #10: Do not exceed maximum chunk size in h5::array_interface::write
+* Fix signature of generic h5::read_attribute and h5::write_attribute
+* Allow reading vector<string> when stored as subgroup with numbered keys
+* np.int / np.float / np.complex removed
+
+
+## Version 1.1.0
+
 This is version 1.1.0 of h5, a high-level C++ interface to the hdf5 library.
 
 We thank all contributors: Daniel Bauernfeind, Alexander Hampel, Henri Menke, Dylan Simon, Nils Wentzell
