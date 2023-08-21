@@ -108,25 +108,31 @@ namespace h5 {
    */
   template <typename T>
   void h5_read(group g, std::string name, std::vector<T> &v) {
+    if (not g.has_key(name)) throw make_runtime_error("h5 : group has no key ", name);
 
-    if constexpr (std::is_arithmetic_v<T> or is_complex_v<T>) {
-
-      auto lt = array_interface::get_h5_lengths_type(g, name);
-      if (lt.rank() != 1 + is_complex_v<T>) throw make_runtime_error("h5 : reading a vector and I got an array of rank", lt.rank());
-      v.resize(lt.lengths[0]);
-      array_interface::read(g, name, array_interface::h5_array_view_from_vector(v), lt);
-
-    } else if constexpr (std::is_same_v<T, std::string> or std::is_same_v<T, std::vector<std::string>>) {
-
-      char_buf cb;
-      h5_read(g, name, cb);
-      from_char_buf(cb, v);
-
-    } else { // generic type
+    if (g.has_subgroup(name)) { // stored as subgroup with keys of generic type
 
       auto g2 = g.open_group(name);
       v.resize(g2.get_all_dataset_names().size() + g2.get_all_subgroup_names().size());
       for (int i = 0; i < v.size(); ++i) { h5_read(g2, std::to_string(i), v[i]); }
+
+    } else {
+      if constexpr (std::is_arithmetic_v<T> or is_complex_v<T>) {
+
+        auto lt = array_interface::get_h5_lengths_type(g, name);
+        if (lt.rank() != 1 + is_complex_v<T>) throw make_runtime_error("h5 : reading a vector and I got an array of rank ", lt.rank());
+        v.resize(lt.lengths[0]);
+        array_interface::read(g, name, array_interface::h5_array_view_from_vector(v), lt);
+
+      } else if constexpr (std::is_same_v<T, std::string> or std::is_same_v<T, std::vector<std::string>>) {
+
+        char_buf cb;
+        h5_read(g, name, cb);
+        from_char_buf(cb, v);
+
+      } else {
+        throw make_runtime_error("h5 : unrecognized dataset type in read of std::vector<T>");
+      }
     }
   }
 
