@@ -18,6 +18,7 @@
 #define LIBH5_OBJECT_HPP
 
 #include <complex>
+#include <cstdint>
 #include <vector>
 #include <sstream>
 #include "./macros.hpp"
