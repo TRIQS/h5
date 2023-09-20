@@ -18,6 +18,7 @@
 #define LIBH5_MACROS_HPP
 
 #include <iostream>
+#include <exception>
 
 // Basic macros for the implementation
 
