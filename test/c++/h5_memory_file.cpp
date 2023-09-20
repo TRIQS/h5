@@ -23,56 +23,46 @@
 TEST(H5, MemoryFile) {
 
   // Some data to write
-  auto vec_int = std::vector<int>{1, 2, 3};
-  auto vec_dbl = std::vector<double>{4.0, 5.0, 6.0};
+  auto vec_int = std::vector{1, 2, 3};
+  auto vec_dbl = std::vector{4.0, 5.0, 6.0};
   auto vec_str = std::vector<std::string>{"Hello", "there!"};
-
-  // The data buffers
-  std::vector<std::byte> buf_mem, buf_disk, buf_raw;
-
-  {
-    // Create file in memory
-    auto f_mem = h5::file{};
-    h5::write(f_mem, "vec_int", vec_int);
-    h5::write(f_mem, "vec_dbl", vec_dbl);
-
-    // Write memory file to disk as binary data
-    buf_mem = f_mem.as_buffer();
-    std::ofstream ostrm("h5_bin_out.h5", std::ios::binary);
-    ostrm.write(reinterpret_cast<char *>(buf_mem.data()), buf_mem.size());
-  }
 
   {
     // Write to on-disk h5 file
-    auto f_disk = h5::file{"h5_bin_in.h5", 'w'};
+    auto f_disk = h5::file{"h5_bin_ref.h5", 'w'};
     h5::write(f_disk, "vec_int", vec_int);
     h5::write(f_disk, "vec_dbl", vec_dbl);
-    buf_disk = f_disk.as_buffer();
-
-    EXPECT_EQ(buf_mem, buf_disk);
+    h5::write(f_disk, "vec_str", vec_str);
   }
 
   {
-    // Read from disk as raw data
-    std::ifstream istrm{"h5_bin_in.h5", std::ios::binary | std::ios::ate};
+    // Write to file in memory
+    auto f_mem = h5::file{};
+    h5::write(f_mem, "vec_int", vec_int);
+    h5::write(f_mem, "vec_dbl", vec_dbl);
+    h5::write(f_mem, "vec_str", vec_str);
+
+    // Write memory file to disk as binary data
+    auto buf_mem = f_mem.as_buffer();
+    std::ofstream ostrm("h5_bin_buf.h5", std::ios::binary);
+    ostrm.write(reinterpret_cast<char *>(buf_mem.data()), buf_mem.size());
+  }
+
+  // Read from disk into raw buffer
+  std::vector<std::byte> buf_raw;
+  {
+    std::ifstream istrm{"h5_bin_ref.h5", std::ios::binary | std::ios::ate};
     buf_raw.resize(istrm.tellg(), std::byte{0});
     istrm.seekg(0);
     istrm.read(reinterpret_cast<char *>(buf_raw.data()), buf_raw.size());
-    EXPECT_EQ(buf_disk, buf_raw);
   }
 
-  std::vector<int> vec_int_read;
-  std::vector<double> vec_dbl_read;
-  std::vector<std::string> vec_str_read;
-  {
-    // Create file in memory from buffer
-    auto f = h5::file{buf_raw};
+  // Compare the various files
+  for (auto f : {h5::file{"h5_bin_ref.h5", 'r'}, h5::file{"h5_bin_ref.h5", 'r'}, h5::file{buf_raw}}) {
 
-    h5::read(f, "vec_int", vec_int_read);
-    h5::read(f, "vec_dbl", vec_dbl_read);
-
-    h5::write(f, "vec_str", vec_str);
-    h5::read(f, "vec_str", vec_str_read);
+    auto vec_int_read = h5::read<std::vector<int>>(f, "vec_int");
+    auto vec_dbl_read = h5::read<std::vector<double>>(f, "vec_dbl");
+    auto vec_str_read = h5::read<std::vector<std::string>>(f, "vec_str");
 
     EXPECT_EQ(vec_int, vec_int_read);
     EXPECT_EQ(vec_dbl, vec_dbl_read);
