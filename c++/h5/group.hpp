@@ -36,9 +36,6 @@ namespace h5 {
     /// Takes the "/" group at the top of the file
     group(file f);
 
-    ///
-    group(group const &) = default;
-
     private:
     // construct from the bare object and the parent
     // internal use only for open/create subgroup
