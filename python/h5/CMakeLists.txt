@@ -68,14 +68,3 @@ add_custom_command(
   COMMAND echo "** Copying all wrap.[ch]xx to src"
 )
 
-
-## Build and install any python modules
-#foreach(gen ${wrap_generators})
-  #string(REPLACE "_desc.py" "" gen ${gen})
-  #get_filename_component(module_name ${gen} NAME_WE)
-  #get_filename_component(module_dir ${gen} DIRECTORY)
-  #add_cpp2py_module(NAME ${module_name} DIRECTORY ${module_dir})
-  #add_library(${PROJECT_NAME}::${module_name} ALIAS ${module_name})
-  #target_link_libraries(${module_name} h5py_io)
-  #install(TARGETS ${module_name} DESTINATION ${PYTHON_LIB_DEST}/${module_dir})
-#endforeach()
