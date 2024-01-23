@@ -57,4 +57,10 @@ namespace h5 {
 
 } // namespace h5
 
+// Python wrapping declaration 
+#ifdef C2PY_INCLUDED
+#include "../python/h5/_h5py.wrap.hxx"
+#endif
+
+
 #endif // LIBH5_H5_HPP
