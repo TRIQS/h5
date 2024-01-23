@@ -1,15 +1,10 @@
-#include <Python.h>
-#include <numpy/arrayobject.h>
-
 #include "h5py_io.hpp"
 #include <h5/group.hpp>
 #include <h5/scalar.hpp>
 #include <h5/stl/string.hpp>
 #include <h5/array_interface.hpp>
 
-#include <cpp2py/cpp2py.hpp>
-#include <cpp2py/converters/vector.hpp>
-#include <cpp2py/converters/string.hpp>
+#include <c2py/c2py.hpp>
 
 #include <hdf5.h>
 #include <hdf5_hl.h>
@@ -183,7 +178,7 @@ namespace h5 {
       write(g, name, make_av_from_npy(arr_obj), true);
     } else if (PyArray_CheckScalar(ob)) {
       // Treat numpy scalars as 0-dimensional ndarrays
-      cpp2py::pyref obsc = PyArray_FromScalar(ob, NULL);
+      c2py::pyref obsc = PyArray_FromScalar(ob, NULL);
       h5_write_bare(g, name, obsc);
     } else if (PyFloat_Check(ob)) {
       h5_write(g, name, PyFloat_AsDouble(ob));
@@ -250,12 +245,12 @@ namespace h5 {
     if (H5Tget_class(lt.ty) == H5T_STRING) {
       if (lt.rank() == 1) {
         auto x = h5_read<std::vector<std::string>>(g, name);
-        return cpp2py::convert_to_python(x);
+        return c2py::cxx2py(x);
       }
 
       if (lt.rank() == 2) {
         auto x = h5_read<std::vector<std::vector<std::string>>>(g, name);
-        return cpp2py::convert_to_python(x);
+        return c2py::cxx2py(x);
       }
 
       PyErr_SetString(PyExc_RuntimeError, "Unknown string dataset format");

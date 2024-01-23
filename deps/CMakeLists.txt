@@ -47,16 +47,16 @@ else()
   endif()
 endif()
 
-# -- Cpp2Py --
-if(PythonSupport OR (NOT IS_SUBPROJECT AND Build_Documentation))
-  external_dependency(Cpp2Py
-    GIT_REPO https://github.com/TRIQS/cpp2py
-    VERSION 2.0
-    GIT_TAG master
-    BUILD_ALWAYS
-    EXCLUDE_FROM_ALL
-  )
-endif()
+## -- Cpp2Py --
+#if(PythonSupport OR (NOT IS_SUBPROJECT AND Build_Documentation))
+  #external_dependency(Cpp2Py
+    #GIT_REPO https://github.com/TRIQS/cpp2py
+    #VERSION 2.0
+    #GIT_TAG master
+    #BUILD_ALWAYS
+    #EXCLUDE_FROM_ALL
+  #)
+#endif()
 
 # -- GTest --
 external_dependency(GTest

@@ -47,4 +47,9 @@ namespace h5 {
       throw std::runtime_error("h5_read : mismatch of the Format tag in the h5 group : found " + tag_file + " while I expected " + tag_expected);
   }
 
+  // ========= implement group method ===========
+
+  std::string group::read_hdf5_format_from_key(std::string const & key) const {std::string result; h5::read_hdf5_format_from_key(*this, key, result); return result;}
+
+
 } // namespace h5

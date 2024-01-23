@@ -262,4 +262,12 @@ namespace h5 {
     _cb = std::move(cb_out);
   }
 
+  // ========== Implement group method ===================
+
+
+  void group::write_attribute(std::string const& key, std::string const & val) const { h5::h5_write_attribute(*this, key, val);}
+
+  std::string group::read_attribute(std::string const & name) const { std::string result; h5::h5_read_attribute(*this, name, result); return result;}
+
+
 } // namespace h5

@@ -80,7 +80,7 @@ class HDFArchiveGroupBasicLayer:
         h5.h5_write(self._group, key, val)
 
     def _flush(self):
-        if bool(self._group): self._group.file.flush()
+        if bool(self._group): self._group.get_file().flush()
 
     def create_group (self,key):
         self._group.create_group(key)

@@ -130,14 +130,25 @@ add_subdirectory(deps)
 # Build and install the library
 add_subdirectory(c++/${PROJECT_NAME})
 
+# Python
+if(PythonSupport)
+ find_package(Python COMPONENTS Interpreter Development NumPy)
+
+ include(FetchContent)
+ FetchContent_Declare(
+  c2py
+  GIT_REPOSITORY https://github.com/TRIQS/c2py
+  GIT_TAG        unstable 
+  EXCLUDE_FROM_ALL
+ )
+ FetchContent_MakeAvailable(c2py)
+
+ add_subdirectory(python/${PROJECT_NAME})
+endif()
+
 # Tests
 if(Build_Tests)
   add_subdirectory(test)
-endif()
-
-# Python
-if(PythonSupport)
-  add_subdirectory(python/${PROJECT_NAME})
 endif()
 
 # Docs

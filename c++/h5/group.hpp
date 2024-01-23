@@ -143,6 +143,20 @@ namespace h5 {
 
     /// Returns all names of dataset of G
     [[nodiscard]] std::vector<std::string> get_all_subgroup_dataset_names() const;
+
+    /// Returns all names of dataset of G
+    [[nodiscard]] std::vector<std::string> keys() const { return get_all_subgroup_dataset_names();}
+    // duplicate for Python API
+
+    /// Write an attribute
+    void write_attribute(std::string const& key, std::string const & val) const;
+
+    /// Read an attribute
+    std::string read_attribute(std::string const & name) const;
+    
+    /// Read the format string from the key in the group
+    std::string read_hdf5_format_from_key(std::string const & key) const;
+
   };
 
 } // namespace h5

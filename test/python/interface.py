@@ -59,8 +59,8 @@ class TestH5Interface(unittest.TestCase):
         self.assertEqual(g.read_attribute('ATTR1'), "value1")
         self.assertEqual(g.read_attribute('ATTRNotPresent'), "")
 
-        self.assertEqual(f.name, "test2.h5")
-        self.assertEqual(g.file.name, "test2.h5")
+        self.assertEqual(f.name(), "test2.h5")
+        self.assertEqual(g.get_file().name(), "test2.h5")
 
     def test_h5_io(self):
 
