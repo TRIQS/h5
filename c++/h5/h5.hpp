@@ -59,7 +59,7 @@ namespace h5 {
 
 // Python wrapping declaration 
 #ifdef C2PY_INCLUDED
-#include "../python/h5/_h5py.wrap.hxx"
+#include <h5/_h5py.wrap.hxx>
 #endif
 
 
