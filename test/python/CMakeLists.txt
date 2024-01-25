@@ -1,13 +1,15 @@
-
+#
+# No such files.
 # Copy h5 files to binary dir
-file(GLOB_RECURSE all_h5_ref_files RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} *.ref.h5)
-foreach(file ${all_h5_ref_files})
-  configure_file(${file} ${file} COPYONLY)
-endforeach()
+#file(GLOB_RECURSE all_h5_ref_files RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} *.ref.h5)
+#foreach(file ${all_h5_ref_files})
+  #configure_file(${file} ${file} COPYONLY)
+#endforeach()
 
 # List of all tests
 set(all_tests interface archive h5_storable_test issue_multifile)
 
+# Build the h5_storable C++ module
 Python_add_library(h5_storable MODULE "h5_storable.$<IF:$<TARGET_EXISTS:clair::c2py_plugin>,cpp,wrap.cxx>")
 target_link_libraries(h5_storable PRIVATE h5_c c2py::c2py $<TARGET_NAME_IF_EXISTS:clair::c2py_plugin>)
 target_include_directories(h5_storable PRIVATE   ${CMAKE_CURRENT_SOURCE_DIR})
@@ -19,11 +21,4 @@ foreach(test ${all_tests})
   set_property(TEST Py_${test_name} APPEND PROPERTY ENVIRONMENT PYTHONPATH=${PROJECT_BINARY_DIR}/python:${h5_BINARY_DIR}/python:${CMAKE_CURRENT_BINARY_DIR}:$ENV{PYTHONPATH} ${SANITIZER_RT_PRELOAD})
 endforeach()
 
-
-add_custom_target(copy_test_cxx_to_src)
-add_custom_command(
-  TARGET copy_test_cxx_to_src
-  COMMAND cp ${CMAKE_CURRENT_BINARY_DIR}/*.wrap.cxx ${CMAKE_CURRENT_BINARY_DIR}/*.wrap.hxx ${CMAKE_CURRENT_SOURCE_DIR}
-  COMMAND echo "** Copying all test [ch]xx to src"
-)
 

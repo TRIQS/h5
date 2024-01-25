@@ -59,14 +59,9 @@ constinit PyGetSetDef c2py::tp_getset<storable>[] = {c2py::getsetdef_from_member
 
 // ==================== module functions ====================
 
-// h5_write
-static auto const fun_0 = c2py::dispatcher_f_kw_t{c2py::cfun([](h5::group g, const std::string &name, const storable &obj) { return h5_write(g, name, obj); }, "g", "name", "obj")};
-
-static const auto doc_d_0 = fun_0.doc({R"DOC(   )DOC"});
 //--------------------- module function table  -----------------------------
 
 static PyMethodDef module_methods[] = {
-   {"h5_write", (PyCFunction)c2py::pyfkw<fun_0>, METH_VARARGS | METH_KEYWORDS, doc_d_0.c_str()},
    {nullptr, nullptr, 0, nullptr} // Sentinel
 };
 
