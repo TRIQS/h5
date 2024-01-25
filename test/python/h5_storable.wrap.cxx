@@ -36,10 +36,14 @@ template <> inline constexpr const char *c2py::tp_doc<storable> = R"DOC(   )DOC"
 
 static auto init_0                                     = c2py::dispatcher_c_kw_t{c2py::c_constructor<storable>()};
 template <> constexpr initproc c2py::tp_init<storable> = c2py::pyfkw_constructor<init_0>;
+// hdf5_format
+static auto const fun_0   = c2py::dispatcher_f_kw_t{c2py::cfun(c2py::cast<>(&storable::hdf5_format))};
+static const auto doc_d_0 = fun_0.doc({R"DOC(   )DOC"});
 
 // ----- Method table ----
 template <>
 PyMethodDef c2py::tp_methods<storable>[] = {
+   {"hdf5_format", (PyCFunction)c2py::pyfkw<fun_0>, METH_VARARGS | METH_KEYWORDS | METH_STATIC, doc_d_0.c_str()},
    {"__write_hdf5__", c2py::tpxx_write_h5<storable>, METH_VARARGS, "  "},
    {"__getstate__", c2py::getstate_h5<storable>, METH_NOARGS, ""},
    {"__setstate__", c2py::setstate_h5<storable>, METH_O, ""},
