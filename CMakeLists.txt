@@ -16,6 +16,9 @@
 
 cmake_minimum_required(VERSION 3.20 FATAL_ERROR)
 cmake_policy(VERSION 3.20)
+if(POLICY CMP0144)
+  cmake_policy(SET CMP0144 NEW)
+endif()
 
 # ############
 # Define Project
@@ -147,6 +150,9 @@ endif()
 
 # Additional configuration files
 add_subdirectory(share)
+
+# add packaging for automatic Versioning
+add_subdirectory(packaging)
 
 # #############
 # Debian Package

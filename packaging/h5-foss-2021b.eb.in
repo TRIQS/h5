@@ -1,7 +1,7 @@
 easyblock = 'CMakeMake'
 
 name = 'h5'
-version = '1.2.0'
+version = '@PROJECT_VERSION@'
 
 homepage = 'https://triqs.github.io/h5/'
 description = """
