@@ -15,12 +15,12 @@ target_include_directories(${PROJECT_NAME}_c PUBLIC $<BUILD_INTERFACE:${PROJECT_
 target_include_directories(${PROJECT_NAME}_c SYSTEM INTERFACE $<INSTALL_INTERFACE:${CMAKE_INSTALL_FULL_INCLUDEDIR}>)
 target_compile_definitions(${PROJECT_NAME}_c PUBLIC
 				H5_GIT_HASH=${PROJECT_GIT_HASH}
-				$<$<CONFIG:Debug>:H5_DEBUG>
+				$<$<CONFIG:Debug,RelWithDebInfo>:H5_DEBUG>
 			  )
 
 # Install library and headers
-install(TARGETS ${PROJECT_NAME}_c EXPORT ${PROJECT_NAME}-targets DESTINATION lib)
-install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} DESTINATION include FILES_MATCHING PATTERN "*.hpp" PATTERN "*.h" PATTERN "*.wrap.hxx")
+install(TARGETS ${PROJECT_NAME}_c EXPORT ${PROJECT_NAME}-targets DESTINATION ${CMAKE_INSTALL_LIBDIR})
+install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR} FILES_MATCHING PATTERN "*.hpp" PATTERN "*.h" PATTERN "*.wrap.hxx")
 
 # ========= Additional Depdencies ==========
 
