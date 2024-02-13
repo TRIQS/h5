@@ -203,6 +203,30 @@ namespace h5 {
 
   // -------------------------
 
+  // Read any integer type from hdf5 and return a Python long
+  PyObject *h5_read_any_int(group g, std::string const &name, auto h5type) {
+    if (H5Tequal(h5type, H5T_NATIVE_SHORT)) {
+      return PyLong_FromLong(h5_read<short>(g, name));
+    } else if (H5Tequal(h5type, H5T_NATIVE_INT)) {
+      return PyLong_FromLong(h5_read<int>(g, name));
+    } else if (H5Tequal(h5type, H5T_NATIVE_LONG)) {
+      return PyLong_FromLong(h5_read<long>(g, name));
+    } else if (H5Tequal(h5type, H5T_NATIVE_LLONG)) {
+      return PyLong_FromLongLong(h5_read<long long>(g, name));
+    } else if (H5Tequal(h5type, H5T_NATIVE_USHORT)) {
+      return PyLong_FromUnsignedLong(h5_read<unsigned short>(g, name));
+    } else if (H5Tequal(h5type, H5T_NATIVE_UINT)) {
+      return PyLong_FromUnsignedLong(h5_read<unsigned int>(g, name));
+    } else if (H5Tequal(h5type, H5T_NATIVE_ULONG)) {
+      return PyLong_FromUnsignedLong(h5_read<unsigned long>(g, name));
+    } else if (H5Tequal(h5type, H5T_NATIVE_ULLONG)) {
+      return PyLong_FromUnsignedLongLong(h5_read<unsigned long long>(g, name));
+    } else {
+      PyErr_SetString(PyExc_RuntimeError, "h5_read to Python: unknown integer type");
+      return NULL;
+    }
+  }
+
   PyObject *h5_read_bare(group g, std::string const &name) { // There should be no errors from h5 reading
     import_numpy();
 
@@ -215,11 +239,7 @@ namespace h5 {
         h5_read(g, name, x);
         return PyFloat_FromDouble(x);
       }
-      if (H5Tget_class(lt.ty) == H5T_INTEGER) {
-        long x;
-        h5_read(g, name, x);
-        return PyLong_FromLong(x);
-      }
+      if (H5Tget_class(lt.ty) == H5T_INTEGER) { return h5_read_any_int(g, name, lt.ty); }
       if (H5Tequal(lt.ty, h5::hdf5_type<bool>())) {
         bool x;
         h5_read(g, name, x);
