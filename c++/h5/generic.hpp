@@ -46,13 +46,13 @@ namespace h5 {
   }
 
   template <typename T>
-  void read(group g, std::string const &key, T &x) {
-    h5_read(g, key, x);
+  void read(group g, std::string const &key, T &x, auto const &...args) {
+    h5_read(g, key, x, args...);
   }
 
   template <typename T>
-  void write(group g, std::string const &key, T const &x) {
-    h5_write(g, key, x);
+  void write(group g, std::string const &key, T const &x, auto const &...args) {
+    h5_write(g, key, x, args...);
   }
 
   /**
