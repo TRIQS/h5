@@ -15,7 +15,7 @@ target_include_directories(${PROJECT_NAME}_c PUBLIC $<BUILD_INTERFACE:${PROJECT_
 target_include_directories(${PROJECT_NAME}_c SYSTEM INTERFACE $<INSTALL_INTERFACE:${CMAKE_INSTALL_FULL_INCLUDEDIR}>)
 target_compile_definitions(${PROJECT_NAME}_c PUBLIC
 				H5_GIT_HASH=${PROJECT_GIT_HASH}
-				$<$<CONFIG:Debug,RelWithDebInfo>:H5_DEBUG>
+				$<$<CONFIG:Debug>:H5_DEBUG>
 			  )
 
 # Install library and headers
