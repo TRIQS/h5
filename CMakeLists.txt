@@ -105,6 +105,9 @@ target_compile_options(${PROJECT_NAME}_warnings
     $<$<CXX_COMPILER_ID:IntelLLVM>:-Wno-tautological-constant-compare>
 )
 
+# Provide GNU Installation directories
+include(GNUInstallDirs)
+
 # ---------------------------------
 # Resolve Clang Linktime Problems
 # CMake will adjust any linker flags from '-L path_to/mylib.so' to -lmylib
