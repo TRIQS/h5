@@ -2,9 +2,6 @@
 FROM flatironinstitute/triqs:base
 ARG APPNAME=h5
 
-COPY requirements.txt /src/$APPNAME/requirements.txt
-RUN pip3 install -r /src/$APPNAME/requirements.txt
-
 RUN useradd -u 990 -m build
 
 ENV SRC=/src \
