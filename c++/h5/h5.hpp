@@ -14,6 +14,11 @@
 //
 // Authors: Olivier Parcollet, Nils Wentzell
 
+/**
+ * @file
+ * @brief Includes all relevant h5 headers.
+ */
+
 #ifndef LIBH5_H5_HPP
 #define LIBH5_H5_HPP
 
@@ -38,29 +43,29 @@
 
 // in some old version of hdf5 (Ubuntu 12.04 e.g.), the macro is not yet defined.
 #ifndef H5_VERSION_GE
-
 #define H5_VERSION_GE(Maj, Min, Rel)                                                                                                                 \
   (((H5_VERS_MAJOR == Maj) && (H5_VERS_MINOR == Min) && (H5_VERS_RELEASE >= Rel)) || ((H5_VERS_MAJOR == Maj) && (H5_VERS_MINOR > Min))               \
    || (H5_VERS_MAJOR > Maj))
-
 #endif
 
 namespace h5 {
 
+  /**
+   * @brief Concept to check if a type can be read/written from/to HDF5.
+   * @tparam T Type to check.
+   */
   template <typename T>
-  concept Storable = requires(T const &xc, T &x, h5::group g, std::string const &subgroup_name) {
+  concept Storable = requires(T const &xc, T &x, h5::group g, std::string const &name) {
     { T::hdf5_format() } -> std::convertible_to<std::string>;
-    //{ get_hdf5_format(xc) } -> std::convertible_to<std::string>;
-    { h5_write(g, subgroup_name, xc) };
-    { h5_read(g, subgroup_name, x) };
+    { h5_write(g, name, xc) };
+    { h5_read(g, name, x) };
   };
 
 } // namespace h5
 
-// Python wrapping declaration 
+// Python wrapping declaration
 #ifdef C2PY_INCLUDED
 #include <h5/_h5py.wrap.hxx>
 #endif
-
 
 #endif // LIBH5_H5_HPP

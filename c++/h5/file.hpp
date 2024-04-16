@@ -14,62 +14,87 @@
 //
 // Authors: Olivier Parcollet, Nils Wentzell
 
+/**
+ * @file
+ * @brief Provides a handle to an HDF5 file.
+ */
+
 #ifndef LIBH5_FILE_HPP
 #define LIBH5_FILE_HPP
 
-#include <vector>
-#include <span>
 #include "./object.hpp"
+
+#include <cstddef>
+#include <span>
+#include <string>
+#include <vector>
 
 namespace h5 {
 
   /**
-   *  A little handler for the HDF5 file
+   * @brief A handle to an HDF5 file.
    *
-   *  The class is basically a pointer to the file.
+   * @details This class inherits from the general h5::object class. It simply wraps the HDF5 functions
+   * to open an existing file or to create a new file.
+   *
+   * An h5::file is automatically closed when it goes out of scope, i.e. its reference count is decreased.
    */
   class file : public object {
-
     public:
     /**
-     * Open a file in memory
+     * @brief Default constructor creates a buffered memory file.
+     * @details It modifies the file access property list to use the `H5FD_CORE` driver. It can be used for
+     * serializing and deserializing data (see h5::serialize and h5::deserialize).
      */
     file();
 
     /**
-     * Open the file on disk
+     * @brief Constructor to open an existing file or to create a new file on disk.
      *
-     * @param name  name of the file
+     * @details The file is opened in the specified mode. The following modes are available:
      *
-     * @param mode  Opening mode
-     * 
-     *       - 'r' : Read Only (HDF5 flag H5F_ACC_RDONLY)
-     *       - 'w' : Write Only (HDF5 flag H5F_ACC_TRUNC)
-     *       - 'a' : Append (HDF5 flag  H5F_ACC_RDWR)
-     *       - 'e' : Like 'w' but fails if the file already exists (HDF5 flag  H5F_ACC_EXCL)
+     * - 'r': Open an existing file in read only mode (calls `H5Fopen` with `H5F_ACC_RDONLY`).
+     * - 'w': Create a new file or overwrite an existing file in read-write mode (calls `H5Fcreate` with `H5F_ACC_TRUNC`).
+     * - 'a': Create a new file or append to an existing file in read-write mode (calls `H5Fcreate` with  `H5F_ACC_EXCL`
+     * or `H5Fopen` with `H5F_ACC_RDWR` in case the file already exists).
+     * - 'e': Create a new file if the file does not already exists, otherwise throw an exception (calls `H5Fcreate` with
+     * `H5F_ACC_EXCL`)
+     *
+     * @param name Name of the file.
+     * @param mode Mode in which to open the file.
      */
     file(const char *name, char mode);
 
-    // Open the file on disk
+    /**
+     * @brief Constructor to open an existing file or to create a new file on disk.
+     * @details See file::file(const char*, char) for a more detailed description.
+     */
     file(std::string const &name, char mode) : file(name.c_str(), mode) {}
 
-    /// Name of the file
+    /// Get the name of the file.
     [[nodiscard]] std::string name() const;
 
-    /// Flush the file
+    /// Flush the file by calling `H5Fflush`.
     void flush();
 
     private:
+    // Constructor to create a buffered memory file with an initial file image of a given size.
     file(const std::byte *buf, size_t size);
 
     public:
-    /// Create a file in memory from a byte buffer
+    /**
+     * @brief Constructor to create a buffered memory file from a byte buffer.
+     * @param buf Byte buffer.
+     */
     file(std::span<std::byte> const &buf) : file(buf.data(), buf.size()) {}
 
-    /// Create a file in memory from a byte buffer
+    /**
+     * @brief Constructor to create a buffered memory file from a byte buffer.
+     * @param buf Byte buffer.
+     */
     file(std::vector<std::byte> const &buf) : file(buf.data(), buf.size()) {}
 
-    /// Get a copy of the associated byte buffer
+    /// Get a copy of the associated byte buffer.
     [[nodiscard]] std::vector<std::byte> as_buffer() const;
   };
 

@@ -14,136 +14,237 @@
 //
 // Authors: Olivier Parcollet, Nils Wentzell
 
+/**
+ * @file
+ * @brief Provides a generic handle for HDF5 objects.
+ */
+
 #ifndef LIBH5_OBJECT_HPP
 #define LIBH5_OBJECT_HPP
 
 #include <complex>
 #include <cstdint>
-#include <vector>
+#include <stdexcept>
 #include <sstream>
-#include "./macros.hpp"
+#include <string>
+#include <type_traits>
+#include <vector>
 
 namespace h5 {
 
-  // We copy this from hdf5.h, and static_assert its validity in the cpp
-  // in order to completely isolate our header from the hdf5 headers
-  // Hence complex installation paths to hdf5 are only needed in the cpp file,
-  // not by the users of the library.
+  /**
+   * @brief ID type used in HDF5.
+   *
+   * @details This is just a copy from the HDF5 library (see the official
+   * <a href="https://docs.hdfgroup.org/hdf5/develop/_h5_ipublic_8h.html#a0045db7ff9c22ad35db6ae91662e1943">documentation</a>).
+   * It is used to completely isolate our header from the HDF5 headers. In the .cpp file a `static_assert` is used to verify
+   * its validity.
+   */
   using hid_t = int64_t;
-  using hsize_t =
+
+  /**
+   * @brief Size type used in HDF5.
+   * @details This is just a copy from the HDF5 library. It is used to completely isolate our header from the HDF5 headers.
+   * In the .cpp file a `static_assert` is used to verify its validity.
+   */
 #ifdef H5_VER_GE_113
-     uint64_t;
+  using hsize_t = uint64_t;
 #else
-     unsigned long long;
+  using hsize_t = unsigned long long;
 #endif
+
+  /// Vector of h5::hsize_t used throughout the h5 library.
   using v_t = std::vector<hsize_t>;
 
-  // A complex compound type consisting of two doubles
-  // This type is stored and loaded as an hdf5 compound datatype
+  /**
+   * @brief A complex compound type consisting of two doubles to represent a complex number.
+   * @details This type can be used to read/write complex numbers from/to HDF5 files.
+   */
   struct dcplx_t {
-    double r, i;
+    /// Real part.
+    double r;
+
+    /// Imaginary part.
+    double i;
   };
 
-  // impl trait to detect complex numbers
+  // Type trait to check if a type is std::complex.
   template <typename T>
   struct _is_complex : std::false_type {};
 
+  // Specialization of h5::_is_complex for std::complex.
   template <typename T>
   struct _is_complex<std::complex<T>> : std::true_type {};
 
+  /**
+   * @brief Boolean type trait set to true for std::complex types.
+   * @tparam T Type to check.
+   */
   template <typename T>
   constexpr bool is_complex_v = _is_complex<T>::value;
 
-  // impl
-  template <typename... T>
-  std::runtime_error make_runtime_error(T const &...x) {
-    std::stringstream fs;
-    (fs << ... << x);
-    return std::runtime_error{fs.str()};
+  /**
+   * @brief Create a std::runtime_error with an error message constructed from the given arguments.
+   *
+   * @tparam Ts Types of the arguments.
+   * @param ts Arguments streamed into the error message string.
+   * @return std::runtime_error.
+   */
+  template <typename... Ts>
+  [[nodiscard]] std::runtime_error make_runtime_error(Ts const &...ts) {
+    std::stringstream ss;
+    (ss << ... << ts);
+    return std::runtime_error{ss.str()};
   }
 
-  /*
-   * A handle to the a general HDF5 object
+  /**
+   * @brief A generic handle for HDF5 objects.
    *
-   * HDF5 uses a reference counting system, similar to python.
-   * h5::object handles the proper reference couting (similar to pybind11::object e.g.)
-   * using a RAII pattern (hence exception safety).
+   * @details It simply stores the h5::hid_t of the corresponding HDF5 object.
+   *
+   * More specific HDF5 objects, like h5::file or h5::group, inherit from this class. Since it lacks a virtual
+   * destructor, the derived classes should not be deleted through a pointer to this class. It is recommended
+   * to use the derived classes whenever possible.
+   *
+   * HDF5's reference counting system is similar to python. This class handles the proper reference counting
+   * using a RAII pattern (hence exception safe). Depending on how the object is constructed, it either
+   * increases the reference count associated HDF5 object or steals it.
    */
   class object {
-
     protected:
-    hid_t id = 0; //NOLINT Ok, I want a protected variable ...
+    // Wrapped HDF5 ID.
+    hid_t id = 0; // NOLINT (protected member is wanted here)
 
     public:
-    /// make an h5::object from a simple borrowed ref (simply inc. the ref).
-    static object from_borrowed(hid_t id);
+    /**
+     * @brief Create an h5::object for a given HDF5 ID and increase its reference count.
+     *
+     * @param id HDF5 ID.
+     * @return h5::object.
+     */
+    [[nodiscard]] static object from_borrowed(hid_t id);
 
-    /// Constructor from an owned id (or 0). It steals (take ownership) of the reference.
+    /**
+     * @brief Construct a new h5::object for a given HDF5 ID by taking ownership, i.e. without increasing the
+     * reference count.
+     *
+     * @details If no ID is given, it is set to zero (default).
+     *
+     * @param id HDF5 ID.
+     */
     object(hid_t id = 0) : id(id) {}
 
-    /// A new ref. No deep copy.
+    /**
+     * @brief Copy constructor copies the underlying HDF5 ID and increases its reference count.
+     * @param x Object to copy.
+     */
     object(object const &x);
 
-    /// Steals the reference
+    /**
+     * @brief Move constructor steals the underlying HDF5 ID without increasing its reference count.
+     * @param x Object to move.
+     */
     object(object &&x) noexcept : id(x.id) { x.id = 0; }
 
-    /// Copy the reference and incref
+    /**
+     * @brief Copy assignment operator copies the underlying HDF5 ID and increases its reference count.
+     * @param x Object to copy.
+     */
     object &operator=(object const &x) {
       operator=(object(x));
       return *this;
     }
 
-    /// Steals the ref.
+    /**
+     * @brief Move assignment operator steals the underlying HDF5 ID without increasing its reference count.
+     * @param x Object to move.
+     */
     object &operator=(object &&x) noexcept;
 
-    ///
+    /// Destructor decreases the reference count and sets the object's ID to zero.
     ~object() { close(); }
 
-    /// Release the HDF5 handle and reset the object to default state (id =0).
+    /// Release the HDF5 handle by decreasing the reference count and by setting the object's ID to zero.
     void close();
 
-    /// cast operator to use it in the C function as its id
+    /// User-defined conversion to h5::hid_t.
     operator hid_t() const { return id; }
 
-    /// Get the current number of references
+    /// Get the current reference count.
     [[nodiscard]] int get_ref_count() const;
 
-    /// Ensure the id is valid (by H5Iis_valid).
+    /// Ensure that the wrapped HDF5 ID is valid (by calling `H5Iis_valid`).
     [[nodiscard]] bool is_valid() const;
   };
 
-  //-----------------------------
-
   // simple but useful aliases. It does NOT check the h5 type of the object.
   // FIXME : derive and make a check ??
-  using dataset   = object;
-  using datatype  = object;
+
+  /// Type alias for an HDF5 dataset.
+  using dataset = object;
+
+  /// Type alias for an HDF5 datatype.
+  using datatype = object;
+
+  /// Type alias for an HDF5 dataspace.
   using dataspace = object;
-  using proplist  = object;
+
+  /// Type alias for an HDF5 property list.
+  using proplist = object;
+
+  /// Type alias for an HDF5 attribute.
   using attribute = object;
 
-  // -----------------------  hdf5_type  ---------------------------
-  // Correspondance T -> hdf5 type
   namespace detail {
+
+    // Map a C++ type to an HDF5 type (specializations are in object.cpp).
     template <typename T>
     hid_t hid_t_of();
-  }
 
+  } // namespace detail
+
+  /**
+   * @brief Map a given C++ type to an HDF5 datatype.
+   *
+   * @tparam T C++ type.
+   * @return h5::datatype object corresponding to the given C++ type.
+   */
   template <typename T>
-  datatype hdf5_type() {
+  [[nodiscard]] datatype hdf5_type() {
     return object::from_borrowed(detail::hid_t_of<T>());
   }
 
-  // ------------------------------
+  /**
+   * @brief Get the name of an h5::datatype (for error messages).
+   *
+   * @details Throws an exception if the datatype is not supported.
+   *
+   * @param dt h5::datatype.
+   * @return String representation of the datatype.
+   */
+  [[nodiscard]] std::string get_name_of_h5_type(datatype dt);
 
-  // A function to get the name of a datatype in clear (for error messages)
-  std::string get_name_of_h5_type(datatype ty);
+  /**
+   * @brief Get the HDF5 type stored in a given h5::dataset.
+   *
+   * @param ds h5::dataset.
+   * @return h5::datatype of the given h5::dataset.
+   */
+  [[nodiscard]] datatype get_hdf5_type(dataset ds);
 
-  // Get hdf5 type of a dataset
-  object get_hdf5_type(dataset);
-
-  // Check equality of datatypes
-  bool hdf5_type_equal(datatype, datatype);
+  /**
+   * @brief Check two HDF5 datatypes for equality.
+   *
+   * @details For string types, this function only checks if they are both of the class `H5T_STRING`.
+   * It does not take into account the size, character set, etc.
+   *
+   * Otherwise, it simply uses `H5Tequal`. Throws an exception if the HDF5 call fails.
+   *
+   * @param dt1 h5::datatype #1.
+   * @param dt2 h5::datatype #2.
+   * @return True, if the two datatypes are equal.
+   */
+  [[nodiscard]] bool hdf5_type_equal(datatype dt1, datatype dt2);
 
 } // namespace h5
 

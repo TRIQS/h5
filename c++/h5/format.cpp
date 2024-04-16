@@ -15,36 +15,40 @@
 // Authors: Olivier Parcollet, Nils Wentzell
 
 #include "./format.hpp"
+#include "./group.hpp"
+#include "./object.hpp"
 #include "./stl/string.hpp"
+
+#include <stdexcept>
 #include <string>
 
 namespace h5 {
 
   void read_hdf5_format(object obj, std::string &s) {
     h5_read_attribute(obj, "Format", s);
-    if (s == "") { // Backward compatibility
-      h5_read_attribute(obj, "TRIQS_HDF5_data_scheme", s);
-    }
+
+    // backward compatibility
+    if (s == "") { h5_read_attribute(obj, "TRIQS_HDF5_data_scheme", s); }
   }
 
   std::string read_hdf5_format(group g) {
     std::string s;
-    read_hdf5_format(g, s);
+    read_hdf5_format(g, s); // NOLINT (slicing is intended)
     return s;
   }
 
   void read_hdf5_format_from_key(group g, std::string const &key, std::string &s) {
     h5_read_attribute_from_key(g, key, "Format", s);
-    if (s == "") { // Backward compatibility
-      h5_read_attribute_from_key(g, key, "TRIQS_HDF5_data_scheme", s);
-    }
+
+    // backward compatibility
+    if (s == "") { h5_read_attribute_from_key(g, key, "TRIQS_HDF5_data_scheme", s); }
   }
 
   void assert_hdf5_format_as_string(group g, const char *tag_expected, bool ignore_if_absent) {
-    auto tag_file = read_hdf5_format(g);
-    if (ignore_if_absent and tag_file.empty()) return;
-    if (tag_file != tag_expected)
-      throw std::runtime_error("h5_read : mismatch of the Format tag in the h5 group : found " + tag_file + " while I expected " + tag_expected);
+    auto tag = read_hdf5_format(g);
+    if (ignore_if_absent and tag.empty()) return;
+    if (tag != tag_expected)
+      throw std::runtime_error("Error in assert_hdf5_format_as_string: hdf5_format tag mistmatch: " + tag + " != " + tag_expected);
   }
 
 } // namespace h5

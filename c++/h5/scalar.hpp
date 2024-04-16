@@ -14,32 +14,70 @@
 //
 // Authors: Olivier Parcollet, Nils Wentzell
 
+/**
+ * @file
+ * @brief Provides a generic interface to read/write scalars from/to HDF5.
+ */
+
 #ifndef LIBH5_SCALAR_HPP
 #define LIBH5_SCALAR_HPP
 
-#include <cmath>
-#include "./group.hpp"
 #include "./array_interface.hpp"
+#include "./group.hpp"
+#include "./macros.hpp"
+#include "./object.hpp"
+
+#include <cmath>
+#include <string>
+#include <type_traits>
+
 namespace h5 {
 
   namespace array_interface {
 
-    template <typename S>
-    h5_array_view h5_array_view_from_scalar(S &&s) {
-      return {hdf5_type<std::decay_t<S>>(), (void *)(&s), 0, is_complex_v<std::decay_t<S>>};
+    /**
+     * @brief Create an array view for a scalar.
+     *
+     * @tparam T Scalar type.
+     * @param x Scalar value.
+     * @return h5::array_interface::h5_array_view of rank 0.
+     */
+    template <typename T>
+    h5_array_view h5_array_view_from_scalar(T &x) {
+      return {hdf5_type<std::decay_t<T>>(), (void *)(&x), 0, is_complex_v<std::decay_t<T>>};
     }
+
   } // namespace array_interface
 
+  /**
+   * @brief Write a scalar to an HDF5 dataset.
+   *
+   * @details The scalar type needs to be either arithmetic, complex or of type h5::dcplx_t.
+   *
+   * @tparam T Scalar type.
+   * @param g h5::group in which the dataset is created.
+   * @param name Name of the dataset.
+   * @param x Scalar value to be written.
+   */
   template <typename T>
   void h5_write(group g, std::string const &name, T const &x) H5_REQUIRES(std::is_arithmetic_v<T> or is_complex_v<T> or std::is_same_v<T, dcplx_t>) {
     array_interface::write(g, name, array_interface::h5_array_view_from_scalar(x), false);
   }
 
+  /**
+   * @brief Read a scalar from an HDF5 dataset.
+   *
+   * @details The scalar type needs to be either arithmetic, complex or of type h5::dcplx_t.
+   *
+   * @tparam T Scalar type.
+   * @param g h5::group containing the dataset.
+   * @param name Name of the dataset.
+   * @param x Scalar variable to be read into.
+   */
   template <typename T>
   void h5_read(group g, std::string const &name, T &x) H5_REQUIRES(std::is_arithmetic_v<T> or is_complex_v<T> or std::is_same_v<T, dcplx_t>) {
-
+    // backward compatibility to read complex values stored the old way (in a subgroup)
     if constexpr (is_complex_v<T>) {
-      // Backward compatibility to read complex stored the old way
       if (g.has_subgroup(name)) {
         group gr = g.open_group(name);
         H5_ASSERT(gr.has_key("r") and gr.has_key("i"));
@@ -51,24 +89,46 @@ namespace h5 {
       }
     }
 
+    // get h5_lengths_type
     auto lt = array_interface::get_h5_lengths_type(g, name);
 
+    // read complex values stored as a compound HDF5 datatype
     if constexpr (is_complex_v<T>) {
-      // Allow reading compound hdf5 dataype into complex
       if (hdf5_type_equal(lt.ty, hdf5_type<dcplx_t>())) {
-        h5_read(g, name, reinterpret_cast<dcplx_t &>(x));
+        h5_read(g, name, reinterpret_cast<dcplx_t &>(x)); // NOLINT (reinterpret_cast is safe here)
         return;
       }
     }
 
+    // read scalar value
     array_interface::read(g, name, array_interface::h5_array_view_from_scalar(x), lt);
   }
 
+  /**
+   * @brief Write a scalar to an HDF5 attribute.
+   *
+   * @details The scalar type needs to be either arithmetic or std::complex.
+   *
+   * @tparam T Scalar type.
+   * @param obj h5::object to which the attribute is attached.
+   * @param name Name of the attribute.
+   * @param x Scalar value to be written.
+   */
   template <typename T>
   void h5_write_attribute(object obj, std::string const &name, T const &x) H5_REQUIRES(std::is_arithmetic_v<T> or is_complex_v<T>) {
     array_interface::write_attribute(obj, name, array_interface::h5_array_view_from_scalar(x));
   }
 
+  /**
+   * @brief Read a scalar from an HDF5 attribute.
+   *
+   * @details The scalar type needs to be either arithmetic or std::complex.
+   *
+   * @tparam T Scalar type.
+   * @param obj h5::object to which the attribute is attached.
+   * @param name Name of the attribute.
+   * @param x Scalar variable to be read into.
+   */
   template <typename T>
   void h5_read_attribute(object obj, std::string const &name, T &x) H5_REQUIRES(std::is_arithmetic_v<T> or is_complex_v<T>) {
     array_interface::read_attribute(obj, name, array_interface::h5_array_view_from_scalar(x));

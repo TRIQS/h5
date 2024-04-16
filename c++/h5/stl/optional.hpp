@@ -14,36 +14,60 @@
 //
 // Authors: Olivier Parcollet, Nils Wentzell
 
+/**
+ * @file
+ * @brief Provides functions to read/write std::optional objects from/to HDF5.
+ */
+
 #ifndef LIBH5_STL_OPTIONAL_HPP
 #define LIBH5_STL_OPTIONAL_HPP
 
-#include <optional>
+#include "../format.hpp"
 #include "../group.hpp"
 #include "./string.hpp"
 
+#include <optional>
+#include <string>
+
 namespace h5 {
 
+  /// Specialization of h5::hdf5_format_impl for std::optional.
   template <typename T>
   struct hdf5_format_impl<std::optional<T>> {
     static std::string invoke() { return hdf5_format_impl<T>::invoke(); }
   };
 
   /**
-   * Optional : write if the value is set.
+   * @brief Write a std::optional to an HDF5 dataset/subgroup (if it is set).
+   *
+   * @details Calls the specialized `h5_write` function for the value type of the std::optional.
+   *
+   * @tparam T Value type of std::optional.
+   * @param g h5::group in which the dataset/subgroup is created.
+   * @param name Name of the dataset/subgroup to which the std::optional value is written.
+   * @param opt std::optional to be written.
    */
   template <typename T>
-  void h5_write(group gr, std::string const &name, std::optional<T> const &v) {
-    if (bool(v)) h5_write(gr, name, *v);
+  void h5_write(group g, std::string const &name, std::optional<T> const &opt) {
+    if (opt) h5_write(g, name, *opt);
   }
 
   /**
-   * Read optional from the h5
+   * @brief Read a std::optional from an HDF5 dataset/subgroup.
+   *
+   * @details Calls the specialized `h5_read` function for the value type of the std::optional.
+   *
+   * @tparam T Value type of std::optional.
+   * @param g h5::group containing the dataset/subgroup.
+   * @param name Name of the dataset/subgroup from which the std::optional value is read.
+   * @param opt std::optional to read into.
    */
   template <typename T>
-  void h5_read(group gr, std::string name, std::optional<T> &v) {
-    v.reset();
-    if (gr.has_key(name)) v.emplace(h5_read<T>(gr, name));
+  void h5_read(group g, std::string name, std::optional<T> &opt) {
+    opt.reset();
+    if (g.has_key(name)) opt.emplace(h5_read<T>(g, name));
   }
+
 } // namespace h5
 
 #endif // LIBH5_STL_OPTIONAL_HPP

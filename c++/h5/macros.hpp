@@ -14,30 +14,40 @@
 //
 // Authors: Olivier Parcollet, Nils Wentzell
 
+/**
+ * @file
+ * @brief Macros used in the h5 library.
+ */
+
 #ifndef LIBH5_MACROS_HPP
 #define LIBH5_MACROS_HPP
 
 #include <iostream>
 #include <exception>
 
-// Basic macros for the implementation
+// ---------------- Stringify ----------------
 
 #define H5_AS_STRING(...) H5_AS_STRING2(__VA_ARGS__)
 #define H5_AS_STRING2(...) #__VA_ARGS__
 
-// The REQUIRES
+// ---------------- Requires ----------------
+
 #ifdef __clang__
 #define H5_REQUIRES(...) __attribute__((enable_if(__VA_ARGS__, H5_AS_STRING2(__VA_ARGS__))))
 #elif __GNUC__
 #define H5_REQUIRES(...) requires(__VA_ARGS__)
 #endif
 
-// DEBUG PRINTING
+// ---------------- Print ----------------
+
 #define H5_PRINT(X) std::cerr << H5_AS_STRING(X) << " = " << X << "      at " << __FILE__ << ":" << __LINE__ << '\n'
+
+// ---------------- Inline ----------------
 
 #define H5_FORCEINLINE __inline__ __attribute__((always_inline))
 
-// CONTRACTS like
+// ---------------- Debugging ----------------
+
 #define H5_EXPECTS(X)                                                                                                                                \
   if (!(X)) {                                                                                                                                        \
     std::cerr << "Precondition " << H5_AS_STRING(X) << " violated at " << __FILE__ << ":" << __LINE__ << "\n";                                       \

@@ -14,53 +14,84 @@
 //
 // Authors: Olivier Parcollet, Nils Wentzell
 
+/**
+ * @file
+ * @brief Provides functions to read/write std::tuple object from/to HDF5.
+ */
+
 #ifndef LIBH5_STL_TUPLE_HPP
 #define LIBH5_STL_TUPLE_HPP
 
-#include <tuple>
+#include "../format.hpp"
 #include "../group.hpp"
 #include "./string.hpp"
 
+#include <cstddef>
+#include <stdexcept>
+#include <string>
+#include <tuple>
+#include <utility>
+
 namespace h5 {
 
+  /// Specialization of h5::hdf5_format_impl for std::tuple.
   template <typename... T>
   struct hdf5_format_impl<std::tuple<T...>> {
     static std::string invoke() { return "PythonTupleWrap"; }
   };
 
   namespace detail {
-    template <typename... T, std::size_t... Is>
-    void h5_write_tuple_impl(group gr, std::string const &, std::tuple<T...> const &tpl, std::index_sequence<Is...>) {
-      (h5_write(gr, std::to_string(Is), std::get<Is>(tpl)), ...);
+
+    // Helper function to write a tuple to HDF5.
+    template <typename... Ts, std::size_t... Is>
+    void h5_write_tuple_impl(group g, std::string const &, std::tuple<Ts...> const &tup, std::index_sequence<Is...>) {
+      (h5_write(g, std::to_string(Is), std::get<Is>(tup)), ...);
     }
 
-    template <typename... T, std::size_t... Is>
-    void h5_read_tuple_impl(group gr, std::string const &, std::tuple<T...> &tpl, std::index_sequence<Is...>) {
-      if (gr.get_all_subgroup_dataset_names().size() != sizeof...(Is))
-        throw std::runtime_error("ERROR in std::tuple h5_read: Tuple size incompatible to number of group elements");
-      (h5_read(gr, std::to_string(Is), std::get<Is>(tpl)), ...);
+    // Helper function to read a tuple from HDF5.
+    template <typename... Ts, std::size_t... Is>
+    void h5_read_tuple_impl(group g, std::string const &, std::tuple<Ts...> &tup, std::index_sequence<Is...>) {
+      if (g.get_all_subgroup_dataset_names().size() != sizeof...(Is))
+        throw std::runtime_error(
+           "Error in h5_read_tuple_impl: Reading a std::tuple<Ts...> from a group with more/less than sizeof...(Ts) subgroups/datasets is not allowed");
+      (h5_read(g, std::to_string(Is), std::get<Is>(tup)), ...);
     }
 
   } // namespace detail
 
   /**
-   * Tuple of T... as a subgroup with numbers
+   * @brief Write a std::tuple to an HDF5 subgroup.
+   *
+   * @details Calls the specialized `h5_write` function for every element of the std::tuple.
+   *
+   * @tparam Ts Tuple types.
+   * @param g h5::group in which the subgroup is created.
+   * @param name Name of the subgroup to which the std::tuple is written.
+   * @param tup std::tuple to be written.
    */
-  template <typename... T>
-  void h5_write(group f, std::string const &name, std::tuple<T...> const &tpl) {
-    auto gr = f.create_group(name);
-    write_hdf5_format(gr, tpl);
-    detail::h5_write_tuple_impl(gr, name, tpl, std::index_sequence_for<T...>{});
+  template <typename... Ts>
+  void h5_write(group g, std::string const &name, std::tuple<Ts...> const &tup) {
+    auto gr = g.create_group(name);
+    write_hdf5_format(gr, tup);
+    detail::h5_write_tuple_impl(gr, name, tup, std::index_sequence_for<Ts...>{});
   }
 
   /**
-   * Tuple of T...
+   * @brief Read a std::tuple from an HDF5 subgroup.
+   *
+   * @details Calls the specialized `h5_read` function for every value of the std::tuple.
+   *
+   * @tparam Ts Tuple types.
+   * @param g h5::group containing the subgroup.
+   * @param name Name of the subgroup from which the std::tuple is read.
+   * @param tup std::tuple to read into.
    */
-  template <typename... T>
-  void h5_read(group f, std::string const &name, std::tuple<T...> &tpl) {
-    auto gr = f.open_group(name);
-    detail::h5_read_tuple_impl(gr, name, tpl, std::index_sequence_for<T...>{});
+  template <typename... Ts>
+  void h5_read(group g, std::string const &name, std::tuple<Ts...> &tup) {
+    auto gr = g.open_group(name);
+    detail::h5_read_tuple_impl(gr, name, tup, std::index_sequence_for<Ts...>{});
   }
+
 } // namespace h5
 
 #endif // LIBH5_STL_TUPLE_HPP

@@ -14,131 +14,181 @@
 //
 // Authors: Henri Menke, Olivier Parcollet, Nils Wentzell
 
+/**
+ * @file
+ * @brief Provides a handle to an HDF5 group and various methods to simplify the creation/opening of
+ * subgroups, datasets and softlinks within a group.
+ */
+
 #ifndef LIBH5_GROUP_HPP
 #define LIBH5_GROUP_HPP
 
-#include <utility>
-
 #include "./file.hpp"
+
+#include <string>
+#include <utility>
+#include <vector>
 
 namespace h5 {
 
   /**
-   *  HDF5 group
+   * @brief A handle to an HDF5 group.
+   *
+   * @details This class inherits from the general h5::object class. Each group stores the parent h5::file
+   * to which it belongs.
+   *
+   * It provides various methods to simplify the creation of new and opening of existing groups, subgroups,
+   * datasets and softlinks within the current group.
    */
   class group : public object {
-
+    // File to which the group belongs.
     file parent_file;
 
     public:
-    group() = default; // for python converter only
+    /// Default constructor (only necessary for the Python interface).
+    group() = default;
 
-    /// Takes the "/" group at the top of the file
+    /**
+     * @brief Constructor to open the root ("/") group in the given file.
+     * @param f h5::file.
+     */
     group(file f);
 
     private:
-    // construct from the bare object and the parent
-    // internal use only for open/create subgroup
-    group(object obj, file _parent_file) : object{obj}, parent_file(std::move(_parent_file)) {}
+    // Copy the given object and parent file (only used internally to open/create a subgroup).
+    group(object obj, file _parent_file) : object{obj}, parent_file{std::move(_parent_file)} {}
 
     public:
-    /// Name of the group
+    /// Get the name of the group.
     [[nodiscard]] std::string name() const;
 
-    /// Access to the parent file
+    /// Get the parent file to which the group belongs.
     [[nodiscard]] file get_file() const { return parent_file; }
 
     /**
-     * True iff key is an object in the group
+     * @brief Check if a link with the given key exists in the group.
      *
-     * @param key
+     * @param key Name of the link.
+     * @return True if the link exists, false otherwise.
      */
     [[nodiscard]] bool has_key(std::string const &key) const;
 
     /**
-     * True iff key is a subgroup of this.
+     * @brief Check if a subgroup with the given key exists in the group and is accessible.
      *
-     * @param key
+     * @param key Name of the subgroup.
+     * @return True if the subgroup exists and can be accessed, false otherwise.
      */
     [[nodiscard]] bool has_subgroup(std::string const &key) const;
 
     /**
-     * True iff key is a dataset of this.
+     * @brief Check if a dataset with the given key exists in the group and is accessible.
      *
-     * @param key
+     * @param key Name of the dataset.
+     * @return True if the dataset exists, false otherwise.
      */
     [[nodiscard]] bool has_dataset(std::string const &key) const;
 
     /**
-     * Unlinks the subgroup key if it exists
-     * No error is thrown if key does not exists
-     * NB : unlink is almost a remove, but it does not really remove from the file (memory is not freed).
-     * After unlinking a large object, a h5repack may be needed. Cf HDF5 documentation.
+     * @brief Remove a link with the given key from the group.
      *
-     * @param key The name of the subgroup to be removed.
-     * @param error_if_absent If True, throws an error if the key is missing.
+     * @details It simply calls `H5Ldelete` to delete the link. If the given link does not exist, it throws
+     * an exception if `error_if_absent == true`, otherwise it does nothing.
+     *
+     * @param key Name of the link to be removed.
+     * @param error_if_absent If true, throws an exception if the key is not the name of a link in the group.
      */
     void unlink(std::string const &key, bool error_if_absent = false) const;
 
     /**
-     * Open a subgroup.
-     * Throws std::runtime_error if it does not exist.
+     * @brief Open a subgroup with the given key in the group.
      *
-     * @param key  The name of the subgroup. If empty, return this group
+     * @details If the given key is empty, a handle to the current group is returned. Throws an exception if the
+     * subgroup fails to be opened.
+     *
+     * @param key Name of the subgroup.
+     * @return A handle to the opened subgroup.
      */
     [[nodiscard]] group open_group(std::string const &key) const;
 
     /**
-     * Create a subgroup in this group
-     * 
-     * @param key  The name of the subgroup. If empty, return this group.
-     * @param delete_if_exists  Unlink the group if it exists
+     * @brief Create a subgroup with the given key in the group.
+     *
+     * @details If a subgroup with the given key already exists, it is unlinked first if `delete_if_exists == true`.
+     * If the given key is empty, a handle to the current group is returned. Throws an exception if the subgroup fails
+     * to be created.
+     *
+     * @param key Name of the subgroup to be created.
+     * @param delete_if_exists If true, unlink first an existing subgroup with the same name.
+     * @return A handle to the created subgroup.
      */
-    group create_group(std::string const &key, bool delete_if_exists = true) const; // NOLINT
+    [[nodiscard]] group create_group(std::string const &key, bool delete_if_exists = true) const;
 
     /**
-     * Create a softlink in this group
-     * 
-     * @param target_key  The path the link should point to. Has to exist.
-     * @param key  The link name that will point to the target path.
-     * @param delete_if_exists  Unlink the key first if it exists.
+     * @brief Create a softlink with the given key to a target with a given target key in this group.
+     *
+     * @details Does nothing if the key or target key is empty. If `delete_if_exists == true`, it first unlinks
+     * an existing link with the same name. Throws an exception if the target does not exist, if a link with
+     * the given key already exists and `delete_if_exists == false`, or if the softlink fails to be created.
+     *
+     * @param target_key Name of target.
+     * @param key Name of the softlink to be created.
+     * @param delete_if_exists If true, unlink first an existing key with the same name.
      */
     void create_softlink(std::string const &target_key, std::string const &key, bool delete_if_exists = true) const;
 
     /**
-     * Open a existing DataSet in the group.
-     * Throws std::runtime_error if it does not exist.
+     * @brief Open a dataset with the given key in the group.
      *
-     * @param key  The name of the subgroup. If empty, return this group
+     * @details Throws an exception if there exists no link with the given key or if the dataset fails to be opened.
+     *
+     * @param key Name of the dataset.
+     * @return A handle to the opened dataset.
      */
     [[nodiscard]] dataset open_dataset(std::string const &key) const;
 
     /**
-     * Create a dataset in this group
-     * 
-     * @param key  The name of the dataset. 
-     * @param ty Datatype
-     * @param sp Dataspace
+     * @brief Create a dataset with the given key, datatype, dataspace and dataset creation property list in this group.
+     *
+     * @details It first unlinks an existing dataset with the same name. Throws an exception if the dataset fails to be
+     * created.
+     *
+     * @param key Name of the dataset to be created.
+     * @param ty h5::datatype.
+     * @param sp h5::dataspace.
+     * @param pl Dataset creation property list.
+     * @return A handle to the created dataset.
+     */
+    [[nodiscard]] dataset create_dataset(std::string const &key, datatype ty, dataspace sp, hid_t pl) const;
+
+    /**
+     * @brief Create a dataset with the given key, datatype and dataspace in this group.
+     *
+     * @details It simply calls group::create_dateset with the default dataset creation property list.
+     *
+     * @param key Name of the dataset to be created.
+     * @param ty h5::datatype.
+     * @param sp h5::dataspace.
+     * @return A handle to the created dataset.
      */
     [[nodiscard]] dataset create_dataset(std::string const &key, datatype ty, dataspace sp) const;
 
     /**
-     * Create a dataset in this group
-     * 
-     * @param key  The name of the dataset. 
-     * @param ty Datatype
-     * @param sp Dataspace
-     * @param pl Property list
+     * @brief Get all the names of the subgroups in the current group.
+     * @return A vector with the names of all the subgroups.
      */
-    [[nodiscard]] dataset create_dataset(std::string const &key, datatype ty, dataspace sp, hid_t pl) const;
-
-    /// Returns all names of subgroup of G
     [[nodiscard]] std::vector<std::string> get_all_subgroup_names() const;
 
-    /// Returns all names of dataset of G
+    /**
+     * @brief Get all the names of the datasets in the current group.
+     * @return A vector with the names of all the datasets.
+     */
     [[nodiscard]] std::vector<std::string> get_all_dataset_names() const;
 
-    /// Returns all names of dataset of G
+    /**
+     * @brief Get all the names of the subgroups and datasets in the current group.
+     * @return A vector with the names of all the subgroups and datasets.
+     */
     [[nodiscard]] std::vector<std::string> get_all_subgroup_dataset_names() const;
   };
 

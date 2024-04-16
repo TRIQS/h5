@@ -15,26 +15,22 @@
 // Authors: Philipp Dumitrescu, Olivier Parcollet, Nils Wentzell
 
 #include "./vector.hpp"
+
 #include <hdf5.h>
 #include <hdf5_hl.h>
-#include <array>
+
+#include <algorithm>
 #include <cstring>
 #include <algorithm>
 
-#include "./string.hpp"
-
 namespace h5 {
 
-  //------------------  to_char_buf ------------------------------
-
-  // copy to the buffer, with each string having the same length
   char_buf to_char_buf(std::vector<std::string> const &v) {
-
+    // get size of longest string
     size_t s = 1;
     for (auto &x : v) s = std::max(s, x.size() + 1);
-    auto len = v_t{v.size(), s};
 
-    // copy to the buffer
+    // copy each string to a buffer and pad with zeros
     std::vector<char> buf;
     buf.resize(std::max(v.size() * s, 1ul), 0x00);
     size_t i = 0;
@@ -43,20 +39,20 @@ namespace h5 {
       ++i;
     }
 
+    // return char_buf
+    auto len = v_t{v.size(), s};
     return {buf, len};
   }
 
-  // copy to the buffer, with each string having the same length
   char_buf to_char_buf(std::vector<std::vector<std::string>> const &v) {
-
+    // get size of longest vector and string
     size_t s = 1, lv = 0;
     for (auto &v1 : v) {
       lv = std::max(lv, v1.size());
       for (auto &x : v1) s = std::max(s, x.size() + 1);
     }
-    auto len = v_t{v.size(), lv, s};
 
-    // copy to the buffer
+    // copy each string to a buffer and pad with zeros
     std::vector<char> buf;
     buf.resize(std::max(v.size() * lv * s, 1ul), 0x00);
     for (int i = 0, k = 0; i < v.size(); i++)
@@ -64,19 +60,21 @@ namespace h5 {
         if (j < v[i].size()) strcpy(&buf[k * s], v[i][j].c_str());
       }
 
+    // return char_buf
+    auto len = v_t{v.size(), lv, s};
     return {buf, len};
   }
 
-  //------------------- from_char_buf-----------------------------
-
   void from_char_buf(char_buf const &cb, std::vector<std::string> &v) {
+    // prepare vector
     v.clear();
     v.resize(cb.lengths[0]);
-    auto len_string = cb.lengths[1];
 
-    long i = 0;
+    // loop over all strings
+    auto len_string = cb.lengths[1];
+    long i          = 0;
     for (auto &x : v) {
-      // Use full range from char_buf and remove null characters
+      // use full range from char_buf and remove null characters
       const char *bptr = &cb.buffer[i * len_string];
       x                = std::string(bptr, bptr + len_string);
       x.erase(std::remove(begin(x), end(x), '\0'), end(x));
@@ -84,18 +82,18 @@ namespace h5 {
     }
   }
 
-  //--------
-
   void from_char_buf(char_buf const &cb, std::vector<std::vector<std::string>> &v) {
+    // prepare vector
     v.clear();
     v.resize(cb.lengths[0]);
+
+    // loop over all vectors and all strings
     auto inner_vec_size = cb.lengths[1];
     auto len_string     = cb.lengths[2];
-
-    long i = 0;
+    long i              = 0;
     for (auto &v_inner : v) {
       for (int j = 0; j < inner_vec_size; ++j, ++i) {
-        // Use full range from char_buf and remove null characters
+        // use full range from char_buf and remove null characters
         const char *bptr = &cb.buffer[i * len_string];
         auto s           = std::string(bptr, bptr + len_string);
         s.erase(std::remove(begin(s), end(s), '\0'), end(s));
@@ -104,15 +102,11 @@ namespace h5 {
     }
   }
 
-  // -----------   WRITE  ATTRIBUTE ------------
-
   void h5_write_attribute(object obj, std::string const &name, std::vector<std::string> const &v) { h5_write_attribute(obj, name, to_char_buf(v)); }
 
   void h5_write_attribute(object obj, std::string const &name, std::vector<std::vector<std::string>> const &v) {
     h5_write_attribute(obj, name, to_char_buf(v));
   }
-
-  // -----------   READ  ATTRIBUTE ------------
 
   void h5_read_attribute(object obj, std::string const &name, std::vector<std::string> &v) {
     char_buf cb;

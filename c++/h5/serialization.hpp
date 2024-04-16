@@ -14,29 +14,53 @@
 //
 // Authors: Olivier Parcollet, Nils Wentzell
 
+/**
+ * @file
+ * @brief Provides generic serialize and deserialize functions for types that can be read/written from/to HDF5.
+ */
+
 #ifndef LIBH5_SERIALIZATION_HPP
 #define LIBH5_SERIALIZATION_HPP
 
 #include "./file.hpp"
-#include "./group.hpp"
 #include "./generic.hpp"
+
+#include <cstddef>
+#include <vector>
 
 namespace h5 {
 
+  /**
+   * @brief Serialize an object to a byte buffer.
+   *
+   * @details It first writes the object to a buffered memory file and then returns the underlying byte buffer.
+   *
+   * @tparam T Type of the object.
+   * @param x Object to be serialized.
+   * @return Byte buffer containing the serialized object.
+   */
   template <typename T>
-  std::vector<std::byte> serialize(T const &x) {
+  [[nodiscard]] std::vector<std::byte> serialize(T const &x) {
     file f{};
     h5_write(f, "object", x);
     return f.as_buffer();
   }
 
-  // -----------------------------
-
+  /**
+   * @brief Deserialize an object from a byte buffer.
+   *
+   * @details It first creates a buffered memory file from the given byte buffer and then reads the object from the file.
+   *
+   * @tparam T Type of the object.
+   * @param buf Byte buffer containing the serialized object.
+   * @return Deserialized object.
+   */
   template <typename T>
-  T deserialize(std::vector<std::byte> const &buf) {
+  [[nodiscard]] T deserialize(std::vector<std::byte> const &buf) {
     file f{buf};
     return h5_read<T>(f, "object");
   }
+
 } // namespace h5
 
 #endif // LIBH5_SERIALIZATION_HPP
