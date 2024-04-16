@@ -24,9 +24,13 @@
 
 #include <concepts>
 
+#include "./array_interface.hpp"
+#include "./complex.hpp"
 #include "./file.hpp"
-#include "./group.hpp"
 #include "./format.hpp"
+#include "./generic.hpp"
+#include "./group.hpp"
+#include "./object.hpp"
 #include "./scalar.hpp"
 #include "./stl/string.hpp"
 #include "./stl/array.hpp"
@@ -36,7 +40,6 @@
 #include "./stl/tuple.hpp"
 #include "./stl/optional.hpp"
 #include "./stl/variant.hpp"
-#include "./generic.hpp"
 
 // Define this so cpp2py modules know whether hdf5 was included
 #define H5_INTERFACE_INCLUDED

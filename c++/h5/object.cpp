@@ -14,6 +14,7 @@
 //
 // Authors: Olivier Parcollet, Nils Wentzell
 
+#include "./complex.hpp"
 #include "./macros.hpp"
 #include "./object.hpp"
 

@@ -14,8 +14,9 @@
 //
 // Authors: Olivier Parcollet, Nils Wentzell
 
-#include "../macros.hpp"
 #include "./string.hpp"
+#include "../macros.hpp"
+#include "../utils.hpp"
 
 #include <hdf5.h>
 #include <hdf5_hl.h>

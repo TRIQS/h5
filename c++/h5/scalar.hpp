@@ -23,6 +23,7 @@
 #define LIBH5_SCALAR_HPP
 
 #include "./array_interface.hpp"
+#include "./complex.hpp"
 #include "./group.hpp"
 #include "./macros.hpp"
 #include "./object.hpp"

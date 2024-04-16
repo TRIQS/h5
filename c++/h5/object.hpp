@@ -22,12 +22,8 @@
 #ifndef LIBH5_OBJECT_HPP
 #define LIBH5_OBJECT_HPP
 
-#include <complex>
 #include <cstdint>
-#include <stdexcept>
-#include <sstream>
 #include <string>
-#include <type_traits>
 #include <vector>
 
 namespace h5 {
@@ -55,47 +51,6 @@ namespace h5 {
 
   /// Vector of h5::hsize_t used throughout the h5 library.
   using v_t = std::vector<hsize_t>;
-
-  /**
-   * @brief A complex compound type consisting of two doubles to represent a complex number.
-   * @details This type can be used to read/write complex numbers from/to HDF5 files.
-   */
-  struct dcplx_t {
-    /// Real part.
-    double r;
-
-    /// Imaginary part.
-    double i;
-  };
-
-  // Type trait to check if a type is std::complex.
-  template <typename T>
-  struct _is_complex : std::false_type {};
-
-  // Specialization of h5::_is_complex for std::complex.
-  template <typename T>
-  struct _is_complex<std::complex<T>> : std::true_type {};
-
-  /**
-   * @brief Boolean type trait set to true for std::complex types.
-   * @tparam T Type to check.
-   */
-  template <typename T>
-  constexpr bool is_complex_v = _is_complex<T>::value;
-
-  /**
-   * @brief Create a std::runtime_error with an error message constructed from the given arguments.
-   *
-   * @tparam Ts Types of the arguments.
-   * @param ts Arguments streamed into the error message string.
-   * @return std::runtime_error.
-   */
-  template <typename... Ts>
-  [[nodiscard]] std::runtime_error make_runtime_error(Ts const &...ts) {
-    std::stringstream ss;
-    (ss << ... << ts);
-    return std::runtime_error{ss.str()};
-  }
 
   /**
    * @brief A generic handle for HDF5 objects.

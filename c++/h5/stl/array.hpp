@@ -23,6 +23,7 @@
 #define LIBH5_STL_ARRAY_HPP
 
 #include "../array_interface.hpp"
+#include "../complex.hpp"
 #include "../macros.hpp"
 
 #include <algorithm>

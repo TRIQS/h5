@@ -22,10 +22,12 @@
 #ifndef LIBH5_STL_VECTOR_HPP
 #define LIBH5_STL_VECTOR_HPP
 
+#include "./string.hpp"
+#include "../complex.hpp"
 #include "../format.hpp"
 #include "../group.hpp"
 #include "../scalar.hpp"
-#include "./string.hpp"
+#include "../utils.hpp"
 
 #include <string>
 #include <vector>
