@@ -14,9 +14,15 @@
 //
 // Authors: Olivier Parcollet, Nils Wentzell
 
+/**
+ * @file
+ * @brief Implementation details for object.hpp.
+ */
+
 #include "./complex.hpp"
 #include "./macros.hpp"
 #include "./object.hpp"
+#include "./utils.hpp"
 
 #include <H5Ipublic.h>
 #include <H5Fpublic.h>

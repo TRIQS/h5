@@ -32,6 +32,11 @@
 namespace h5 {
 
   /**
+   * @addtogroup rw_generic
+   * @{
+   */
+
+  /**
    * @brief Generic implementation for reading from an HDF5 dataset/subgroup.
    *
    * @details It calls the static member function `T::h5_read_construct(group, T &)` in case `T` is not default constructible,
@@ -202,6 +207,8 @@ namespace h5 {
     }
     return false;
   }
+
+  /** @} */
 
 } // namespace h5
 

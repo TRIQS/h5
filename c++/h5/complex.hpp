@@ -28,8 +28,12 @@
 namespace h5 {
 
   /**
+   * @ingroup h5_types
    * @brief A complex compound type consisting of two doubles to represent a complex number.
+   *
    * @details This type can be used to read/write complex numbers from/to HDF5 files.
+   *
+   * @note **h5** also supports the direct use of std::complex which is the recommended way to read/write complex data.
    */
   struct dcplx_t {
     /// Real part.
@@ -48,6 +52,7 @@ namespace h5 {
   struct _is_complex<std::complex<T>> : std::true_type {};
 
   /**
+   * @ingroup h5_types
    * @brief Boolean type trait set to true for std::complex types.
    * @tparam T Type to check.
    */

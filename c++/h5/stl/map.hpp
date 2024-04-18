@@ -33,6 +33,11 @@
 
 namespace h5 {
 
+  /**
+   * @addtogroup rw_map
+   * @{
+   */
+
   /// Specialization of h5::hdf5_format_impl for std::map.
   template <typename keyT, typename valueT>
   struct hdf5_format_impl<std::map<keyT, valueT>> {
@@ -102,6 +107,8 @@ namespace h5 {
       }
     }
   }
+
+  /** @} */
 
 } // namespace h5
 

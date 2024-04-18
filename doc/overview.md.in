@@ -1,0 +1,102 @@
+@mainpage Overview
+
+[TOC]
+
+[![build](https://github.com/TRIQS/h5/workflows/build/badge.svg?branch=unstable)](https://github.com/TRIQS/h5/actions?query=workflow%3Abuild)
+
+> This is the homepage of **TRIQS/h5 v@PROJECT_VERSION@**. The source code can be found on [GitHub](https://github.com/TRIQS/h5).
+
+**h5** provides a high-level C++ interface to the [HDF5 library](https://www.hdfgroup.org/solutions/hdf5/).
+
+The main purpose of the library is to simplify the most common tasks like creating/opening/closing HDF5 files/groups/datasets/dataspaces or
+writing/reading data to/from HDF5 files.
+
+More specifically, **h5**
+* provides classes representing general HDF5 objects, like files, groups, etc.,
+* provides read and write functions for various [STL container types](https://en.cppreference.com/w/cpp/container),
+* provides a generic array interface to store and load multi-dimensional arrays,
+* takes an [RAII](https://en.wikipedia.org/wiki/Resource_acquisition_is_initialization) approach to manage reference counting and
+* comes with Python bindings.
+
+**h5** only implements a small subset of the functionality provided by the HDF5 library. For more advanced tasks, the user can always resort to
+the underlying HDF5 C-implementation.
+
+@section motivation Motivating example
+
+Storing and loading a vector of strings and a vector of doubles is as easy as
+
+```cpp
+#include <h5/h5.hpp>
+#include <string>
+#include <vector>
+
+int main(){
+
+  {
+    // Open file in write mode
+    h5::file file("vec.h5", 'w');
+
+    std::vector<std::string> vecs = {"a", "b"};
+    std::vector<double> vecd      = {1.0, 2.0};
+
+    h5::write(file, "vecs", vecs);
+    h5::write(file, "vecd", vecd);
+
+  } // Close file
+
+  {
+    // Open file in read mode
+    h5::file file("vec.h5", 'r');
+
+    std::vector<std::string> vecs;
+    std::vector<double> vecd;
+
+    h5::read(file, "vecs", vecs);
+    h5::read(file, "vecd", vecd);
+
+  } // Close file
+}
+```
+
+This example will generate an HDF5 file `vec.h5` with two datasets in the root "/" group:
+
+```
+$ h5dump vec.h5
+
+HDF5 "vec.h5" {
+GROUP "/" {
+   DATASET "vecd" {
+      DATATYPE  H5T_IEEE_F64LE
+      DATASPACE  SIMPLE { ( 2 ) / ( 2 ) }
+      DATA {
+      (0): 1, 2
+      }
+   }
+   DATASET "vecs" {
+      DATATYPE  H5T_STRING {
+         STRSIZE 2;
+         STRPAD H5T_STR_NULLTERM;
+         CSET H5T_CSET_UTF8;
+         CTYPE H5T_C_S1;
+      }
+      DATASPACE  SIMPLE { ( 2 ) / ( 2 ) }
+      DATA {
+      (0): "a", "b"
+      }
+   }
+}
+}
+```
+
+@section start Where to start?
+
+The @ref installation section tells you how to get the library and make it available on your system.
+
+@ref integration explains how to integrate **h5** in your own C++ code.
+
+Then, you can start with the @ref examples section to get an overview of the library's features and how
+it can simplify basic HDF5 tasks.
+
+Furthermore, we provide a detailed reference @ref documentation to answer your questions.
+
+If you experience any problem with the library, you can post an @ref issues "Issue" on GitHub.

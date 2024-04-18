@@ -22,35 +22,16 @@
 #ifndef LIBH5_OBJECT_HPP
 #define LIBH5_OBJECT_HPP
 
-#include <cstdint>
+#include "./utils.hpp"
+
 #include <string>
-#include <vector>
 
 namespace h5 {
 
   /**
-   * @brief ID type used in HDF5.
-   *
-   * @details This is just a copy from the HDF5 library (see the official
-   * <a href="https://docs.hdfgroup.org/hdf5/develop/_h5_ipublic_8h.html#a0045db7ff9c22ad35db6ae91662e1943">documentation</a>).
-   * It is used to completely isolate our header from the HDF5 headers. In the .cpp file a `static_assert` is used to verify
-   * its validity.
+   * @addtogroup data_model
+   * @{
    */
-  using hid_t = int64_t;
-
-  /**
-   * @brief Size type used in HDF5.
-   * @details This is just a copy from the HDF5 library. It is used to completely isolate our header from the HDF5 headers.
-   * In the .cpp file a `static_assert` is used to verify its validity.
-   */
-#ifdef H5_VER_GE_113
-  using hsize_t = uint64_t;
-#else
-  using hsize_t = unsigned long long;
-#endif
-
-  /// Vector of h5::hsize_t used throughout the h5 library.
-  using v_t = std::vector<hsize_t>;
 
   /**
    * @brief A generic handle for HDF5 objects.
@@ -61,9 +42,9 @@ namespace h5 {
    * destructor, the derived classes should not be deleted through a pointer to this class. It is recommended
    * to use the derived classes whenever possible.
    *
-   * HDF5's reference counting system is similar to python. This class handles the proper reference counting
+   * HDF5's reference counting system is similar to Python's. This class handles the proper reference counting
    * using a RAII pattern (hence exception safe). Depending on how the object is constructed, it either
-   * increases the reference count associated HDF5 object or steals it.
+   * increases the reference count associated with the HDF5 object or steals it.
    */
   class object {
     protected:
@@ -150,6 +131,13 @@ namespace h5 {
   /// Type alias for an HDF5 attribute.
   using attribute = object;
 
+  /** @} */
+
+  /**
+   * @addtogroup h5_types
+   * @{
+   */
+
   namespace detail {
 
     // Map a C++ type to an HDF5 type (specializations are in object.cpp).
@@ -188,7 +176,7 @@ namespace h5 {
   [[nodiscard]] datatype get_hdf5_type(dataset ds);
 
   /**
-   * @brief Check two HDF5 datatypes for equality.
+   * @brief Check if two HDF5 datatypes are equal.
    *
    * @details For string types, this function only checks if they are both of the class `H5T_STRING`.
    * It does not take into account the size, character set, etc.
@@ -200,6 +188,8 @@ namespace h5 {
    * @return True, if the two datatypes are equal.
    */
   [[nodiscard]] bool hdf5_type_equal(datatype dt1, datatype dt2);
+
+  /** @} */
 
 } // namespace h5
 

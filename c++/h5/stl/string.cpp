@@ -14,6 +14,11 @@
 //
 // Authors: Olivier Parcollet, Nils Wentzell
 
+/**
+ * @file
+ * @brief Implementation details for stl/string.hpp.
+ */
+
 #include "./string.hpp"
 #include "../macros.hpp"
 #include "../utils.hpp"

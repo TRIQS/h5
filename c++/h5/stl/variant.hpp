@@ -33,6 +33,11 @@
 
 namespace h5 {
 
+  /**
+   * @addtogroup rw_variant
+   * @{
+   */
+
   /// Specialization of h5::hdf5_format_impl for std::variant.
   template <typename... T>
   struct hdf5_format_impl<std::variant<T...>> {
@@ -87,6 +92,8 @@ namespace h5 {
     datatype dt = get_hdf5_type(ds);
     h5_read_variant_helper<std::variant<Ts...>, Ts...>(v, dt, g, name);
   }
+
+  /** @} */
 
 } // namespace h5
 

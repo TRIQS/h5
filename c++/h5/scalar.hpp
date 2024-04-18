@@ -37,6 +37,7 @@ namespace h5 {
   namespace array_interface {
 
     /**
+     * @ingroup rw_arrayinterface
      * @brief Create an array view for a scalar.
      *
      * @tparam T Scalar type.
@@ -49,6 +50,11 @@ namespace h5 {
     }
 
   } // namespace array_interface
+
+  /**
+   * @addtogroup rw_scalar
+   * @{
+   */
 
   /**
    * @brief Write a scalar to an HDF5 dataset.
@@ -134,6 +140,8 @@ namespace h5 {
   void h5_read_attribute(object obj, std::string const &name, T &x) H5_REQUIRES(std::is_arithmetic_v<T> or is_complex_v<T>) {
     array_interface::read_attribute(obj, name, array_interface::h5_array_view_from_scalar(x));
   }
+
+  /** @} */
 
 } // namespace h5
 

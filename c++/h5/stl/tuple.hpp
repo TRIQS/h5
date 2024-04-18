@@ -34,6 +34,11 @@
 
 namespace h5 {
 
+  /**
+   * @addtogroup rw_tuple
+   * @{
+   */
+
   /// Specialization of h5::hdf5_format_impl for std::tuple.
   template <typename... T>
   struct hdf5_format_impl<std::tuple<T...>> {
@@ -91,6 +96,8 @@ namespace h5 {
     auto gr = g.open_group(name);
     detail::h5_read_tuple_impl(gr, name, tup, std::index_sequence_for<Ts...>{});
   }
+
+  /** @} */
 
 } // namespace h5
 

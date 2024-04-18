@@ -32,6 +32,7 @@
 namespace h5 {
 
   /**
+   * @ingroup data_model
    * @brief A handle to an HDF5 group.
    *
    * @details This class inherits from the general h5::object class. Each group stores the parent h5::file

@@ -32,6 +32,7 @@
 #include "./group.hpp"
 #include "./object.hpp"
 #include "./scalar.hpp"
+#include "./utils.hpp"
 #include "./stl/string.hpp"
 #include "./stl/array.hpp"
 #include "./stl/vector.hpp"
@@ -54,6 +55,7 @@
 namespace h5 {
 
   /**
+   * @ingroup utilities
    * @brief Concept to check if a type can be read/written from/to HDF5.
    * @tparam T Type to check.
    */

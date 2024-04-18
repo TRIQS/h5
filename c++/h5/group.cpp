@@ -14,6 +14,11 @@
 //
 // Authors: Henri Menke, Olivier Parcollet, Nils Wentzell
 
+/**
+ * @file
+ * @brief Implementation details for group.hpp.
+ */
+
 #include "./group.hpp"
 
 #include <hdf5.h>

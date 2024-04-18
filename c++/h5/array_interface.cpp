@@ -14,6 +14,11 @@
 //
 // Authors: Olivier Parcollet, Nils Wentzell
 
+/**
+ * @file
+ * @brief Implementation details for array_interface.hpp.
+ */
+
 #include "./array_interface.hpp"
 #include "./macros.hpp"
 #include "./stl/string.hpp"

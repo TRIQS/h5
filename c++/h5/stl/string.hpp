@@ -33,6 +33,11 @@ namespace h5 {
   template <typename T>
   struct hdf5_format_impl;
 
+  /**
+   * @addtogroup rw_string
+   * @{
+   */
+
   /// Specialization of h5::hdf5_format_impl for std::string.
   template <>
   struct hdf5_format_impl<std::string> {
@@ -201,6 +206,8 @@ namespace h5 {
    * @param cb h5::char_buf to read into.
    */
   void h5_read_attribute(object obj, std::string const &name, char_buf &cb);
+
+  /** @} */
 
 } // namespace h5
 

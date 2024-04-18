@@ -36,6 +36,11 @@
 namespace h5 {
 
   /**
+   * @addtogroup format
+   * @{
+   */
+
+  /**
    * @brief Default type trait to get the `hdf5_format` tag of type `T` by calling its static member function
    * `T::hdf5_format()`.
    *
@@ -159,6 +164,8 @@ namespace h5 {
   void assert_hdf5_format(group g, T const &, bool ignore_if_absent = false) {
     assert_hdf5_format_as_string(g, get_hdf5_format<T>().c_str(), ignore_if_absent);
   }
+
+  /** @} */
 
 } // namespace h5
 

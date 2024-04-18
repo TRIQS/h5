@@ -22,10 +22,41 @@
 #ifndef LIBH5_UTILS_HPP
 #define LIBH5_UTILS_HPP
 
+#include <cstdint>
 #include <stdexcept>
 #include <sstream>
+#include <vector>
 
 namespace h5 {
+
+  /**
+   * @addtogroup utilities
+   * @{
+   */
+
+  /**
+   * @brief ID type used in HDF5.
+   *
+   * @details This is just a copy from the HDF5 library (see the official
+   * <a href="https://docs.hdfgroup.org/hdf5/develop/_h5_ipublic_8h.html#a0045db7ff9c22ad35db6ae91662e1943">documentation</a>).
+   * It is used to completely isolate our header from the HDF5 headers. In the object.cpp file a `static_assert` is used to verify
+   * its validity.
+   */
+  using hid_t = int64_t;
+
+  /**
+   * @brief Size type used in HDF5.
+   * @details This is just a copy from the HDF5 library. It is used to completely isolate our header from the HDF5 headers.
+   * In the object.cpp file a `static_assert` is used to verify its validity.
+   */
+#ifdef H5_VER_GE_113
+  using hsize_t = uint64_t;
+#else
+  using hsize_t = unsigned long long;
+#endif
+
+  /// Vector of h5::hsize_t used throughout the h5 library.
+  using v_t = std::vector<hsize_t>;
 
   /**
    * @brief Create a std::runtime_error with an error message constructed from the given arguments.
@@ -40,6 +71,8 @@ namespace h5 {
     (ss << ... << ts);
     return std::runtime_error{ss.str()};
   }
+
+  /** @} */
 
 } // namespace h5
 

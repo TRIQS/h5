@@ -30,6 +30,11 @@
 
 namespace h5::array_interface {
 
+  /**
+   * @addtogroup rw_arrayinterface
+   * @{
+   */
+
   /// Simple struct to store basic information about an n-dimensional array/dataspace.
   struct h5_lengths_type {
     /// Shape of the array/dataspace.
@@ -250,6 +255,8 @@ namespace h5::array_interface {
    * @param v h5::array_interface::h5_array_view to read into.
    */
   void read_attribute(object obj, std::string const &name, h5_array_view v);
+
+  /** @} */
 
 } // namespace h5::array_interface
 

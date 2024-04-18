@@ -14,6 +14,11 @@
 //
 // Authors: Olivier Parcollet, Nils Wentzell
 
+/**
+ * @file
+ * @brief Implementation details for format.hpp.
+ */
+
 #include "./format.hpp"
 #include "./group.hpp"
 #include "./object.hpp"

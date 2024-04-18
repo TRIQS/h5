@@ -14,6 +14,11 @@
 //
 // Authors: Olivier Parcollet, Nils Wentzell
 
+/**
+ * @file
+ * @brief Implementation details for file.hpp.
+ */
+
 #include "./file.hpp"
 
 #include <hdf5.h>

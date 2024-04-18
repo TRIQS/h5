@@ -38,6 +38,7 @@ namespace h5 {
   namespace array_interface {
 
     /**
+     * @ingroup rw_arrayinterface
      * @brief Create an h5::array_interface::h5_array_view for a std::vector.
      *
      * @tparam T Value type of std::vector.
@@ -54,7 +55,11 @@ namespace h5 {
 
   } // namespace array_interface
 
-  // FIXME : CLEAN THIS
+  /**
+   * @addtogroup rw_vector
+   * @{
+   */
+
   // Specialization of h5::hdf5_format_impl for std::vector<std::string>.
   H5_SPECIALIZE_FORMAT2(std::vector<std::string>, vector<string>);
 

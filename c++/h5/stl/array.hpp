@@ -35,6 +35,11 @@
 namespace h5 {
 
   /**
+   * @addtogroup rw_array
+   * @{
+   */
+
+  /**
    * @brief Write a std::array to an HDF5 dataset/subgroup.
    *
    * @tparam T Value type of the std::array.
@@ -127,6 +132,8 @@ namespace h5 {
       for (int i = 0; i < N; ++i) h5_read(g2, std::to_string(i), a[i]);
     }
   }
+
+  /** @} */
 
 } // namespace h5
 

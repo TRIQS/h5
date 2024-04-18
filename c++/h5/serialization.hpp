@@ -31,6 +31,11 @@
 namespace h5 {
 
   /**
+   * @addtogroup serialize
+   * @{
+   */
+
+  /**
    * @brief Serialize an object to a byte buffer.
    *
    * @details It first writes the object to a buffered memory file and then returns the underlying byte buffer.
@@ -53,13 +58,15 @@ namespace h5 {
    *
    * @tparam T Type of the object.
    * @param buf Byte buffer containing the serialized object.
-   * @return Deserialized object.
+   * @return Object restored from the given byte buffer.
    */
   template <typename T>
   [[nodiscard]] T deserialize(std::vector<std::byte> const &buf) {
     file f{buf};
     return h5_read<T>(f, "object");
   }
+
+  /** @} */
 
 } // namespace h5
 

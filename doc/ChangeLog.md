@@ -1,6 +1,4 @@
-(changelog)=
-
-# Changelog
+@page changelog Changelog
 
 ## Version 1.2.0
 

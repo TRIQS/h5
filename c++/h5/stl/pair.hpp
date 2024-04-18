@@ -31,6 +31,11 @@
 
 namespace h5 {
 
+  /**
+   * @addtogroup rw_pair
+   * @{
+   */
+
   /// Specialization of h5::hdf5_format_impl for std::pair.
   template <typename T1, typename T2>
   struct hdf5_format_impl<std::pair<T1, T2>> {
@@ -75,6 +80,8 @@ namespace h5 {
     h5_read(gr, "0", p.first);
     h5_read(gr, "1", p.second);
   }
+
+  /** @} */
 
 } // namespace h5
 

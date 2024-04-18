@@ -14,6 +14,11 @@
 //
 // Authors: Philipp Dumitrescu, Olivier Parcollet, Nils Wentzell
 
+/**
+ * @file
+ * @brief Implementation details for stl/vector.hpp.
+ */
+
 #include "./vector.hpp"
 
 #include <hdf5.h>

@@ -31,6 +31,11 @@
 
 namespace h5 {
 
+  /**
+   * @addtogroup rw_optional
+   * @{
+   */
+
   /// Specialization of h5::hdf5_format_impl for std::optional.
   template <typename T>
   struct hdf5_format_impl<std::optional<T>> {
@@ -67,6 +72,8 @@ namespace h5 {
     opt.reset();
     if (g.has_key(name)) opt.emplace(h5_read<T>(g, name));
   }
+
+  /** @} */
 
 } // namespace h5
 
