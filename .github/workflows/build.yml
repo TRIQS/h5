@@ -26,10 +26,10 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - {os: ubuntu-22.04, cc: gcc-12, cxx: g++-12}
-          - {os: ubuntu-22.04, cc: clang-15, cxx: clang++-15}
-          - {os: macos-12, cc: gcc-12, cxx: g++-12}
-          - {os: macos-12, cc: clang, cxx: clang++}
+          - {os: ubuntu-22.04, cc: gcc-12, cxx: g++-12, doc: OFF}
+          - {os: ubuntu-22.04, cc: clang-15, cxx: clang++-15, doc: ON}
+          - {os: macos-12, cc: gcc-12, cxx: g++-12, doc: OFF}
+          - {os: macos-12, cc: clang, cxx: clang++, doc: OFF}
 
     runs-on: ${{ matrix.os }}
 
@@ -91,6 +91,23 @@ jobs:
         echo "VIRTUAL_ENV=$VIRTUAL_ENV" >> $GITHUB_ENV
         echo "PATH=$PATH" >> $GITHUB_ENV
 
+    - name: Build doxygen
+      if: matrix.doc == 'ON'
+      env:
+        CC: ${{ matrix.cc }}
+        CXX: ${{ matrix.cxx }}
+        LIBRARY_PATH: /usr/local/opt/llvm/lib
+      run: |
+        cd $HOME
+        git clone https://github.com/doxygen/doxygen.git
+        cd doxygen
+        git checkout 0a7e79813
+        mkdir build
+        cd build
+        cmake .. -Duse_libclang=ON -Dstatic_libclang=ON -Duse_libc++=OFF -DLLVM_ROOT=/usr/lib/llvm-15/lib/cmake/llvm -DClang_ROOT=/usr/lib/llvm-15/lib/cmake/clang
+        make -j 2 VERBOSE=1
+        cp bin/doxygen /usr/local/bin/doxygen
+
     - name: add clang cxxflags
       if: ${{ contains(matrix.cxx, 'clang') }}
       run: |
@@ -103,7 +120,7 @@ jobs:
         CXX: ${{ matrix.cxx }}
         LIBRARY_PATH: /usr/local/opt/llvm/lib
       run: |
-        mkdir build && cd build && cmake .. -DCMAKE_INSTALL_PREFIX=$HOME/install
+        mkdir build && cd build && cmake .. -DCMAKE_INSTALL_PREFIX=$HOME/install -DBuild_Documentation=${{ matrix.doc }}
         make -j2 || make -j1 VERBOSE=1
 
     - name: Test h5
@@ -123,3 +140,11 @@ jobs:
       with:
         path: ${{ env.CCACHE_DIR }}
         key: ccache-${{ matrix.os }}-${{ matrix.cc }}-${{ github.run_id }}
+
+    - name: Deploy documentation
+      if: matrix.doc == 'ON' && github.ref == 'refs/heads/unstable'
+      uses: JamesIves/github-pages-deploy-action@v4
+      with:
+        folder: build/doc/html
+        branch: github.io
+        target-folder: docs/unstable
