@@ -59,7 +59,7 @@ namespace h5 {
         break;
       }
       // create new file in read-write mode if the file does not exist yet
-      case 'e': id = H5Fopen(name, H5F_ACC_EXCL, H5P_DEFAULT); break;
+      case 'e': id = H5Fcreate(name, H5F_ACC_EXCL, H5P_DEFAULT, H5P_DEFAULT); break;
       default: throw std::runtime_error("File mode is not one of r, w, a, e");
     }
 
