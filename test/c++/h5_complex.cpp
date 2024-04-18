@@ -14,13 +14,15 @@
 //
 // Authors: Nils Wentzell
 
-#include "./test_common.hpp"
-
+#include <gtest/gtest.h>
 #include <h5/h5.hpp>
+
+#include <array>
 #include <complex>
 
-// clang-format off
-TEST(H5, ComplexBkwd){
+TEST(H5, ComplexBackwardCompatibility) {
+  // write and read a complex number the old way
+  std::complex<double> z{1.0, 2.0};
 
   {
     h5::file file("complex_old.h5", 'w');
@@ -28,52 +30,47 @@ TEST(H5, ComplexBkwd){
 
     auto g = top.create_group("cplx");
 
-    double r = 1.0, i = 2.0;
-    h5_write(g, "r", r);
-    h5_write(g, "i", i);
+    h5_write(g, "r", z.real());
+    h5_write(g, "i", z.imag());
   }
 
   {
     h5::file file("complex_old.h5", 'r');
 
-    std::complex<double> c;
-    h5_read(file, "cplx", c);
+    std::complex<double> z_in;
+    h5_read(file, "cplx", z_in);
 
-    dcomplex exact = {1.0, 2.0};
-    EXPECT_EQ(c, exact);
+    EXPECT_EQ(z, z_in);
   }
 };
 
-TEST(H5, ComplexCompound){
-
-  std::array<h5::dcplx_t, 4> arr = { h5::dcplx_t{0.0, 0.0}, h5::dcplx_t{0.0, 1.0}, h5::dcplx_t{1.0, 0.0}, h5::dcplx_t{1.0, 1.0} };
-  auto scal = h5::dcplx_t{2.0, 2.0};
+TEST(H5, ComplexCompoundType) {
+  // write an array of h5::dxplx_t and read it into an array of std::complex<double>
+  std::array<h5::dcplx_t, 4> arr = {h5::dcplx_t{0.0, 0.0}, h5::dcplx_t{0.0, 1.0}, h5::dcplx_t{1.0, 0.0}, h5::dcplx_t{1.0, 1.0}};
+  h5::dcplx_t z{2.0, 2.0};
 
   {
     h5::file file("complex_compound.h5", 'w');
 
     h5_write(file, "cplx_arr", arr);
-    h5_write(file, "cplx_scal", scal);
+    h5_write(file, "cplx_scal", z);
   }
 
   {
     h5::file file("complex_compound.h5", 'r');
 
     std::array<std::complex<double>, 4> arr_in;
-    std::complex<double> scal_in;
+    std::complex<double> z_in;
 
     h5_read(file, "cplx_arr", arr_in);
-    h5_read(file, "cplx_scal", scal_in);
+    h5_read(file, "cplx_scal", z_in);
 
-    for(int i = 0; i < arr.size(); ++i){
+    for (int i = 0; i < arr.size(); ++i) {
       EXPECT_EQ(arr_in[i].real(), arr[i].r);
       EXPECT_EQ(arr_in[i].imag(), arr[i].i);
     }
 
-    EXPECT_EQ(scal_in.real(), scal.r);
-    EXPECT_EQ(scal_in.imag(), scal.i);
+    EXPECT_EQ(z_in.real(), z.r);
+    EXPECT_EQ(z_in.imag(), z.i);
   }
-
 };
-
-// clang-format on

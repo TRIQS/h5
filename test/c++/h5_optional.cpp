@@ -14,25 +14,27 @@
 //
 // Authors: Nils Wentzell
 
-#include "./test_common.hpp"
-
+#include <gtest/gtest.h>
 #include <h5/h5.hpp>
+
 #include <optional>
 
 TEST(H5, Optional) {
+  // write/read an optional int
+  std::optional<int> a(18);
 
-  std::optional<int> a(18), b;
-
-  if (a) std::cout << *a << std::endl;
   {
     h5::file file("test_opt.h5", 'w');
-    h5_write(file, "A", a);
-  }
-  {
-    h5::file file("test_opt.h5", 'r');
-    h5_read(file, "A", b);
+    h5::write(file, "a", a);
   }
 
-  EXPECT_TRUE(bool(b));
-  EXPECT_EQ(a, b);
+  {
+    h5::file file("test_opt.h5", 'r');
+
+    std::optional<int> b;
+    h5::read(file, "a", b);
+
+    EXPECT_TRUE(bool(b));
+    EXPECT_EQ(a, b);
+  }
 }

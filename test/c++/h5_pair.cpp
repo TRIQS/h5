@@ -14,37 +14,34 @@
 //
 // Authors: Nils Wentzell
 
-#
-#include "./test_common.hpp"
-
+#include <gtest/gtest.h>
 #include <h5/h5.hpp>
-#include <tuple>
+
+#include <string>
+#include <utility>
+#include <vector>
 
 TEST(H5, Pair) {
-
-  // write
-  std::pair<std::string, int> m                  = {"a", 1};
-  std::pair<std::string, std::vector<double>> mv = {"a", {1.0, 2.0}};
+  // write/read a pair of string and int and a pair of string and vector
+  std::pair<std::string, int> psi                 = {"a", 1};
+  std::pair<std::string, std::vector<double>> psv = {"a", {1.0, 2.0}};
 
   {
     h5::file file{"test_pair.h5", 'w'};
-    h5::group grp{file};
-    h5_write(grp, "pair_int_str", m);
-    h5_write(grp, "pair_str_vec", mv);
-  }
 
-  // read
-  std::pair<std::string, int> mm;
-  std::pair<std::string, std::vector<double>> mmv;
+    h5::write(file, "pair_int_str", psi);
+    h5::write(file, "pair_str_vec", psv);
+  }
 
   {
     h5::file file{"test_pair.h5", 'r'};
-    h5::group grp{file};
-    h5_read(grp, "pair_int_str", mm);
-    h5_read(grp, "pair_str_vec", mmv);
-  }
 
-  // compare
-  EXPECT_EQ(m, mm);
-  EXPECT_EQ(mv, mmv);
+    std::pair<std::string, int> psi_in;
+    std::pair<std::string, std::vector<double>> psv_in;
+    h5::read(file, "pair_int_str", psi_in);
+    h5::read(file, "pair_str_vec", psv_in);
+
+    EXPECT_EQ(psi, psi_in);
+    EXPECT_EQ(psv, psv_in);
+  }
 }

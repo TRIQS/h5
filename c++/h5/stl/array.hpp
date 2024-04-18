@@ -104,8 +104,8 @@ namespace h5 {
 
         // read non-complex data into std::array<std::complex>
         if (!lt.has_complex_attribute) {
-          std::cerr << "WARNING: HDF5 type mismatch while reading into a std::array: " + get_name_of_h5_type(hdf5_type<T>()) + " =! "
-                + get_name_of_h5_type(lt.ty) + "\n";
+          std::cerr << "WARNING: HDF5 type mismatch while reading into a std::array: std::complex<" + get_name_of_h5_type(hdf5_type<T>())
+                + "> != " + get_name_of_h5_type(lt.ty) + "\n";
           std::array<double, N> tmp{};
           h5_read(g, name, tmp);
           std::copy(begin(tmp), end(tmp), begin(a));

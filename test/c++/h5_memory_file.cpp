@@ -14,52 +14,46 @@
 //
 // Authors: Nils Wentzell
 
-#include "./test_common.hpp"
-
+#include <gtest/gtest.h>
 #include <h5/h5.hpp>
-#include <map>
+
+#include <cstddef>
 #include <fstream>
+#include <string>
+#include <vector>
 
 TEST(H5, MemoryFile) {
-
-  // Some data to write
+  // test compatibility of on-disk and in-memory files
   auto vec_int = std::vector{1, 2, 3};
   auto vec_dbl = std::vector{4.0, 5.0, 6.0};
   auto vec_str = std::vector<std::string>{"Hello", "there!"};
 
-  {
-    // Write to on-disk h5 file
-    auto f_disk = h5::file{"h5_bin_ref.h5", 'w'};
-    h5::write(f_disk, "vec_int", vec_int);
-    h5::write(f_disk, "vec_dbl", vec_dbl);
-    h5::write(f_disk, "vec_str", vec_str);
-  }
+  // write data to on-disk file
+  auto f_disk = h5::file{"on_disk.h5", 'w'};
+  h5::write(f_disk, "vec_int", vec_int);
+  h5::write(f_disk, "vec_dbl", vec_dbl);
+  h5::write(f_disk, "vec_str", vec_str);
 
-  {
-    // Write to file in memory
-    auto f_mem = h5::file{};
-    h5::write(f_mem, "vec_int", vec_int);
-    h5::write(f_mem, "vec_dbl", vec_dbl);
-    h5::write(f_mem, "vec_str", vec_str);
+  // write data to memory file
+  auto f_mem = h5::file{};
+  h5::write(f_mem, "vec_int", vec_int);
+  h5::write(f_mem, "vec_dbl", vec_dbl);
+  h5::write(f_mem, "vec_str", vec_str);
 
-    // Write memory file to disk as binary data
-    auto buf_mem = f_mem.as_buffer();
-    std::ofstream ostrm("h5_bin_buf.h5", std::ios::binary);
-    ostrm.write(reinterpret_cast<char *>(buf_mem.data()), buf_mem.size());
-  }
+  // write memory file to disk as standard binary data
+  auto buf_mem = f_mem.as_buffer();
+  std::ofstream ostrm("in_memory.bin", std::ios::binary);
+  ostrm.write(reinterpret_cast<char *>(buf_mem.data()), static_cast<long>(buf_mem.size())); // NOLINT (reinterpret cast is wanted here)
 
-  // Read from disk into raw buffer
+  // read h5 file from disk into raw buffer
   std::vector<std::byte> buf_raw;
-  {
-    std::ifstream istrm{"h5_bin_ref.h5", std::ios::binary | std::ios::ate};
-    buf_raw.resize(istrm.tellg(), std::byte{0});
-    istrm.seekg(0);
-    istrm.read(reinterpret_cast<char *>(buf_raw.data()), buf_raw.size());
-  }
+  std::ifstream istrm{"on_disk.h5", std::ios::binary | std::ios::ate};
+  buf_raw.resize(istrm.tellg(), std::byte{0});
+  istrm.seekg(0);
+  istrm.read(reinterpret_cast<char *>(buf_raw.data()), static_cast<long>(buf_raw.size())); // NOLINT (reinterpret cast is wanted here)
 
-  // Compare the various files
-  for (auto f : {h5::file{"h5_bin_ref.h5", 'r'}, h5::file{"h5_bin_ref.h5", 'r'}, h5::file{buf_raw}}) {
-
+  // compare various files
+  for (auto f : {h5::file{"on_disk.h5", 'r'}, h5::file{buf_raw}, h5::file{buf_mem}}) {
     auto vec_int_read = h5::read<std::vector<int>>(f, "vec_int");
     auto vec_dbl_read = h5::read<std::vector<double>>(f, "vec_dbl");
     auto vec_str_read = h5::read<std::vector<std::string>>(f, "vec_str");

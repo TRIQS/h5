@@ -14,57 +14,62 @@
 //
 // Authors: Olivier Parcollet, Nils Wentzell
 
-#include "./test_common.hpp"
-
+#include <gtest/gtest.h>
 #include <h5/h5.hpp>
+
+#include <complex>
+#include <string>
 #include <variant>
 
 TEST(H5, VariantIntComplex) {
-
+  // write/read a variant of int and complex
   using v_t = std::variant<int, std::complex<double>>;
-  auto c    = std::complex<double>{1, 2};
-  {
-    auto v1 = v_t{6};
-    auto v2 = v_t{c};
+  std::complex<double> z{1, 2};
+  int i{6};
 
+  {
     h5::file file("test_variantIC.h5", 'w');
+
+    auto v1 = v_t{i};
+    auto v2 = v_t{z};
     h5_write(file, "v1", v1);
     h5_write(file, "v2", v2);
   }
 
   {
-    v_t v1, v2;
     h5::file file("test_variantIC.h5", 'r');
+
+    v_t v1, v2;
     h5_read(file, "v1", v1);
     h5_read(file, "v2", v2);
 
-    EXPECT_EQ(std::get<int>(v1), 6); // std library version
-    EXPECT_EQ(std::get<std::complex<double>>(v2), c);
+    EXPECT_EQ(std::get<int>(v1), i);
+    EXPECT_EQ(std::get<std::complex<double>>(v2), z);
   }
 }
 
-// -----------------------------
-
 TEST(H5, VariantIntString) {
-
+  // write/read a variant of int and string
   using v_t = std::variant<int, std::string>;
-  auto s    = std::string{"Hello"};
+  std::string s{"Hello"};
+  int i{6};
   {
-    auto v1 = v_t{6};
-    auto v2 = v_t{s};
-
     h5::file file("test_variantIS.h5", 'w');
+
+    auto v1 = v_t{i};
+    auto v2 = v_t{s};
     h5_write(file, "v1", v1);
     h5_write(file, "v2", v2);
   }
 
   {
-    v_t v1, v2;
     h5::file file("test_variantIS.h5", 'r');
+
+    v_t v1, v2;
     h5_read(file, "v1", v1);
     h5_read(file, "v2", v2);
 
-    EXPECT_EQ(std::get<int>(v1), 6); // std library version
+    EXPECT_EQ(std::get<int>(v1), i);
     EXPECT_EQ(std::get<std::string>(v2), s);
   }
 }

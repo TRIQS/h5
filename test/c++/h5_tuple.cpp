@@ -14,36 +14,34 @@
 //
 // Authors: Nils Wentzell
 
-#include "./test_common.hpp"
-
+#include <gtest/gtest.h>
 #include <h5/h5.hpp>
+
+#include <string>
 #include <tuple>
+#include <vector>
 
 TEST(H5, Tuple) {
-
-  // write
-  std::tuple<std::string, int> m                  = {"a", 1};
-  std::tuple<std::string, std::vector<double>> mv = {"a", {1.0, 2.0}};
+  // write/read a tuple of string and int and a tuple of string and vector
+  std::tuple<std::string, int> tsi                 = {"a", 1};
+  std::tuple<std::string, std::vector<double>> tsv = {"a", {1.0, 2.0}};
 
   {
     h5::file file{"test_tuple.h5", 'w'};
-    h5::group grp{file};
-    h5_write(grp, "tpl_int_str", m);
-    h5_write(grp, "tpl_str_vec", mv);
-  }
 
-  // read
-  std::tuple<std::string, int> mm;
-  std::tuple<std::string, std::vector<double>> mmv;
+    h5::write(file, "tpl_int_str", tsi);
+    h5::write(file, "tpl_str_vec", tsv);
+  }
 
   {
     h5::file file{"test_tuple.h5", 'r'};
-    h5::group grp{file};
-    h5_read(grp, "tpl_int_str", mm);
-    h5_read(grp, "tpl_str_vec", mmv);
-  }
 
-  // compare
-  EXPECT_EQ(m, mm);
-  EXPECT_EQ(mv, mmv);
+    std::tuple<std::string, int> tsi_in;
+    std::tuple<std::string, std::vector<double>> tsv_in;
+    h5::read(file, "tpl_int_str", tsi_in);
+    h5::read(file, "tpl_str_vec", tsv_in);
+
+    EXPECT_EQ(tsi, tsi_in);
+    EXPECT_EQ(tsv, tsv_in);
+  }
 }

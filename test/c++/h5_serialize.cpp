@@ -14,15 +14,14 @@
 //
 // Authors: Nils Wentzell
 
-#include "./test_common.hpp"
-
+#include <gtest/gtest.h>
 #include <h5/h5.hpp>
 #include <h5/serialization.hpp>
 
 #include <array>
 
 TEST(H5, Serialize) {
-
+  // serialize/deserialize an array of strings and doubles
   auto arr_str = std::array<std::string, 2>{"a", "abc"};
   auto arr_dbl = std::array<double, 2>{1.0, 2.0};
 
