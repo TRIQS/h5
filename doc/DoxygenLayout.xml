@@ -44,8 +44,8 @@
       <tab type="usergroup" url="@ref readwrite" title="Read and write from/to HDF5">
         <tab type="user" url="@ref rw_generic" title="Generic read/write"/>
         <tab type="usergroup" url="@ref rw_arrayinterface" title="Array interface">
-          <tab type="user" url="@ref h5::array_interface::h5_array_view" title="h5_array_view"/>
-          <tab type="user" url="@ref h5::array_interface::h5_lengths_type" title="h5_lengths_type"/>
+          <tab type="user" url="@ref h5::array_interface::array_view" title="array_view"/>
+          <tab type="user" url="@ref h5::array_interface::dataset_info" title="dataset_info"/>
           <tab type="user" url="@ref h5::array_interface::hyperslab" title="hyperslab"/>
         </tab>
         <tab type="user" url="@ref rw_scalar" title="Arithmetic scalar types"/>

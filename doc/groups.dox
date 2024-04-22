@@ -85,7 +85,7 @@
  * @ingroup readwrite
  * @brief Specialized functions to read/write n-dimensional arrays from/to HDF5.
  *
- * @details It provides specialized functions to read/write an h5::array_interface::h5_array_view from/to HDF5. An
+ * @details It provides specialized functions to read/write an h5::array_interface::array_view from/to HDF5. An
  * array view mimics a view on a generic n-dimensional array. It uses HDF5's hyperslab concept to perform the
  * reading/writing.
  *

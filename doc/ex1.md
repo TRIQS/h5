@@ -7,7 +7,7 @@ This example shows how to use the **h5** array interface to write/read a 2-dimen
 We first write a 2-dimensional `5x5` array to an HDF5 file.
 
 Then we use an h5::array_interface::hyperslab to select every other column from the original `5x5` matrix and
-read it into a `5x3` h5::array_interface::h5_array_view.
+read it into a `5x3` h5::array_interface::array_view.
 
 Finally, we output the result to stdout.
 
@@ -25,33 +25,33 @@ int main() {
   std::vector<int> data (25, 0);
   std::iota(data.begin(), data.end(), 0);
 
-  // create an h5_array_view of rank 2 with dimensions 5x5 of the original data
+  // create an array_view of rank 2 with dimensions 5x5 of the original data
   int rank = 2;
   int rows_w = 5;
   int cols_w = 5;
-  h5::array_interface::h5_array_view view(h5::hdf5_type<int>(), (void*) data.data(), rank, false);
+  h5::array_interface::array_view view(h5::hdf5_type<int>(), (void*) data.data(), rank, false);
   view.slab.count[0] = rows_w;
   view.slab.count[1] = cols_w;
-  view.L_tot[0] = rows_w;
-  view.L_tot[1] = cols_w;
+  view.parent_shape[0] = rows_w;
+  view.parent_shape[1] = cols_w;
 
   // create file in read/write mode
   h5::file file("view.h5", 'w');
 
-  // write h5_array_view to file
+  // write array_view to file
   h5::array_interface::write(file, "view", view, false);
 
   // reserve memory for reading
   std::vector<int> read_data(15, 0);
 
-  // create an h5_array_view or rank 2 with dimensions 5x3 of the read memory
+  // create an array_view or rank 2 with dimensions 5x3 of the read memory
   int rows_r = 5;
   int cols_r = 3;
-  h5::array_interface::h5_array_view read_view(h5::hdf5_type<int>(), (void*) read_data.data(), rank, false);
+  h5::array_interface::array_view read_view(h5::hdf5_type<int>(), (void*) read_data.data(), rank, false);
   read_view.slab.count[0] = rows_r;
   read_view.slab.count[1] = cols_r;
-  read_view.L_tot[0] = rows_r;
-  read_view.L_tot[1] = cols_r;
+  read_view.parent_shape[0] = rows_r;
+  read_view.parent_shape[1] = cols_r;
 
   // create an hyperslab to select the data to be read from the file (every other column -> stride in second dimension is 2)
   h5::array_interface::hyperslab read_slab(rank, false);
@@ -60,11 +60,11 @@ int main() {
   read_slab.stride[0] = 1;
   read_slab.stride[1] = 2;
 
-  // get h5_lengths_type from the dataset in the file
-  auto lengths_type = h5::array_interface::get_h5_lengths_type(file, "view");
+  // get dataset_info from the dataset in the file
+  auto ds_info = h5::array_interface::get_dataset_info(file, "view");
 
   // read data from file
-  h5::array_interface::read(file, "view", read_view, lengths_type, read_slab);
+  h5::array_interface::read(file, "view", read_view, ds_info, read_slab);
 
   // output data
   for (int i = 0; i < rows_r; ++i) {

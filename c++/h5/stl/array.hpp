@@ -58,10 +58,10 @@ namespace h5 {
     } else if constexpr (std::is_arithmetic_v<T> or is_complex_v<T> or std::is_same_v<T, dcplx_t> or std::is_same_v<T, char *>
                          or std::is_same_v<T, const char *>) {
       // array of arithmetic/complex types or char* or const char*
-      h5::array_interface::h5_array_view v{hdf5_type<T>(), (void *)a.data(), 1, is_complex_v<T>};
-      v.slab.count[0]  = N;
-      v.slab.stride[0] = 1;
-      v.L_tot[0]       = N;
+      h5::array_interface::array_view v{hdf5_type<T>(), (void *)a.data(), 1, is_complex_v<T>};
+      v.slab.count[0]   = N;
+      v.slab.stride[0]  = 1;
+      v.parent_shape[0] = N;
       h5::array_interface::write(g, name, v, true);
     } else {
       // array of generic type
@@ -91,21 +91,21 @@ namespace h5 {
     } else if constexpr (std::is_arithmetic_v<T> or is_complex_v<T> or std::is_same_v<T, dcplx_t> or std::is_same_v<T, char *>
                          or std::is_same_v<T, const char *>) {
       // array of arithmetic/complex types or char* or const char*
-      auto lt = array_interface::get_h5_lengths_type(g, name);
-      H5_EXPECTS(lt.rank() == 1 + lt.has_complex_attribute);
-      H5_EXPECTS(N == lt.lengths[0]);
+      auto ds_info = array_interface::get_dataset_info(g, name);
+      H5_EXPECTS(ds_info.rank() == 1 + ds_info.has_complex_attribute);
+      H5_EXPECTS(N == ds_info.lengths[0]);
 
       if constexpr (is_complex_v<T>) {
         // read complex values stored as a compound HDF5 datatype
-        if (hdf5_type_equal(lt.ty, hdf5_type<dcplx_t>())) {
+        if (hdf5_type_equal(ds_info.ty, hdf5_type<dcplx_t>())) {
           h5_read(g, name, reinterpret_cast<std::array<dcplx_t, N> &>(a)); // NOLINT (reinterpret_cast is safe here)
           return;
         }
 
         // read non-complex data into std::array<std::complex>
-        if (!lt.has_complex_attribute) {
+        if (!ds_info.has_complex_attribute) {
           std::cerr << "WARNING: HDF5 type mismatch while reading into a std::array: std::complex<" + get_name_of_h5_type(hdf5_type<T>())
-                + "> != " + get_name_of_h5_type(lt.ty) + "\n";
+                + "> != " + get_name_of_h5_type(ds_info.ty) + "\n";
           std::array<double, N> tmp{};
           h5_read(g, name, tmp);
           std::copy(begin(tmp), end(tmp), begin(a));
@@ -114,11 +114,11 @@ namespace h5 {
       }
 
       // use array_interface to read
-      array_interface::h5_array_view v{hdf5_type<T>(), (void *)(a.data()), 1, is_complex_v<T>};
-      v.slab.count[0]  = N;
-      v.slab.stride[0] = 1;
-      v.L_tot[0]       = N;
-      array_interface::read(g, name, v, lt);
+      array_interface::array_view v{hdf5_type<T>(), (void *)(a.data()), 1, is_complex_v<T>};
+      v.slab.count[0]   = N;
+      v.slab.stride[0]  = 1;
+      v.parent_shape[0] = N;
+      array_interface::read(g, name, v, ds_info);
     } else {
       // array of generic type
       auto g2 = g.open_group(name);

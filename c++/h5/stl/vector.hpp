@@ -39,17 +39,17 @@ namespace h5 {
 
     /**
      * @ingroup rw_arrayinterface
-     * @brief Create an h5::array_interface::h5_array_view for a std::vector.
+     * @brief Create an h5::array_interface::array_view for a std::vector.
      *
      * @tparam T Value type of std::vector.
      * @param v std::vector.
-     * @return h5::array_interface::h5_array_view of rank 1.
+     * @return h5::array_interface::array_view of rank 1.
      */
     template <typename T>
-    h5_array_view h5_array_view_from_vector(std::vector<T> const &v) {
-      h5_array_view res{hdf5_type<T>(), (void *)v.data(), 1, is_complex_v<std::decay_t<T>>};
-      res.slab.count[0] = v.size();
-      res.L_tot[0]      = v.size();
+    array_view array_view_from_vector(std::vector<T> const &v) {
+      array_view res{hdf5_type<T>(), (void *)v.data(), 1, is_complex_v<std::decay_t<T>>};
+      res.slab.count[0]   = v.size();
+      res.parent_shape[0] = v.size();
       return res;
     }
 
@@ -119,7 +119,7 @@ namespace h5 {
   void h5_write(group g, std::string const &name, std::vector<T> const &v) {
     if constexpr (std::is_arithmetic_v<T> or is_complex_v<T>) {
       // vector of arithmetic/complex types
-      array_interface::write(g, name, array_interface::h5_array_view_from_vector(v), true);
+      array_interface::write(g, name, array_interface::array_view_from_vector(v), true);
     } else if constexpr (std::is_same_v<T, std::string> or std::is_same_v<T, std::vector<std::string>>) {
       // vector (of vectors) of strings
       h5_write(g, name, to_char_buf(v));
@@ -158,11 +158,11 @@ namespace h5 {
     } else {
       if constexpr (std::is_arithmetic_v<T> or is_complex_v<T>) {
         // vector of arithmetic/complex types
-        auto lt = array_interface::get_h5_lengths_type(g, name);
-        if (lt.rank() != 1 + is_complex_v<T>)
-          throw make_runtime_error("Error in h5_read: Reading a vector from an array of rank ", lt.rank(), " is not allowed");
-        v.resize(lt.lengths[0]);
-        array_interface::read(g, name, array_interface::h5_array_view_from_vector(v), lt);
+        auto ds_info = array_interface::get_dataset_info(g, name);
+        if (ds_info.rank() != 1 + is_complex_v<T>)
+          throw make_runtime_error("Error in h5_read: Reading a vector from an array of rank ", ds_info.rank(), " is not allowed");
+        v.resize(ds_info.lengths[0]);
+        array_interface::read(g, name, array_interface::array_view_from_vector(v), ds_info);
       } else if constexpr (std::is_same_v<T, std::string> or std::is_same_v<T, std::vector<std::string>>) {
         // vector of strings or vector of vector of strings
         char_buf cb;

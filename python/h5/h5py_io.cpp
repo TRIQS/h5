@@ -126,8 +126,8 @@ namespace h5 {
 
   //--------------------------------------
 
-  // Make a h5_array_view from the numpy object
-  static array_interface::h5_array_view make_av_from_npy(PyArrayObject *arr_obj) {
+  // Make a array_view from the numpy object
+  static array_interface::array_view make_av_from_npy(PyArrayObject *arr_obj) {
 
 #ifdef PYTHON_NUMPY_VERSION_LT_17
     int elementsType = arr_obj->descr->type_num;
@@ -139,7 +139,7 @@ namespace h5 {
     datatype dt           = npy_to_h5(elementsType);
     const bool is_complex = (elementsType == NPY_CDOUBLE) or (elementsType == NPY_CLONGDOUBLE) or (elementsType == NPY_CFLOAT);
 
-    array_interface::h5_array_view res{dt, PyArray_DATA(arr_obj), rank, is_complex};
+    array_interface::array_view res{dt, PyArray_DATA(arr_obj), rank, is_complex};
     std::vector<long> c_strides(rank + is_complex, 0);
     long total_size = 1;
 
@@ -155,10 +155,10 @@ namespace h5 {
     }
 
     // be careful to consider the last dim if complex, but do NOT copy it
-    auto [Ltot, stri] = h5::array_interface::get_L_tot_and_strides_h5(c_strides.data(), rank + is_complex, total_size * (is_complex ? 2 : 1));
+    auto [Ltot, stri] = h5::array_interface::get_parent_shape_and_h5_strides(c_strides.data(), rank + is_complex, total_size * (is_complex ? 2 : 1));
     for (int i = 0; i < rank; ++i) {
-      res.L_tot[i]       = Ltot[i];
-      res.slab.stride[i] = stri[i];
+      res.parent_shape[i] = Ltot[i];
+      res.slab.stride[i]  = stri[i];
     }
 
     return res;
@@ -230,27 +230,27 @@ namespace h5 {
   PyObject *h5_read_bare(group g, std::string const &name) { // There should be no errors from h5 reading
     import_numpy();
 
-    array_interface::h5_lengths_type lt = array_interface::get_h5_lengths_type(g, name);
+    array_interface::dataset_info ds_info = array_interface::get_dataset_info(g, name);
 
     // First case, we have a scalar
-    if (lt.rank() == 0) {
-      if (H5Tget_class(lt.ty) == H5T_FLOAT) {
+    if (ds_info.rank() == 0) {
+      if (H5Tget_class(ds_info.ty) == H5T_FLOAT) {
         double x;
         h5_read(g, name, x);
         return PyFloat_FromDouble(x);
       }
-      if (H5Tget_class(lt.ty) == H5T_INTEGER) { return h5_read_any_int(g, name, lt.ty); }
-      if (H5Tequal(lt.ty, h5::hdf5_type<bool>())) {
+      if (H5Tget_class(ds_info.ty) == H5T_INTEGER) { return h5_read_any_int(g, name, ds_info.ty); }
+      if (H5Tequal(ds_info.ty, h5::hdf5_type<bool>())) {
         bool x;
         h5_read(g, name, x);
         return PyBool_FromLong(long(x));
       }
-      if (H5Tget_class(lt.ty) == H5T_STRING) {
+      if (H5Tget_class(ds_info.ty) == H5T_STRING) {
         std::string x;
         h5_read(g, name, x);
         return PyUnicode_FromString(x.c_str());
       }
-      if (H5Tequal(lt.ty, hdf5_type<dcplx_t>())) {
+      if (H5Tequal(ds_info.ty, hdf5_type<dcplx_t>())) {
         dcplx_t x;
         h5_read(g, name, x);
         return PyComplex_FromDoubles(x.r, x.i);
@@ -261,19 +261,19 @@ namespace h5 {
     }
 
     // A scalar complex is a special case
-    if ((lt.rank() == 1) and lt.has_complex_attribute) {
+    if ((ds_info.rank() == 1) and ds_info.has_complex_attribute) {
       std::complex<double> z;
       h5_read(g, name, z);
       return PyComplex_FromDoubles(z.real(), z.imag());
     }
 
-    if (H5Tget_class(lt.ty) == H5T_STRING) {
-      if (lt.rank() == 1) {
+    if (H5Tget_class(ds_info.ty) == H5T_STRING) {
+      if (ds_info.rank() == 1) {
         auto x = h5_read<std::vector<std::string>>(g, name);
         return cpp2py::convert_to_python(x);
       }
 
-      if (lt.rank() == 2) {
+      if (ds_info.rank() == 2) {
         auto x = h5_read<std::vector<std::vector<std::string>>>(g, name);
         return cpp2py::convert_to_python(x);
       }
@@ -283,10 +283,10 @@ namespace h5 {
     }
 
     // Last case : it is an array
-    std::vector<npy_intp> L(lt.rank());                            // Make the lengths
-    std::copy(lt.lengths.begin(), lt.lengths.end(), L.begin());    //npy_intp and size_t may differ, so I can not use =
-    int elementsType = h5_to_npy(lt.ty, lt.has_complex_attribute); // element_type in Python from the hdf5 type and complex tag
-    if (lt.has_complex_attribute)
+    std::vector<npy_intp> L(ds_info.rank());                                 // Make the lengths
+    std::copy(ds_info.lengths.begin(), ds_info.lengths.end(), L.begin());    //npy_intp and size_t may differ, so I can not use =
+    int elementsType = h5_to_npy(ds_info.ty, ds_info.has_complex_attribute); // element_type in Python from the hdf5 type and complex tag
+    if (ds_info.has_complex_attribute)
       L.pop_back(); // remove the last dim which is 2 in complex case,
                     // since we are going to build a array of complex
 
@@ -296,7 +296,7 @@ namespace h5 {
     // in case of allocation error
 
     // read from the file
-    read(g, name, make_av_from_npy((PyArrayObject *)ob), lt);
+    read(g, name, make_av_from_npy((PyArrayObject *)ob), ds_info);
     return ob;
   }
 

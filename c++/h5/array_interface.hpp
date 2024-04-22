@@ -35,25 +35,25 @@ namespace h5::array_interface {
    * @{
    */
 
-  /// Simple struct to store basic information about an n-dimensional array/dataspace.
-  struct h5_lengths_type {
-    /// Shape of the array/dataspace.
+  /// Simple struct to store basic information about an HDF5 dataset.
+  struct dataset_info {
+    /// Shape of the dataspace in the dataset.
     v_t lengths;
 
-    /// h5::datatype stored in the array/dataspace.
+    /// h5::datatype stored in the dataset.
     datatype ty;
 
     /// Whether the stored values are complex.
     bool has_complex_attribute;
 
-    /// Get the rank of the array/dataspace.
+    /// Get the rank of the dataspace in the dataset.
     [[nodiscard]] int rank() const { return static_cast<int>(lengths.size()); }
   };
 
   /**
    * @brief Struct representing an HDF5 hyperslab.
    *
-   * @details A hyperslab is used to select elements form an n-dimensional array/dataspace and it is defined
+   * @details A hyperslab is used to select elements from an n-dimensional array/dataspace and it is defined
    * by 4 arrays of the same size as the rank of the underlying dataspace
    * (see <a href="https://docs.hdfgroup.org/hdf5/v1_12/group___h5_s.html">HDF5 docs</a>):
    * - `offset`: Origin of the hyperslab in the dataspace.
@@ -129,11 +129,14 @@ namespace h5::array_interface {
   /**
    * @brief Struct representing a view on an n-dimensional array/dataspace.
    *
-   * @details A view consists of the parent array and of an h5::array_interface::hyperslab
-   * specifying a selection. The array is defined by a pointer to its data and its shape. If
-   * the data of the array is complex, its imaginary part is treated as just another dimension.
+   * @details A view consists of the parent array and of an h5::array_interface::hyperslab specifying a selection.
+   * The parent array is defined by a pointer to its data and its shape. Note that the shape of the parent array
+   * does not necessarily have to correspond to the actual shape and size of the underlying memory. It is only used
+   * to select the correct elements in the hyperslab.
+   *
+   * If the data of the array is complex, its imaginary part is treated as just another dimension.
    */
-  struct h5_array_view {
+  struct array_view {
     /// h5::datatype stored in the array.
     datatype ty;
 
@@ -141,7 +144,7 @@ namespace h5::array_interface {
     void *start;
 
     /// Shape of the (contiguous) parent array.
-    v_t L_tot;
+    v_t parent_shape;
 
     /// h5::array_interface::hyperslab specifying the selection of the view.
     hyperslab slab;
@@ -160,9 +163,9 @@ namespace h5::array_interface {
      * @param rank Rank of the parent array (excluding the possible added imaginary dimension).
      * @param is_complex Whether the data is complex valued.
      */
-    h5_array_view(datatype ty, void *start, int rank, bool is_complex)
-       : ty(std::move(ty)), start(start), L_tot(rank + is_complex), slab(rank, is_complex), is_complex(is_complex) {
-      if (is_complex) L_tot[rank] = 2;
+    array_view(datatype ty, void *start, int rank, bool is_complex)
+       : ty(std::move(ty)), start(start), parent_shape(rank + is_complex), slab(rank, is_complex), is_complex(is_complex) {
+      if (is_complex) parent_shape[rank] = 2;
     }
 
     /// Get the rank of the view (including the possible added imaginary dimension).
@@ -171,31 +174,39 @@ namespace h5::array_interface {
 
   /**
    * @brief Given a view on an n-dimensional array (dataspace) by specifying its numpy/nda-style strides and
-   * its size, calculate the shape of the underlying parent array and the HDF5 strides of the view.
+   * its size (number of elements in the view), calculate the shape of a possible parent array and the corresponding
+   * HDF5 strides of the view.
    *
-   * @warning This function contains a bug and only works as intended in special cases.
+   * @details The memory layout is assumend to be in C-order. Suppose `parent_shape` is an array containing the shape of
+   * the n-dimensional parent array, `np_strides` contains the numpy strides and `h5_strides` are the HDF5 strides. Then
+   * the following equations have to hold (rank = N):
+   * - `np_strides[N - 1] = h5_strides[N - 1]`
+   * - `np_strides[N - 2] = h5_strides[N - 2] * parent_shape[N - 1]`
+   * - `np_strides[N - 3] = h5_strides[N - 3] * parent_shape[N - 1] * parent_shape[N - 2]`
+   * - `...`
+   * - `np_strides[N - N] = h5_strides[N - N] * parent_shape[N - 1] * parent_shape[N - 2] * ... * parent_shape[1]`.
    *
-   * @details The memory layout is assumend to be in C-order. Suppose `L` is an array containing the shape of the
-   * n-dimensional parent array, `np_strides` contains the numpy strides and `h5_strides` are the HDF5 strides. Then
-   * - `np_strides[n - 1] = h5_strides[n - 1]`,
-   * - `np_strides[n - i] = L[n - 1] * ... * L[n - i - 1] * h5_strides[n - i]` and
-   * - `np_strides[0] = L[n - 1] * ... * L[1] * h5_strides[0]`.
+   * Note that `np_strides[N - i] = m * s[N - 1] * s[N - 2] * ... * s[N - i + 1]`, where `0 < m < s[N - i]` is an integer
+   * an `s` is the true shape of the parent array.
+   *
+   * @note The shape of the parent array as well as the HDF5 strides that fulfill the above equations are not unique.
+   * This is not a problem as long as HDF5 manages to select the correct elements in memory.
    *
    * @param np_strides Numpy/nda-style strides.
    * @param rank Rank of the n-dimensional parent array.
    * @param view_size Number of elements in the given view.
    * @return std::pair containing the shape of the parent array and the HDF5 strides of the view.
    */
-  std::pair<v_t, v_t> get_L_tot_and_strides_h5(long const *np_strides, int rank, long view_size);
+  std::pair<v_t, v_t> get_parent_shape_and_h5_strides(long const *np_strides, int rank, long view_size);
 
   /**
    * @brief Retrieve the shape and the h5::datatype from a dataset.
    *
    * @param g h5::group containing the dataset.
    * @param name Name of the dataset.
-   * @return h5::array_interface::h5_lengths_type containing the shape and HDF5 type of the dataset.
+   * @return h5::array_interface::dataset_info containing the shape and HDF5 type of the dataset.
    */
-  h5_lengths_type get_h5_lengths_type(group g, std::string const &name);
+  dataset_info get_dataset_info(group g, std::string const &name);
 
   /**
    * @brief Write an array view to an HDF5 dataset.
@@ -206,10 +217,10 @@ namespace h5::array_interface {
    *
    * @param g h5::group in which the dataset is created.
    * @param name Name of the dataset
-   * @param v h5::array_interface::h5_array_view to be written.
+   * @param v h5::array_interface::array_view to be written.
    * @param compress Whether to compress the dataset.
    */
-  void write(group g, std::string const &name, h5_array_view const &v, bool compress);
+  void write(group g, std::string const &name, array_view const &v, bool compress);
 
   /**
    * @brief Write an array view to a selected hyperslab of an existing HDF5 dataset.
@@ -221,40 +232,40 @@ namespace h5::array_interface {
    *
    * @param g h5::group which contains the dataset.
    * @param name Name of the dataset.
-   * @param v h5::array_interface::h5_array_view to be written.
-   * @param lt h5::array_interface::h5_lengths_type of the file dataset (only used to check the consistency of the input).
+   * @param v h5::array_interface::array_view to be written.
+   * @param ds_info h5::array_interface::dataset_info of the file dataset (only used to check the consistency of the input).
    * @param sl h5::array_interface::hyperslab specifying the selection to be written to.
    */
-  void write_slice(group g, std::string const &name, h5_array_view const &v, h5_lengths_type lt, hyperslab sl);
+  void write_slice(group g, std::string const &name, array_view const &v, dataset_info ds_info, hyperslab sl);
 
   /**
    * @brief Write an array view to an HDF5 attribute.
    *
    * @param obj h5::object to which the attribute is attached.
    * @param name Name of the attribute.
-   * @param v v h5::array_interface::h5_array_view to be written.
+   * @param v v h5::array_interface::array_view to be written.
    */
-  void write_attribute(object obj, std::string const &name, h5_array_view v);
+  void write_attribute(object obj, std::string const &name, array_view v);
 
   /**
    * @brief Read a given hyperslab from an HDF5 dataset into an array view.
    *
    * @param g h5::group which contains the dataset.
    * @param name Name of the dataset.
-   * @param v h5::array_interface::h5_array_view to read into.
-   * @param lt h5::array_interface::h5_lengths_type of the file dataset (only used to check the consistency of the input).
+   * @param v h5::array_interface::array_view to read into.
+   * @param ds_info h5::array_interface::dataset_info of the file dataset (only used to check the consistency of the input).
    * @param sl h5::array_interface::hyperslab specifying the selection to read from.
    */
-  void read(group g, std::string const &name, h5_array_view v, h5_lengths_type lt, hyperslab sl = {});
+  void read(group g, std::string const &name, array_view v, dataset_info ds_info, hyperslab sl = {});
 
   /**
    * @brief Read from an HDF5 attribute into an array view.
    *
    * @param obj h5::object to which the attribute is attached.
    * @param name Name of the attribute.
-   * @param v h5::array_interface::h5_array_view to read into.
+   * @param v h5::array_interface::array_view to read into.
    */
-  void read_attribute(object obj, std::string const &name, h5_array_view v);
+  void read_attribute(object obj, std::string const &name, array_view v);
 
   /** @} */
 

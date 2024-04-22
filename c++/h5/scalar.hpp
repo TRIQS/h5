@@ -42,10 +42,10 @@ namespace h5 {
      *
      * @tparam T Scalar type.
      * @param x Scalar value.
-     * @return h5::array_interface::h5_array_view of rank 0.
+     * @return h5::array_interface::array_view of rank 0.
      */
     template <typename T>
-    h5_array_view h5_array_view_from_scalar(T &x) {
+    array_view array_view_from_scalar(T &x) {
       return {hdf5_type<std::decay_t<T>>(), (void *)(&x), 0, is_complex_v<std::decay_t<T>>};
     }
 
@@ -68,7 +68,7 @@ namespace h5 {
    */
   template <typename T>
   void h5_write(group g, std::string const &name, T const &x) H5_REQUIRES(std::is_arithmetic_v<T> or is_complex_v<T> or std::is_same_v<T, dcplx_t>) {
-    array_interface::write(g, name, array_interface::h5_array_view_from_scalar(x), false);
+    array_interface::write(g, name, array_interface::array_view_from_scalar(x), false);
   }
 
   /**
@@ -96,19 +96,19 @@ namespace h5 {
       }
     }
 
-    // get h5_lengths_type
-    auto lt = array_interface::get_h5_lengths_type(g, name);
+    // get dataset_info
+    auto ds_info = array_interface::get_dataset_info(g, name);
 
     // read complex values stored as a compound HDF5 datatype
     if constexpr (is_complex_v<T>) {
-      if (hdf5_type_equal(lt.ty, hdf5_type<dcplx_t>())) {
+      if (hdf5_type_equal(ds_info.ty, hdf5_type<dcplx_t>())) {
         h5_read(g, name, reinterpret_cast<dcplx_t &>(x)); // NOLINT (reinterpret_cast is safe here)
         return;
       }
     }
 
     // read scalar value
-    array_interface::read(g, name, array_interface::h5_array_view_from_scalar(x), lt);
+    array_interface::read(g, name, array_interface::array_view_from_scalar(x), ds_info);
   }
 
   /**
@@ -123,7 +123,7 @@ namespace h5 {
    */
   template <typename T>
   void h5_write_attribute(object obj, std::string const &name, T const &x) H5_REQUIRES(std::is_arithmetic_v<T> or is_complex_v<T>) {
-    array_interface::write_attribute(obj, name, array_interface::h5_array_view_from_scalar(x));
+    array_interface::write_attribute(obj, name, array_interface::array_view_from_scalar(x));
   }
 
   /**
@@ -138,7 +138,7 @@ namespace h5 {
    */
   template <typename T>
   void h5_read_attribute(object obj, std::string const &name, T &x) H5_REQUIRES(std::is_arithmetic_v<T> or is_complex_v<T>) {
-    array_interface::read_attribute(obj, name, array_interface::h5_array_view_from_scalar(x));
+    array_interface::read_attribute(obj, name, array_interface::array_view_from_scalar(x));
   }
 
   /** @} */

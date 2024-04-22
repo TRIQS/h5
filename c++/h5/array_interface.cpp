@@ -38,13 +38,13 @@ namespace h5::array_interface {
   namespace {
 
     // Create an HDF5 memory dataspace.
-    dataspace make_mem_dspace(h5_array_view const &v) {
+    dataspace make_mem_dspace(array_view const &v) {
       // scalar case
       if (v.rank() == 0) return H5Screate(H5S_SCALAR);
 
-      // create a dataspace of rank v.rank() and with shape v.L_tot
-      dataspace dspace = H5Screate_simple(v.slab.rank(), v.L_tot.data(), nullptr);
-      if (!dspace.is_valid()) throw std::runtime_error("Error in make_mem_dspace: Creating the dataspace for an h5_array_view failed");
+      // create a dataspace of rank v.rank() and with shape v.parent_shape
+      dataspace dspace = H5Screate_simple(v.slab.rank(), v.parent_shape.data(), nullptr);
+      if (!dspace.is_valid()) throw std::runtime_error("Error in make_mem_dspace: Creating the dataspace for an array_view failed");
 
       // select the hyperslab according to v.slab
       herr_t err = H5Sselect_hyperslab(dspace, H5S_SELECT_SET, v.slab.offset.data(), v.slab.stride.data(), v.slab.count.data(),
@@ -57,32 +57,52 @@ namespace h5::array_interface {
 
   } // namespace
 
-  std::pair<v_t, v_t> get_L_tot_and_strides_h5(long const *np_strides, int rank, long view_size) {
+  std::pair<v_t, v_t> get_parent_shape_and_h5_strides(long const *np_strides, int rank, long view_size) {
     // scalar case: return empty vectors
     if (rank == 0) return {};
 
-    // empty nd-array case: return (0,0,0), (1,1,1)
+    // empty view case: return (0,0,0), (1,1,1)
     if (view_size == 0) return {v_t(rank, 0), v_t(rank, 1)};
 
-    // general case
-    v_t Ltot(rank), h5_strides(rank);
-    for (int u = 0; u < rank; ++u) h5_strides[u] = np_strides[u];
-    Ltot[0] = view_size;
+    // for the general case, we would like to find a parent_shape and h5_strides such that the following equations hold (rank = N):
+    // 1. np_strides[N - 1] = h5_strides[N - 1]
+    // 2. np_strides[N - 2] = h5_strides[N - 2] * parent_shape[N - 1]
+    // 3. np_strides[N - 3] = h5_strides[N - 3] * parent_shape[N - 1] * parent_shape[N - 2]
+    // ...
+    // N. np_strides[N - N] = h5_strides[N - N] * parent_shape[N - 1] * parent_shape[N - 2] * ... * parent_shape[1]
+    //
+    // note that np_strides[N - i] = m * s[N - 1] * s[N - 2] * ... * s[N - i + 1], where 0 < m < s[N - i] and
+    // s is the true shape of the parent array
 
+    // initialize h5_strides with the np_strides
+    v_t parent_shape(rank), h5_strides(rank);
+    for (int u = 0; u < rank; ++u) h5_strides[u] = np_strides[u];
+
+    // from the above equations it follows that parent_shape[0] (size of the slowest varying dimension) is arbitrary
+    parent_shape[0] = view_size;
+
+    // to solve the equations, we use the following algorithm:
+    // - Eq. 1 is already satisfied
+    // - parent_shape[N - i] = gcd(np_strides[N - i], np_strides[N - i - 1], ..., np_strides[0])
+    // - h5_strides[N - 1] = np_strides[N - 1] / parent_shape[N - 1]
+    // - divide equations i, i+1, ..., N by parent_shape[N - i]
+    // - repeat until all equations are satisfied
+    // that way we guarantee that the parent_shape[i] >= s[i] (see note above), which is important to make sure that
+    // the view elements are not out of bounds when HDF5 selects the hyperslab
     for (int u = rank - 2; u >= 0; --u) {
-      // L[u+1] as gcd of size and stride[u] ... stride[0]
-      hsize_t L = h5_strides[u];
-      // L becomes the gcd
-      for (int v = u - 1; v >= 0; --v) { L = std::gcd(L, h5_strides[v]); }
-      // divides
-      for (int v = u; v >= 0; --v) { h5_strides[v] /= L; }
-      Ltot[u + 1] = L;
+      // calculate the gcd
+      hsize_t gcd = h5_strides[u];
+      for (int v = u - 1; v >= 0; --v) { gcd = std::gcd(gcd, h5_strides[v]); }
+      // set partent_shape to the gcd
+      parent_shape[u + 1] = gcd;
+      // divide the remaining equations by the gcd
+      for (int v = u; v >= 0; --v) { h5_strides[v] /= gcd; }
     }
 
-    return {Ltot, h5_strides};
+    return {parent_shape, h5_strides};
   }
 
-  h5_lengths_type get_h5_lengths_type(group g, std::string const &name) {
+  dataset_info get_dataset_info(group g, std::string const &name) {
     // open dataset
     dataset ds = g.open_dataset(name);
 
@@ -97,7 +117,7 @@ namespace h5::array_interface {
     return {std::move(dims_out), ty, has_complex_attribute};
   }
 
-  void write(group g, std::string const &name, h5_array_view const &v, bool compress) {
+  void write(group g, std::string const &name, array_view const &v, bool compress) {
     // unlink the dataset if it already exists
     g.unlink(name);
 
@@ -141,15 +161,15 @@ namespace h5::array_interface {
     if (v.is_complex) h5_write_attribute(ds, "__complex__", "1");
   }
 
-  void write_slice(group g, std::string const &name, h5_array_view const &v, h5_lengths_type lt, hyperslab sl) {
+  void write_slice(group g, std::string const &name, array_view const &v, dataset_info ds_info, hyperslab sl) {
     // empty hyperslab
     if (sl.empty()) return;
 
     // check consistency of input: block shape {1, ..., 1} is assumed
     if (v.slab.count != sl.count) throw std::runtime_error("Error in h5::array_interface::write_slice: Memory and file slabs are incompatible");
-    if (not hdf5_type_equal(v.ty, lt.ty))
+    if (not hdf5_type_equal(v.ty, ds_info.ty))
       throw std::runtime_error("Error in h5::array_interface::write_slice: Incompatible HDF5 types: " + get_name_of_h5_type(v.ty)
-                               + " != " + get_name_of_h5_type(lt.ty));
+                               + " != " + get_name_of_h5_type(ds_info.ty));
 
     // open existing dataset, get dataspace and select hyperslab
     dataset ds            = g.open_dataset(name);
@@ -169,7 +189,7 @@ namespace h5::array_interface {
     }
   }
 
-  void write_attribute(object obj, std::string const &name, h5_array_view v) {
+  void write_attribute(object obj, std::string const &name, array_view v) {
     // check if the attribute already exists
     if (H5LTfind_attribute(obj, name.c_str()) != 0)
       throw std::runtime_error("Error in h5::array_interface::write_attribute: Attribute " + name + " already exists");
@@ -186,7 +206,7 @@ namespace h5::array_interface {
     if (err < 0) throw std::runtime_error("Error in h5::array_interface::write_attribute: Writing to the attribute " + name + " failed");
   }
 
-  void read(group g, std::string const &name, h5_array_view v, h5_lengths_type lt, hyperslab sl) {
+  void read(group g, std::string const &name, array_view v, dataset_info ds_info, hyperslab sl) {
     // open dataset and get dataspace
     dataset ds            = g.open_dataset(name);
     dataspace file_dspace = H5Dget_space(ds);
@@ -199,20 +219,20 @@ namespace h5::array_interface {
     }
 
     // check consistency of input
-    if (H5Tget_class(v.ty) != H5Tget_class(lt.ty))
+    if (H5Tget_class(v.ty) != H5Tget_class(ds_info.ty))
       throw std::runtime_error("Error in h5::array_interface::read: Incompatible HDF5 types: " + get_name_of_h5_type(v.ty)
-                               + " != " + get_name_of_h5_type(lt.ty));
+                               + " != " + get_name_of_h5_type(ds_info.ty));
 
-    if (not hdf5_type_equal(v.ty, lt.ty))
-      std::cerr << "WARNING: HDF5 type mismatch while reading into an h5_array_view: " + get_name_of_h5_type(v.ty)
-            + " != " + get_name_of_h5_type(lt.ty) + "\n";
+    if (not hdf5_type_equal(v.ty, ds_info.ty))
+      std::cerr << "WARNING: HDF5 type mismatch while reading into an array_view: " + get_name_of_h5_type(v.ty)
+            + " != " + get_name_of_h5_type(ds_info.ty) + "\n";
 
-    if (lt.rank() != v.rank())
+    if (ds_info.rank() != v.rank())
       throw std::runtime_error("Error in h5::array_interface::read: Incompatible ranks: " + std::to_string(v.rank())
-                               + " != " + std::to_string(lt.rank()));
+                               + " != " + std::to_string(ds_info.rank()));
 
     // block shape of {1, ..., 1} is assumed
-    if (sl.empty() and lt.lengths != v.slab.count) throw std::runtime_error("Error in h5::array_interface::read: Incompatible shapes");
+    if (sl.empty() and ds_info.lengths != v.slab.count) throw std::runtime_error("Error in h5::array_interface::read: Incompatible shapes");
 
     // memory dataspace
     dataspace mem_dspace = make_mem_dspace(v);
@@ -225,7 +245,7 @@ namespace h5::array_interface {
     }
   }
 
-  void read_attribute(object obj, std::string const &name, h5_array_view v) {
+  void read_attribute(object obj, std::string const &name, array_view v) {
     // open attribute
     attribute attr = H5Aopen(obj, name.c_str(), H5P_DEFAULT);
     if (!attr.is_valid()) throw std::runtime_error("Error in h5::array_interface::read_attribute: Opening the attribute " + name + " failed");
