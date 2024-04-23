@@ -296,7 +296,7 @@ namespace h5 {
     // in case of allocation error
 
     // read from the file
-    read(g, name, make_av_from_npy((PyArrayObject *)ob), ds_info);
+    read(g, name, make_av_from_npy((PyArrayObject *)ob));
     return ob;
   }
 

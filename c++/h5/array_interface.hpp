@@ -25,6 +25,8 @@
 #include "./group.hpp"
 #include "./object.hpp"
 
+#include <algorithm>
+#include <numeric>
 #include <string>
 #include <utility>
 
@@ -124,15 +126,29 @@ namespace h5::array_interface {
 
     /// Check whether the hyperslab is empty (has been initialized).
     [[nodiscard]] bool empty() const { return count.empty(); }
+
+    /// Get the shape of the selected hyperslab.
+    [[nodiscard]] v_t shape() const {
+      v_t shape(rank());
+      std::transform(count.begin(), count.end(), block.begin(), shape.begin(), std::multiplies<>());
+      return shape;
+    }
+
+    /// Get the total number of elements in the hyperslab.
+    [[nodiscard]] auto size() const {
+      auto sh = shape();
+      return std::accumulate(sh.begin(), sh.end(), (hsize_t)1, std::multiplies<>());
+    }
   };
 
   /**
    * @brief Struct representing a view on an n-dimensional array/dataspace.
    *
    * @details A view consists of the parent array and of an h5::array_interface::hyperslab specifying a selection.
-   * The parent array is defined by a pointer to its data and its shape. Note that the shape of the parent array
-   * does not necessarily have to correspond to the actual shape and size of the underlying memory. It is only used
-   * to select the correct elements in the hyperslab.
+   * The parent array is defined by a pointer to its data and its shape.
+   *
+   * Note that the shape of the parent array does not necessarily have to correspond to the actual shape and size of
+   * the underlying memory. It is only used to select the correct elements in the hyperslab.
    *
    * If the data of the array is complex, its imaginary part is treated as just another dimension.
    */
@@ -202,6 +218,14 @@ namespace h5::array_interface {
   /**
    * @brief Retrieve the shape and the h5::datatype from a dataset.
    *
+   * @param ds h5::dataset.
+   * @return h5::array_interface::dataset_info containing the shape and HDF5 type of the dataset.
+   */
+  dataset_info get_dataset_info(dataset ds);
+
+  /**
+   * @brief Retrieve the shape and the h5::datatype from a dataset with a given name in the given group.
+   *
    * @param g h5::group containing the dataset.
    * @param name Name of the dataset.
    * @return h5::array_interface::dataset_info containing the shape and HDF5 type of the dataset.
@@ -212,8 +236,6 @@ namespace h5::array_interface {
    * @brief Write an array view to an HDF5 dataset.
    *
    * @details If a link with the given name already exists, it is first unlinked.
-   *
-   * @warning This function only works consistently if the blocks of the hyperslab contain only a single element!
    *
    * @param g h5::group in which the dataset is created.
    * @param name Name of the dataset
@@ -228,15 +250,12 @@ namespace h5::array_interface {
    * @details It checks if the number of elements in the view is the same as selected in the hyperslab and if the
    * datatypes are compatible. Otherwise, an exception is thrown.
    *
-   * @warning This function only works consistently if the blocks of both hyperslabs contain only a single element!
-   *
    * @param g h5::group which contains the dataset.
    * @param name Name of the dataset.
    * @param v h5::array_interface::array_view to be written.
-   * @param ds_info h5::array_interface::dataset_info of the file dataset (only used to check the consistency of the input).
    * @param sl h5::array_interface::hyperslab specifying the selection to be written to.
    */
-  void write_slice(group g, std::string const &name, array_view const &v, dataset_info ds_info, hyperslab sl);
+  void write_slice(group g, std::string const &name, array_view const &v, hyperslab sl);
 
   /**
    * @brief Write an array view to an HDF5 attribute.
@@ -253,10 +272,9 @@ namespace h5::array_interface {
    * @param g h5::group which contains the dataset.
    * @param name Name of the dataset.
    * @param v h5::array_interface::array_view to read into.
-   * @param ds_info h5::array_interface::dataset_info of the file dataset (only used to check the consistency of the input).
    * @param sl h5::array_interface::hyperslab specifying the selection to read from.
    */
-  void read(group g, std::string const &name, array_view v, dataset_info ds_info, hyperslab sl = {});
+  void read(group g, std::string const &name, array_view v, hyperslab sl = {});
 
   /**
    * @brief Read from an HDF5 attribute into an array view.

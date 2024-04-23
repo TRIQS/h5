@@ -162,7 +162,7 @@ namespace h5 {
         if (ds_info.rank() != 1 + is_complex_v<T>)
           throw make_runtime_error("Error in h5_read: Reading a vector from an array of rank ", ds_info.rank(), " is not allowed");
         v.resize(ds_info.lengths[0]);
-        array_interface::read(g, name, array_interface::array_view_from_vector(v), ds_info);
+        array_interface::read(g, name, array_interface::array_view_from_vector(v));
       } else if constexpr (std::is_same_v<T, std::string> or std::is_same_v<T, std::vector<std::string>>) {
         // vector of strings or vector of vector of strings
         char_buf cb;

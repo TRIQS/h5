@@ -118,7 +118,7 @@ namespace h5 {
       v.slab.count[0]   = N;
       v.slab.stride[0]  = 1;
       v.parent_shape[0] = N;
-      array_interface::read(g, name, v, ds_info);
+      array_interface::read(g, name, v);
     } else {
       // array of generic type
       auto g2 = g.open_group(name);

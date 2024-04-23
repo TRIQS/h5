@@ -102,11 +102,8 @@ namespace h5::array_interface {
     return {parent_shape, h5_strides};
   }
 
-  dataset_info get_dataset_info(group g, std::string const &name) {
-    // open dataset
-    dataset ds = g.open_dataset(name);
-
-    // retrieve shape information
+  dataset_info get_dataset_info(dataset ds) {
+    // retrieve shape and datatype information
     datatype ty                = H5Dget_type(ds);
     bool has_complex_attribute = H5LTfind_attribute(ds, "__complex__");
     dataspace dspace           = H5Dget_space(ds);
@@ -117,9 +114,17 @@ namespace h5::array_interface {
     return {std::move(dims_out), ty, has_complex_attribute};
   }
 
+  dataset_info get_dataset_info(group g, std::string const &name) {
+    dataset ds = g.open_dataset(name);
+    return get_dataset_info(ds);
+  }
+
   void write(group g, std::string const &name, array_view const &v, bool compress) {
     // unlink the dataset if it already exists
     g.unlink(name);
+
+    // shape of the hyperslab in memory
+    auto hs_shape = v.slab.shape();
 
     // chunk the dataset and add compression
     proplist cparms = H5P_DEFAULT;
@@ -131,7 +136,7 @@ namespace h5::array_interface {
       for (int i = v.rank() - 1; i >= 0; --i) {
         H5_ASSERT(max_chunk_size >= chunk_size);
         hsize_t max_dim = max_chunk_size / chunk_size;
-        chunk_dims[i]   = std::clamp(v.slab.count[i], hsize_t{1}, max_dim);
+        chunk_dims[i]   = std::clamp(hs_shape[i], hsize_t{1}, max_dim);
         chunk_size *= chunk_dims[i];
       }
       cparms = H5Pcreate(H5P_DATASET_CREATE);
@@ -139,8 +144,8 @@ namespace h5::array_interface {
       H5Pset_deflate(cparms, 1);
     }
 
-    // dataspace for the dataset in the file: v.slab.block shape {1, ..., 1} is assumed
-    dataspace file_dspace = H5Screate_simple(v.slab.rank(), v.slab.count.data(), nullptr);
+    // dataspace for the dataset in the file
+    dataspace file_dspace = H5Screate_simple(v.slab.rank(), hs_shape.data(), nullptr);
 
     // create the dataset in the file
     dataset ds = H5Dcreate2(g, name.c_str(), v.ty, file_dspace, H5P_DEFAULT, cparms, H5P_DEFAULT);
@@ -161,12 +166,14 @@ namespace h5::array_interface {
     if (v.is_complex) h5_write_attribute(ds, "__complex__", "1");
   }
 
-  void write_slice(group g, std::string const &name, array_view const &v, dataset_info ds_info, hyperslab sl) {
+  void write_slice(group g, std::string const &name, array_view const &v, hyperslab sl) {
     // empty hyperslab
     if (sl.empty()) return;
 
-    // check consistency of input: block shape {1, ..., 1} is assumed
-    if (v.slab.count != sl.count) throw std::runtime_error("Error in h5::array_interface::write_slice: Memory and file slabs are incompatible");
+    // check consistency of input
+    if (v.slab.size() != sl.size()) throw std::runtime_error("Error in h5::array_interface::write_slice: Incompatible sizes");
+
+    auto ds_info = get_dataset_info(g, name);
     if (not hdf5_type_equal(v.ty, ds_info.ty))
       throw std::runtime_error("Error in h5::array_interface::write_slice: Incompatible HDF5 types: " + get_name_of_h5_type(v.ty)
                                + " != " + get_name_of_h5_type(ds_info.ty));
@@ -206,7 +213,7 @@ namespace h5::array_interface {
     if (err < 0) throw std::runtime_error("Error in h5::array_interface::write_attribute: Writing to the attribute " + name + " failed");
   }
 
-  void read(group g, std::string const &name, array_view v, dataset_info ds_info, hyperslab sl) {
+  void read(group g, std::string const &name, array_view v, hyperslab sl) {
     // open dataset and get dataspace
     dataset ds            = g.open_dataset(name);
     dataspace file_dspace = H5Dget_space(ds);
@@ -219,6 +226,7 @@ namespace h5::array_interface {
     }
 
     // check consistency of input
+    auto ds_info = get_dataset_info(g, name);
     if (H5Tget_class(v.ty) != H5Tget_class(ds_info.ty))
       throw std::runtime_error("Error in h5::array_interface::read: Incompatible HDF5 types: " + get_name_of_h5_type(v.ty)
                                + " != " + get_name_of_h5_type(ds_info.ty));
@@ -227,12 +235,9 @@ namespace h5::array_interface {
       std::cerr << "WARNING: HDF5 type mismatch while reading into an array_view: " + get_name_of_h5_type(v.ty)
             + " != " + get_name_of_h5_type(ds_info.ty) + "\n";
 
-    if (ds_info.rank() != v.rank())
-      throw std::runtime_error("Error in h5::array_interface::read: Incompatible ranks: " + std::to_string(v.rank())
-                               + " != " + std::to_string(ds_info.rank()));
-
-    // block shape of {1, ..., 1} is assumed
-    if (sl.empty() and ds_info.lengths != v.slab.count) throw std::runtime_error("Error in h5::array_interface::read: Incompatible shapes");
+    auto sl_size = sl.size();
+    if (sl.empty()) { sl_size = std::accumulate(ds_info.lengths.begin(), ds_info.lengths.end(), (hsize_t)1, std::multiplies<>()); }
+    if (sl_size != v.slab.size()) throw std::runtime_error("Error in h5::array_interface::read: Incompatible sizes");
 
     // memory dataspace
     dataspace mem_dspace = make_mem_dspace(v);

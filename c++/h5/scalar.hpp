@@ -108,7 +108,7 @@ namespace h5 {
     }
 
     // read scalar value
-    array_interface::read(g, name, array_interface::array_view_from_scalar(x), ds_info);
+    array_interface::read(g, name, array_interface::array_view_from_scalar(x));
   }
 
   /**

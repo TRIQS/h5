@@ -58,7 +58,7 @@ the interface.
 * @ref rw_variant
 * @ref rw_vector
 
-The @ref rw_array "array interface" helps with loading and storing n-dimensional arrays.
+The @ref rw_arrayinterface "array interface" helps with loading and storing n-dimensional arrays.
 
 Furthermore, the generic design of the read/write functionality makes it easily extendible to support custom user types as well.
 @ref ex2 shows how to make a user defined type HDF5 serializable.

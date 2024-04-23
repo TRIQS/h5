@@ -17,6 +17,8 @@
 #include <gtest/gtest.h>
 #include <h5/h5.hpp>
 
+#include <hdf5_hl.h>
+
 #include <numeric>
 #include <vector>
 
@@ -123,107 +125,126 @@ TEST(H5, GetParentShapeAndH5Strides3D) {
 TEST(H5, ArrayInterface1DArray) {
   // test the array interface for a 1D array
   h5::file file("1d_array.h5", 'w');
+  h5::group group(file);
   std::vector<int> data(100, 0);
   std::iota(data.begin(), data.end(), 0);
   int rank = 1;
   int size = static_cast<int>(data.size());
 
   // write the full array
-  h5::array_interface::array_view full_view(h5::hdf5_type<int>(), (void *)data.data(), rank, false);
-  full_view.slab.count[0]   = size;
-  full_view.parent_shape[0] = size;
-  h5::array_interface::write(file, "full_view", full_view, true);
+  h5::array_interface::array_view view_1(h5::hdf5_type<int>(), (void *)data.data(), rank, false);
+  view_1.slab.count[0]   = size;
+  view_1.parent_shape[0] = size;
+  h5::array_interface::write(file, "view_1", view_1, true);
 
   // read the full array
-  std::vector<int> full_data_in(data.size(), 0);
-  h5::array_interface::array_view full_view_in(h5::hdf5_type<int>(), (void *)full_data_in.data(), rank, false);
-  full_view_in.slab.count[0]   = size;
-  full_view_in.parent_shape[0] = size;
-  auto full_view_ds_info       = h5::array_interface::get_dataset_info(file, "full_view");
-  h5::array_interface::read(file, "full_view", full_view_in, full_view_ds_info, full_view.slab);
+  std::vector<int> data_in_1(data.size(), 0);
+  h5::array_interface::array_view view_in_1(h5::hdf5_type<int>(), (void *)data_in_1.data(), rank, false);
+  view_in_1.slab.count[0]   = size;
+  view_in_1.parent_shape[0] = size;
+  h5::array_interface::read(file, "view_1", view_in_1);
 
   // check results
-  for (int i = 0; i < size; ++i) { EXPECT_EQ(full_data_in[i], data[i]); }
+  for (int i = 0; i < size; ++i) { EXPECT_EQ(data_in_1[i], data[i]); }
 
-  // // write blocks of size 10, skipping every other block, starting with the second block
-  // h5::array_interface::array_view block_view(h5::hdf5_type<int>(), (void *)data.data(), rank, false);
-  // block_view.slab.offset[0]  = 10;
-  // block_view.slab.stride[0]  = 20;
-  // block_view.slab.count[0]   = 5;
-  // block_view.slab.block[0]   = 10;
-  // block_view.parent_shape[0] = size;
-  // h5::array_interface::write(file, "block_view", block_view, true);
+  // write blocks of size 10, skipping every other block, starting with the second block
+  h5::array_interface::array_view view_2(h5::hdf5_type<int>(), (void *)data.data(), rank, false);
+  view_2.slab.offset[0]  = 10;
+  view_2.slab.stride[0]  = 20;
+  view_2.slab.count[0]   = 5;
+  view_2.slab.block[0]   = 10;
+  view_2.parent_shape[0] = size;
+  h5::array_interface::write(file, "view_2", view_2, true);
 
-  // // read blocks of size 10, skipping every other block, starting with the second block
-  // std::vector<int> block_data_in(50, 0);
-  // h5::array_interface::array_view block_view_in(h5::hdf5_type<int>(), (void *)block_data_in.data(), rank, false);
-  // block_view_in.slab.count[0]   = 50;
-  // block_view_in.parent_shape[0] = 50;
-  // h5::array_interface::read(file, "full_view", block_view_in, full_view_lt, block_view_in.slab);
+  // read the data written to view_2 into a 1D array
+  std::vector<int> data_in_2(50, 0);
+  h5::array_interface::array_view view_in_2(h5::hdf5_type<int>(), (void *)data_in_2.data(), rank, false);
+  view_in_2.slab.count[0]   = 50;
+  view_in_2.parent_shape[0] = 50;
+  h5::array_interface::read(file, "view_2", view_in_2);
 
-  // read the block view
-  // std::vector<int> block_data_in(50, 0);
-  // h5::array_interface::array_view block_view_in(h5::hdf5_type<int>(), (void *)block_data_in.data(), rank, false);
-  // block_view_in.slab.count[0]   = 50;
-  // block_view_in.parent_shape[0] = 50;
-  // auto block_view_lt            = h5::array_interface::get_dataset_info(file, "block_view");
-  // h5::array_interface::read(file, "block_view", block_view_in, block_view_lt, block_view_in.slab);
+  // read blocks of size 10, skipping every other block, starting with the second block directly from view_1
+  std::vector<int> data_in_3(50, 0);
+  h5::array_interface::array_view view_in_3(h5::hdf5_type<int>(), (void *)data_in_3.data(), rank, false);
+  view_in_3.slab.count[0]   = 50;
+  view_in_3.parent_shape[0] = 50;
+  h5::array_interface::read(file, "view_1", view_in_3, view_2.slab);
+
+  // check results
+  for (int i = 0; i < 50; ++i) { EXPECT_EQ(data_in_2[i], data_in_3[i]); }
+
+  // write the blocks selected in view_2 to a 5x10 2D array
+  h5::v_t shape_3        = {5, 10};
+  h5::dataspace dspace_3 = H5Screate_simple(2, shape_3.data(), nullptr);
+  std::ignore            = group.create_dataset("view_3", h5::hdf5_type<int>(), dspace_3);
+  h5::array_interface::hyperslab slab_4(2, false);
+  slab_4.count = {5, 1};
+  slab_4.block = {1, 10};
+  h5::array_interface::write_slice(file, "view_3", view_2, slab_4);
+
+  // read the 2D view_3 into a 1D array
+  std::vector<int> data_in_4(50, 0);
+  h5::array_interface::array_view view_in_4(h5::hdf5_type<int>(), (void *)data_in_4.data(), rank, false);
+  view_in_4.slab.count[0]   = 50;
+  view_in_4.parent_shape[0] = 50;
+  h5::array_interface::read(file, "view_3", view_in_4, slab_4);
+
+  for (int i = 0; i < 50; ++i) { EXPECT_EQ(data_in_4[i], data_in_3[i]); }
 }
 
-// TEST(H5, ArrayInterface2DArray) {
-//   // write a 5x5 array and read a 5x3 array (every other column)
-//   std::vector<int> data(25, 0);
-//   std::iota(data.begin(), data.end(), 0);
+TEST(H5, ArrayInterface3DArray) {
+  // test the array interface for a 3D array
+  h5::file file("3d_array.h5", 'w');
+  h5::group group(file);
+  std::vector<int> data(27, 0);
+  std::iota(data.begin(), data.end(), 0);
+  int rank = 3;
+  int size = static_cast<int>(data.size());
 
-//   // create an array_view of rank 2 with dimensions 5x5 of the original data
-//   int rank   = 2;
-//   int rows_w = 5;
-//   int cols_w = 5;
-//   h5::array_interface::array_view view(h5::hdf5_type<int>(), (void *)data.data(), rank, false);
-//   // view.slab.count[0]   = rows_w;
-//   // view.slab.count[1]   = cols_w;
-//   // view.parent_shape[0] = rows_w;
-//   // view.parent_shape[1] = cols_w;
-//   view.slab.count[0]   = 1;
-//   view.slab.count[1]   = 1;
-//   view.slab.block[0]   = 5;
-//   view.slab.block[1]   = 5;
-//   view.parent_shape[0] = rows_w;
-//   view.parent_shape[1] = cols_w;
+  // write the full data as a 3x3x3 array
+  h5::array_interface::array_view view_1(h5::hdf5_type<int>(), (void *)data.data(), rank, false);
+  view_1.slab.count   = {3, 3, 3};
+  view_1.parent_shape = {3, 3, 3};
+  h5::array_interface::write(file, "view_1", view_1, true);
 
-//   // create file in read/write mode
-//   h5::file file("2d_array.h5", 'w');
+  // read the full array as a 1D array
+  std::vector<int> data_in_1(data.size(), 0);
+  h5::array_interface::array_view view_in_1(h5::hdf5_type<int>(), (void *)data_in_1.data(), 1, false);
+  view_in_1.slab.count[0]   = size;
+  view_in_1.parent_shape[0] = size;
+  h5::array_interface::read(file, "view_1", view_in_1);
 
-//   // write array_view to file
-//   h5::array_interface::write(file, "view", view, false);
+  // check results
+  for (int i = 0; i < size; ++i) { EXPECT_EQ(data_in_1[i], data[i]); }
 
-//   // reserve memory for reading
-//   std::vector<int> data_in(15, 0);
+  // write the 3x3 arrays starting at (0, 0, 0) and (2, 0, 0) into a 6x3 array
+  h5::array_interface::array_view view_2(h5::hdf5_type<int>(), (void *)data.data(), rank, false);
+  view_2.slab.offset     = {0, 0, 0};
+  view_2.slab.stride     = {2, 1, 1};
+  view_2.slab.count      = {2, 1, 1};
+  view_2.slab.block      = {1, 3, 3};
+  view_2.parent_shape    = {3, 3, 3};
+  h5::v_t shape_2        = {6, 3};
+  h5::dataspace dspace_2 = H5Screate_simple(2, shape_2.data(), nullptr);
+  std::ignore            = group.create_dataset("view_2", h5::hdf5_type<int>(), dspace_2);
+  h5::array_interface::hyperslab slab_2(2, false);
+  slab_2.count = shape_2;
+  h5::array_interface::write_slice(file, "view_2", view_2, slab_2);
 
-//   // create an array_view or rank 2 with dimensions 5x3 of the read memory
-//   int rows_in = 5;
-//   int cols_in = 3;
-//   h5::array_interface::array_view view_in(h5::hdf5_type<int>(), (void *)data_in.data(), rank, false);
-//   view_in.slab.count[0]   = rows_in;
-//   view_in.slab.count[1]   = cols_in;
-//   view_in.parent_shape[0] = rows_in;
-//   view_in.parent_shape[1] = cols_in;
+  // read in the data written to view_2 into a 2D array
+  std::vector<int> data_in_2(18, 0);
+  h5::array_interface::array_view view_in_2(h5::hdf5_type<int>(), (void *)data_in_2.data(), 2, false);
+  view_in_2.slab = slab_2;
+  view_in_2.parent_shape = shape_2;
+  h5::array_interface::read(file, "view_2", view_in_2);
 
-//   // create an hyperslab to select the data to be read from the file (every other column -> stride in second dimension is 2)
-//   h5::array_interface::hyperslab slab_in(rank, false);
-//   slab_in.count[0]  = rows_in;
-//   slab_in.count[1]  = cols_in;
-//   slab_in.stride[0] = 1;
-//   slab_in.stride[1] = 2;
+  // read in the 3x3 arrays starting at (0, 0, 0) and (2, 0, 0) directly from view_1
+  std::vector<int> data_in_3(18, 0);
+  h5::array_interface::array_view view_in_3(h5::hdf5_type<int>(), (void *)data_in_3.data(), 2, false);
+  view_in_3.slab = slab_2;
+  view_in_3.parent_shape = shape_2;
+  h5::array_interface::read(file, "view_1", view_in_3, view_2.slab);
 
-//   // get dataset_info from the dataset in the file
-//   auto lengths_type = h5::array_interface::get_dataset_info(file, "view");
-
-//   // read data from file
-//   h5::array_interface::read(file, "view", view_in, lengths_type, slab_in);
-
-//   // check results
-//   for (int i = 0; i < rows_in; ++i) {
-//     for (int j = 0; j < cols_in; ++j) { EXPECT_EQ(data_in[i * cols_in + j], data[i * cols_w + j * 2]); }
-//   }
-// }
+    // check results
+  for (int i = 0; i < 18; ++i) { EXPECT_EQ(data_in_2[i], data_in_3[i]); }
+}
