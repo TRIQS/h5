@@ -202,9 +202,6 @@ namespace h5::array_interface {
    * - `...`
    * - `np_strides[N - N] = h5_strides[N - N] * parent_shape[N - 1] * parent_shape[N - 2] * ... * parent_shape[1]`.
    *
-   * Note that `np_strides[N - i] = m * s[N - 1] * s[N - 2] * ... * s[N - i + 1]`, where `0 < m < s[N - i]` is an integer
-   * an `s` is the true shape of the parent array.
-   *
    * @note The shape of the parent array as well as the HDF5 strides that fulfill the above equations are not unique.
    * This is not a problem as long as HDF5 manages to select the correct elements in memory.
    *

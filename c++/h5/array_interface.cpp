@@ -71,31 +71,23 @@ namespace h5::array_interface {
     // ...
     // N. np_strides[N - N] = h5_strides[N - N] * parent_shape[N - 1] * parent_shape[N - 2] * ... * parent_shape[1]
     //
-    // note that np_strides[N - i] = m * s[N - 1] * s[N - 2] * ... * s[N - i + 1], where 0 < m < s[N - i] and
-    // s is the true shape of the parent array
+    // Note: The shape of the parent array as well as the HDF5 strides that fulfill the above equations are not unique.
+    // This is not a problem as long as HDF5 manages to select the correct elements in memory.
 
-    // initialize h5_strides with the np_strides
+    // create the result vectors
     v_t parent_shape(rank), h5_strides(rank);
-    for (int u = 0; u < rank; ++u) h5_strides[u] = np_strides[u];
 
     // from the above equations it follows that parent_shape[0] (size of the slowest varying dimension) is arbitrary
     parent_shape[0] = view_size;
 
-    // to solve the equations, we use the following algorithm:
-    // - Eq. 1 is already satisfied
-    // - parent_shape[N - i] = gcd(np_strides[N - i], np_strides[N - i - 1], ..., np_strides[0])
-    // - h5_strides[N - 1] = np_strides[N - 1] / parent_shape[N - 1]
-    // - divide equations i, i+1, ..., N by parent_shape[N - i]
-    // - repeat until all equations are satisfied
-    // that way we guarantee that the parent_shape[i] >= s[i] (see note above), which is important to make sure that
-    // the view elements are not out of bounds when HDF5 selects the hyperslab
+    // We initialize the h5_strides array to the values of np_strides
+    // and successively divide off the parent_shape values as they appear
+    // in the equations above.
+    for (int u = 0; u < rank; ++u) h5_strides[u] = np_strides[u];
     for (int u = rank - 2; u >= 0; --u) {
-      // calculate the gcd
       hsize_t gcd = h5_strides[u];
       for (int v = u - 1; v >= 0; --v) { gcd = std::gcd(gcd, h5_strides[v]); }
-      // set partent_shape to the gcd
       parent_shape[u + 1] = gcd;
-      // divide the remaining equations by the gcd
       for (int v = u; v >= 0; --v) { h5_strides[v] /= gcd; }
     }
 
