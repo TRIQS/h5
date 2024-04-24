@@ -43,13 +43,17 @@ namespace h5 {
     double i;
   };
 
-  // Type trait to check if a type is std::complex.
-  template <typename T>
-  struct _is_complex : std::false_type {};
+  namespace detail {
 
-  // Specialization of h5::_is_complex for std::complex.
-  template <typename T>
-  struct _is_complex<std::complex<T>> : std::true_type {};
+    // Type trait to check if a type is std::complex.
+    template <typename T>
+    struct _is_complex : std::false_type {};
+
+    // Specialization of h5::_is_complex for std::complex.
+    template <typename T>
+    struct _is_complex<std::complex<T>> : std::true_type {};
+
+  } // namespace detail
 
   /**
    * @ingroup h5_types
@@ -57,7 +61,7 @@ namespace h5 {
    * @tparam T Type to check.
    */
   template <typename T>
-  constexpr bool is_complex_v = _is_complex<T>::value;
+  constexpr bool is_complex_v = detail::_is_complex<T>::value;
 
 } // namespace h5
 

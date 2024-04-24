@@ -59,19 +59,23 @@ namespace h5 {
     std::visit([&](auto const &x) { h5_write(g, name, x); }, v);
   }
 
-  // Helper function to read a std::variant from HDF5.
-  template <typename VT, typename U, typename... Ts>
-  void h5_read_variant_helper(VT &v, datatype dt, group g, std::string const &name) {
-    // finds the correct h5_read recursively
-    if (hdf5_type_equal(hdf5_type<U>(), dt)) {
-      v = VT{h5_read<U>(g, name)};
-      return;
+  namespace detail {
+
+    // Helper function to read a std::variant from HDF5.
+    template <typename VT, typename U, typename... Ts>
+    void h5_read_variant_helper(VT &v, datatype dt, group g, std::string const &name) {
+      // finds the correct h5_read recursively
+      if (hdf5_type_equal(hdf5_type<U>(), dt)) {
+        v = VT{h5_read<U>(g, name)};
+        return;
+      }
+      if constexpr (sizeof...(Ts) > 0)
+        h5_read_variant_helper<VT, Ts...>(v, dt, g, name);
+      else
+        throw std::runtime_error("Error in h5_read_variant_helper: Type stored in the variant has no corresponding HDF5 datatype");
     }
-    if constexpr (sizeof...(Ts) > 0)
-      h5_read_variant_helper<VT, Ts...>(v, dt, g, name);
-    else
-      throw std::runtime_error("Error in h5_read_variant_helper: Type stored in the variant has no corresponding HDF5 datatype");
-  }
+
+  } // namespace detail
 
   /**
    * @brief Read a std::variant from an HDF5 dataset.
@@ -90,7 +94,7 @@ namespace h5 {
     // assume for the moment, name is a dataset.
     dataset ds  = g.open_dataset(name);
     datatype dt = get_hdf5_type(ds);
-    h5_read_variant_helper<std::variant<Ts...>, Ts...>(v, dt, g, name);
+    detail::h5_read_variant_helper<std::variant<Ts...>, Ts...>(v, dt, g, name);
   }
 
   /** @} */
