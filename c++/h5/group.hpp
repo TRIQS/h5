@@ -123,7 +123,7 @@ namespace h5 {
      * @param delete_if_exists If true, unlink first an existing subgroup with the same name.
      * @return A handle to the created subgroup.
      */
-    [[nodiscard]] group create_group(std::string const &key, bool delete_if_exists = true) const;
+    group create_group(std::string const &key, bool delete_if_exists = true) const;
 
     /**
      * @brief Create a softlink with the given key to a target with a given target key in this group.
@@ -160,7 +160,7 @@ namespace h5 {
      * @param pl Dataset creation property list.
      * @return A handle to the created dataset.
      */
-    [[nodiscard]] dataset create_dataset(std::string const &key, datatype ty, dataspace sp, hid_t pl) const;
+    dataset create_dataset(std::string const &key, datatype ty, dataspace sp, hid_t pl) const;
 
     /**
      * @brief Create a dataset with the given key, datatype and dataspace in this group.
@@ -172,7 +172,7 @@ namespace h5 {
      * @param sp h5::dataspace.
      * @return A handle to the created dataset.
      */
-    [[nodiscard]] dataset create_dataset(std::string const &key, datatype ty, dataspace sp) const;
+    dataset create_dataset(std::string const &key, datatype ty, dataspace sp) const;
 
     /**
      * @brief Get all the names of the subgroups in the current group.
