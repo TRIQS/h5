@@ -5,7 +5,7 @@ var searchData=
   ['serialization_2',['Example 3: Serialization',['../ex3.html',1,'']]],
   ['serialization_2ehpp_3',['serialization.hpp',['../serialization_8hpp.html',1,'']]],
   ['serialize_4',['serialize',['../group__serialize.html#gad2bcd8f6dac5f1b4d3726c5ba86b0ee6',1,'h5']]],
-  ['serialize_20deserialize_5',['Serialize Deserialize',['../group__serialize.html',1,'Serialize/Deserialize'],['../documentation.html#autotoc_md13',1,'Serialize/Deserialize']]],
+  ['serialize_20deserialize_5',['Serialize Deserialize',['../group__serialize.html',1,'Serialize/Deserialize'],['../documentation.html#autotoc_md17',1,'Serialize/Deserialize']]],
   ['shape_6',['shape',['../structh5_1_1array__interface_1_1hyperslab.html#aedf629d6a7106753636b53c02fef52e4',1,'h5::array_interface::hyperslab']]],
   ['size_7',['size',['../structh5_1_1array__interface_1_1hyperslab.html#a3da1a6f01c8e55e911f0cbc07d4f7814',1,'h5::array_interface::hyperslab']]],
   ['slab_8',['slab',['../structh5_1_1array__interface_1_1array__view.html#afdccd091cfba38919a24f80dc6ea0329',1,'h5::array_interface::array_view']]],

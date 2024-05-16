@@ -7,7 +7,7 @@ var searchData=
   ['char_20and_20char_5fbuf_4',['std::string, const char* and char_buf',['../group__rw__string.html',1,'']]],
   ['char_5fbuf_5',['char_buf',['../structh5_1_1char__buf.html',1,'h5::char_buf'],['../group__rw__string.html',1,'std::string, const char* and char_buf']]],
   ['close_6',['close',['../classh5_1_1object.html#aebdace197ff0705cba4d55b556f3625f',1,'h5::object']]],
-  ['cmake_7',['cmake',['../changelog.html#autotoc_md2',1,'cmake'],['../changelog.html#autotoc_md8',1,'cmake']]],
+  ['cmake_7',['cmake',['../changelog.html#autotoc_md3',1,'cmake'],['../changelog.html#autotoc_md6',1,'cmake'],['../changelog.html#autotoc_md12',1,'cmake']]],
   ['cmake_8',['CMake',['../integration.html#cmake',1,'']]],
   ['cmake_20options_9',['Custom CMake options',['../installation.html#cmake_options',1,'']]],
   ['compiling_20the_20examples_10',['Compiling the examples',['../examples.html#compiling',1,'']]],

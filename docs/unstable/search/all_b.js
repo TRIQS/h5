@@ -1,7 +1,7 @@
 var searchData=
 [
-  ['h5_20data_20model_0',['h5 data model',['../group__data__model.html',1,'h5 data model'],['../documentation.html#autotoc_md10',1,'h5 data model']]],
-  ['h5_20types_1',['h5 types',['../group__h5__types.html',1,'h5 types'],['../documentation.html#autotoc_md11',1,'h5 types']]],
+  ['h5_20data_20model_0',['h5 data model',['../group__data__model.html',1,'h5 data model'],['../documentation.html#autotoc_md14',1,'h5 data model']]],
+  ['h5_20types_1',['h5 types',['../group__h5__types.html',1,'h5 types'],['../documentation.html#autotoc_md15',1,'h5 types']]],
   ['h5_2ehpp_2',['h5.hpp',['../h5_8hpp.html',1,'']]],
   ['h5_3a_3astorable_3',['Storable',['../concepth5_1_1Storable.html',1,'h5']]],
   ['h5_5fread_4',['h5_read',['../group__rw__string.html#gaa53aea73f5d6c3d0b21b60b45b0971cb',1,'h5::h5_read(group g, std::string const &amp;name, std::string &amp;s)'],['../group__rw__string.html#ga8f9eaf1d5471aff2a72f6c3cfd0f0bc4',1,'h5::h5_read(group g, std::string const &amp;name, char *s)=delete'],['../group__rw__string.html#ga6f74ff39ecd2f67aaa09d7d8f7b495f5',1,'h5::h5_read(group g, std::string const &amp;name, char_buf &amp;cb)'],['../group__rw__vector.html#ga13f38a434763ed1773e0d9b3d3e0e3e4',1,'h5::h5_read(group g, std::string name, std::vector&lt; T &gt; &amp;v)'],['../group__rw__generic.html#ga4b45370a6f04082744435a3a91e3f977',1,'h5::h5_read(group g, std::string const &amp;key)'],['../group__rw__scalar.html#ga9ee6c8c4894bcf83bc241c40e4ded8fa',1,'h5::h5_read(group g, std::string const &amp;name, T &amp;x) H5_REQUIRES(std'],['../group__rw__array.html#ga9599fed7a420bd71bae28617120760aa',1,'h5::h5_read(group g, std::string name, std::array&lt; T, N &gt; &amp;a)'],['../group__rw__map.html#gad5ba413230e29fc26d86b2eea0033c59',1,'h5::h5_read(group g, std::string const &amp;name, std::map&lt; keyT, valueT &gt; &amp;m)'],['../group__rw__optional.html#ga512168e128acddcb166fbda734835bef',1,'h5::h5_read(group g, std::string name, std::optional&lt; T &gt; &amp;opt)'],['../group__rw__pair.html#gafd2c802ce6da7fef80f3a6219a6f14dc',1,'h5::h5_read(group g, std::string const &amp;name, std::pair&lt; T1, T2 &gt; &amp;p)'],['../group__rw__tuple.html#ga00b2f02b66a7c1131f270c43b6d7e36c',1,'h5::h5_read(group g, std::string const &amp;name, std::tuple&lt; Ts... &gt; &amp;tup)'],['../group__rw__variant.html#ga7492178ba09ec065658b644a882a6418',1,'h5::h5_read(group g, std::string const &amp;name, std::variant&lt; Ts... &gt; &amp;v)']]],
@@ -14,7 +14,7 @@ var searchData=
   ['has_5fdataset_11',['has_dataset',['../classh5_1_1group.html#a055f445b358bd85e4ac662fa894402ae',1,'h5::group']]],
   ['has_5fkey_12',['has_key',['../classh5_1_1group.html#a58609c88a804a958bab4a8df8ce4d8d4',1,'h5::group']]],
   ['has_5fsubgroup_13',['has_subgroup',['../classh5_1_1group.html#a2c5d766c3f528b5ec6d0bc6d44d6e6e7',1,'h5::group']]],
-  ['hdf5_14',['HDF5',['../group__readwrite.html',1,'Read and write from/to HDF5'],['../documentation.html#autotoc_md12',1,'Read and write from/to HDF5']]],
+  ['hdf5_14',['HDF5',['../group__readwrite.html',1,'Read and write from/to HDF5'],['../documentation.html#autotoc_md16',1,'Read and write from/to HDF5']]],
   ['hdf5_5fformat_5fimpl_15',['hdf5_format_impl',['../structh5_1_1hdf5__format__impl.html',1,'h5']]],
   ['hdf5_5fformat_5fimpl_3c_20bool_20_3e_16',['hdf5_format_impl&lt; bool &gt;',['../structh5_1_1hdf5__format__impl_3_01bool_01_4.html',1,'h5']]],
   ['hdf5_5fformat_5fimpl_3c_20double_20_3e_17',['hdf5_format_impl&lt; double &gt;',['../structh5_1_1hdf5__format__impl_3_01double_01_4.html',1,'h5']]],
