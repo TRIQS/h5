@@ -1,5 +1,40 @@
 @page changelog Changelog
 
+## Version 1.3.0
+
+This is version 1.3.0 of h5, a high-level C++ interface to the hdf5 library.
+
+We thank all contributors: Thomas Hahn, Alexander Hampel, Henri Menke, Olivier Parcollet, Nils Wentzell
+
+Find below an itemized list of changes in this release.
+
+### General
+* Clean up detail namespace to consistently contain implementation details
+* Improve test coverage and clean up tests
+* Bug fix in h5::array_interface
+* Allow arbitrary block sizes in h5::array_interface
+* Clean up in h5::array_interface
+* Bug fix in h5::file ctor
+* Split object.hpp into multiple header files
+* Remove default copy constructor in group
+* Allow additional arguments in generic h5::read and h5::write functions
+* Allow reading of all integer types into Python long without warning
+* Correct installation of _h5py.wrap.hxx
+* Add hxx clair include
+* Add missing include in h5/macros.hpp
+* Add missing cstdint include in h5/object.hpp, see issue #915
+
+### doc
+* Add documentation to the C++ source code files
+* Remove any sphinx related files and switch to doxygen to generate documentation
+* Build and deploy documentation with GitHub Actions
+
+### cmake
+* Use GNUInstallDirs in install commands
+* Set policy CMP0144 to new
+* Use CPP2PY_PYTHON_xxx variables instead of PYTHON_xxx
+
+
 ## Version 1.2.0
 
 This is version 1.2.0 of h5, a high-level C++ interface to the hdf5 library.
