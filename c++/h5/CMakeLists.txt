@@ -30,10 +30,8 @@ find_package(HDF5 REQUIRED C HL)
 
 # Link against interface target and export
 target_link_libraries(h5_c PRIVATE hdf5::hdf5 hdf5::hdf5_hl)
-if(HDF5_VERSION VERSION_GREATER 1.10)
-  target_compile_definitions(h5_c PRIVATE H5_USE_110_API)
-endif()
-if(HDF5_VERSION VERSION_GREATER_EQUAL 1.13)
+target_compile_definitions(h5_c PRIVATE H5_USE_110_API)
+if(NOT HDF5_VERSION VERSION_LESS 1.13)
   target_compile_definitions(h5_c PRIVATE H5_VER_GE_113)
 endif()
 
