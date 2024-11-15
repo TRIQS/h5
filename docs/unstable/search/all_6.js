@@ -2,7 +2,7 @@ var searchData=
 [
   ['c_20projects_0',['Integration in C++ projects',['../integration.html',1,'']]],
   ['c_20type_1',['Example 2: Write/Read a custom C++ type',['../ex2.html',1,'']]],
-  ['changelog_2',['ChangeLog',['../md_h5_2ChangeLog.html',1,'']]],
+  ['changelog_2',['ChangeLog',['../md_h5_2_change_log.html',1,'']]],
   ['changelog_3',['Changelog',['../changelog.html',1,'']]],
   ['char_20and_20char_5fbuf_4',['std::string, const char* and char_buf',['../group__rw__string.html',1,'']]],
   ['char_5fbuf_5',['char_buf',['../structh5_1_1char__buf.html',1,'h5::char_buf'],['../group__rw__string.html',1,'std::string, const char* and char_buf']]],

@@ -127,71 +127,42 @@ $(function(){initNavTree('serialization_8hpp_source.html',''); initResizable(tru
 <div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span><span class="comment">//</span></div>
 <div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span><span class="comment">// Authors: Thomas Hahn, Olivier Parcollet, Nils Wentzell</span></div>
 <div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span> </div>
-<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span><span class="comment">/**</span></div>
-<div class="line"><span class="lineno">   18</span><span class="comment"> * @file</span></div>
-<div class="line"><span class="lineno">   19</span><span class="comment"> * @brief Provides generic serialize and deserialize functions for types that can be read/written from/to HDF5.</span></div>
-<div class="line"><span class="lineno">   20</span><span class="comment"> */</span></div>
-<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span> </div>
-<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span><span class="preprocessor">#</span><span class="preprocessor">ifndef</span> <span class="preprocessor">LIBH5_SERIALIZATION_HPP</span></div>
-<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span><span class="preprocessor">#</span><span class="preprocessor">define</span> <span class="preprocessor">LIBH5_SERIALIZATION_HPP</span></div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span><span class="preprocessor">#ifndef LIBH5_SERIALIZATION_HPP</span></div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span><span class="preprocessor">#define LIBH5_SERIALIZATION_HPP</span></div>
 <div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span> </div>
-<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span><span class="preprocessor">#</span><span class="preprocessor">include</span> <span class="preprocessor">&quot;./file.hpp&quot;</span></div>
-<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span><span class="preprocessor">#</span><span class="preprocessor">include</span> <span class="preprocessor">&quot;./generic.hpp&quot;</span></div>
+<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span><span class="preprocessor">#include &quot;<a class="code" href="file_8hpp.html">./file.hpp</a>&quot;</span></div>
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span><span class="preprocessor">#include &quot;<a class="code" href="generic_8hpp.html">./generic.hpp</a>&quot;</span></div>
 <div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span> </div>
-<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span><span class="preprocessor">#</span><span class="preprocessor">include</span> <span class="preprocessor">&lt;</span><span class="preprocessor">cstddef</span><span class="preprocessor">&gt;</span></div>
-<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span><span class="preprocessor">#</span><span class="preprocessor">include</span> <span class="preprocessor">&lt;</span><span class="preprocessor">vector</span><span class="preprocessor">&gt;</span></div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span><span class="preprocessor">#include &lt;cstddef&gt;</span></div>
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span><span class="preprocessor">#include &lt;vector&gt;</span></div>
 <div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span> </div>
-<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span><span class="keyword">namespace</span> h5 {</div>
+<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span><span class="keyword">namespace </span>h5 {</div>
 <div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span> </div>
-<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span>  <span class="comment">/**</span></div>
-<div class="line"><span class="lineno">   34</span><span class="comment">   * @addtogroup serialize</span></div>
-<div class="line"><span class="lineno">   35</span><span class="comment">   * @{</span></div>
-<div class="line"><span class="lineno">   36</span><span class="comment">   */</span></div>
-<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span> </div>
-<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span>  <span class="comment">/**</span></div>
-<div class="line"><span class="lineno">   39</span><span class="comment">   * @brief Serialize an object to a byte buffer.</span></div>
-<div class="line"><span class="lineno">   40</span><span class="comment">   *</span></div>
-<div class="line"><span class="lineno">   41</span><span class="comment">   * @details It first writes the object to a buffered memory file and then returns the underlying byte buffer.</span></div>
-<div class="line"><span class="lineno">   42</span><span class="comment">   *</span></div>
-<div class="line"><span class="lineno">   43</span><span class="comment">   * @tparam T Type of the object.</span></div>
-<div class="line"><span class="lineno">   44</span><span class="comment">   * @param x Object to be serialized.</span></div>
-<div class="line"><span class="lineno">   45</span><span class="comment">   * @return Byte buffer containing the serialized object.</span></div>
-<div class="line"><span class="lineno">   46</span><span class="comment">   */</span></div>
 <div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span>  <span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
 <div class="foldopen" id="foldopen00048" data-start="{" data-end="}">
 <div class="line"><a id="l00048" name="l00048"></a><span class="lineno"><a class="line" href="group__serialize.html#gad2bcd8f6dac5f1b4d3726c5ba86b0ee6">   48</a></span>  [[nodiscard]] std::vector&lt;std::byte&gt; <a class="code hl_function" href="group__serialize.html#gad2bcd8f6dac5f1b4d3726c5ba86b0ee6">serialize</a>(T <span class="keyword">const</span> &amp;x) {</div>
-<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span>    <a class="code hl_class" href="classh5_1_1file.html">file</a> f<a class="code hl_function" href="classh5_1_1file.html#abc269f83b1553d5062396db5c93274bf">{</a><a class="code hl_function" href="classh5_1_1file.html#abc269f83b1553d5062396db5c93274bf">}</a>;</div>
-<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span>    h5_write(f, <span class="stringliteral">&quot;object&quot;</span>, x);</div>
-<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span>    <span class="keywordflow">return</span> f<a class="code hl_function" href="classh5_1_1file.html#a741811559b5fa892077bfdf93cbf9132">.</a><a class="code hl_function" href="classh5_1_1file.html#a741811559b5fa892077bfdf93cbf9132">as_buffer</a><a class="code hl_function" href="classh5_1_1file.html#a741811559b5fa892077bfdf93cbf9132">(</a><a class="code hl_function" href="classh5_1_1file.html#a741811559b5fa892077bfdf93cbf9132">)</a>;</div>
+<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span>    <a class="code hl_class" href="classh5_1_1file.html">file</a> f{};</div>
+<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span>    <a class="code hl_function" href="group__rw__scalar.html#ga2098f3cbcd6d6a7107f476bbf891ba20">h5_write</a>(f, <span class="stringliteral">&quot;object&quot;</span>, x);</div>
+<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span>    <span class="keywordflow">return</span> f.as_buffer();</div>
 <div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>  }</div>
 </div>
 <div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span> </div>
-<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span>  <span class="comment">/**</span></div>
-<div class="line"><span class="lineno">   55</span><span class="comment">   * @brief Deserialize an object from a byte buffer.</span></div>
-<div class="line"><span class="lineno">   56</span><span class="comment">   *</span></div>
-<div class="line"><span class="lineno">   57</span><span class="comment">   * @details It first creates a buffered memory file from the given byte buffer and then reads the object from the file.</span></div>
-<div class="line"><span class="lineno">   58</span><span class="comment">   *</span></div>
-<div class="line"><span class="lineno">   59</span><span class="comment">   * @tparam T Type of the object.</span></div>
-<div class="line"><span class="lineno">   60</span><span class="comment">   * @param buf Byte buffer containing the serialized object.</span></div>
-<div class="line"><span class="lineno">   61</span><span class="comment">   * @return Object restored from the given byte buffer.</span></div>
-<div class="line"><span class="lineno">   62</span><span class="comment">   */</span></div>
 <div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span>  <span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
 <div class="foldopen" id="foldopen00064" data-start="{" data-end="}">
 <div class="line"><a id="l00064" name="l00064"></a><span class="lineno"><a class="line" href="group__serialize.html#gaaaf280034cc7cb7233216238d956a0ad">   64</a></span>  [[nodiscard]] T <a class="code hl_function" href="group__serialize.html#gaaaf280034cc7cb7233216238d956a0ad">deserialize</a>(std::vector&lt;std::byte&gt; <span class="keyword">const</span> &amp;buf) {</div>
-<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span>    <a class="code hl_class" href="classh5_1_1file.html">file</a> f<a class="code hl_function" href="classh5_1_1file.html#aab4c5e14a94adc2a580da44307d287eb">{</a>buf<a class="code hl_function" href="classh5_1_1file.html#aab4c5e14a94adc2a580da44307d287eb">}</a>;</div>
-<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span>    <span class="keywordflow">return</span> h5_read&lt;T&gt;(f, <span class="stringliteral">&quot;object&quot;</span>);</div>
+<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span>    <a class="code hl_class" href="classh5_1_1file.html">file</a> f{buf};</div>
+<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span>    <span class="keywordflow">return</span> <a class="code hl_function" href="group__rw__generic.html#ga4b45370a6f04082744435a3a91e3f977">h5_read&lt;T&gt;</a>(f, <span class="stringliteral">&quot;object&quot;</span>);</div>
 <div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span>  }</div>
 </div>
 <div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span> </div>
-<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span>  <span class="comment">/** @} */</span></div>
-<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span> </div>
 <div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span>} <span class="comment">// namespace h5</span></div>
 <div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span> </div>
-<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span><span class="preprocessor">#</span><span class="preprocessor">endif</span> <span class="comment">// LIBH5_SERIALIZATION_HPP</span></div>
+<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span><span class="preprocessor">#endif </span><span class="comment">// LIBH5_SERIALIZATION_HPP</span></div>
 <div class="ttc" id="aclassh5_1_1file_html"><div class="ttname"><a href="classh5_1_1file.html">h5::file</a></div><div class="ttdoc">A handle to an HDF5 file.</div><div class="ttdef"><b>Definition</b> <a href="file_8hpp_source.html#l00043">file.hpp:43</a></div></div>
-<div class="ttc" id="aclassh5_1_1file_html_a741811559b5fa892077bfdf93cbf9132"><div class="ttname"><a href="classh5_1_1file.html#a741811559b5fa892077bfdf93cbf9132">h5::file::as_buffer</a></div><div class="ttdeci">std::vector&lt; std::byte &gt; as_buffer() const</div><div class="ttdoc">Get a copy of the associated byte buffer.</div><div class="ttdef"><b>Definition</b> <a href="file_8cpp_source.html#l00123">file.cpp:123</a></div></div>
-<div class="ttc" id="aclassh5_1_1file_html_aab4c5e14a94adc2a580da44307d287eb"><div class="ttname"><a href="classh5_1_1file.html#aab4c5e14a94adc2a580da44307d287eb">h5::file::file</a></div><div class="ttdeci">file(std::vector&lt; std::byte &gt; const &amp;buf)</div><div class="ttdoc">Constructor to create a buffered memory file from a byte buffer.</div><div class="ttdef"><b>Definition</b> <a href="file_8hpp_source.html#l00096">file.hpp:96</a></div></div>
-<div class="ttc" id="aclassh5_1_1file_html_abc269f83b1553d5062396db5c93274bf"><div class="ttname"><a href="classh5_1_1file.html#abc269f83b1553d5062396db5c93274bf">h5::file::file</a></div><div class="ttdeci">file()</div><div class="ttdoc">Default constructor creates a buffered memory file.</div><div class="ttdef"><b>Definition</b> <a href="file_8cpp_source.html#l00091">file.cpp:91</a></div></div>
+<div class="ttc" id="afile_8hpp_html"><div class="ttname"><a href="file_8hpp.html">file.hpp</a></div><div class="ttdoc">Provides a handle to an HDF5 file.</div></div>
+<div class="ttc" id="ageneric_8hpp_html"><div class="ttname"><a href="generic_8hpp.html">generic.hpp</a></div><div class="ttdoc">Provides a generic interface for reading/writing data from/to various HDF5 objects.</div></div>
+<div class="ttc" id="agroup__rw__generic_html_ga4b45370a6f04082744435a3a91e3f977"><div class="ttname"><a href="group__rw__generic.html#ga4b45370a6f04082744435a3a91e3f977">h5::h5_read</a></div><div class="ttdeci">T h5_read(group g, std::string const &amp;key)</div><div class="ttdoc">Generic implementation for reading from an HDF5 dataset/subgroup.</div><div class="ttdef"><b>Definition</b> <a href="generic_8hpp_source.html#l00051">generic.hpp:51</a></div></div>
+<div class="ttc" id="agroup__rw__scalar_html_ga2098f3cbcd6d6a7107f476bbf891ba20"><div class="ttname"><a href="group__rw__scalar.html#ga2098f3cbcd6d6a7107f476bbf891ba20">h5::h5_write</a></div><div class="ttdeci">void h5_write(group g, std::string const &amp;name, T const &amp;x) H5_REQUIRES(std</div><div class="ttdoc">Write a scalar to an HDF5 dataset.</div><div class="ttdef"><b>Definition</b> <a href="scalar_8hpp_source.html#l00070">scalar.hpp:70</a></div></div>
 <div class="ttc" id="agroup__serialize_html_gaaaf280034cc7cb7233216238d956a0ad"><div class="ttname"><a href="group__serialize.html#gaaaf280034cc7cb7233216238d956a0ad">h5::deserialize</a></div><div class="ttdeci">T deserialize(std::vector&lt; std::byte &gt; const &amp;buf)</div><div class="ttdoc">Deserialize an object from a byte buffer.</div><div class="ttdef"><b>Definition</b> <a href="#l00064">serialization.hpp:64</a></div></div>
 <div class="ttc" id="agroup__serialize_html_gad2bcd8f6dac5f1b4d3726c5ba86b0ee6"><div class="ttname"><a href="group__serialize.html#gad2bcd8f6dac5f1b4d3726c5ba86b0ee6">h5::serialize</a></div><div class="ttdeci">std::vector&lt; std::byte &gt; serialize(T const &amp;x)</div><div class="ttdoc">Serialize an object to a byte buffer.</div><div class="ttdef"><b>Definition</b> <a href="#l00048">serialization.hpp:48</a></div></div>
 </div><!-- fragment --></div><!-- contents -->

@@ -78,22 +78,22 @@ var NAVTREE =
         ] ],
         [ "std::array", "group__rw__array.html", null ],
         [ "std::map", "group__rw__map.html", [
-          [ "hdf5_format_impl<std::map>", "structh5_1_1hdf5__format__impl_3_01std_1_1map_3_01keyT_00_01valueT_01_4_01_4.html", null ]
+          [ "hdf5_format_impl<std::map>", "structh5_1_1hdf5__format__impl_3_01std_1_1map_3_01key_t_00_01value_t_01_4_01_4.html", null ]
         ] ],
         [ "std::optional", "group__rw__optional.html", [
-          [ "hdf5_format_impl<std::optional>", "structh5_1_1hdf5__format__impl_3_01std_1_1optional_3_01T_01_4_01_4.html", null ]
+          [ "hdf5_format_impl<std::optional>", "structh5_1_1hdf5__format__impl_3_01std_1_1optional_3_01_t_01_4_01_4.html", null ]
         ] ],
         [ "std::pair", "group__rw__pair.html", [
-          [ "hdf5_format_impl<std::pair>", "structh5_1_1hdf5__format__impl_3_01std_1_1pair_3_01T1_00_01T2_01_4_01_4.html", null ]
+          [ "hdf5_format_impl<std::pair>", "structh5_1_1hdf5__format__impl_3_01std_1_1pair_3_01_t1_00_01_t2_01_4_01_4.html", null ]
         ] ],
         [ "std::tuple", "group__rw__tuple.html", [
-          [ "hdf5_format_impl<std::tuple>", "structh5_1_1hdf5__format__impl_3_01std_1_1tuple_3_01T_8_8_8_01_4_01_4.html", null ]
+          [ "hdf5_format_impl<std::tuple>", "structh5_1_1hdf5__format__impl_3_01std_1_1tuple_3_01_t_8_8_8_01_4_01_4.html", null ]
         ] ],
         [ "std::variant", "group__rw__variant.html", [
-          [ "hdf5_format_impl<std::variant>", "structh5_1_1hdf5__format__impl_3_01std_1_1variant_3_01T_8_8_8_01_4_01_4.html", null ]
+          [ "hdf5_format_impl<std::variant>", "structh5_1_1hdf5__format__impl_3_01std_1_1variant_3_01_t_8_8_8_01_4_01_4.html", null ]
         ] ],
         [ "std::vector", "group__rw__vector.html", [
-          [ "hdf5_format_impl<std::vector>", "structh5_1_1hdf5__format__impl_3_01std_1_1vector_3_01T_01_4_01_4.html", null ],
+          [ "hdf5_format_impl<std::vector>", "structh5_1_1hdf5__format__impl_3_01std_1_1vector_3_01_t_01_4_01_4.html", null ],
           [ "hdf5_format_impl<std::vector<std::string>>", "structh5_1_1hdf5__format__impl_3_01std_1_1vector_3_01std_1_1string_01_4_01_4.html", null ]
         ] ],
         [ "Format tags", "group__format.html", [
@@ -120,7 +120,7 @@ var NAVTREE =
         [ "hsize_t", "group__utilities.html#ga18c60c084dcd9a6e60485eff3bfdfdbb", null ],
         [ "v_t", "group__utilities.html#ga0133dae33fa46580049cc43ab40f66cc", null ],
         [ "make_runtime_error", "group__utilities.html#ga533849e07bf3ba2cca1f3a831a2df9af", null ],
-        [ "Storable", "concepth5_1_1Storable.html", null ]
+        [ "Storable", "concepth5_1_1_storable.html", null ]
       ] ],
       [ "File List", "files.html", "files" ]
     ] ],

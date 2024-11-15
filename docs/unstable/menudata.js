@@ -68,17 +68,17 @@ var menudata={children:[
 {text:"hdf5_format_impl<std::string>",url:"structh5_1_1hdf5__format__impl_3_01std_1_1string_01_4.html"}]},
 {text:"std::array",url:"group__rw__array.html"},
 {text:"std::map",url:"group__rw__map.html",children:[
-{text:"hdf5_format_impl<std::map>",url:"structh5_1_1hdf5__format__impl_3_01std_1_1map_3_01keyT_00_01valueT_01_4_01_4.html"}]},
+{text:"hdf5_format_impl<std::map>",url:"structh5_1_1hdf5__format__impl_3_01std_1_1map_3_01key_t_00_01value_t_01_4_01_4.html"}]},
 {text:"std::optional",url:"group__rw__optional.html",children:[
-{text:"hdf5_format_impl<std::optional>",url:"structh5_1_1hdf5__format__impl_3_01std_1_1optional_3_01T_01_4_01_4.html"}]},
+{text:"hdf5_format_impl<std::optional>",url:"structh5_1_1hdf5__format__impl_3_01std_1_1optional_3_01_t_01_4_01_4.html"}]},
 {text:"std::pair",url:"group__rw__pair.html",children:[
-{text:"hdf5_format_impl<std::pair>",url:"structh5_1_1hdf5__format__impl_3_01std_1_1pair_3_01T1_00_01T2_01_4_01_4.html"}]},
+{text:"hdf5_format_impl<std::pair>",url:"structh5_1_1hdf5__format__impl_3_01std_1_1pair_3_01_t1_00_01_t2_01_4_01_4.html"}]},
 {text:"std::tuple",url:"group__rw__tuple.html",children:[
-{text:"hdf5_format_impl<std::tuple>",url:"structh5_1_1hdf5__format__impl_3_01std_1_1tuple_3_01T_8_8_8_01_4_01_4.html"}]},
+{text:"hdf5_format_impl<std::tuple>",url:"structh5_1_1hdf5__format__impl_3_01std_1_1tuple_3_01_t_8_8_8_01_4_01_4.html"}]},
 {text:"std::variant",url:"group__rw__variant.html",children:[
-{text:"hdf5_format_impl<std::variant>",url:"structh5_1_1hdf5__format__impl_3_01std_1_1variant_3_01T_8_8_8_01_4_01_4.html"}]},
+{text:"hdf5_format_impl<std::variant>",url:"structh5_1_1hdf5__format__impl_3_01std_1_1variant_3_01_t_8_8_8_01_4_01_4.html"}]},
 {text:"std::vector",url:"group__rw__vector.html",children:[
-{text:"hdf5_format_impl<std::vector>",url:"structh5_1_1hdf5__format__impl_3_01std_1_1vector_3_01T_01_4_01_4.html"},
+{text:"hdf5_format_impl<std::vector>",url:"structh5_1_1hdf5__format__impl_3_01std_1_1vector_3_01_t_01_4_01_4.html"},
 {text:"hdf5_format_impl<std::vector<std::string>>",url:"structh5_1_1hdf5__format__impl_3_01std_1_1vector_3_01std_1_1string_01_4_01_4.html"}]},
 {text:"Format tags",url:"group__format.html",children:[
 {text:"hdf5_format_impl<T>",url:"structh5_1_1hdf5__format__impl.html"},
@@ -101,7 +101,7 @@ var menudata={children:[
 {text:"hsize_t",url:"group__utilities.html#ga18c60c084dcd9a6e60485eff3bfdfdbb"},
 {text:"v_t",url:"group__utilities.html#ga0133dae33fa46580049cc43ab40f66cc"},
 {text:"make_runtime_error",url:"group__utilities.html#ga533849e07bf3ba2cca1f3a831a2df9af"},
-{text:"Storable",url:"concepth5_1_1Storable.html"}]},
+{text:"Storable",url:"concepth5_1_1_storable.html"}]},
 {text:"File List",url:"files.html"}]},
 {text:"Changelog",url:"changelog.html"},
 {text:"Issues",url:"issues.html"}]}
