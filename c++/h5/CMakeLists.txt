@@ -26,6 +26,12 @@ install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} DESTINATION include FILES_MATCHING
 
 message(STATUS "-------- HDF5 detection -------------")
 
+# cmake versions prior to 3.26 require C language enabled
+# c.f. https://gitlab.kitware.com/cmake/cmake/-/issues/24241
+if(CMAKE_VERSION VERSION_LESS "3.26")
+  enable_language(C)
+endif()
+
 find_package(HDF5 REQUIRED C HL)
 
 # Create an interface target
@@ -45,10 +51,8 @@ if(TARGET hdf5::hdf5 AND TARGET hdf5::hdf5_hl)
 endif()
 target_link_libraries(hdf5 INTERFACE "${HDF5_LIBRARIES}" ${HDF5_HL_LIBRARIES})
 target_compile_options(hdf5 INTERFACE ${HDF5_DEFINITIONS})
-if(HDF5_VERSION VERSION_GREATER 1.10)
-  target_compile_definitions(hdf5 INTERFACE H5_USE_110_API)
-endif()
-if(HDF5_VERSION VERSION_GREATER_EQUAL 1.13)
+target_compile_definitions(hdf5 INTERFACE H5_USE_110_API)
+if(HDF5_VERSION VERSION_GREATER_EQUAL 1.13 OR NOT HDF5_VERSION)
   target_compile_definitions(hdf5 INTERFACE H5_VER_GE_113)
 endif()
 
