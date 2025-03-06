@@ -38,7 +38,7 @@ find_package(HDF5 REQUIRED C HL)
 target_link_libraries(h5_c PRIVATE hdf5::hdf5 hdf5::hdf5_hl)
 target_compile_definitions(h5_c PRIVATE H5_USE_110_API)
 if(HDF5_VERSION VERSION_GREATER_EQUAL 1.13 OR NOT HDF5_VERSION)
-  target_compile_definitions(h5_c PRIVATE H5_VER_GE_113)
+  target_compile_definitions(h5_c PUBLIC H5_VER_GE_113)
 endif()
 
 # ========= Static Analyzer Checks ==========
