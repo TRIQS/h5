@@ -19,7 +19,8 @@ var searchData=
   ['std_3a_3avariant_16',['std::variant',['../group__rw__variant.html',1,'']]],
   ['std_3a_3avector_17',['std::vector',['../group__rw__vector.html',1,'']]],
   ['steps_18',['Installation steps',['../installation.html#install_steps',1,'']]],
-  ['stride_19',['stride',['../structh5_1_1array__interface_1_1hyperslab.html#a96339ebd637a1433dda2108eeed44092',1,'h5::array_interface::hyperslab']]],
-  ['string_2ecpp_20',['string.cpp',['../string_8cpp.html',1,'']]],
-  ['string_2ehpp_21',['string.hpp',['../string_8hpp.html',1,'']]]
+  ['storable_19',['Storable',['../concepth5_1_1_storable.html',1,'h5']]],
+  ['stride_20',['stride',['../structh5_1_1array__interface_1_1hyperslab.html#a96339ebd637a1433dda2108eeed44092',1,'h5::array_interface::hyperslab']]],
+  ['string_2ecpp_21',['string.cpp',['../string_8cpp.html',1,'']]],
+  ['string_2ehpp_22',['string.hpp',['../string_8hpp.html',1,'']]]
 ];
