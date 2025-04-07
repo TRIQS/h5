@@ -26,9 +26,9 @@
 #include <hdf5.h>
 #include <hdf5_hl.h>
 
-#include <numeric>
 #include <algorithm>
 #include <iostream>
+#include <numeric>
 #include <stdexcept>
 #include <utility>
 #include <vector>
@@ -57,11 +57,12 @@ namespace h5::array_interface {
 
   } // namespace
 
-  std::pair<v_t, v_t> get_parent_shape_and_h5_strides(long const *np_strides, int rank, long view_size) {
+  std::pair<v_t, v_t> get_parent_shape_and_h5_strides(long const *np_strides, int rank, long const *view_shape) {
     // scalar case: return empty vectors
     if (rank == 0) return {};
 
     // empty view case: return (0,0,0), (1,1,1)
+    auto const view_size = std::accumulate(view_shape, view_shape + rank, 1l, std::multiplies<>());
     if (view_size == 0) return {v_t(rank, 0), v_t(rank, 1)};
 
     // for the general case, we would like to find a parent_shape and h5_strides such that the following equations hold (rank = N):
@@ -90,7 +91,7 @@ namespace h5::array_interface {
 
     // from the above equations it follows that parent_shape[0] (size of the slowest varying dimension)
     // is arbitrary as long as it is big enough to contain the elements selected by the hyperslab
-    parent_shape[0] = view_size * h5_strides[0];
+    parent_shape[0] = view_shape[0] * h5_strides[0];
 
     return {parent_shape, h5_strides};
   }

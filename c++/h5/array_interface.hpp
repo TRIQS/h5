@@ -207,10 +207,10 @@ namespace h5::array_interface {
    *
    * @param np_strides Numpy/nda-style strides.
    * @param rank Rank of the n-dimensional parent array.
-   * @param view_size Number of elements in the given view.
+   * @param view_shape Shape of the given view.
    * @return std::pair containing the shape of the parent array and the HDF5 strides of the view.
    */
-  std::pair<v_t, v_t> get_parent_shape_and_h5_strides(long const *np_strides, int rank, long view_size);
+  std::pair<v_t, v_t> get_parent_shape_and_h5_strides(long const *np_strides, int rank, long const *view_shape);
 
   /**
    * @brief Retrieve the shape and the h5::datatype from a dataset.

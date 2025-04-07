@@ -19,7 +19,6 @@
 
 #include <hdf5_hl.h>
 
-#include <limits>
 #include <numeric>
 #include <vector>
 
@@ -32,12 +31,11 @@ void print(const C &c) {
 
 // Check the set of equations that relate numpy/nda-style strides to HDF5-style strides.
 void check_strides(const std::vector<long> &np_strides, const std::vector<long> &view_shape) {
-  // get view size and rank
-  auto view_size = std::accumulate(view_shape.begin(), view_shape.end(), 1l, std::multiplies<>());
-  int rank       = static_cast<int>(view_shape.size());
+  // get rank
+  int rank = static_cast<int>(view_shape.size());
 
   // get parent shape and h5 strides
-  auto [parent_shape, h5_strides] = h5::array_interface::get_parent_shape_and_h5_strides(np_strides.data(), rank, view_size);
+  auto [parent_shape, h5_strides] = h5::array_interface::get_parent_shape_and_h5_strides(np_strides.data(), rank, view_shape.data());
 
   // check that the number of strides is the same
   EXPECT_EQ(np_strides.size(), h5_strides.size());
@@ -49,7 +47,6 @@ void check_strides(const std::vector<long> &np_strides, const std::vector<long> 
   h5::hsize_t product = 1;
   for (int i = static_cast<int>(np_strides.size()) - 1; i >= 0; --i) {
     EXPECT_EQ(np_strides[i], product * h5_strides[i]);
-    EXPECT_LE(product, std::numeric_limits<h5::hsize_t>::max() / parent_shape[i]);
     product *= parent_shape[i];
     EXPECT_TRUE(parent_shape[i] >= view_shape[i] * h5_strides[i]);
   }
