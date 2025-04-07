@@ -19,6 +19,7 @@
 
 #include <hdf5_hl.h>
 
+#include <limits>
 #include <numeric>
 #include <vector>
 
@@ -48,6 +49,7 @@ void check_strides(const std::vector<long> &np_strides, const std::vector<long> 
   h5::hsize_t product = 1;
   for (int i = static_cast<int>(np_strides.size()) - 1; i >= 0; --i) {
     EXPECT_EQ(np_strides[i], product * h5_strides[i]);
+    EXPECT_LE(product, std::numeric_limits<h5::hsize_t>::max() / parent_shape[i]);
     product *= parent_shape[i];
     EXPECT_TRUE(parent_shape[i] >= view_shape[i] * h5_strides[i]);
   }
@@ -119,6 +121,11 @@ TEST(H5, GetParentShapeAndH5Strides3D) {
   // 3D array of size 10x10x10: every other element
   np_strides = {200, 20, 2};
   view_shape = {5, 5, 5};
+  check_strides(np_strides, view_shape);
+
+  // 3D array of size 1x524x9305280: contiguous data, all elements
+  np_strides = {524l * 9305280l, 9305280l, 1l};
+  view_shape = {1, 524, 9305280};
   check_strides(np_strides, view_shape);
 }
 
