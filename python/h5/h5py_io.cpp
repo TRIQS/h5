@@ -140,8 +140,7 @@ namespace h5 {
     const bool is_complex = (elementsType == NPY_CDOUBLE) or (elementsType == NPY_CLONGDOUBLE) or (elementsType == NPY_CFLOAT);
 
     array_interface::array_view res{dt, PyArray_DATA(arr_obj), rank, is_complex};
-    std::vector<long> c_strides(rank + is_complex, 0);
-    long total_size = 1;
+    std::vector<long> c_strides(rank + is_complex, 0), c_shape(rank + is_complex, 2);
 
     for (int i = 0; i < rank; ++i) {
 #ifdef PYTHON_NUMPY_VERSION_LT_17
@@ -151,11 +150,11 @@ namespace h5 {
       res.slab.count[i] = size_t(PyArray_DIMS(arr_obj)[i]);
       c_strides[i]      = std::ptrdiff_t(PyArray_STRIDES(arr_obj)[i]) / h5_c_size(dt);
 #endif
-      total_size *= res.slab.count[i];
+      c_shape[i] = long(res.slab.count[i]);
     }
 
     // be careful to consider the last dim if complex, but do NOT copy it
-    auto [Ltot, stri] = h5::array_interface::get_parent_shape_and_h5_strides(c_strides.data(), rank + is_complex, total_size * (is_complex ? 2 : 1));
+    auto [Ltot, stri] = h5::array_interface::get_parent_shape_and_h5_strides(c_strides.data(), rank + is_complex, c_shape.data());
     for (int i = 0; i < rank; ++i) {
       res.parent_shape[i] = Ltot[i];
       res.slab.stride[i]  = stri[i];
