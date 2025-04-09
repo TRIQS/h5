@@ -147,9 +147,9 @@ Functions</h2></td></tr>
 <tr class="memitem:ga624c2c6fd7e39bf89701cea324e145d6" id="r_ga624c2c6fd7e39bf89701cea324e145d6"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structh5_1_1array__interface_1_1dataset__info.html">dataset_info</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ga624c2c6fd7e39bf89701cea324e145d6">h5::array_interface::get_dataset_info</a> (<a class="el" href="classh5_1_1group.html">group</a> g, std::string const &amp;name)</td></tr>
 <tr class="memdesc:ga624c2c6fd7e39bf89701cea324e145d6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieve the shape and the <a class="el" href="group__data__model.html#ga177e858254a3d1ab84a707a225fa4b1f" title="Type alias for an HDF5 datatype.">h5::datatype</a> from a dataset with a given name in the given group.  <br /></td></tr>
 <tr class="separator:ga624c2c6fd7e39bf89701cea324e145d6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga85b67fae914dd5f7081d18fdffa4f435" id="r_ga85b67fae914dd5f7081d18fdffa4f435"><td class="memItemLeft" align="right" valign="top">std::pair&lt; <a class="el" href="group__utilities.html#ga0133dae33fa46580049cc43ab40f66cc">v_t</a>, <a class="el" href="group__utilities.html#ga0133dae33fa46580049cc43ab40f66cc">v_t</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ga85b67fae914dd5f7081d18fdffa4f435">h5::array_interface::get_parent_shape_and_h5_strides</a> (long const *np_strides, int rank, long view_size)</td></tr>
-<tr class="memdesc:ga85b67fae914dd5f7081d18fdffa4f435"><td class="mdescLeft">&#160;</td><td class="mdescRight">Given a view on an n-dimensional array (dataspace) by specifying its numpy/nda-style strides and its size (number of elements in the view), calculate the shape of a possible parent array and the corresponding HDF5 strides of the view.  <br /></td></tr>
-<tr class="separator:ga85b67fae914dd5f7081d18fdffa4f435"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga78f90eb58218f72ee27f1ca9a2b14862" id="r_ga78f90eb58218f72ee27f1ca9a2b14862"><td class="memItemLeft" align="right" valign="top">std::pair&lt; <a class="el" href="group__utilities.html#ga0133dae33fa46580049cc43ab40f66cc">v_t</a>, <a class="el" href="group__utilities.html#ga0133dae33fa46580049cc43ab40f66cc">v_t</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ga78f90eb58218f72ee27f1ca9a2b14862">h5::array_interface::get_parent_shape_and_h5_strides</a> (long const *np_strides, int rank, long const *view_shape)</td></tr>
+<tr class="memdesc:ga78f90eb58218f72ee27f1ca9a2b14862"><td class="mdescLeft">&#160;</td><td class="mdescRight">Given a view on an n-dimensional array (dataspace) by specifying its numpy/nda-style strides and its size (number of elements in the view), calculate the shape of a possible parent array and the corresponding HDF5 strides of the view.  <br /></td></tr>
+<tr class="separator:ga78f90eb58218f72ee27f1ca9a2b14862"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga31fd36bfc407821a00d20f2105c1684e" id="r_ga31fd36bfc407821a00d20f2105c1684e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ga31fd36bfc407821a00d20f2105c1684e">h5::array_interface::read</a> (<a class="el" href="classh5_1_1group.html">group</a> g, std::string const &amp;name, <a class="el" href="structh5_1_1array__interface_1_1array__view.html">array_view</a> v, <a class="el" href="structh5_1_1array__interface_1_1hyperslab.html">hyperslab</a> sl={})</td></tr>
 <tr class="memdesc:ga31fd36bfc407821a00d20f2105c1684e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Read a given hyperslab from an HDF5 dataset into an array view.  <br /></td></tr>
 <tr class="separator:ga31fd36bfc407821a00d20f2105c1684e"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -269,7 +269,7 @@ template&lt;typename T&gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd><a class="el" href="structh5_1_1array__interface_1_1dataset__info.html" title="Simple struct to store basic information about an HDF5 dataset.">h5::array_interface::dataset_info</a> containing the shape and HDF5 type of the dataset. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="array__interface_8cpp_source.html#l00098">98</a> of file <a class="el" href="array__interface_8cpp_source.html">array_interface.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="array__interface_8cpp_source.html#l00099">99</a> of file <a class="el" href="array__interface_8cpp_source.html">array_interface.cpp</a>.</p>
 
 </div>
 </div>
@@ -304,12 +304,12 @@ template&lt;typename T&gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd><a class="el" href="structh5_1_1array__interface_1_1dataset__info.html" title="Simple struct to store basic information about an HDF5 dataset.">h5::array_interface::dataset_info</a> containing the shape and HDF5 type of the dataset. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="array__interface_8cpp_source.html#l00110">110</a> of file <a class="el" href="array__interface_8cpp_source.html">array_interface.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="array__interface_8cpp_source.html#l00111">111</a> of file <a class="el" href="array__interface_8cpp_source.html">array_interface.cpp</a>.</p>
 
 </div>
 </div>
-<a id="ga85b67fae914dd5f7081d18fdffa4f435" name="ga85b67fae914dd5f7081d18fdffa4f435"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ga85b67fae914dd5f7081d18fdffa4f435">&#9670;&#160;</a></span>get_parent_shape_and_h5_strides()</h2>
+<a id="ga78f90eb58218f72ee27f1ca9a2b14862" name="ga78f90eb58218f72ee27f1ca9a2b14862"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga78f90eb58218f72ee27f1ca9a2b14862">&#9670;&#160;</a></span>get_parent_shape_and_h5_strides()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -327,7 +327,7 @@ template&lt;typename T&gt; </div>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">long</td>          <td class="paramname"><span class="paramname"><em>view_size</em></span>&#160;)</td>
+          <td class="paramtype">long const *</td>          <td class="paramname"><span class="paramname"><em>view_shape</em></span>&#160;)</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -347,7 +347,7 @@ template&lt;typename T&gt; </div>
   <table class="params">
     <tr><td class="paramname">np_strides</td><td>Numpy/nda-style strides. </td></tr>
     <tr><td class="paramname">rank</td><td>Rank of the n-dimensional parent array. </td></tr>
-    <tr><td class="paramname">view_size</td><td>Number of elements in the given view. </td></tr>
+    <tr><td class="paramname">view_shape</td><td>Shape of the given view. </td></tr>
   </table>
   </dd>
 </dl>
@@ -399,7 +399,7 @@ template&lt;typename T&gt; </div>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="array__interface_8cpp_source.html#l00209">209</a> of file <a class="el" href="array__interface_8cpp_source.html">array_interface.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="array__interface_8cpp_source.html#l00210">210</a> of file <a class="el" href="array__interface_8cpp_source.html">array_interface.cpp</a>.</p>
 
 </div>
 </div>
@@ -439,7 +439,7 @@ template&lt;typename T&gt; </div>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="array__interface_8cpp_source.html#l00246">246</a> of file <a class="el" href="array__interface_8cpp_source.html">array_interface.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="array__interface_8cpp_source.html#l00247">247</a> of file <a class="el" href="array__interface_8cpp_source.html">array_interface.cpp</a>.</p>
 
 </div>
 </div>
@@ -486,7 +486,7 @@ template&lt;typename T&gt; </div>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="array__interface_8cpp_source.html#l00115">115</a> of file <a class="el" href="array__interface_8cpp_source.html">array_interface.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="array__interface_8cpp_source.html#l00116">116</a> of file <a class="el" href="array__interface_8cpp_source.html">array_interface.cpp</a>.</p>
 
 </div>
 </div>
@@ -526,7 +526,7 @@ template&lt;typename T&gt; </div>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="array__interface_8cpp_source.html#l00192">192</a> of file <a class="el" href="array__interface_8cpp_source.html">array_interface.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="array__interface_8cpp_source.html#l00193">193</a> of file <a class="el" href="array__interface_8cpp_source.html">array_interface.cpp</a>.</p>
 
 </div>
 </div>
@@ -573,7 +573,7 @@ template&lt;typename T&gt; </div>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="array__interface_8cpp_source.html#l00162">162</a> of file <a class="el" href="array__interface_8cpp_source.html">array_interface.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="array__interface_8cpp_source.html#l00163">163</a> of file <a class="el" href="array__interface_8cpp_source.html">array_interface.cpp</a>.</p>
 
 </div>
 </div>
