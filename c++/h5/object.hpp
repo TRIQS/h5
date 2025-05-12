@@ -138,6 +138,8 @@ namespace h5 {
    * @{
    */
 
+  template <typename T>
+  constexpr bool is_h5_compound = false;
   namespace detail {
 
     // Map a C++ type to an HDF5 type (specializations are in object.cpp).
