@@ -67,7 +67,8 @@ namespace h5 {
    * @param x Scalar value to be written.
    */
   template <typename T>
-  void h5_write(group g, std::string const &name, T const &x) H5_REQUIRES(std::is_arithmetic_v<T> or is_complex_v<T> or std::is_same_v<T, dcplx_t>) {
+    requires(std::is_arithmetic_v<T> or is_complex_v<T> or std::is_same_v<T, dcplx_t> or is_h5_compound<T>)
+  void h5_write(group g, std::string const &name, T const &x) {
     array_interface::write(g, name, array_interface::array_view_from_scalar(x), false);
   }
 
@@ -82,7 +83,8 @@ namespace h5 {
    * @param x Scalar variable to be read into.
    */
   template <typename T>
-  void h5_read(group g, std::string const &name, T &x) H5_REQUIRES(std::is_arithmetic_v<T> or is_complex_v<T> or std::is_same_v<T, dcplx_t>) {
+    requires(std::is_arithmetic_v<T> or is_complex_v<T> or std::is_same_v<T, dcplx_t> or is_h5_compound<T>)
+  void h5_read(group g, std::string const &name, T &x) {
     // backward compatibility to read complex values stored the old way (in a subgroup)
     if constexpr (is_complex_v<T>) {
       if (g.has_subgroup(name)) {
@@ -122,7 +124,8 @@ namespace h5 {
    * @param x Scalar value to be written.
    */
   template <typename T>
-  void h5_write_attribute(object obj, std::string const &name, T const &x) H5_REQUIRES(std::is_arithmetic_v<T> or is_complex_v<T>) {
+    requires(std::is_arithmetic_v<T> or is_complex_v<T> or is_h5_compound<T>)
+  void h5_write_attribute(object obj, std::string const &name, T const &x) {
     array_interface::write_attribute(obj, name, array_interface::array_view_from_scalar(x));
   }
 
@@ -137,7 +140,8 @@ namespace h5 {
    * @param x Scalar variable to be read into.
    */
   template <typename T>
-  void h5_read_attribute(object obj, std::string const &name, T &x) H5_REQUIRES(std::is_arithmetic_v<T> or is_complex_v<T>) {
+    requires(std::is_arithmetic_v<T> or is_complex_v<T> or is_h5_compound<T>)
+  void h5_read_attribute(object obj, std::string const &name, T &x) {
     array_interface::read_attribute(obj, name, array_interface::array_view_from_scalar(x));
   }
 
