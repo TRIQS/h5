@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['projects_0',['Integration in C++ projects',['../integration.html',1,'']]]
+  ['general_0',['General',['../changelog.html#autotoc_md1',1,'General'],['../changelog.html#autotoc_md5',1,'General'],['../changelog.html#autotoc_md10',1,'General']]]
 ];
