@@ -17,6 +17,7 @@
 #include <gtest/gtest.h>
 #include <h5/h5.hpp>
 
+#include <complex>
 #include <map>
 #include <string>
 #include <vector>
@@ -45,12 +46,31 @@ TEST(H5, MapWithStringKeyType) {
   }
 }
 
+TEST(H5, MapWithGreaterComparison) {
+  // write/read a map with int keys and std::complex<double> values using std::greater as comparison
+  std::map<int, std::complex<double>, std::greater<int>> m_complex = {{1, {1.0, 2.0}}, {2, {3.0, 4.0}}};
+
+  {
+    h5::file file{"test_map_greater.h5", 'w'};
+    h5::write(file, "map_complex", m_complex);
+  }
+
+  {
+    h5::file file{"test_map_greater.h5", 'r'};
+
+    std::map<int, std::complex<double>, std::greater<int>> m_complex_in;
+    h5::read(file, "map_complex", m_complex_in);
+
+    EXPECT_EQ(m_complex, m_complex_in);
+  }
+}
+
 // Custom type to be used as a key in a map.
 class custom_key_class {
   int var;
 
   public:
-  custom_key_class(int v = 0) : var(v){};
+  custom_key_class(int v = 0) : var(v) {};
 
   static std::string hdf5_format() { return "TestkeyClass"; }
 

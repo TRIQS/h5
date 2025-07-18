@@ -39,28 +39,29 @@ namespace h5 {
    */
 
   /// Specialization of h5::hdf5_format_impl for std::map.
-  template <typename keyT, typename valueT>
-  struct hdf5_format_impl<std::map<keyT, valueT>> {
+  template <typename Key, typename T, typename Compare>
+  struct hdf5_format_impl<std::map<Key, T, Compare>> {
     static std::string invoke() { return "Dict"; }
   };
 
   /**
    * @brief Write a std::map to an HDF5 subgroup.
    *
-   * @tparam keyT Key type of the std::map.
-   * @tparam valueT Value type of the std::map.
+   * @tparam Key Key type of the std::map.
+   * @tparam T Value type of the std::map.
+   * @tparam Compare Comparison type for the std::map.
    * @param g h5::group in which the subgroup is created.
    * @param name Name of the subgroup to which the std::map is written.
    * @param m std::map to be written.
    */
-  template <typename keyT, typename valueT>
-  void h5_write(group g, std::string const &name, std::map<keyT, valueT> const &m) {
+  template <typename Key, typename T, typename Compare>
+  void h5_write(group g, std::string const &name, std::map<Key, T, Compare> const &m) {
     // create the subgroup and write the hdf5_format tag
     auto gr = g.create_group(name);
     write_hdf5_format(gr, m);
 
     // write element by element
-    if constexpr (std::is_same_v<keyT, std::string>) {
+    if constexpr (std::is_same_v<Key, std::string>) {
       // if key is a string, use it for the dataset name
       for (auto const &[key, val] : m) h5_write(gr, key, val);
     } else {
@@ -78,29 +79,30 @@ namespace h5 {
   /**
    * @brief Read a std::map from an HDF5 subgroup.
    *
-   * @tparam keyT Key type of the std::map.
-   * @tparam valueT Value type of the std::map.
+   * @tparam Key Key type of the std::map.
+   * @tparam T Value type of the std::map.
+   * @tparam Compare Comparison type for the std::map.
    * @param g h5::group containing the subgroup.
    * @param name Name of the subgroup from which the std::map is read.
    * @param m std::map to read into.
    */
-  template <typename keyT, typename valueT>
-  void h5_read(group g, std::string const &name, std::map<keyT, valueT> &m) {
+  template <typename Key, typename T, typename Compare>
+  void h5_read(group g, std::string const &name, std::map<Key, T, Compare> &m) {
     // open the subgroup and clear the map
     auto gr = g.open_group(name);
     m.clear();
 
     // loop over all subgroups and datasets in the current group
     for (auto const &x : gr.get_all_subgroup_dataset_names()) {
-      valueT val;
-      if constexpr (std::is_same_v<keyT, std::string>) {
+      T val;
+      if constexpr (std::is_same_v<Key, std::string>) {
         // if key is a string, read from the dataset with the same name
         h5_read(gr, x, val);
         m.emplace(x, std::move(val));
       } else {
         // otherwise, read from the subgroup
         auto element_gr = gr.open_group(x);
-        keyT key;
+        Key key;
         h5_read(element_gr, "key", key);
         h5_read(element_gr, "val", val);
         m.emplace(std::move(key), std::move(val));
