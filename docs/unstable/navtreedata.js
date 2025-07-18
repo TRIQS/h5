@@ -78,7 +78,7 @@ var NAVTREE =
         ] ],
         [ "std::array", "group__rw__array.html", null ],
         [ "std::map", "group__rw__map.html", [
-          [ "hdf5_format_impl<std::map>", "structh5_1_1hdf5__format__impl_3_01std_1_1map_3_01key_t_00_01value_t_01_4_01_4.html", null ]
+          [ "hdf5_format_impl<std::map>", "structh5_1_1hdf5__format__impl.html", null ]
         ] ],
         [ "std::optional", "group__rw__optional.html", [
           [ "hdf5_format_impl<std::optional>", "structh5_1_1hdf5__format__impl_3_01std_1_1optional_3_01_t_01_4_01_4.html", null ]
