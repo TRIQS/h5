@@ -17,10 +17,11 @@
 /**
  * @file
  * @brief Provides utilities for reading and writing `hdf5_format` tags.
- * @details An `hdf5_format` tag is a string that describes the type of object stored in an HDF5 file. A type `T` which is
- * HDF5 readable/writeable should do one of the following:
+ * @details An `hdf5_format` tag is a string that describes the type of object stored in an HDF5 file. A type `T` which 
+ * is HDF5 readable/writeable should do one of the following:
  * - implement a static member function `static hdf5_format() -> std::string` or
- * - specialize the `hdf5_format_impl` struct for `T` and provide an implementation for the member `static invoke() -> std::string`.
+ * - specialize the `hdf5_format_impl` struct for `T` and provide an implementation for the member `static invoke() -> 
+ * std::string`.
  */
 
 #ifndef LIBH5_FORMAT_HPP
@@ -86,11 +87,12 @@ namespace h5 {
   /**
    * @brief Get the `hdf5_format` tag of type `T` using template argument deduction.
    *
-   * @tparam T Type for which the `hdf5_format` tag is to be retrieved..
+   * @tparam T Type for which the `hdf5_format` tag is to be retrieved.
+   * @param t Instance of type T (used for template argument deduction only).
    * @return std::string containing the `hdf5_format` tag.
    */
   template <typename T>
-  std::string get_hdf5_format(T const &) {
+  std::string get_hdf5_format([[maybe_unused]] T const &t) {
     return hdf5_format_impl<T>::invoke();
   }
 
@@ -103,8 +105,7 @@ namespace h5 {
   inline void write_hdf5_format_as_string(object obj, std::string const &s) { h5_write_attribute(obj, "Format", s); }
 
   /**
-   * @brief Write an `hdf5_format` tag for type `T` to an HDF5 attribute with the name 'Format' using template
-   * argument deduction.
+   * @brief Write an `hdf5_format` tag for type `T` to an HDF5 attribute with the name 'Format'.
    *
    * @tparam T Type for which the `hdf5_format` tag is to be written.
    * @param obj h5::object to which the attribute is attached.
@@ -115,14 +116,15 @@ namespace h5 {
   }
 
   /**
-   * @brief Write an `hdf5_format` tag for type `T` to an HDF5 attribute with the name 'Format' using template
-   * argument deduction.
+   * @brief Write an `hdf5_format` tag for type `T` to an HDF5 attribute with the name 'Format' using template argument 
+   * deduction.
    *
    * @tparam T Type for which the `hdf5_format` tag is to be written.
    * @param obj h5::object to which the attribute is attached.
+   * @param t Instance of type T (used for template argument deduction only).
    */
   template <typename T>
-  inline void write_hdf5_format(object obj, T const &) {
+  inline void write_hdf5_format(object obj, [[maybe_unused]] T const &t) {
     h5_write_attribute(obj, "Format", get_hdf5_format<T>());
   }
 
@@ -135,12 +137,12 @@ namespace h5 {
   void read_hdf5_format(object obj, std::string &s);
 
   /**
-   * @brief Read an `hdf5_format` tag from an HDF5 attribute with the name 'Format' attached to a given h5::group.
+   * @brief Read an `hdf5_format` tag from an HDF5 attribute with the name 'Format'.
    *
-   * @param g h5::group from which the attribute is read.
+   * @param obj h5::object from which the attribute is read.
    * @return String containing the `hdf5_format` tag.
    */
-  std::string read_hdf5_format(group g);
+  std::string read_hdf5_format(object obj);
 
   /**
    * @brief Read an `hdf5_format` tag from an HDF5 attribute with the name 'Format'.
@@ -152,44 +154,45 @@ namespace h5 {
   void read_hdf5_format_from_key(group g, std::string const &key, std::string &s);
 
   /**
-   * @brief Assert that the `hdf5_format` tag attached to the given group is the same as the given tag.
+   * @brief Assert that the `hdf5_format` tag attached to the given object is the same as the given tag.
    *
    * @details Throws a std::runtime_error if the tags don't match.
    *
-   * @param g h5::group to be checked.
+   * @param obj h5::object to be checked.
    * @param tag_expected Expected `hdf5_format` tag.
-   * @param ignore_if_absent If true, the assertion is ignored if the group does not have a 'Format' attribute.
+   * @param ignore_if_absent If true, the assertion is ignored if the object does not have a 'Format' attribute.
    */
-  void assert_hdf5_format_as_string(group g, const char *tag_expected, bool ignore_if_absent = false);
+  void assert_hdf5_format_as_string(object obj, const char *tag_expected, bool ignore_if_absent = false);
 
   /**
-   * @brief Assert that the `hdf5_format` tag attached to the given group is the same as the `hdf5_format` tag of the type `T`
-   * using template argument deduction.
+   * @brief Assert that the `hdf5_format` tag attached to the given object is the same as the `hdf5_format` tag of the 
+   * type `T`.
    *
    * @details Throws a std::runtime_error if the tags don't match.
    *
    * @tparam T Type for which the `hdf5_format` tag is to be checked.
-   * @param g h5::group to be checked.
-   * @param ignore_if_absent If true, the assertion is ignored if the group does not have a 'Format' attribute.
+   * @param obj h5::object to be checked.
+   * @param ignore_if_absent If true, the assertion is ignored if the object does not have a 'Format' attribute.
    */
   template <typename T>
-  void assert_hdf5_format(group g, bool ignore_if_absent = false) {
-    assert_hdf5_format_as_string(g, get_hdf5_format<T>().c_str(), ignore_if_absent);
+  void assert_hdf5_format(object obj, bool ignore_if_absent = false) {
+    assert_hdf5_format_as_string(obj, get_hdf5_format<T>().c_str(), ignore_if_absent);
   }
 
   /**
-   * @brief Assert that the `hdf5_format` tag attached to the given group is the same as the `hdf5_format` tag of the type `T`
-   * using template argument deduction.
+   * @brief Assert that the `hdf5_format` tag attached to the given object is the same as the `hdf5_format` tag of the 
+   * type `T` using template argument deduction.
    *
    * @details Throws a std::runtime_error if the tags don't match.
    *
    * @tparam T Type for which the `hdf5_format` tag is to be checked.
-   * @param g h5::group to be checked.
-   * @param ignore_if_absent If true, the assertion is ignored if the group does not have a 'Format' attribute.
+   * @param obj h5::object to be checked.
+   * @param t Instance of type T (used for template argument deduction only).
+   * @param ignore_if_absent If true, the assertion is ignored if the object does not have a 'Format' attribute.
    */
   template <typename T>
-  void assert_hdf5_format(group g, T const &, bool ignore_if_absent = false) {
-    assert_hdf5_format_as_string(g, get_hdf5_format<T>().c_str(), ignore_if_absent);
+  void assert_hdf5_format(object obj, [[maybe_unused]] T const &t, bool ignore_if_absent = false) {
+    assert_hdf5_format_as_string(obj, get_hdf5_format<T>().c_str(), ignore_if_absent);
   }
 
   /** @} */
