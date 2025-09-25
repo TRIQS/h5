@@ -36,9 +36,9 @@ namespace h5 {
     if (s == "") { h5_read_attribute(obj, "TRIQS_HDF5_data_scheme", s); }
   }
 
-  std::string read_hdf5_format(group g) {
+  std::string read_hdf5_format(object obj) {
     std::string s;
-    read_hdf5_format(g, s); // NOLINT (slicing is intended)
+    read_hdf5_format(obj, s);
     return s;
   }
 
@@ -49,8 +49,8 @@ namespace h5 {
     if (s == "") { h5_read_attribute_from_key(g, key, "TRIQS_HDF5_data_scheme", s); }
   }
 
-  void assert_hdf5_format_as_string(group g, const char *tag_expected, bool ignore_if_absent) {
-    auto tag = read_hdf5_format(g);
+  void assert_hdf5_format_as_string(object obj, const char *tag_expected, bool ignore_if_absent) {
+    auto tag = read_hdf5_format(obj);
     if (ignore_if_absent and tag.empty()) return;
     if (tag != tag_expected)
       throw std::runtime_error("Error in assert_hdf5_format_as_string: hdf5_format tag mistmatch: " + tag + " != " + tag_expected);
