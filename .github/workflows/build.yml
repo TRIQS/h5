@@ -2,9 +2,9 @@ name: build
 
 on:
   push:
-    branches: [ unstable ]
+    branches: [ unstable, '[0-9]+.[0-9]+.x' ]
   pull_request:
-    branches: [ unstable ]
+    branches: [ unstable, '[0-9]+.[0-9]+.x' ]
   workflow_call:
   workflow_dispatch:
 
@@ -25,11 +25,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        include:
-          - {os: ubuntu-24.04, cc: gcc, cxx: g++, doc: OFF}
-          - {os: ubuntu-24.04, cc: clang, cxx: clang++, doc: OFF}
-          - {os: macos-14, cc: gcc-14, cxx: g++-14, doc: OFF}
-          - {os: macos-14, cc: clang, cxx: clang++, doc: ON}
+        os:  [ubuntu-24.04, macos-15]
+        cxx: [g++, clang++]
 
     runs-on: ${{ matrix.os }}
 
@@ -39,9 +36,17 @@ jobs:
     - uses: actions/cache/restore@v4
       with:
         path: ${{ env.CCACHE_DIR }}
-        key: ccache-${{ matrix.os }}-${{ matrix.cc }}-${{ github.run_id }}
-        restore-keys:
-          ccache-${{ matrix.os }}-${{ matrix.cc }}-
+        key: ccache-${{ matrix.os }}-${{ matrix.cxx }}-${{ github.run_id }}-${{ github.run_attempt }}
+        restore-keys: |
+          ccache-${{ matrix.os }}-${{ matrix.cxx }}-
+
+    - name: Set cxx variables
+      run: |
+        if [[ ${{ matrix.os }} == 'macos-15' && ${{ matrix.cxx }} == 'g++' ]]; then
+          echo "CXX=g++-15" >> $GITHUB_ENV
+        else
+          echo "CXX=${{ matrix.cxx }}" >> $GITHUB_ENV
+        fi
 
     - name: Install ubuntu dependencies
       if: ${{ contains(matrix.os, 'ubuntu') }}
@@ -50,20 +55,21 @@ jobs:
         sudo apt-get install lsb-release wget software-properties-common &&
         sudo apt-get install
         ccache
+        cmake
+        ninja-build
         clang
+        clang-tools
         g++
         gfortran
         hdf5-tools
-        libblas-dev
         libclang-dev
         libc++-dev
         libc++abi-dev
         libomp-dev
-        libfftw3-dev
         libgfortran5
         libgmp-dev
         libhdf5-dev
-        liblapack-dev
+        libopenblas-dev
         libopenmpi-dev
         openmpi-bin
         openmpi-common
@@ -75,12 +81,11 @@ jobs:
         python3-numpy
         python3-pip
         python3-scipy
-        python3-sphinx
-        python3-nbsphinx
+        python3-ipython
 
     - name: Set up virtualenv
       run: |
-        mkdir $HOME/.venv
+        mkdir -p $HOME/.venv
         python3 -m venv --system-site-packages $HOME/.venv/my_python
         source $HOME/.venv/my_python/bin/activate
         echo "VIRTUAL_ENV=$VIRTUAL_ENV" >> $GITHUB_ENV
@@ -95,24 +100,18 @@ jobs:
         pip install -r requirements.txt
         echo "PATH=$(brew --prefix llvm)/bin:$(brew --prefix gcc)/bin:$PATH" >> $GITHUB_ENV
         echo "PYTHONPATH=$(brew --prefix llvm)/lib/python3.13/site-packages" >> $GITHUB_ENV
+        echo "SDKROOT=$(xcrun --show-sdk-path)" >> $GITHUB_ENV
+        echo "LDFLAGS=-L$(brew --prefix llvm)/lib/c++ -L/opt/homebrew/opt/llvm/lib/unwind -lunwind" >> $GITHUB_ENV
 
     - name: Add clang CXXFLAGS
-      if: ${{ contains(matrix.cxx, 'clang') }}
+      if: ${{ matrix.cxx == 'clang++' }}
       run: |
         echo "CXXFLAGS=-stdlib=libc++" >> $GITHUB_ENV
 
-    - name: Add clang LDFLAGS for macos to link against brew's libc++
-      if: ${{ contains(matrix.os, 'macos') && contains(matrix.cxx, 'clang') }}
-      run: |
-        echo 'LDFLAGS="-L$(brew --prefix llvm)/lib/c++ -L$(brew --prefix llvm)/lib -lunwind"' >> $GITHUB_ENV
-
     - name: Build h5
-      env:
-        CC: ${{ matrix.cc }}
-        CXX: ${{ matrix.cxx }}
       run: |
-        mkdir build && cd build && cmake .. -DCMAKE_INSTALL_PREFIX=$HOME/install -DBuild_Documentation=${{ matrix.doc }}
-        make -j2 || make -j1 VERBOSE=1
+        cmake -S . -B build -G Ninja -DCMAKE_INSTALL_PREFIX=$HOME/install -DBuild_Documentation=${{ matrix.doc }}
+        cmake --build build --verbose
 
     - name: Test h5
       env:
@@ -129,7 +128,7 @@ jobs:
       if: always()
       with:
         path: ${{ env.CCACHE_DIR }}
-        key: ccache-${{ matrix.os }}-${{ matrix.cc }}-${{ github.run_id }}
+        key: ccache-${{ matrix.os }}-${{ matrix.cxx }}-${{ github.run_id }}-${{ github.run_attempt }}
 
     - name: Deploy documentation
       if: matrix.doc == 'ON' && github.ref == 'refs/heads/unstable'
