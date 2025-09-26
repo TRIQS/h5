@@ -101,16 +101,12 @@ jobs:
         echo "PATH=$(brew --prefix llvm)/bin:$(brew --prefix gcc)/bin:$PATH" >> $GITHUB_ENV
         echo "PYTHONPATH=$(brew --prefix llvm)/lib/python3.13/site-packages" >> $GITHUB_ENV
         echo "SDKROOT=$(xcrun --show-sdk-path)" >> $GITHUB_ENV
+        echo "LDFLAGS=-L$(brew --prefix llvm)/lib/c++ -L$(brew --prefix llvm)/lib/unwind" >> $GITHUB_ENV
 
     - name: Add clang CXXFLAGS
       if: ${{ matrix.cxx == 'clang++' }}
       run: |
         echo "CXXFLAGS=-stdlib=libc++" >> $GITHUB_ENV
-
-    - name: Add clang LDFLAGS for macos to link against brew's libc++
-      if: ${{ contains(matrix.os, 'macos') && contains(matrix.cxx, 'clang') }}
-      run: |
-        echo "LDFLAGS=-L$(brew --prefix llvm)/lib/c++ -L$(brew --prefix llvm)/lib/unwind -lunwind" >> $GITHUB_ENV
 
     - name: Build h5
       run: |
