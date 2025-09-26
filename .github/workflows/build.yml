@@ -107,6 +107,11 @@ jobs:
       run: |
         echo "CXXFLAGS=-stdlib=libc++" >> $GITHUB_ENV
 
+    - name: Add clang LDFLAGS for macos to link against brew's libc++
+      if: ${{ contains(matrix.os, 'macos') && contains(matrix.cxx, 'clang') }}
+      run: |
+        echo "LDFLAGS=-L$(brew --prefix llvm)/lib/c++ -L$(brew --prefix llvm)/lib/unwind -lunwind" >> $GITHUB_ENV
+
     - name: Build h5
       run: |
         cmake -S . -B build -G Ninja -DCMAKE_INSTALL_PREFIX=$HOME/install -DBuild_Documentation=${{ matrix.doc }}
