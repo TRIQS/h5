@@ -109,8 +109,10 @@ jobs:
         echo "CXXFLAGS=-stdlib=libc++" >> $GITHUB_ENV
 
     - name: Build h5
+      env:
+        BUILD_DOXYGEN_DOCS: ${{ matrix.os == 'macos-15' && matrix.cxx == 'clang++' && 'ON' || 'OFF' }}
       run: |
-        cmake -S . -B build -G Ninja -DCMAKE_INSTALL_PREFIX=$HOME/install -DBuild_Documentation=${{ matrix.doc }}
+        cmake -S . -B build -G Ninja -DCMAKE_INSTALL_PREFIX=$HOME/install -DBuild_Documentation=$BUILD_DOXYGEN_DOCS
         cmake --build build --verbose
 
     - name: Test h5
@@ -131,7 +133,7 @@ jobs:
         key: ccache-${{ matrix.os }}-${{ matrix.cxx }}-${{ github.run_id }}-${{ github.run_attempt }}
 
     - name: Deploy documentation
-      if: matrix.doc == 'ON' && github.ref == 'refs/heads/unstable'
+      if: matrix.os == 'macos-15' && matrix.cxx == 'clang++' && github.ref == 'refs/heads/unstable'
       uses: JamesIves/github-pages-deploy-action@v4
       with:
         folder: build/doc/html
