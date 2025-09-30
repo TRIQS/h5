@@ -6,7 +6,7 @@ var searchData=
   ['write_20read_20a_202_20dimensional_20array_3',['Example 1: Write/Read a 2-dimensional array',['../ex1.html',1,'']]],
   ['write_20read_20a_20custom_20c_20type_4',['Example 2: Write/Read a custom C++ type',['../ex2.html',1,'']]],
   ['write_5fattribute_5',['write_attribute',['../group__rw__arrayinterface.html#ga37227293cd0ea704a7dd90206883b3b3',1,'h5::array_interface::write_attribute()'],['../group__rw__generic.html#ga9dad4717169edbd078fdbe553c336de2',1,'h5::write_attribute(object obj, std::string const &amp;key, T const &amp;x)']]],
-  ['write_5fhdf5_5fformat_6',['write_hdf5_format',['../group__format.html#ga4a970763c8c15978bb6c071a5d8d1eb5',1,'h5::write_hdf5_format(object obj)'],['../group__format.html#ga617d8b8e91b761b2710b6b651bee1776',1,'h5::write_hdf5_format(object obj, T const &amp;)']]],
+  ['write_5fhdf5_5fformat_6',['write_hdf5_format',['../group__format.html#ga4a970763c8c15978bb6c071a5d8d1eb5',1,'h5::write_hdf5_format(object obj)'],['../group__format.html#gac222168204a633593c9273715cc5d1e4',1,'h5::write_hdf5_format(object obj, T const &amp;t)']]],
   ['write_5fhdf5_5fformat_5fas_5fstring_7',['write_hdf5_format_as_string',['../group__format.html#gae249b1e03e6c6360e6647a9039a6616e',1,'h5']]],
   ['write_5fslice_8',['write_slice',['../group__rw__arrayinterface.html#ga231f414a9ca5af379dcf1dbe6f449396',1,'h5::array_interface']]]
 ];

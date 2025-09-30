@@ -109,7 +109,7 @@ $(function(){initNavTree('group__format.html','',''); });
 <li>implement a static member function <span class="tt">static hdf5_format() -&gt; std::string</span> or</li>
 <li>specialize the <span class="tt"><a class="el" href="structh5_1_1hdf5__format__impl.html" title="Default type trait to get the hdf5_format tag of type T by calling its static member function T::hdf5...">hdf5_format_impl</a></span> struct for <span class="tt">T</span> and provide an implementation for the member <span class="tt">static invoke() -&gt; std::string</span>.</li>
 </ul>
-<p>The specialized <span class="tt">h5_write</span> function for type <span class="tt">T</span> should write the format tag to file (see <a class="el" href="#ga4a970763c8c15978bb6c071a5d8d1eb5" title="Write an hdf5_format tag for type T to an HDF5 attribute with the name &#39;Format&#39; using template argume...">h5::write_hdf5_format</a> and <a class="el" href="#gae249b1e03e6c6360e6647a9039a6616e" title="Write a std::string to an HDF5 attribute with the name &#39;Format&#39;.">h5::write_hdf5_format_as_string</a>) and the <span class="tt">h5_read</span> function should check that the format tag is correct (see <a class="el" href="#ga9fb7efead6f9a2c20dca54d2bf2bba4f" title="Assert that the hdf5_format tag attached to the given group is the same as the hdf5_format tag of the...">h5::assert_hdf5_format</a> and <a class="el" href="#gab82dd9911233771a47e1c78a8415388f" title="Assert that the hdf5_format tag attached to the given group is the same as the given tag.">h5::assert_hdf5_format_as_string</a>).</p>
+<p>The specialized <span class="tt">h5_write</span> function for type <span class="tt">T</span> should write the format tag to file (see <a class="el" href="#ga4a970763c8c15978bb6c071a5d8d1eb5" title="Write an hdf5_format tag for type T to an HDF5 attribute with the name &#39;Format&#39;.">h5::write_hdf5_format</a> and <a class="el" href="#gae249b1e03e6c6360e6647a9039a6616e" title="Write a std::string to an HDF5 attribute with the name &#39;Format&#39;.">h5::write_hdf5_format_as_string</a>) and the <span class="tt">h5_read</span> function should check that the format tag is correct (see <a class="el" href="#ga001f3281f4d0b0c368914944af3ca33d" title="Assert that the hdf5_format tag attached to the given object is the same as the hdf5_format tag of th...">h5::assert_hdf5_format</a> and <a class="el" href="#ga0c72428f8d246fe0f77b5ba21d8c0f0a" title="Assert that the hdf5_format tag attached to the given object is the same as the given tag.">h5::assert_hdf5_format_as_string</a>).</p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-nested-classes" class="groupheader"><a id="nested-classes" name="nested-classes"></a>
 Classes</h2></td></tr>
@@ -140,38 +140,38 @@ Classes</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-func-members" class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:ga9fb7efead6f9a2c20dca54d2bf2bba4f" id="r_ga9fb7efead6f9a2c20dca54d2bf2bba4f"><td class="memTemplParams" colspan="2">template&lt;typename T&gt; </td></tr>
-<tr class="memitem:ga9fb7efead6f9a2c20dca54d2bf2bba4f template"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ga9fb7efead6f9a2c20dca54d2bf2bba4f">h5::assert_hdf5_format</a> (<a class="el" href="classh5_1_1group.html">group</a> g, bool ignore_if_absent=false)</td></tr>
-<tr class="memdesc:ga9fb7efead6f9a2c20dca54d2bf2bba4f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Assert that the <span class="tt">hdf5_format</span> tag attached to the given group is the same as the <span class="tt">hdf5_format</span> tag of the type <span class="tt">T</span> using template argument deduction.  <br /></td></tr>
-<tr class="memitem:ga7ca395415c1f1eba19727a744cc2c374" id="r_ga7ca395415c1f1eba19727a744cc2c374"><td class="memTemplParams" colspan="2">template&lt;typename T&gt; </td></tr>
-<tr class="memitem:ga7ca395415c1f1eba19727a744cc2c374 template"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ga7ca395415c1f1eba19727a744cc2c374">h5::assert_hdf5_format</a> (<a class="el" href="classh5_1_1group.html">group</a> g, T const &amp;, bool ignore_if_absent=false)</td></tr>
-<tr class="memdesc:ga7ca395415c1f1eba19727a744cc2c374"><td class="mdescLeft">&#160;</td><td class="mdescRight">Assert that the <span class="tt">hdf5_format</span> tag attached to the given group is the same as the <span class="tt">hdf5_format</span> tag of the type <span class="tt">T</span> using template argument deduction.  <br /></td></tr>
-<tr class="memitem:gab82dd9911233771a47e1c78a8415388f" id="r_gab82dd9911233771a47e1c78a8415388f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#gab82dd9911233771a47e1c78a8415388f">h5::assert_hdf5_format_as_string</a> (<a class="el" href="classh5_1_1group.html">group</a> g, const char *tag_expected, bool ignore_if_absent=false)</td></tr>
-<tr class="memdesc:gab82dd9911233771a47e1c78a8415388f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Assert that the <span class="tt">hdf5_format</span> tag attached to the given group is the same as the given tag.  <br /></td></tr>
+<tr class="memitem:ga001f3281f4d0b0c368914944af3ca33d" id="r_ga001f3281f4d0b0c368914944af3ca33d"><td class="memTemplParams" colspan="2">template&lt;typename T&gt; </td></tr>
+<tr class="memitem:ga001f3281f4d0b0c368914944af3ca33d template"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ga001f3281f4d0b0c368914944af3ca33d">h5::assert_hdf5_format</a> (<a class="el" href="classh5_1_1object.html">object</a> obj, bool ignore_if_absent=false)</td></tr>
+<tr class="memdesc:ga001f3281f4d0b0c368914944af3ca33d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Assert that the <span class="tt">hdf5_format</span> tag attached to the given object is the same as the <span class="tt">hdf5_format</span> tag of the type <span class="tt">T</span>.  <br /></td></tr>
+<tr class="memitem:ga822ceb809ab85fc188961a9c1c484e03" id="r_ga822ceb809ab85fc188961a9c1c484e03"><td class="memTemplParams" colspan="2">template&lt;typename T&gt; </td></tr>
+<tr class="memitem:ga822ceb809ab85fc188961a9c1c484e03 template"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ga822ceb809ab85fc188961a9c1c484e03">h5::assert_hdf5_format</a> (<a class="el" href="classh5_1_1object.html">object</a> obj, T const &amp;t, bool ignore_if_absent=false)</td></tr>
+<tr class="memdesc:ga822ceb809ab85fc188961a9c1c484e03"><td class="mdescLeft">&#160;</td><td class="mdescRight">Assert that the <span class="tt">hdf5_format</span> tag attached to the given object is the same as the <span class="tt">hdf5_format</span> tag of the type <span class="tt">T</span> using template argument deduction.  <br /></td></tr>
+<tr class="memitem:ga0c72428f8d246fe0f77b5ba21d8c0f0a" id="r_ga0c72428f8d246fe0f77b5ba21d8c0f0a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ga0c72428f8d246fe0f77b5ba21d8c0f0a">h5::assert_hdf5_format_as_string</a> (<a class="el" href="classh5_1_1object.html">object</a> obj, const char *tag_expected, bool ignore_if_absent=false)</td></tr>
+<tr class="memdesc:ga0c72428f8d246fe0f77b5ba21d8c0f0a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Assert that the <span class="tt">hdf5_format</span> tag attached to the given object is the same as the given tag.  <br /></td></tr>
 <tr class="memitem:gab4b255929a97cb9df8ff9eb01135f3c7" id="r_gab4b255929a97cb9df8ff9eb01135f3c7"><td class="memTemplParams" colspan="2">template&lt;typename T&gt; </td></tr>
 <tr class="memitem:gab4b255929a97cb9df8ff9eb01135f3c7 template"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#gab4b255929a97cb9df8ff9eb01135f3c7">h5::get_hdf5_format</a> ()</td></tr>
 <tr class="memdesc:gab4b255929a97cb9df8ff9eb01135f3c7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the <span class="tt">hdf5_format</span> tag of type <span class="tt">T</span>.  <br /></td></tr>
-<tr class="memitem:gab877c9d9af389c144bf13275f33f0605" id="r_gab877c9d9af389c144bf13275f33f0605"><td class="memTemplParams" colspan="2">template&lt;typename T&gt; </td></tr>
-<tr class="memitem:gab877c9d9af389c144bf13275f33f0605 template"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#gab877c9d9af389c144bf13275f33f0605">h5::get_hdf5_format</a> (T const &amp;)</td></tr>
-<tr class="memdesc:gab877c9d9af389c144bf13275f33f0605"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the <span class="tt">hdf5_format</span> tag of type <span class="tt">T</span> using template argument deduction.  <br /></td></tr>
-<tr class="memitem:ga21c13fd47e833f129fcf177a45d4280e" id="r_ga21c13fd47e833f129fcf177a45d4280e"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ga21c13fd47e833f129fcf177a45d4280e">h5::read_hdf5_format</a> (<a class="el" href="classh5_1_1group.html">group</a> g)</td></tr>
-<tr class="memdesc:ga21c13fd47e833f129fcf177a45d4280e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Read an <span class="tt">hdf5_format</span> tag from an HDF5 attribute with the name 'Format' attached to a given <a class="el" href="classh5_1_1group.html" title="A handle to an HDF5 group.">h5::group</a>.  <br /></td></tr>
+<tr class="memitem:ga6de42684786901adfc5bea11755037b2" id="r_ga6de42684786901adfc5bea11755037b2"><td class="memTemplParams" colspan="2">template&lt;typename T&gt; </td></tr>
+<tr class="memitem:ga6de42684786901adfc5bea11755037b2 template"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ga6de42684786901adfc5bea11755037b2">h5::get_hdf5_format</a> (T const &amp;t)</td></tr>
+<tr class="memdesc:ga6de42684786901adfc5bea11755037b2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the <span class="tt">hdf5_format</span> tag of type <span class="tt">T</span> using template argument deduction.  <br /></td></tr>
+<tr class="memitem:ga1f1aaf105f4d08f1e0e23dce4be3a9cd" id="r_ga1f1aaf105f4d08f1e0e23dce4be3a9cd"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ga1f1aaf105f4d08f1e0e23dce4be3a9cd">h5::read_hdf5_format</a> (<a class="el" href="classh5_1_1object.html">object</a> obj)</td></tr>
+<tr class="memdesc:ga1f1aaf105f4d08f1e0e23dce4be3a9cd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Read an <span class="tt">hdf5_format</span> tag from an HDF5 attribute with the name 'Format'.  <br /></td></tr>
 <tr class="memitem:gac9b5e2d04a3501fe65bd9566f68451c1" id="r_gac9b5e2d04a3501fe65bd9566f68451c1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#gac9b5e2d04a3501fe65bd9566f68451c1">h5::read_hdf5_format</a> (<a class="el" href="classh5_1_1object.html">object</a> obj, std::string &amp;s)</td></tr>
 <tr class="memdesc:gac9b5e2d04a3501fe65bd9566f68451c1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Read an <span class="tt">hdf5_format</span> tag from an HDF5 attribute with the name 'Format'.  <br /></td></tr>
 <tr class="memitem:gadd5cf864d70631a4038ebc1b7a305674" id="r_gadd5cf864d70631a4038ebc1b7a305674"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#gadd5cf864d70631a4038ebc1b7a305674">h5::read_hdf5_format_from_key</a> (<a class="el" href="classh5_1_1group.html">group</a> g, std::string const &amp;key, std::string &amp;s)</td></tr>
 <tr class="memdesc:gadd5cf864d70631a4038ebc1b7a305674"><td class="mdescLeft">&#160;</td><td class="mdescRight">Read an <span class="tt">hdf5_format</span> tag from an HDF5 attribute with the name 'Format'.  <br /></td></tr>
 <tr class="memitem:ga4a970763c8c15978bb6c071a5d8d1eb5" id="r_ga4a970763c8c15978bb6c071a5d8d1eb5"><td class="memTemplParams" colspan="2">template&lt;typename T&gt; </td></tr>
 <tr class="memitem:ga4a970763c8c15978bb6c071a5d8d1eb5 template"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ga4a970763c8c15978bb6c071a5d8d1eb5">h5::write_hdf5_format</a> (<a class="el" href="classh5_1_1object.html">object</a> obj)</td></tr>
-<tr class="memdesc:ga4a970763c8c15978bb6c071a5d8d1eb5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Write an <span class="tt">hdf5_format</span> tag for type <span class="tt">T</span> to an HDF5 attribute with the name 'Format' using template argument deduction.  <br /></td></tr>
-<tr class="memitem:ga617d8b8e91b761b2710b6b651bee1776" id="r_ga617d8b8e91b761b2710b6b651bee1776"><td class="memTemplParams" colspan="2">template&lt;typename T&gt; </td></tr>
-<tr class="memitem:ga617d8b8e91b761b2710b6b651bee1776 template"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ga617d8b8e91b761b2710b6b651bee1776">h5::write_hdf5_format</a> (<a class="el" href="classh5_1_1object.html">object</a> obj, T const &amp;)</td></tr>
-<tr class="memdesc:ga617d8b8e91b761b2710b6b651bee1776"><td class="mdescLeft">&#160;</td><td class="mdescRight">Write an <span class="tt">hdf5_format</span> tag for type <span class="tt">T</span> to an HDF5 attribute with the name 'Format' using template argument deduction.  <br /></td></tr>
+<tr class="memdesc:ga4a970763c8c15978bb6c071a5d8d1eb5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Write an <span class="tt">hdf5_format</span> tag for type <span class="tt">T</span> to an HDF5 attribute with the name 'Format'.  <br /></td></tr>
+<tr class="memitem:gac222168204a633593c9273715cc5d1e4" id="r_gac222168204a633593c9273715cc5d1e4"><td class="memTemplParams" colspan="2">template&lt;typename T&gt; </td></tr>
+<tr class="memitem:gac222168204a633593c9273715cc5d1e4 template"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#gac222168204a633593c9273715cc5d1e4">h5::write_hdf5_format</a> (<a class="el" href="classh5_1_1object.html">object</a> obj, T const &amp;t)</td></tr>
+<tr class="memdesc:gac222168204a633593c9273715cc5d1e4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Write an <span class="tt">hdf5_format</span> tag for type <span class="tt">T</span> to an HDF5 attribute with the name 'Format' using template argument deduction.  <br /></td></tr>
 <tr class="memitem:gae249b1e03e6c6360e6647a9039a6616e" id="r_gae249b1e03e6c6360e6647a9039a6616e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#gae249b1e03e6c6360e6647a9039a6616e">h5::write_hdf5_format_as_string</a> (<a class="el" href="classh5_1_1object.html">object</a> obj, std::string const &amp;s)</td></tr>
 <tr class="memdesc:gae249b1e03e6c6360e6647a9039a6616e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Write a std::string to an HDF5 attribute with the name 'Format'.  <br /></td></tr>
 </table>
 <a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Function Documentation</h2>
-<a id="ga9fb7efead6f9a2c20dca54d2bf2bba4f" name="ga9fb7efead6f9a2c20dca54d2bf2bba4f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ga9fb7efead6f9a2c20dca54d2bf2bba4f">&#9670;&#160;</a></span>assert_hdf5_format() <span class="overload">[1/2]</span></h2>
+<a id="ga001f3281f4d0b0c368914944af3ca33d" name="ga001f3281f4d0b0c368914944af3ca33d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga001f3281f4d0b0c368914944af3ca33d">&#9670;&#160;</a></span>assert_hdf5_format() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -181,7 +181,7 @@ template&lt;typename T&gt; </div>
         <tr>
           <td class="memname">void h5::assert_hdf5_format </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="classh5_1_1group.html">group</a></td>          <td class="paramname"><span class="paramname"><em>g</em></span>, </td>
+          <td class="paramtype"><a class="el" href="classh5_1_1object.html">object</a></td>          <td class="paramname"><span class="paramname"><em>obj</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -193,7 +193,7 @@ template&lt;typename T&gt; </div>
 
 <p><code>#include &lt;<a class="el" href="format_8hpp.html">h5/format.hpp</a>&gt;</code></p>
 
-<p>Assert that the <span class="tt">hdf5_format</span> tag attached to the given group is the same as the <span class="tt">hdf5_format</span> tag of the type <span class="tt">T</span> using template argument deduction. </p>
+<p>Assert that the <span class="tt">hdf5_format</span> tag attached to the given object is the same as the <span class="tt">hdf5_format</span> tag of the type <span class="tt">T</span>. </p>
 <p>Throws a std::runtime_error if the tags don't match.</p>
 <dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
@@ -203,18 +203,18 @@ template&lt;typename T&gt; </div>
 </dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">g</td><td><a class="el" href="classh5_1_1group.html" title="A handle to an HDF5 group.">h5::group</a> to be checked. </td></tr>
-    <tr><td class="paramname">ignore_if_absent</td><td>If true, the assertion is ignored if the group does not have a 'Format' attribute. </td></tr>
+    <tr><td class="paramname">obj</td><td><a class="el" href="classh5_1_1object.html" title="A generic handle for HDF5 objects.">h5::object</a> to be checked. </td></tr>
+    <tr><td class="paramname">ignore_if_absent</td><td>If true, the assertion is ignored if the object does not have a 'Format' attribute. </td></tr>
   </table>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="format_8hpp_source.html#l00176">176</a> of file <a class="el" href="format_8hpp_source.html">format.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="format_8hpp_source.html#l00178">178</a> of file <a class="el" href="format_8hpp_source.html">format.hpp</a>.</p>
 
 </div>
 </div>
-<a id="ga7ca395415c1f1eba19727a744cc2c374" name="ga7ca395415c1f1eba19727a744cc2c374"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ga7ca395415c1f1eba19727a744cc2c374">&#9670;&#160;</a></span>assert_hdf5_format() <span class="overload">[2/2]</span></h2>
+<a id="ga822ceb809ab85fc188961a9c1c484e03" name="ga822ceb809ab85fc188961a9c1c484e03"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga822ceb809ab85fc188961a9c1c484e03">&#9670;&#160;</a></span>assert_hdf5_format() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -224,12 +224,12 @@ template&lt;typename T&gt; </div>
         <tr>
           <td class="memname">void h5::assert_hdf5_format </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="classh5_1_1group.html">group</a></td>          <td class="paramname"><span class="paramname"><em>g</em></span>, </td>
+          <td class="paramtype"><a class="el" href="classh5_1_1object.html">object</a></td>          <td class="paramname"><span class="paramname"><em>obj</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">T const &amp;</td>          <td class="paramname"><span class="paramname"><em></em></span>, </td>
+          <td class="paramtype">T const &amp;</td>          <td class="paramname"><span class="paramname"><em>t</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -241,7 +241,7 @@ template&lt;typename T&gt; </div>
 
 <p><code>#include &lt;<a class="el" href="format_8hpp.html">h5/format.hpp</a>&gt;</code></p>
 
-<p>Assert that the <span class="tt">hdf5_format</span> tag attached to the given group is the same as the <span class="tt">hdf5_format</span> tag of the type <span class="tt">T</span> using template argument deduction. </p>
+<p>Assert that the <span class="tt">hdf5_format</span> tag attached to the given object is the same as the <span class="tt">hdf5_format</span> tag of the type <span class="tt">T</span> using template argument deduction. </p>
 <p>Throws a std::runtime_error if the tags don't match.</p>
 <dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
@@ -251,18 +251,19 @@ template&lt;typename T&gt; </div>
 </dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">g</td><td><a class="el" href="classh5_1_1group.html" title="A handle to an HDF5 group.">h5::group</a> to be checked. </td></tr>
-    <tr><td class="paramname">ignore_if_absent</td><td>If true, the assertion is ignored if the group does not have a 'Format' attribute. </td></tr>
+    <tr><td class="paramname">obj</td><td><a class="el" href="classh5_1_1object.html" title="A generic handle for HDF5 objects.">h5::object</a> to be checked. </td></tr>
+    <tr><td class="paramname">t</td><td>Instance of type T (used for template argument deduction only). </td></tr>
+    <tr><td class="paramname">ignore_if_absent</td><td>If true, the assertion is ignored if the object does not have a 'Format' attribute. </td></tr>
   </table>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="format_8hpp_source.html#l00191">191</a> of file <a class="el" href="format_8hpp_source.html">format.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="format_8hpp_source.html#l00194">194</a> of file <a class="el" href="format_8hpp_source.html">format.hpp</a>.</p>
 
 </div>
 </div>
-<a id="gab82dd9911233771a47e1c78a8415388f" name="gab82dd9911233771a47e1c78a8415388f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#gab82dd9911233771a47e1c78a8415388f">&#9670;&#160;</a></span>assert_hdf5_format_as_string()</h2>
+<a id="ga0c72428f8d246fe0f77b5ba21d8c0f0a" name="ga0c72428f8d246fe0f77b5ba21d8c0f0a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga0c72428f8d246fe0f77b5ba21d8c0f0a">&#9670;&#160;</a></span>assert_hdf5_format_as_string()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -270,7 +271,7 @@ template&lt;typename T&gt; </div>
         <tr>
           <td class="memname">void h5::assert_hdf5_format_as_string </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="classh5_1_1group.html">group</a></td>          <td class="paramname"><span class="paramname"><em>g</em></span>, </td>
+          <td class="paramtype"><a class="el" href="classh5_1_1object.html">object</a></td>          <td class="paramname"><span class="paramname"><em>obj</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -287,13 +288,13 @@ template&lt;typename T&gt; </div>
 
 <p><code>#include &lt;<a class="el" href="format_8cpp.html">h5/format.cpp</a>&gt;</code></p>
 
-<p>Assert that the <span class="tt">hdf5_format</span> tag attached to the given group is the same as the given tag. </p>
+<p>Assert that the <span class="tt">hdf5_format</span> tag attached to the given object is the same as the given tag. </p>
 <p>Throws a std::runtime_error if the tags don't match.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">g</td><td><a class="el" href="classh5_1_1group.html" title="A handle to an HDF5 group.">h5::group</a> to be checked. </td></tr>
+    <tr><td class="paramname">obj</td><td><a class="el" href="classh5_1_1object.html" title="A generic handle for HDF5 objects.">h5::object</a> to be checked. </td></tr>
     <tr><td class="paramname">tag_expected</td><td>Expected <span class="tt">hdf5_format</span> tag. </td></tr>
-    <tr><td class="paramname">ignore_if_absent</td><td>If true, the assertion is ignored if the group does not have a 'Format' attribute. </td></tr>
+    <tr><td class="paramname">ignore_if_absent</td><td>If true, the assertion is ignored if the object does not have a 'Format' attribute. </td></tr>
   </table>
   </dd>
 </dl>
@@ -330,12 +331,12 @@ template&lt;typename T&gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>std::string containing the <span class="tt">hdf5_format</span> tag. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="format_8hpp_source.html#l00082">82</a> of file <a class="el" href="format_8hpp_source.html">format.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="format_8hpp_source.html#l00083">83</a> of file <a class="el" href="format_8hpp_source.html">format.hpp</a>.</p>
 
 </div>
 </div>
-<a id="gab877c9d9af389c144bf13275f33f0605" name="gab877c9d9af389c144bf13275f33f0605"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#gab877c9d9af389c144bf13275f33f0605">&#9670;&#160;</a></span>get_hdf5_format() <span class="overload">[2/2]</span></h2>
+<a id="ga6de42684786901adfc5bea11755037b2" name="ga6de42684786901adfc5bea11755037b2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga6de42684786901adfc5bea11755037b2">&#9670;&#160;</a></span>get_hdf5_format() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -345,7 +346,7 @@ template&lt;typename T&gt; </div>
         <tr>
           <td class="memname">std::string h5::get_hdf5_format </td>
           <td>(</td>
-          <td class="paramtype">T const &amp;</td>          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td class="paramtype">T const &amp;</td>          <td class="paramname"><span class="paramname"><em>t</em></span></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -356,18 +357,24 @@ template&lt;typename T&gt; </div>
 <p>Get the <span class="tt">hdf5_format</span> tag of type <span class="tt">T</span> using template argument deduction. </p>
 <dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
-    <tr><td class="paramname">T</td><td>Type for which the <span class="tt">hdf5_format</span> tag is to be retrieved.. </td></tr>
+    <tr><td class="paramname">T</td><td>Type for which the <span class="tt">hdf5_format</span> tag is to be retrieved. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">t</td><td>Instance of type T (used for template argument deduction only). </td></tr>
   </table>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>std::string containing the <span class="tt">hdf5_format</span> tag. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="format_8hpp_source.html#l00093">93</a> of file <a class="el" href="format_8hpp_source.html">format.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="format_8hpp_source.html#l00095">95</a> of file <a class="el" href="format_8hpp_source.html">format.hpp</a>.</p>
 
 </div>
 </div>
-<a id="ga21c13fd47e833f129fcf177a45d4280e" name="ga21c13fd47e833f129fcf177a45d4280e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ga21c13fd47e833f129fcf177a45d4280e">&#9670;&#160;</a></span>read_hdf5_format() <span class="overload">[1/2]</span></h2>
+<a id="ga1f1aaf105f4d08f1e0e23dce4be3a9cd" name="ga1f1aaf105f4d08f1e0e23dce4be3a9cd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga1f1aaf105f4d08f1e0e23dce4be3a9cd">&#9670;&#160;</a></span>read_hdf5_format() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -375,7 +382,7 @@ template&lt;typename T&gt; </div>
         <tr>
           <td class="memname">std::string h5::read_hdf5_format </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="classh5_1_1group.html">group</a></td>          <td class="paramname"><span class="paramname"><em>g</em></span></td><td>)</td>
+          <td class="paramtype"><a class="el" href="classh5_1_1object.html">object</a></td>          <td class="paramname"><span class="paramname"><em>obj</em></span></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -383,10 +390,10 @@ template&lt;typename T&gt; </div>
 
 <p><code>#include &lt;<a class="el" href="format_8cpp.html">h5/format.cpp</a>&gt;</code></p>
 
-<p>Read an <span class="tt">hdf5_format</span> tag from an HDF5 attribute with the name 'Format' attached to a given <a class="el" href="classh5_1_1group.html" title="A handle to an HDF5 group.">h5::group</a>. </p>
+<p>Read an <span class="tt">hdf5_format</span> tag from an HDF5 attribute with the name 'Format'. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">g</td><td><a class="el" href="classh5_1_1group.html" title="A handle to an HDF5 group.">h5::group</a> from which the attribute is read. </td></tr>
+    <tr><td class="paramname">obj</td><td><a class="el" href="classh5_1_1object.html" title="A generic handle for HDF5 objects.">h5::object</a> from which the attribute is read. </td></tr>
   </table>
   </dd>
 </dl>
@@ -497,7 +504,7 @@ template&lt;typename T&gt; </div>
 
 <p><code>#include &lt;<a class="el" href="format_8hpp.html">h5/format.hpp</a>&gt;</code></p>
 
-<p>Write an <span class="tt">hdf5_format</span> tag for type <span class="tt">T</span> to an HDF5 attribute with the name 'Format' using template argument deduction. </p>
+<p>Write an <span class="tt">hdf5_format</span> tag for type <span class="tt">T</span> to an HDF5 attribute with the name 'Format'. </p>
 <dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
     <tr><td class="paramname">T</td><td>Type for which the <span class="tt">hdf5_format</span> tag is to be written. </td></tr>
@@ -511,12 +518,12 @@ template&lt;typename T&gt; </div>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="format_8hpp_source.html#l00113">113</a> of file <a class="el" href="format_8hpp_source.html">format.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="format_8hpp_source.html#l00114">114</a> of file <a class="el" href="format_8hpp_source.html">format.hpp</a>.</p>
 
 </div>
 </div>
-<a id="ga617d8b8e91b761b2710b6b651bee1776" name="ga617d8b8e91b761b2710b6b651bee1776"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ga617d8b8e91b761b2710b6b651bee1776">&#9670;&#160;</a></span>write_hdf5_format() <span class="overload">[2/2]</span></h2>
+<a id="gac222168204a633593c9273715cc5d1e4" name="gac222168204a633593c9273715cc5d1e4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gac222168204a633593c9273715cc5d1e4">&#9670;&#160;</a></span>write_hdf5_format() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -534,7 +541,7 @@ template&lt;typename T&gt; </div>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">T const &amp;</td>          <td class="paramname"><span class="paramname"><em></em></span>&#160;)</td>
+          <td class="paramtype">T const &amp;</td>          <td class="paramname"><span class="paramname"><em>t</em></span>&#160;)</td>
         </tr>
       </table>
   </td>
@@ -556,11 +563,12 @@ template&lt;typename T&gt; </div>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">obj</td><td><a class="el" href="classh5_1_1object.html" title="A generic handle for HDF5 objects.">h5::object</a> to which the attribute is attached. </td></tr>
+    <tr><td class="paramname">t</td><td>Instance of type T (used for template argument deduction only). </td></tr>
   </table>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="format_8hpp_source.html#l00125">125</a> of file <a class="el" href="format_8hpp_source.html">format.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="format_8hpp_source.html#l00127">127</a> of file <a class="el" href="format_8hpp_source.html">format.hpp</a>.</p>
 
 </div>
 </div>
@@ -602,7 +610,7 @@ template&lt;typename T&gt; </div>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="format_8hpp_source.html#l00103">103</a> of file <a class="el" href="format_8hpp_source.html">format.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="format_8hpp_source.html#l00105">105</a> of file <a class="el" href="format_8hpp_source.html">format.hpp</a>.</p>
 
 </div>
 </div>

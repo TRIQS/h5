@@ -8,6 +8,6 @@ var searchData=
   ['read_20and_20write_20from_20to_20hdf5_5',['Read and write from to HDF5',['../group__readwrite.html',1,'Read and write from/to HDF5'],['../documentation.html#autotoc_md16',1,'Read and write from/to HDF5']]],
   ['read_20write_6',['Generic read/write',['../group__rw__generic.html',1,'']]],
   ['read_5fattribute_7',['read_attribute',['../group__rw__arrayinterface.html#ga21edb3ab3635dbd5dd00617cde0bbd34',1,'h5::array_interface::read_attribute()'],['../group__rw__generic.html#gac4aa5bd61dff8357205c67619bc8aed9',1,'h5::read_attribute(object obj, std::string const &amp;key)'],['../group__rw__generic.html#ga0559402f9239bea8bc290f01e55e354b',1,'h5::read_attribute(object obj, std::string const &amp;key, T &amp;x)']]],
-  ['read_5fhdf5_5fformat_8',['read_hdf5_format',['../group__format.html#gac9b5e2d04a3501fe65bd9566f68451c1',1,'h5::read_hdf5_format(object obj, std::string &amp;s)'],['../group__format.html#ga21c13fd47e833f129fcf177a45d4280e',1,'h5::read_hdf5_format(group g)']]],
+  ['read_5fhdf5_5fformat_8',['read_hdf5_format',['../group__format.html#gac9b5e2d04a3501fe65bd9566f68451c1',1,'h5::read_hdf5_format(object obj, std::string &amp;s)'],['../group__format.html#ga1f1aaf105f4d08f1e0e23dce4be3a9cd',1,'h5::read_hdf5_format(object obj)']]],
   ['read_5fhdf5_5fformat_5ffrom_5fkey_9',['read_hdf5_format_from_key',['../group__format.html#gadd5cf864d70631a4038ebc1b7a305674',1,'h5']]]
 ];
