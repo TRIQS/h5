@@ -60,11 +60,14 @@ namespace h5 {
    * @tparam T Type to check.
    */
   template <typename T>
-  concept Storable = requires(T const &xc, T &x, h5::group g, std::string const &name) {
+  concept Storable = requires(T const &xc, h5::group g, std::string const &name) {
     { T::hdf5_format() } -> std::convertible_to<std::string>;
     { h5_write(g, name, xc) };
+  } && (requires(T &x, h5::group g, std::string const &name) {
     { h5_read(g, name, x) };
-  };
+  } || requires(h5::group g, std::string const &name) {
+    { T::h5_read_construct(g, name) };
+  });
 
 } // namespace h5
 
