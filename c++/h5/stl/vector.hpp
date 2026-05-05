@@ -117,7 +117,7 @@ namespace h5 {
    */
   template <typename T>
   void h5_write(group g, std::string const &name, std::vector<T> const &v) {
-    if constexpr (std::is_arithmetic_v<T> or is_complex_v<T>) {
+    if constexpr (std::is_arithmetic_v<T> or is_complex_v<T> or std::is_same_v<T, dcplx_t>) {
       // vector of arithmetic/complex types
       array_interface::write(g, name, array_interface::array_view_from_vector(v), true);
     } else if constexpr (std::is_same_v<T, std::string> or std::is_same_v<T, std::vector<std::string>>) {
@@ -156,9 +156,18 @@ namespace h5 {
       v.resize(g2.get_all_dataset_names().size() + g2.get_all_subgroup_names().size());
       for (int i = 0; i < v.size(); ++i) { h5_read(g2, std::to_string(i), v[i]); }
     } else {
-      if constexpr (std::is_arithmetic_v<T> or is_complex_v<T>) {
+      if constexpr (std::is_arithmetic_v<T> or is_complex_v<T> or std::is_same_v<T, dcplx_t>) {
         // vector of arithmetic/complex types
         auto ds_info = array_interface::get_dataset_info(g, name);
+
+        // read complex values stored as a compound HDF5 datatype
+        if constexpr (is_complex_v<T>) {
+          if (hdf5_type_equal(ds_info.ty, hdf5_type<dcplx_t>())) {
+            h5_read(g, name, reinterpret_cast<std::vector<dcplx_t> &>(v)); // NOLINT (reinterpret_cast is safe here)
+            return;
+          }
+        }
+
         if (ds_info.rank() != 1 + is_complex_v<T>)
           throw make_runtime_error("Error in h5_read: Reading a vector from an array of rank ", ds_info.rank(), " is not allowed");
         v.resize(ds_info.lengths[0]);

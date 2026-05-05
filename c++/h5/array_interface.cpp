@@ -20,6 +20,7 @@
  */
 
 #include "./array_interface.hpp"
+#include "./complex.hpp"
 #include "./macros.hpp"
 #include "./stl/string.hpp"
 
@@ -221,6 +222,18 @@ namespace h5::array_interface {
 
     // check consistency of input
     auto ds_info = get_dataset_info(g, name);
+
+    // file dataset uses the {r:double, i:double} compound type (Julia HDF5.jl, h5py): retype the view to dcplx_t and drop the trailing-2 dim
+    if (v.is_complex and hdf5_type_equal(ds_info.ty, hdf5_type<dcplx_t>())) {
+      v.ty         = hdf5_type<dcplx_t>();
+      v.is_complex = false;
+      v.parent_shape.pop_back();
+      v.slab.offset.pop_back();
+      v.slab.stride.pop_back();
+      v.slab.count.pop_back();
+      v.slab.block.pop_back();
+    }
+
     if (H5Tget_class(v.ty) != H5Tget_class(ds_info.ty))
       throw std::runtime_error("Error in h5::array_interface::read: Incompatible HDF5 types: " + get_name_of_h5_type(v.ty)
                                + " != " + get_name_of_h5_type(ds_info.ty));
