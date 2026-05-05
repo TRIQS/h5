@@ -1,5 +1,11 @@
+# Copy h5 files to binary dir
+file(GLOB_RECURSE all_h5_ref_files RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} *.ref.h5)
+foreach(file ${all_h5_ref_files})
+  configure_file(${file} ${file} COPYONLY)
+endforeach()
+
 # List of all tests
-set(all_tests interface archive test_storable issue_multifile)
+set(all_tests interface archive test_storable issue_multifile external_complex)
 
 # Build the storable C++ module
 c2py_add_module(storable LINK_LIBRARIES h5_c DEPENDS_ON_BINDINGS _h5py)

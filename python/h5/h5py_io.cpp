@@ -232,8 +232,10 @@ namespace h5 {
     }
 
     // rank > 0 - general array case
-    auto shape      = std::vector<npy_intp>(ds_info.lengths.begin(), ds_info.lengths.end());
-    auto numpy_type = h5_to_npy(ds_info.ty, ds_info.has_complex_attribute);
+    auto shape = std::vector<npy_intp>(ds_info.lengths.begin(), ds_info.lengths.end());
+    // {r,i} compound complex: allocate as NPY_CDOUBLE; array_interface::read retypes the view
+    bool is_compound_complex = H5Tget_class(ds_info.ty) == H5T_COMPOUND and hdf5_type_equal(ds_info.ty, hdf5_type<dcplx_t>());
+    auto numpy_type          = is_compound_complex ? NPY_CDOUBLE : h5_to_npy(ds_info.ty, ds_info.has_complex_attribute);
 
     // get rid of complex h5 dimension if necessary
     if (ds_info.has_complex_attribute) shape.pop_back();
