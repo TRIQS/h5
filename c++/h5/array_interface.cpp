@@ -157,8 +157,8 @@ namespace h5::array_interface {
         throw std::runtime_error("Error in h5::array_interface::write: Writing to the dataset " + name + " in the group" + g.name() + " failed");
     }
 
-    // add complex attribute if the data is complex valued
-    if (v.is_complex) h5_write_attribute(ds, "__complex__", "1");
+    // mark TRIQS trailing-2 complex datasets with the __complex__ attribute
+    if (v.has_cplx_trailing_dim) h5_write_attribute(ds, "__complex__", "1");
   }
 
   void write_slice(group g, std::string const &name, array_view const &v, hyperslab sl) {
@@ -224,9 +224,9 @@ namespace h5::array_interface {
     auto ds_info = get_dataset_info(g, name);
 
     // file dataset uses the {r:double, i:double} compound type (Julia HDF5.jl, h5py): retype the view to dcplx_t and drop the trailing-2 dim
-    if (v.is_complex and hdf5_type_equal(ds_info.ty, hdf5_type<dcplx_t>())) {
-      v.ty         = hdf5_type<dcplx_t>();
-      v.is_complex = false;
+    if (v.has_cplx_trailing_dim and hdf5_type_equal(ds_info.ty, hdf5_type<dcplx_t>())) {
+      v.ty                    = hdf5_type<dcplx_t>();
+      v.has_cplx_trailing_dim = false;
       v.parent_shape.pop_back();
       v.slab.offset.pop_back();
       v.slab.stride.pop_back();

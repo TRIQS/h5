@@ -103,15 +103,19 @@ namespace h5::array_interface {
     /**
      * @brief Construct a new empty hyperslab for a dataspace of a given rank.
      *
-     * @details A complex hyperslab has an additional dimension for the imaginary part. By default, `offset` and `count` 
-     * are set to zero and `stride` and `block` are set to one. If complex valued, `count.back() = 2`.
+     * @details If `has_cplx_trailing_dim` is true, the hyperslab gets an extra trailing dimension of size 2 to
+     * encode the imaginary part (TRIQS trailing-2 FLOAT convention for complex data). By default, `offset` and
+     * `count` are set to zero and `stride` and `block` are set to one. If `has_cplx_trailing_dim`, `count.back() = 2`.
      *
      * @param rank Rank of the underlying dataspace (excluding the possible added imaginary dimension).
-     * @param is_complex Whether the data is complex valued.
+     * @param has_cplx_trailing_dim True if the buffer encodes complex values via a trailing dim of size 2 (TRIQS convention).
      */
-    hyperslab(int rank, bool is_complex)
-       : offset(rank + is_complex, 0), stride(rank + is_complex, 1), count(rank + is_complex, 0), block(rank + is_complex, 1) {
-      if (is_complex) {
+    hyperslab(int rank, bool has_cplx_trailing_dim)
+       : offset(rank + has_cplx_trailing_dim, 0),
+         stride(rank + has_cplx_trailing_dim, 1),
+         count(rank + has_cplx_trailing_dim, 0),
+         block(rank + has_cplx_trailing_dim, 1) {
+      if (has_cplx_trailing_dim) {
         stride[rank] = 1;
         count[rank]  = 2;
       }
@@ -149,7 +153,8 @@ namespace h5::array_interface {
    * Note that the shape of the parent array does not necessarily have to correspond to the actual shape and size of the 
    * underlying memory. It is only used to select the correct elements in the hyperslab.
    *
-   * If the data of the array is complex, its imaginary part is treated as just another dimension.
+   * If the buffer encodes complex values via the TRIQS trailing-2 FLOAT convention, the imaginary part is
+   * treated as just another dimension.
    */
   struct array_view {
     /// h5::datatype stored in the array.
@@ -164,23 +169,29 @@ namespace h5::array_interface {
     /// h5::array_interface::hyperslab specifying the selection of the view.
     hyperslab slab;
 
-    /// Whether the data is complex valued.
-    bool is_complex;
+    /// True if the buffer encodes complex values via a trailing dim of size 2 (TRIQS convention,
+    /// e.g. `std::complex<double>` viewed as a `double` array with a trailing dim of size 2).
+    bool has_cplx_trailing_dim;
 
     /**
      * @brief Construct a new empty array view.
      *
-     * @details A complex view has an additional dimension for the imaginary part. The shape of the parent array is left 
-     * uninitialized and the h5::array_interface::hyperslab is empty.
+     * @details If `has_cplx_trailing_dim` is true, the view gets an extra trailing dimension of size 2 to
+     * encode the imaginary part. The shape of the parent array is left uninitialized and the
+     * h5::array_interface::hyperslab is empty.
      *
      * @param ty h5::datatype of the array.
      * @param start Pointer to the data of the parent array.
      * @param rank Rank of the parent array (excluding the possible added imaginary dimension).
-     * @param is_complex Whether the data is complex valued.
+     * @param has_cplx_trailing_dim True if the buffer encodes complex values via a trailing dim of size 2 (TRIQS convention).
      */
-    array_view(datatype ty, void *start, int rank, bool is_complex)
-       : ty(std::move(ty)), start(start), parent_shape(rank + is_complex), slab(rank, is_complex), is_complex(is_complex) {
-      if (is_complex) parent_shape[rank] = 2;
+    array_view(datatype ty, void *start, int rank, bool has_cplx_trailing_dim)
+       : ty(std::move(ty)),
+         start(start),
+         parent_shape(rank + has_cplx_trailing_dim),
+         slab(rank, has_cplx_trailing_dim),
+         has_cplx_trailing_dim(has_cplx_trailing_dim) {
+      if (has_cplx_trailing_dim) parent_shape[rank] = 2;
     }
 
     /// Get the rank of the view (including the possible added imaginary dimension).

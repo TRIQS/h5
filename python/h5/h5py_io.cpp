@@ -95,12 +95,12 @@ namespace h5 {
       int rank       = PyArray_NDIM(arr_obj);
 
       // get corresponding HDF5 type
-      datatype dt           = npy_to_h5(numpy_type);
-      const bool is_complex = (numpy_type == NPY_CDOUBLE) or (numpy_type == NPY_CLONGDOUBLE) or (numpy_type == NPY_CFLOAT);
+      datatype dt                      = npy_to_h5(numpy_type);
+      const bool has_cplx_trailing_dim = (numpy_type == NPY_CDOUBLE) or (numpy_type == NPY_CLONGDOUBLE) or (numpy_type == NPY_CFLOAT);
 
       // initialize array view and get the shape of the array and the numpy strides
-      array_interface::array_view res{dt, PyArray_DATA(arr_obj), rank, is_complex};
-      std::vector<long> c_strides(rank + is_complex, 0), c_shape(rank + is_complex, 2);
+      array_interface::array_view res{dt, PyArray_DATA(arr_obj), rank, has_cplx_trailing_dim};
+      std::vector<long> c_strides(rank + has_cplx_trailing_dim, 0), c_shape(rank + has_cplx_trailing_dim, 2);
       for (int i = 0; i < rank; ++i) {
         c_shape[i]        = PyArray_DIMS(arr_obj)[i];
         res.slab.count[i] = static_cast<size_t>(c_shape[i]);
@@ -108,7 +108,7 @@ namespace h5 {
       }
 
       // get the parent shape and HDF5 strides from the numpy strides
-      auto [Ltot, stri] = h5::array_interface::get_parent_shape_and_h5_strides(c_strides.data(), rank + is_complex, c_shape.data());
+      auto [Ltot, stri] = h5::array_interface::get_parent_shape_and_h5_strides(c_strides.data(), rank + has_cplx_trailing_dim, c_shape.data());
       for (int i = 0; i < rank; ++i) {
         res.parent_shape[i] = Ltot[i];
         res.slab.stride[i]  = stri[i];
