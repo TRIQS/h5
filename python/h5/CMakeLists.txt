@@ -20,11 +20,6 @@ set_property(TARGET h5py_io PROPERTY POSITION_INDEPENDENT_CODE ON)
 target_link_libraries(h5py_io PUBLIC ${PROJECT_NAME}_c hdf5::hdf5 cpp2py::cpp2py cpp2py::python_and_numpy)
 target_include_directories(h5py_io PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 
-## Build the pybind11 module
-#pybind11_add_module(_h5py _h5py.cpp h5py_io.cpp)
-#target_link_libraries(_h5py PRIVATE pybind11 h5_c hdf5::hdf5 python_and_numpy)
-#target_compile_options(_h5py PUBLIC $<$<CXX_COMPILER_ID:GNU>:-Wno-attributes>)
-
 # Build and install any python modules
 foreach(gen ${wrap_generators})
   string(REPLACE "_desc.py" "" gen ${gen})
