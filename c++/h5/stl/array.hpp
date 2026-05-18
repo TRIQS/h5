@@ -16,7 +16,7 @@
 
 /**
  * @file
- * @brief Provides functions to read/write std::array objects from/to HDF5.
+ * @brief Provides functions to read/write `std::array` objects from/to HDF5.
  */
 
 #ifndef LIBH5_STL_ARRAY_HPP
@@ -40,13 +40,13 @@ namespace h5 {
    */
 
   /**
-   * @brief Write a std::array to an HDF5 dataset/subgroup.
+   * @brief Write a `std::array` to an HDF5 dataset/subgroup.
    *
-   * @tparam T Value type of the std::array.
-   * @tparam N Size of the std::array.
+   * @tparam T Value type of the `std::array`.
+   * @tparam N Size of the `std::array`.
    * @param g h5::group in which the dataset/subgroup is created.
-   * @param name Name of the dataset/subgroup to which the std::array is written.
-   * @param a std::array to be written.
+   * @param name Name of the dataset/subgroup to which the `std::array` is written.
+   * @param a `std::array` to be written.
    */
   template <typename T, size_t N>
   void h5_write(group g, std::string const &name, std::array<T, N> const &a) {
@@ -72,13 +72,13 @@ namespace h5 {
   }
 
   /**
-   * @brief Read a std::array from an HDF5 dataset/subgroup.
+   * @brief Read a `std::array` from an HDF5 dataset/subgroup.
    *
-   * @tparam T Value type of the std::array.
-   * @tparam N Size of the std::array.
+   * @tparam T Value type of the `std::array`.
+   * @tparam N Size of the `std::array`.
    * @param g h5::group containing the dataset/subgroup.
-   * @param name Name of the dataset/subgroup from which the std::array is read.
-   * @param a std::array to read into.
+   * @param name Name of the dataset/subgroup from which the `std::array` is read.
+   * @param a `std::array` to read into.
    */
   template <typename T, size_t N>
   void h5_read(group g, std::string name, std::array<T, N> &a) {

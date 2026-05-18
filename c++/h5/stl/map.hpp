@@ -16,7 +16,7 @@
 
 /**
  * @file
- * @brief Provides functions to read/write std::map objects from/to HDF5.
+ * @brief Provides functions to read/write `std::map` objects from/to HDF5.
  */
 
 #ifndef LIBH5_STL_MAP_HPP
@@ -38,21 +38,21 @@ namespace h5 {
    * @{
    */
 
-  /// Specialization of h5::hdf5_format_impl for std::map.
+  /// Specialization of h5::hdf5_format_impl for `std::map`.
   template <typename Key, typename T, typename Compare>
   struct hdf5_format_impl<std::map<Key, T, Compare>> {
     static std::string invoke() { return "Dict"; }
   };
 
   /**
-   * @brief Write a std::map to an HDF5 subgroup.
+   * @brief Write a `std::map` to an HDF5 subgroup.
    *
-   * @tparam Key Key type of the std::map.
-   * @tparam T Value type of the std::map.
-   * @tparam Compare Comparison type for the std::map.
+   * @tparam Key Key type of the `std::map`.
+   * @tparam T Value type of the `std::map`.
+   * @tparam Compare Comparison type for the `std::map`.
    * @param g h5::group in which the subgroup is created.
-   * @param name Name of the subgroup to which the std::map is written.
-   * @param m std::map to be written.
+   * @param name Name of the subgroup to which the `std::map` is written.
+   * @param m `std::map` to be written.
    */
   template <typename Key, typename T, typename Compare>
   void h5_write(group g, std::string const &name, std::map<Key, T, Compare> const &m) {
@@ -77,14 +77,14 @@ namespace h5 {
   }
 
   /**
-   * @brief Read a std::map from an HDF5 subgroup.
+   * @brief Read a `std::map` from an HDF5 subgroup.
    *
-   * @tparam Key Key type of the std::map.
-   * @tparam T Value type of the std::map.
-   * @tparam Compare Comparison type for the std::map.
+   * @tparam Key Key type of the `std::map`.
+   * @tparam T Value type of the `std::map`.
+   * @tparam Compare Comparison type for the `std::map`.
    * @param g h5::group containing the subgroup.
-   * @param name Name of the subgroup from which the std::map is read.
-   * @param m std::map to read into.
+   * @param name Name of the subgroup from which the `std::map` is read.
+   * @param m `std::map` to read into.
    */
   template <typename Key, typename T, typename Compare>
   void h5_read(group g, std::string const &name, std::map<Key, T, Compare> &m) {

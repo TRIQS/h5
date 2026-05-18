@@ -16,7 +16,7 @@
 
 /**
  * @file
- * @brief Provides functions to read/write std::variant object from/to HDF5.
+ * @brief Provides functions to read/write `std::variant` object from/to HDF5.
  */
 
 #ifndef LIBH5_STL_VARIANT_HPP
@@ -38,21 +38,21 @@ namespace h5 {
    * @{
    */
 
-  /// Specialization of h5::hdf5_format_impl for std::variant.
+  /// Specialization of h5::hdf5_format_impl for `std::variant`.
   template <typename... T>
   struct hdf5_format_impl<std::variant<T...>> {
     static std::string invoke() = delete;
   };
 
   /**
-   * @brief Write a std::variant to an HDF5 dataset/subgroup.
+   * @brief Write a `std::variant` to an HDF5 dataset/subgroup.
    *
-   * @details Calls the specialized `h5_write` for the type currently stored in the std::variant.
+   * @details Calls the specialized `h5_write` for the type currently stored in the `std::variant`.
    *
    * @tparam Ts Variant types.
    * @param g h5::group in which the dataset/subgroup is created.
-   * @param name Name of the dataset/subgroup to which the std::variant is written.
-   * @param v std::variant to be written.
+   * @param name Name of the dataset/subgroup to which the `std::variant` is written.
+   * @param v `std::variant` to be written.
    */
   template <typename... Ts>
   void h5_write(group g, std::string const &name, std::variant<Ts...> const &v) {
@@ -61,7 +61,7 @@ namespace h5 {
 
   namespace detail {
 
-    // Helper function to read a std::variant from HDF5.
+    // Helper function to read a `std::variant` from HDF5.
     template <typename VT, typename U, typename... Ts>
     void h5_read_variant_helper(VT &v, datatype dt, group g, std::string const &name) {
       // finds the correct h5_read recursively
@@ -78,15 +78,15 @@ namespace h5 {
   } // namespace detail
 
   /**
-   * @brief Read a std::variant from an HDF5 dataset.
+   * @brief Read a `std::variant` from an HDF5 dataset.
    *
-   * @warning This function only works, if name points to a dataset and not a group. Depending on the HDF5 datatype
-   * of the dataset, it calls the specialized `h5_read`.
+   * @warning This function only works, if name points to a dataset and not a group. Depending on the HDF5 datatype of 
+   * the dataset, it calls the specialized `h5_read`.
    *
    * @tparam Ts Variant types.
    * @param g h5::group containing the dataset.
-   * @param name Name of the dataset from which the std::variant is read.
-   * @param v std::variant to read into.
+   * @param name Name of the dataset from which the `std::variant` is read.
+   * @param v `std::variant` to read into.
    */
   template <typename... Ts>
   void h5_read(group g, std::string const &name, std::variant<Ts...> &v) {

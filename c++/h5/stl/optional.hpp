@@ -16,7 +16,7 @@
 
 /**
  * @file
- * @brief Provides functions to read/write std::optional objects from/to HDF5.
+ * @brief Provides functions to read/write `std::optional` objects from/to HDF5.
  */
 
 #ifndef LIBH5_STL_OPTIONAL_HPP
@@ -36,21 +36,21 @@ namespace h5 {
    * @{
    */
 
-  /// Specialization of h5::hdf5_format_impl for std::optional.
+  /// Specialization of h5::hdf5_format_impl for `std::optional`.
   template <typename T>
   struct hdf5_format_impl<std::optional<T>> {
     static std::string invoke() { return hdf5_format_impl<T>::invoke(); }
   };
 
   /**
-   * @brief Write a std::optional to an HDF5 dataset/subgroup (if it is set).
+   * @brief Write a `std::optional` to an HDF5 dataset/subgroup (if it is set).
    *
-   * @details Calls the specialized `h5_write` function for the value type of the std::optional.
+   * @details Calls the specialized `h5_write` function for the value type of the `std::optional`.
    *
-   * @tparam T Value type of std::optional.
+   * @tparam T Value type of `std::optional`.
    * @param g h5::group in which the dataset/subgroup is created.
-   * @param name Name of the dataset/subgroup to which the std::optional value is written.
-   * @param opt std::optional to be written.
+   * @param name Name of the dataset/subgroup to which the `std::optional` value is written.
+   * @param opt `std::optional` to be written.
    */
   template <typename T>
   void h5_write(group g, std::string const &name, std::optional<T> const &opt) {
@@ -58,14 +58,14 @@ namespace h5 {
   }
 
   /**
-   * @brief Read a std::optional from an HDF5 dataset/subgroup.
+   * @brief Read a `std::optional` from an HDF5 dataset/subgroup.
    *
-   * @details Calls the specialized `h5_read` function for the value type of the std::optional.
+   * @details Calls the specialized `h5_read` function for the value type of the `std::optional`.
    *
-   * @tparam T Value type of std::optional.
+   * @tparam T Value type of `std::optional`.
    * @param g h5::group containing the dataset/subgroup.
-   * @param name Name of the dataset/subgroup from which the std::optional value is read.
-   * @param opt std::optional to read into.
+   * @param name Name of the dataset/subgroup from which the `std::optional` value is read.
+   * @param opt `std::optional` to read into.
    */
   template <typename T>
   void h5_read(group g, std::string name, std::optional<T> &opt) {

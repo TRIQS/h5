@@ -33,7 +33,8 @@ namespace h5 {
    *
    * @details This type can be used to read/write complex numbers from/to HDF5 files.
    *
-   * @note **h5** also supports the direct use of std::complex which is the recommended way to read/write complex data.
+   * @note **h5** also supports the direct use of `std::complex<T>` which is the recommended way to read/write complex 
+   * data.
    */
   struct dcplx_t {
     /// Real part.
@@ -45,11 +46,11 @@ namespace h5 {
 
   namespace detail {
 
-    // Type trait to check if a type is std::complex.
+    // Type trait to check if a type is `std::complex`.
     template <typename T>
     struct _is_complex : std::false_type {};
 
-    // Specialization of h5::_is_complex for std::complex.
+    // Specialization of h5::_is_complex for `std::complex`.
     template <typename T>
     struct _is_complex<std::complex<T>> : std::true_type {};
 
@@ -57,7 +58,7 @@ namespace h5 {
 
   /**
    * @ingroup h5_types
-   * @brief Boolean type trait set to true for std::complex types.
+   * @brief Boolean type trait set to true for `std::complex` types.
    * @tparam T Type to check.
    */
   template <typename T>

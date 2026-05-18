@@ -55,18 +55,17 @@ namespace h5::array_interface {
   /**
    * @brief Struct representing an HDF5 hyperslab.
    *
-   * @details A hyperslab is used to select elements from an n-dimensional array/dataspace and it is defined
-   * by 4 arrays of the same size as the rank of the underlying dataspace
-   * (see <a href="https://docs.hdfgroup.org/hdf5/v1_12/group___h5_s.html">HDF5 docs</a>):
+   * @details A hyperslab is used to select elements from an n-dimensional array/dataspace and it is defined by 4 arrays 
+   * of the same size as the rank of the underlying dataspace:
    * - `offset`: Origin of the hyperslab in the dataspace.
-   * - `stride`: The number of elements to skip between each element or block to be selected. If the stride
-   * parameter is set to `NULL`, the stride size defaults to 1 in each dimension.
+   * - `stride`: The number of elements to skip between each element or block to be selected. If the stride parameter is 
+   * set to `NULL`, the stride size defaults to 1 in each dimension.
    * - `count`: The number of elements or blocks to select along each dimension.
-   * - `block`: The size of a block selected from the dataspace. If the block parameter is set to `NULL`,
-   * the block size defaults to a single element in each dimension, as if the block array was set to all ones.
+   * - `block`: The size of a block selected from the dataspace. If the block parameter is set to `NULL`, the block size 
+   * defaults to a single element in each dimension, as if the block array was set to all ones.
    *
-   * The imaginary part of a complex array/dataspace is treated as just another dimension, i.e. its rank is
-   * increased by one.
+   * The imaginary part of a complex array/dataspace is treated as just another dimension, i.e. its rank is increased by 
+   * one.
    *
    * The following example selects every second column in a `7x7` dataspace:
    *
@@ -104,8 +103,8 @@ namespace h5::array_interface {
     /**
      * @brief Construct a new empty hyperslab for a dataspace of a given rank.
      *
-     * @details A complex hyperslab has an additional dimension for the imaginary part. By default, `offset` and
-     * `count` are set to zero and `stride` and `block` are set to one. If complex valued, `count.back() = 2`.
+     * @details A complex hyperslab has an additional dimension for the imaginary part. By default, `offset` and `count` 
+     * are set to zero and `stride` and `block` are set to one. If complex valued, `count.back() = 2`.
      *
      * @param rank Rank of the underlying dataspace (excluding the possible added imaginary dimension).
      * @param is_complex Whether the data is complex valued.
@@ -144,11 +143,11 @@ namespace h5::array_interface {
   /**
    * @brief Struct representing a view on an n-dimensional array/dataspace.
    *
-   * @details A view consists of the parent array and of an h5::array_interface::hyperslab specifying a selection.
-   * The parent array is defined by a pointer to its data and its shape.
+   * @details A view consists of the parent array and of an h5::array_interface::hyperslab specifying a selection. The 
+   * parent array is defined by a pointer to its data and its shape.
    *
-   * Note that the shape of the parent array does not necessarily have to correspond to the actual shape and size of
-   * the underlying memory. It is only used to select the correct elements in the hyperslab.
+   * Note that the shape of the parent array does not necessarily have to correspond to the actual shape and size of the 
+   * underlying memory. It is only used to select the correct elements in the hyperslab.
    *
    * If the data of the array is complex, its imaginary part is treated as just another dimension.
    */
@@ -171,8 +170,8 @@ namespace h5::array_interface {
     /**
      * @brief Construct a new empty array view.
      *
-     * @details A complex view has an additional dimension for the imaginary part. The shape of the
-     * parent array is left uninitialized and the h5::array_interface::hyperslab is empty.
+     * @details A complex view has an additional dimension for the imaginary part. The shape of the parent array is left 
+     * uninitialized and the h5::array_interface::hyperslab is empty.
      *
      * @param ty h5::datatype of the array.
      * @param start Pointer to the data of the parent array.
@@ -189,9 +188,9 @@ namespace h5::array_interface {
   };
 
   /**
-   * @brief Given a view on an n-dimensional array (dataspace) by specifying its numpy/nda-style strides and
-   * its size (number of elements in the view), calculate the shape of a possible parent array and the corresponding
-   * HDF5 strides of the view.
+   * @brief Given a view on an n-dimensional array (dataspace) by specifying its numpy/nda-style strides and its size 
+   * (number of elements in the view), calculate the shape of a possible parent array and the corresponding HDF5 strides 
+   * of the view.
    *
    * @details The memory layout is assumend to be in C-order. Suppose `parent_shape` is an array containing the shape of
    * the n-dimensional parent array, `np_strides` contains the numpy strides and `h5_strides` are the HDF5 strides. Then
@@ -235,7 +234,7 @@ namespace h5::array_interface {
    * @details If a link with the given name already exists, it is first unlinked.
    *
    * @param g h5::group in which the dataset is created.
-   * @param name Name of the dataset
+   * @param name Name of the dataset.
    * @param v h5::array_interface::array_view to be written.
    * @param compress Whether to compress the dataset.
    */
@@ -244,7 +243,7 @@ namespace h5::array_interface {
   /**
    * @brief Write an array view to a selected hyperslab of an existing HDF5 dataset.
    *
-   * @details It checks if the number of elements in the view is the same as selected in the hyperslab and if the
+   * @details It checks if the number of elements in the view is the same as selected in the hyperslab and if the 
    * datatypes are compatible. Otherwise, an exception is thrown.
    *
    * @param g h5::group which contains the dataset.

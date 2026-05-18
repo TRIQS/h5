@@ -54,7 +54,8 @@ namespace h5 {
   /**
    * @brief Deserialize an object from a byte buffer.
    *
-   * @details It first creates a buffered memory file from the given byte buffer and then reads the object from the file.
+   * @details It first creates a buffered memory file from the given byte buffer and then reads the object from the 
+   * file.
    *
    * @tparam T Type of the object.
    * @param buf Byte buffer containing the serialized object.

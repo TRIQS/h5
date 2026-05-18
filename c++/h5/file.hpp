@@ -35,8 +35,8 @@ namespace h5 {
    * @ingroup data_model
    * @brief A handle to an HDF5 file.
    *
-   * @details This class inherits from the general h5::object class. It simply wraps the HDF5 functions
-   * to open an existing file or to create a new file.
+   * @details This class inherits from the general h5::object class. It simply wraps the HDF5 functions to open an 
+   * existing file or to create a new file.
    *
    * An h5::file is automatically closed when it goes out of scope, i.e. its reference count is decreased.
    */
@@ -44,8 +44,9 @@ namespace h5 {
     public:
     /**
      * @brief Default constructor creates a buffered memory file.
-     * @details It modifies the file access property list to use the `H5FD_CORE` driver. It can be used for
-     * serializing and deserializing data (see h5::serialize and h5::deserialize).
+     * 
+     * @details It modifies the file access property list to use the `H5FD_CORE` driver. It can be used for serializing 
+     * and deserializing data (see h5::serialize and h5::deserialize).
      */
     file();
 
@@ -55,11 +56,12 @@ namespace h5 {
      * @details The file is opened in the specified mode. The following modes are available:
      *
      * - 'r': Open an existing file in read only mode (calls `H5Fopen` with `H5F_ACC_RDONLY`).
-     * - 'w': Create a new file or overwrite an existing file in read-write mode (calls `H5Fcreate` with `H5F_ACC_TRUNC`).
+     * - 'w': Create a new file or overwrite an existing file in read-write mode (calls `H5Fcreate` with 
+     * `H5F_ACC_TRUNC`).
      * - 'a': Create a new file or append to an existing file in read-write mode (calls `H5Fcreate` with  `H5F_ACC_EXCL`
      * or `H5Fopen` with `H5F_ACC_RDWR` in case the file already exists).
-     * - 'e': Create a new file if the file does not already exists, otherwise throw an exception (calls `H5Fcreate` with
-     * `H5F_ACC_EXCL`)
+     * - 'e': Create a new file if the file does not already exists, otherwise throw an exception (calls `H5Fcreate` 
+     * with `H5F_ACC_EXCL`)
      *
      * @param name Name of the file.
      * @param mode Mode in which to open the file.
