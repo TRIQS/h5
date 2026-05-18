@@ -105,7 +105,7 @@ namespace h5::array_interface {
     v_t dims_out(rank);
     H5Sget_simple_extent_dims(dspace, dims_out.data(), nullptr);
 
-    return {std::move(dims_out), ty, has_complex_attribute};
+    return {.lengths = std::move(dims_out), .ty = ty, .has_complex_attribute = has_complex_attribute};
   }
 
   dataset_info get_dataset_info(group g, std::string const &name) {

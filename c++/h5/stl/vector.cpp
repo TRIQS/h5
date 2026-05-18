@@ -46,7 +46,7 @@ namespace h5 {
 
     // return char_buf
     auto len = v_t{v.size(), s};
-    return {buf, len};
+    return {.buffer = buf, .lengths = len};
   }
 
   char_buf to_char_buf(std::vector<std::vector<std::string>> const &v) {
@@ -67,7 +67,7 @@ namespace h5 {
 
     // return char_buf
     auto len = v_t{v.size(), lv, s};
-    return {buf, len};
+    return {.buffer = buf, .lengths = len};
   }
 
   void from_char_buf(char_buf const &cb, std::vector<std::string> &v) {
