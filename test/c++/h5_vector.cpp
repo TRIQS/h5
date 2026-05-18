@@ -111,7 +111,7 @@ class foo {
   int var;
 
   public:
-  foo(int v = 0) : var(v){};
+  foo(int v = 0) : var(v) {};
 
   static std::string hdf5_format() { return "foo"; }
 
@@ -138,5 +138,24 @@ TEST(H5, VectorOfCustomType) {
     h5::read(file, "vec_foo", v_in);
 
     EXPECT_EQ(v, v_in);
+  }
+}
+
+TEST(H5, VectorOfVectorsOfDoubles) {
+  // write/read a vector of vectors of doubles
+  std::vector<std::vector<double>> vv = {{1.0, 2.0}, {3.0, 4.0, 5.0}, {6.0}};
+
+  {
+    h5::file file{"test_nested_vec.h5", 'w'};
+    h5::write(file, "vec_vec_dbl", vv);
+  }
+
+  {
+    h5::file file{"test_nested_vec.h5", 'r'};
+
+    std::vector<std::vector<double>> vv_in;
+    h5::read(file, "vec_vec_dbl", vv_in);
+
+    EXPECT_EQ(vv, vv_in);
   }
 }

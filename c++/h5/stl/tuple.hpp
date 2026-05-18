@@ -42,7 +42,7 @@ namespace h5 {
   /// Specialization of h5::hdf5_format_impl for `std::tuple`.
   template <typename... T>
   struct hdf5_format_impl<std::tuple<T...>> {
-    static std::string invoke() { return "PythonTupleWrap"; }
+    static std::string invoke() { return "Tuple"; }
   };
 
   namespace detail {
