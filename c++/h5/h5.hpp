@@ -22,8 +22,6 @@
 #ifndef LIBH5_H5_HPP
 #define LIBH5_H5_HPP
 
-#include <concepts>
-
 #include "./array_interface.hpp"
 #include "./complex.hpp"
 #include "./file.hpp"
@@ -32,6 +30,7 @@
 #include "./group.hpp"
 #include "./object.hpp"
 #include "./scalar.hpp"
+#include "./storable.hpp"
 #include "./utils.hpp"
 #include "./stl/string.hpp"
 #include "./stl/array.hpp"
@@ -51,25 +50,6 @@
   (((H5_VERS_MAJOR == Maj) && (H5_VERS_MINOR == Min) && (H5_VERS_RELEASE >= Rel)) || ((H5_VERS_MAJOR == Maj) && (H5_VERS_MINOR > Min))               \
    || (H5_VERS_MAJOR > Maj))
 #endif
-
-namespace h5 {
-
-  /**
-   * @ingroup utilities
-   * @brief Concept to check if a type can be read/written from/to HDF5.
-   * @tparam T Type to check.
-   */
-  template <typename T>
-  concept Storable = requires(T const &xc, h5::group g, std::string const &name) {
-    { T::hdf5_format() } -> std::convertible_to<std::string>;
-    { h5_write(g, name, xc) };
-  } && (requires(T &x, h5::group g, std::string const &name) {
-    { h5_read(g, name, x) };
-  } || requires(h5::group g, std::string const &name) {
-    { T::h5_read_construct(g, name) };
-  });
-
-} // namespace h5
 
 // Python wrapping declaration
 #ifdef C2PY_INCLUDED
