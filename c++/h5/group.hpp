@@ -191,6 +191,43 @@ namespace h5 {
      * @return A vector with the names of all the subgroups and datasets.
      */
     [[nodiscard]] std::vector<std::string> get_all_subgroup_dataset_names() const;
+
+    /**
+     * @brief Get all the names of the subgroups and datasets in the current group.
+     * @details This is the same as get_all_subgroup_dataset_names() (used in the Python interface).
+     * @return A vector with the names of all the subgroups and datasets.
+     */
+    [[nodiscard]] std::vector<std::string> keys() const { return get_all_subgroup_dataset_names(); }
+
+    /**
+     * @brief Write a `std::string` HDF5 attribute with the given name to the group.
+     * 
+     * @details It simply calls h5::h5_write_attribute with `this` group and the given name.
+     *
+     * @param name Name of the attribute.
+     * @param s `std::string` to be written.
+     */
+    void write_attribute(std::string const &name, std::string const &s) const;
+
+    /**
+     * @brief Read a string from an HDF5 attribute with the given name.
+     *
+     * @details It simply calls h5::h5_read_attribute with `this` group and the given name.
+     *
+     * @param name Name of the attribute.
+     * @return `std::string` containing the attribute.
+     */
+    [[nodiscard]] std::string read_attribute(std::string const &name) const;
+
+    /**
+     * @brief Read an `hdf5_format` tag from an HDF5 attribute with the name 'Format'.
+     * 
+     * @details It simply calls h5::read_hdf5_format_from_key with `this` group and the given key.
+     *
+     * @param key Name of the object from which the attribute is read.
+     * @return `std::string` containing the `hdf5_format` tag.
+     */
+    [[nodiscard]] std::string read_hdf5_format_from_key(std::string const &key) const;
   };
 
 } // namespace h5

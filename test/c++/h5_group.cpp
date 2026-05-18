@@ -20,6 +20,7 @@
 #include <hdf5_hl.h>
 
 #include <string>
+#include <vector>
 
 TEST(H5, GroupOperations) {
   // test the various group operations
@@ -72,3 +73,22 @@ TEST(H5, GroupOperations) {
   EXPECT_EQ(names.size(), 2);
   for (const auto &n : names) { EXPECT_TRUE(n == gname || n == dsname); }
 };
+
+TEST(H5, GroupWriteRead) {
+  // test writing/reading datasets in groups
+  {
+    h5::file file("group_rw.h5", 'w');
+    h5::group root(file);
+    h5::write(root, "vec", std::vector<int>{1, 2, 3});
+    h5::write_hdf5_format(root.open_dataset("vec"), std::vector<int>{});
+    root.write_attribute("attr_key", "attr_val");
+  }
+
+  {
+    h5::file file("group_rw.h5", 'r');
+    h5::group root(file);
+    EXPECT_EQ((std::vector<int>{1, 2, 3}), h5::read<std::vector<int>>(root, "vec"));
+    EXPECT_EQ("attr_val", root.read_attribute("attr_key"));
+    EXPECT_EQ(h5::get_hdf5_format(std::vector<int>{}), root.read_hdf5_format_from_key("vec"));
+  }
+}

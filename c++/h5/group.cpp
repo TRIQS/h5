@@ -210,4 +210,23 @@ namespace h5 {
     return ds_name;
   }
 
+  // Forward declarations.
+  void h5_write_attribute(object, std::string const &, std::string const &);
+  void h5_read_attribute(object, std::string const &, std::string &);
+  void read_hdf5_format_from_key(group, std::string const &, std::string &);
+
+  void group::write_attribute(std::string const &name, std::string const &s) const { h5_write_attribute(*this, name, s); } // NOLINT
+
+  std::string group::read_attribute(std::string const &name) const {
+    std::string result{};
+    h5_read_attribute(*this, name, result); // NOLINT
+    return result;
+  }
+
+  std::string group::read_hdf5_format_from_key(std::string const &key) const {
+    std::string result{};
+    h5::read_hdf5_format_from_key(*this, key, result);
+    return result;
+  }
+
 } // namespace h5
