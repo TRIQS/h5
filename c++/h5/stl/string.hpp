@@ -172,6 +172,12 @@ namespace h5 {
     [[nodiscard]] dataspace dspace() const;
   };
 
+  /// Specialization of h5::hdf5_format_impl for h5::char_buf.
+  template <>
+  struct hdf5_format_impl<char_buf> {
+    static std::string invoke() { return "char_buf"; }
+  };
+
   /**
    * @brief Write an h5::char_buf to an HDF5 dataset.
    *
