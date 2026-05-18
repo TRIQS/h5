@@ -37,8 +37,8 @@ class TestH5Interface(unittest.TestCase):
         g2 = g.create_group("GG")
 
         a = np.array(((1,2,3), (4,5,6)), int)
-        h5.h5_write(g2, 'a', a)
-        h5.h5_write(g, 'a1', a)
+        h5.h5_write_bare(g2, 'a', a)
+        h5.h5_write_bare(g, 'a1', a)
         g.write_attribute("ATTR1", "value1")
 
         del f
@@ -47,7 +47,7 @@ class TestH5Interface(unittest.TestCase):
         f = h5.File("test2.h5", 'r')
         g = h5.Group(f)
         g.open_group("GG")
-        assert_arrays_are_close(h5.h5_read(g2, 'a'), a)
+        assert_arrays_are_close(h5.h5_read_bare(g2, 'a'), a)
         print(list(g.keys()))
 
         self.assertEqual(g.has_subgroup('GG'), True)
@@ -59,8 +59,8 @@ class TestH5Interface(unittest.TestCase):
         self.assertEqual(g.read_attribute('ATTR1'), "value1")
         self.assertEqual(g.read_attribute('ATTRNotPresent'), "")
 
-        self.assertEqual(f.name, "test2.h5")
-        self.assertEqual(g.file.name, "test2.h5")
+        self.assertEqual(f.name(), "test2.h5")
+        self.assertEqual(g.get_file().name(), "test2.h5")
 
     def test_h5_io(self):
 
@@ -68,18 +68,18 @@ class TestH5Interface(unittest.TestCase):
         f = h5.File("test.h5", 'w')
         g = h5.Group(f)
 
-        h5.h5_write(g, 'i', 14)
-        h5.h5_write(g, 'd', 3.2)
-        h5.h5_write(g, 's', "a string")
-        h5.h5_write(g, 'c', 1.2 + 3j)
-        h5.h5_write(g, 'nan', float('nan'))
-        h5.h5_write(g, 'npyarr_rank0', np.zeros((), dtype=int))
-        h5.h5_write(g, 'npy_int', np.int_(4))
+        h5.h5_write_bare(g, 'i', 14)
+        h5.h5_write_bare(g, 'd', 3.2)
+        h5.h5_write_bare(g, 's', "a string")
+        h5.h5_write_bare(g, 'c', 1.2 + 3j)
+        h5.h5_write_bare(g, 'nan', float('nan'))
+        h5.h5_write_bare(g, 'npyarr_rank0', np.zeros((), dtype=int))
+        h5.h5_write_bare(g, 'npy_int', np.int_(4))
 
         c = 1
         for types in [int, float, complex]:
             a = np.array(((1,2,3), (4,5,6)), types)
-            h5.h5_write(g, 'a%s'%c, a)
+            h5.h5_write_bare(g, 'a%s'%c, a)
             c += 1 
 
         del f
@@ -88,20 +88,20 @@ class TestH5Interface(unittest.TestCase):
         f = h5.File("test.h5", 'r')
         g = h5.Group(f)
 
-        self.assertEqual(h5.h5_read(g, 'i'), 14)
-        self.assertEqual(h5.h5_read(g, 'd'), 3.2)
-        self.assertEqual(h5.h5_read(g, 's'), "a string")
-        self.assertEqual(h5.h5_read(g, 'c'), 1.2 + 3j)
-        c = h5.h5_read(g, 'c')
+        self.assertEqual(h5.h5_read_bare(g, 'i'), 14)
+        self.assertEqual(h5.h5_read_bare(g, 'd'), 3.2)
+        self.assertEqual(h5.h5_read_bare(g, 's'), "a string")
+        self.assertEqual(h5.h5_read_bare(g, 'c'), 1.2 + 3j)
+        c = h5.h5_read_bare(g, 'c')
         self.assertEqual(type(c), type(1j))
-        self.assertTrue( isnan(h5.h5_read(g, 'nan')) )
-        self.assertEqual(h5.h5_read(g, 'npyarr_rank0'), 0)
-        self.assertEqual(h5.h5_read(g, 'npy_int'), 4)
+        self.assertTrue( isnan(h5.h5_read_bare(g, 'nan')) )
+        self.assertEqual(h5.h5_read_bare(g, 'npyarr_rank0'), 0)
+        self.assertEqual(h5.h5_read_bare(g, 'npy_int'), 4)
 
         c = 1
         for types in [int, float, complex]:
             a = np.array(((1,2,3), (4,5,6)), types)
-            r = h5.h5_read(g, 'a%s'%c)
+            r = h5.h5_read_bare(g, 'a%s'%c)
             assert_arrays_are_close(r, a)
             c += 1 
 

@@ -395,7 +395,7 @@ class HDFArchive(HDFArchiveGroup):
       """
       Return a copy of the hdf5 file as bytes
       """
-      return self._group.file.as_buffer()
+      return self._group.get_file().as_buffer()
 
     def __del__(self):
       # We must ensure the root group is closed before closing the file

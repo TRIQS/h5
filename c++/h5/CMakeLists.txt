@@ -12,13 +12,14 @@ set_target_properties(${PROJECT_NAME}_c PROPERTIES
   VERSION ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}
 )
 target_include_directories(${PROJECT_NAME}_c PUBLIC $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/c++>)
+target_include_directories(${PROJECT_NAME}_c PUBLIC $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/python>)
 target_include_directories(${PROJECT_NAME}_c SYSTEM INTERFACE $<INSTALL_INTERFACE:${CMAKE_INSTALL_PREFIX}/include>)
 target_link_directories(${PROJECT_NAME}_c PUBLIC $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/c++>)
 target_link_directories(${PROJECT_NAME}_c INTERFACE $<INSTALL_INTERFACE:${CMAKE_INSTALL_FULL_LIBDIR}>)
 target_compile_definitions(${PROJECT_NAME}_c PUBLIC
-				H5_GIT_HASH=${PROJECT_GIT_HASH}
-				$<$<CONFIG:Debug>:H5_DEBUG>
-			  )
+	H5_GIT_HASH=${PROJECT_GIT_HASH}
+	$<$<CONFIG:Debug>:H5_DEBUG>
+)
 
 # Install library and headers
 install(TARGETS ${PROJECT_NAME}_c EXPORT ${PROJECT_NAME}-targets DESTINATION ${CMAKE_INSTALL_LIBDIR})

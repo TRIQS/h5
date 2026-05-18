@@ -131,14 +131,28 @@ add_subdirectory(deps)
 # Build and install the library
 add_subdirectory(c++/${PROJECT_NAME})
 
+# Python
+if(PythonSupport)
+  find_package(Python COMPONENTS Interpreter Development NumPy)
+  string(REGEX REPLACE "/.*/lib" "lib" PYTHON_LIB_DEST_ROOT ${Python_SITEARCH})
+
+  # fetch c2py
+  include(FetchContent)
+  FetchContent_Declare(
+    c2py
+    GIT_REPOSITORY  https://github.com/flatironinstitute/c2py
+    GIT_TAG         unstable
+    EXCLUDE_FROM_ALL # exclude from all so that c2py is NOT installed.
+  )
+  FetchContent_MakeAvailable(c2py)
+  include(${c2py_SOURCE_DIR}/share/cmake/clair_c2py_generate_bindings.cmake)
+
+  add_subdirectory(python/${PROJECT_NAME})
+endif()
+
 # Tests
 if(Build_Tests)
   add_subdirectory(test)
-endif()
-
-# Python
-if(PythonSupport)
-  add_subdirectory(python/${PROJECT_NAME})
 endif()
 
 # Docs
