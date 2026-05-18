@@ -983,7 +983,9 @@ WARN_LOGFILE           =
 
 INPUT                  = @CMAKE_CURRENT_SOURCE_DIR@ \
                          @CMAKE_CURRENT_BINARY_DIR@ \
-                         @CMAKE_CURRENT_SOURCE_DIR@/../c++
+                         @CMAKE_CURRENT_SOURCE_DIR@/../c++ \
+                         @CMAKE_CURRENT_SOURCE_DIR@/../python/h5/h5py_io.hpp \
+                         @CMAKE_CURRENT_SOURCE_DIR@/../python/h5/h5py_io.cpp
 
 # This tag can be used to specify the character encoding of the source files
 # that Doxygen parses. Internally Doxygen uses the UTF-8 encoding. Doxygen uses
