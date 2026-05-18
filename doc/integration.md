@@ -35,7 +35,7 @@ include (FetchContent)
 FetchContent_Declare(
   h5
   GIT_REPOSITORY https://github.com/TRIQS/h5.git
-  GIT_TAG        1.2.x
+  GIT_TAG        2.0.x
 )
 FetchContent_MakeAvailable(h5)
 
@@ -44,11 +44,13 @@ add_executable(my_executable main.cpp)
 target_link_libraries(my_executable h5::h5_c)
 ```
 
-If you need to use some of the HDF5 C library features directly, you can simply link to it via `h5::hdf5`.
+If you need to use some of the HDF5 C library features directly, you can simply link to it via `hdf5::hdf5` and 
+`hdf5::hdf5_hl`.
 
-Note that the above will also build [goolgetest](https://github.com/google/googletest) and the unit tests for **h5**.
-To disable this, you can put `set(Build_Tests OFF CACHE BOOL "" FORCE)` before fetching the content or by specifying
-`-DBuild_Tests=OFF` on the command line.
+Note that the above will also build [goolgetest](https://github.com/google/googletest) and the unit tests for **h5** as
+well as the Python bindings.
+To disable this, you can put `set(Build_Tests OFF CACHE BOOL "" FORCE)` and `set(PythonSupport OFF CACHE BOOL "" FORCE)` 
+before fetching the content or by specifying `-DBuild_Tests=OFF` and `-DPythonSupport=OFF` on the command line.
 
 
 @subsection find_package find_package

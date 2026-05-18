@@ -75,7 +75,7 @@ $ cd h5.src && git tag
 Checkout the version of the code that you want:
 
 ```console
-$ git checkout 1.2.0
+$ git checkout 1.3.0
 ```
 
 and follow steps 2 to 4 above to compile the code.

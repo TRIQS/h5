@@ -42,36 +42,11 @@
         <tab type="user" url="@ref h5::is_complex_v" title="is_complex_v"/>
       </tab>
       <tab type="usergroup" url="@ref readwrite" title="Read and write from/to HDF5">
-        <tab type="user" url="@ref rw_generic" title="Generic read/write"/>
+        <tab type="user" url="@ref rw_scalar" title="Arithmetic scalar types"/>
         <tab type="usergroup" url="@ref rw_arrayinterface" title="Array interface">
           <tab type="user" url="@ref h5::array_interface::array_view" title="array_view"/>
           <tab type="user" url="@ref h5::array_interface::dataset_info" title="dataset_info"/>
           <tab type="user" url="@ref h5::array_interface::hyperslab" title="hyperslab"/>
-        </tab>
-        <tab type="user" url="@ref rw_scalar" title="Arithmetic scalar types"/>
-        <tab type="usergroup" url="@ref rw_string" title="std::string, const char* and char_buf">
-          <tab type="user" url="@ref h5::char_buf" title="char_buf"/>
-          <tab type="user" url="@ref h5::hdf5_format_impl< std::string >" title="hdf5_format_impl<std::string>"/>
-        </tab>
-        <tab type="user" url="@ref rw_array" title="std::array"/>
-        <tab type="usergroup" url="@ref rw_map" title="std::map">
-          <tab type="user" url="@ref h5::hdf5_format_impl< std::map< keyT, valueT > >" title="hdf5_format_impl<std::map>"/>
-        </tab>
-        <tab type="usergroup" url="@ref rw_optional" title="std::optional">
-          <tab type="user" url="@ref h5::hdf5_format_impl< std::optional< T > >" title="hdf5_format_impl<std::optional>"/>
-        </tab>
-        <tab type="usergroup" url="@ref rw_pair" title="std::pair">
-          <tab type="user" url="@ref h5::hdf5_format_impl< std::pair< T1, T2 > >" title="hdf5_format_impl<std::pair>"/>
-        </tab>
-        <tab type="usergroup" url="@ref rw_tuple" title="std::tuple">
-          <tab type="user" url="@ref h5::hdf5_format_impl< std::tuple< T... > >" title="hdf5_format_impl<std::tuple>"/>
-        </tab>
-        <tab type="usergroup" url="@ref rw_variant" title="std::variant">
-          <tab type="user" url="@ref h5::hdf5_format_impl< std::variant< T... > >" title="hdf5_format_impl<std::variant>"/>
-        </tab>
-        <tab type="usergroup" url="@ref rw_vector" title="std::vector">
-          <tab type="user" url="@ref h5::hdf5_format_impl< std::vector< T > >" title="hdf5_format_impl<std::vector>"/>
-          <tab type="user" url="@ref h5::hdf5_format_impl< std::vector< std::string > >" title="hdf5_format_impl<std::vector<std::string>>"/>
         </tab>
         <tab type="usergroup" url="@ref format" title="Format tags">
           <tab type="user" url="@ref h5::hdf5_format_impl< T >" title="hdf5_format_impl<T>"/>
@@ -87,16 +62,37 @@
           <tab type="user" url="@ref h5::hdf5_format_impl< unsigned long >" title="hdf5_format_impl<unsigned long>"/>
           <tab type="user" url="@ref h5::hdf5_format_impl< unsigned long long >" title="hdf5_format_impl<unsigned long long>"/>
         </tab>
+        <tab type="user" url="@ref rw_generic" title="Generic read/write"/>
+        <tab type="user" url="@ref rw_array" title="std::array"/>
+        <tab type="usergroup" url="@ref rw_map" title="std::map">
+          <tab type="user" url="@ref 	h5::hdf5_format_impl< std::map< Key, T, Compare > >" title="hdf5_format_impl< std::map >"/>
+        </tab>
+        <tab type="usergroup" url="@ref rw_optional" title="std::optional">
+          <tab type="user" url="@ref h5::hdf5_format_impl< std::optional< T > >" title="hdf5_format_impl< std::optional >"/>
+        </tab>
+        <tab type="usergroup" url="@ref rw_pair" title="std::pair">
+          <tab type="user" url="@ref h5::hdf5_format_impl< std::pair< T1, T2 > >" title="hdf5_format_impl< std::pair >"/>
+        </tab>
+        <tab type="usergroup" url="@ref rw_string" title="std::string, const char* and char_buf">
+          <tab type="user" url="@ref h5::char_buf" title="char_buf"/>
+          <tab type="user" url="@ref h5::hdf5_format_impl< std::string >" title="hdf5_format_impl< std::string >"/>
+        </tab>
+        <tab type="usergroup" url="@ref rw_tuple" title="std::tuple">
+          <tab type="user" url="@ref h5::hdf5_format_impl< std::tuple< T... > >" title="hdf5_format_impl< std::tuple >"/>
+        </tab>
+        <tab type="usergroup" url="@ref rw_variant" title="std::variant">
+          <tab type="user" url="@ref h5::hdf5_format_impl< std::variant< T... > >" title="hdf5_format_impl< std::variant >"/>
+        </tab>
+        <tab type="usergroup" url="@ref rw_vector" title="std::vector">
+          <tab type="user" url="@ref h5::hdf5_format_impl< std::vector< T > >" title="hdf5_format_impl< std::vector >"/>
+          <tab type="user" url="@ref h5::hdf5_format_impl< std::vector< std::string > >" title="hdf5_format_impl< std::vector< std::string > >"/>
+        </tab>
       </tab>
       <tab type="usergroup" url="@ref serialize" title="Serialize/Deserialize">
         <tab type="user" url="@ref h5::serialize" title="serialize"/>
         <tab type="user" url="@ref h5::deserialize" title="deserialize"/>
       </tab>
       <tab type="usergroup" url="@ref utilities" title="Utilities">
-        <tab type="user" url="@ref h5::hid_t" title="hid_t"/>
-        <tab type="user" url="@ref h5::hsize_t" title="hsize_t"/>
-        <tab type="user" url="@ref h5::v_t" title="v_t"/>
-        <tab type="user" url="@ref h5::make_runtime_error" title="make_runtime_error"/>
         <tab type="user" url="@ref h5::Storable" title="Storable"/>
       </tab>
       <tab type="filelist" visible="yes" title="" intro=""/>
