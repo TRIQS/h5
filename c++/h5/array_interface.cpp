@@ -42,7 +42,7 @@ namespace h5::array_interface {
       // scalar case
       if (v.rank() == 0) return H5Screate(H5S_SCALAR);
 
-      // create a dataspace of rank v.rank() and with shape v.parent_shape
+      // create a dataspace of rank v.slab.rank() and with shape v.parent_shape.data()
       dataspace dspace = H5Screate_simple(v.slab.rank(), v.parent_shape.data(), nullptr);
       if (!dspace.is_valid()) throw std::runtime_error("Error in make_mem_dspace: Creating the dataspace for an array_view failed");
 

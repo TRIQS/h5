@@ -38,13 +38,13 @@ namespace h5 {
    *
    * @details It simply stores the h5::hid_t of the corresponding HDF5 object.
    *
-   * More specific HDF5 objects, like h5::file or h5::group, inherit from this class. Since it lacks a virtual
-   * destructor, the derived classes should not be deleted through a pointer to this class. It is recommended
-   * to use the derived classes whenever possible.
+   * More specific HDF5 objects, like h5::file or h5::group, inherit from this class. Since it lacks a virtual 
+   * destructor, the derived classes should not be deleted through a pointer to this class. It is recommended to use the 
+   * derived classes whenever possible.
    *
-   * HDF5's reference counting system is similar to Python's. This class handles the proper reference counting
-   * using a RAII pattern (hence exception safe). Depending on how the object is constructed, it either
-   * increases the reference count associated with the HDF5 object or steals it.
+   * HDF5's reference counting system is similar to Python's. This class handles the proper reference counting using a 
+   * RAII pattern (hence exception safe). Depending on how the object is constructed, it either increases the reference 
+   * count associated with the HDF5 object or steals it.
    */
   class object {
     protected:
@@ -61,8 +61,8 @@ namespace h5 {
     [[nodiscard]] static object from_borrowed(hid_t id);
 
     /**
-     * @brief Construct a new h5::object for a given HDF5 ID by taking ownership, i.e. without increasing the
-     * reference count.
+     * @brief Construct a new h5::object for a given HDF5 ID by taking ownership, i.e. without increasing the reference 
+     * count.
      *
      * @details If no ID is given, it is set to zero (default).
      *
@@ -72,30 +72,30 @@ namespace h5 {
 
     /**
      * @brief Copy constructor copies the underlying HDF5 ID and increases its reference count.
-     * @param x Object to copy.
+     * @param other Object to copy.
      */
-    object(object const &x);
+    object(object const &other);
 
     /**
      * @brief Move constructor steals the underlying HDF5 ID without increasing its reference count.
-     * @param x Object to move.
+     * @param other Object to move.
      */
-    object(object &&x) noexcept : id(x.id) { x.id = 0; }
+    object(object &&other) noexcept : id(other.id) { other.id = 0; }
 
     /**
      * @brief Copy assignment operator copies the underlying HDF5 ID and increases its reference count.
-     * @param x Object to copy.
+     * @param rhs Object to copy.
      */
-    object &operator=(object const &x) {
-      operator=(object(x));
+    object &operator=(object const &rhs) {
+      operator=(object(rhs));
       return *this;
     }
 
     /**
      * @brief Move assignment operator steals the underlying HDF5 ID without increasing its reference count.
-     * @param x Object to move.
+     * @param rhs Object to move.
      */
-    object &operator=(object &&x) noexcept;
+    object &operator=(object &&rhs) noexcept;
 
     /// Destructor decreases the reference count and sets the object's ID to zero.
     ~object() { close(); }

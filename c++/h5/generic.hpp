@@ -17,8 +17,9 @@
 /**
  * @file
  * @brief Provides a generic interface for reading/writing data from/to various HDF5 objects.
- * @details The generic functions (h5::read, h5::write, h5::read_attribute, ...) call their more specialized counterparts
- * (h5::h5_read, h5::h5_write, h5::h5_read_attribute, ...) which find the correct implementation using ADL.
+ * 
+ * @details The generic functions (h5::read, h5::write, h5::read_attribute, ...) call their more specialized 
+ * counterparts (h5::h5_read, h5::h5_write, h5::h5_read_attribute, ...) which find the correct implementation using ADL.
  */
 
 #ifndef LIBH5_GENERIC_HPP
@@ -39,8 +40,9 @@ namespace h5 {
   /**
    * @brief Generic implementation for reading from an HDF5 dataset/subgroup.
    *
-   * @details It calls the static member function `T::h5_read_construct(group, T &)` in case `T` is not default constructible,
-   * otherwise it calls the specialized `h5_read(group, std::string const &, T &)` with a default constructed `T` object.
+   * @details It calls the static member function `T::h5_read_construct(group, T &)` in case `T` is not default 
+   * constructible, otherwise it calls the specialized `h5_read(group, std::string const &, T &)` with a default 
+   * constructed `T` object.
    *
    * @tparam T C++ type to be read.
    * @param g h5::group containing the dataset/subgroup from which to read from.
@@ -83,7 +85,7 @@ namespace h5 {
    * @param g h5::group containing the dataset/subgroup from which to read from.
    * @param key Name of the dataset/subgroup.
    * @param x Variable to read into.
-   * @param args Additional arguments to be passed to the specialized `h5_read(group, std::string const &, T &)` function.
+   * @param args Additional arguments to be passed to the specialized `h5_read(group, std::string const &, T &)` call.
    */
   template <typename T>
   void read(group g, std::string const &key, T &x, auto const &...args) {
@@ -99,7 +101,8 @@ namespace h5 {
    * @param g h5::group in which the dataset/subgroup is created.
    * @param key Name of the dataset/subgroup to which the variable is written.
    * @param x Variable to be written.
-   * @param args Additional arguments to be passed to the specialized `h5_write(group, std::string const &, T const &)` function.
+   * @param args Additional arguments to be passed to the specialized `h5_write(group, std::string const &, T const &)` 
+   * call.
    */
   template <typename T>
   void write(group g, std::string const &key, T const &x, auto const &...args) {
@@ -109,7 +112,9 @@ namespace h5 {
   /**
    * @brief Generic implementation for reading an HDF5 attribute.
    *
-   * @details `T` needs to be default constructible.
+   * @details It calls the specialized `h5_read_attribute(object, std::string const &, T &)` for the given `T`. 
+   * 
+   * `T` needs to be default constructible.
    *
    * @tparam T C++ type to be read.
    * @param obj h5::object to which the attribute is attached.
@@ -171,8 +176,10 @@ namespace h5 {
   /**
    * @brief Generic implementation for reading an HDF5 attribute.
    *
-   * @details It calls the specialized `h5_read_attribute_from_key(object, std::string const &, std::string const &, T &)`
-   * for the given `T`. `T` needs to be default constructible.
+   * @details It calls the specialized `h5_read_attribute_from_key(object, std::string const &, std::string const &, 
+   * T &)` for the given `T`. 
+   * 
+   * `T` needs to be default constructible.
    *
    * @tparam T C++ type to be read.
    * @param g h5::group containing the HDF5 object to which the attribute is attached.
@@ -188,10 +195,11 @@ namespace h5 {
   }
 
   /**
-   * @brief Check if an HDF5 dataset/subgroup with the given key exists in the given parent group before performing the read.
+   * @brief Check if an HDF5 dataset/subgroup with the given key exists in the given parent group before performing the 
+   * read.
    *
-   * @details If the key exists, it simply calls the specialized `h5_read(group, std::string const &, T &)` for the given `T`,
-   * otherwise it does nothing.
+   * @details If the key exists, it simply calls the specialized `h5_read(group, std::string const &, T &)` for the 
+   * given `T`, otherwise it does nothing.
    *
    * @tparam T C++ type to be read.
    * @param g h5::group containing the dataset/subgroup from which to read from.

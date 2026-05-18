@@ -16,8 +16,8 @@
 
 /**
  * @file
- * @brief Provides a handle to an HDF5 group and various methods to simplify the creation/opening of
- * subgroups, datasets and softlinks within a group.
+ * @brief Provides a handle to an HDF5 group and various methods to simplify the creation/opening of subgroups, datasets 
+ * and softlinks within a group.
  */
 
 #ifndef LIBH5_GROUP_HPP
@@ -35,11 +35,11 @@ namespace h5 {
    * @ingroup data_model
    * @brief A handle to an HDF5 group.
    *
-   * @details This class inherits from the general h5::object class. Each group stores the parent h5::file
-   * to which it belongs.
+   * @details This class inherits from the general h5::object class. Each group stores the parent h5::file to which it 
+   * belongs.
    *
-   * It provides various methods to simplify the creation of new and opening of existing groups, subgroups,
-   * datasets and softlinks within the current group.
+   * It provides various methods to simplify the creation of new and opening of existing groups, subgroups, datasets and 
+   * softlinks within the current group.
    */
   class group : public object {
     // File to which the group belongs.
@@ -93,8 +93,8 @@ namespace h5 {
     /**
      * @brief Remove a link with the given key from the group.
      *
-     * @details It simply calls `H5Ldelete` to delete the link. If the given link does not exist, it throws
-     * an exception if `error_if_absent == true`, otherwise it does nothing.
+     * @details It simply calls `H5Ldelete` to delete the link. If the given link does not exist, it throws an exception 
+     * if `error_if_absent == true`, otherwise it does nothing.
      *
      * @param key Name of the link to be removed.
      * @param error_if_absent If true, throws an exception if the key is not the name of a link in the group.
@@ -104,7 +104,7 @@ namespace h5 {
     /**
      * @brief Open a subgroup with the given key in the group.
      *
-     * @details If the given key is empty, a handle to the current group is returned. Throws an exception if the
+     * @details If the given key is empty, a handle to the current group is returned. Throws an exception if the 
      * subgroup fails to be opened.
      *
      * @param key Name of the subgroup.
@@ -115,9 +115,9 @@ namespace h5 {
     /**
      * @brief Create a subgroup with the given key in the group.
      *
-     * @details If a subgroup with the given key already exists, it is unlinked first if `delete_if_exists == true`.
-     * If the given key is empty, a handle to the current group is returned. Throws an exception if the subgroup fails
-     * to be created.
+     * @details If a subgroup with the given key already exists, it is unlinked first if `delete_if_exists == true`. If 
+     * the given key is empty, a handle to the current group is returned. Throws an exception if the subgroup fails to 
+     * be created.
      *
      * @param key Name of the subgroup to be created.
      * @param delete_if_exists If true, unlink first an existing subgroup with the same name.
@@ -128,9 +128,9 @@ namespace h5 {
     /**
      * @brief Create a softlink with the given key to a target with a given target key in this group.
      *
-     * @details Does nothing if the key or target key is empty. If `delete_if_exists == true`, it first unlinks
-     * an existing link with the same name. Throws an exception if the target does not exist, if a link with
-     * the given key already exists and `delete_if_exists == false`, or if the softlink fails to be created.
+     * @details Does nothing if the key or target key is empty. If `delete_if_exists == true`, it first unlinks an 
+     * existing link with the same name. Throws an exception if the target does not exist, if a link with the given key 
+     * already exists and `delete_if_exists == false`, or if the softlink fails to be created.
      *
      * @param target_key Name of target.
      * @param key Name of the softlink to be created.
@@ -165,7 +165,7 @@ namespace h5 {
     /**
      * @brief Create a dataset with the given key, datatype and dataspace in this group.
      *
-     * @details It simply calls group::create_dateset with the default dataset creation property list.
+     * @details It simply calls group::create_dataset with the default dataset creation property list.
      *
      * @param key Name of the dataset to be created.
      * @param ty h5::datatype.

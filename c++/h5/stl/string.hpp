@@ -16,7 +16,7 @@
 
 /**
  * @file
- * @brief Provides functions to read/write std::string, char* and h5::char_buf objects from/to HDF5.
+ * @brief Provides functions to read/write `std::string`, `char*` and h5::char_buf objects from/to HDF5.
  */
 
 #ifndef LIBH5_STL_STRING_HPP
@@ -38,18 +38,18 @@ namespace h5 {
    * @{
    */
 
-  /// Specialization of h5::hdf5_format_impl for std::string.
+  /// Specialization of h5::hdf5_format_impl for `std::string`.
   template <>
   struct hdf5_format_impl<std::string> {
     static std::string invoke() { return "string"; }
   };
 
   /**
-   * @brief Write a std::string to an HDF5 dataset.
+   * @brief Write a `std::string` to an HDF5 dataset.
    *
    * @param g h5::group in which the dataset is created.
    * @param name Name of the dataset.
-   * @param s std::string to be written.
+   * @param s `std::string` to be written.
    */
   void h5_write(group g, std::string const &name, std::string const &s);
 
@@ -63,11 +63,11 @@ namespace h5 {
   inline void h5_write(group g, std::string const &name, const char *s) { h5_write(g, name, std::string{s}); }
 
   /**
-   * @brief Read a string from an HDF5 dataset into a std::string.
+   * @brief Read a string from an HDF5 dataset into a `std::string`.
    *
    * @param g h5::group containing the dataset.
    * @param name Name of the dataset.
-   * @param s std::string to read into.
+   * @param s `std::string` to read into.
    */
   void h5_read(group g, std::string const &name, std::string &s);
 
@@ -78,11 +78,11 @@ namespace h5 {
   inline void h5_read(group g, std::string const &name, char *s) = delete;
 
   /**
-   * @brief Write a std::string to an HDF5 attribute.
+   * @brief Write a `std::string` to an HDF5 attribute.
    *
    * @param obj h5::object to which the attribute is attached.
    * @param name Name of the attribute.
-   * @param s std::string to be written.
+   * @param s `std::string` to be written.
    */
   void h5_write_attribute(object obj, std::string const &name, std::string const &s);
 
@@ -96,29 +96,30 @@ namespace h5 {
   inline void h5_write_attribute(object obj, std::string const &name, const char *s) { h5_write_attribute(obj, name, std::string{s}); }
 
   /**
-   * @brief Read a string from an HDF5 attribute into a std::string.
+   * @brief Read a string from an HDF5 attribute into a `std::string`.
    *
    * @details If the attribute does not exist, an empty string is returned.
    *
    * @param obj h5::object to which the attribute is attached.
    * @param name Name of the attribute.
-   * @param s std::string to read into.
+   * @param s `std::string` to read into.
    */
   void h5_read_attribute(object obj, std::string const &name, std::string &s);
 
   /**
    * @brief Read a string from an HDF5 attribute into a `char*`.
-   * @warning Reading into a `char*` is not allowed. Use h5::h5_read_attribute(object, std::string const &, std::string &) instead.
+   * @warning Reading into a `char*` is not allowed. Use h5::h5_read_attribute(object, std::string const &, std::string 
+   * &) instead.
    */
   inline void h5_read_attribute(object obj, std::string const &name, char *s) = delete;
 
   /**
-   * @brief Write a std::string to an HDF5 attribute.
+   * @brief Write a `std::string` to an HDF5 attribute.
    *
    * @param g h5::group containing the HDF5 object to which the attribute is attached.
    * @param key Name of the object.
    * @param name Name of the attribute.
-   * @param s std::string to be written.
+   * @param s `std::string` to be written.
    */
   void h5_write_attribute_to_key(group g, std::string const &key, std::string const &name, std::string const &s);
 
@@ -135,19 +136,19 @@ namespace h5 {
   }
 
   /**
-   * @brief Read a string from an HDF5 attribute into a std::string.
+   * @brief Read a string from an HDF5 attribute into a `std::string`.
    *
    * @details If the attribute does not exist, an empty string is returned.
    *
    * @param g h5::group containing the HDF5 object to which the attribute is attached.
    * @param key Name of the object.
    * @param name Name of the attribute.
-   * @param s std::string to read into.
+   * @param s `std::string` to read into.
    */
   void h5_read_attribute_from_key(group g, std::string const &key, std::string const &name, std::string &s);
 
   /**
-   * @brief Stores an arbitrary number of strings in a 1-dimensional std::vector<char>.
+   * @brief Stores an arbitrary number of strings in a 1-dimensional `std::vector<char>`.
    *
    * @details Each string is assumed to have the same length. If a string is shorter than this length, it is padded
    * with zeros. The `lengths` member should have the following entries: the number of strings in each dimension and

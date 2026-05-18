@@ -16,7 +16,7 @@
 
 /**
  * @file
- * @brief Provides functions to read/write std::tuple object from/to HDF5.
+ * @brief Provides functions to read/write `std::tuple` object from/to HDF5.
  */
 
 #ifndef LIBH5_STL_TUPLE_HPP
@@ -39,7 +39,7 @@ namespace h5 {
    * @{
    */
 
-  /// Specialization of h5::hdf5_format_impl for std::tuple.
+  /// Specialization of h5::hdf5_format_impl for `std::tuple`.
   template <typename... T>
   struct hdf5_format_impl<std::tuple<T...>> {
     static std::string invoke() { return "PythonTupleWrap"; }
@@ -65,14 +65,14 @@ namespace h5 {
   } // namespace detail
 
   /**
-   * @brief Write a std::tuple to an HDF5 subgroup.
+   * @brief Write a `std::tuple` to an HDF5 subgroup.
    *
-   * @details Calls the specialized `h5_write` function for every element of the std::tuple.
+   * @details Calls the specialized `h5_write` function for every element of the `std::tuple`.
    *
    * @tparam Ts Tuple types.
    * @param g h5::group in which the subgroup is created.
-   * @param name Name of the subgroup to which the std::tuple is written.
-   * @param tup std::tuple to be written.
+   * @param name Name of the subgroup to which the `std::tuple` is written.
+   * @param tup `std::tuple` to be written.
    */
   template <typename... Ts>
   void h5_write(group g, std::string const &name, std::tuple<Ts...> const &tup) {
@@ -82,14 +82,14 @@ namespace h5 {
   }
 
   /**
-   * @brief Read a std::tuple from an HDF5 subgroup.
+   * @brief Read a `std::tuple` from an HDF5 subgroup.
    *
-   * @details Calls the specialized `h5_read` function for every value of the std::tuple.
+   * @details Calls the specialized `h5_read` function for every value of the `std::tuple`.
    *
    * @tparam Ts Tuple types.
    * @param g h5::group containing the subgroup.
-   * @param name Name of the subgroup from which the std::tuple is read.
-   * @param tup std::tuple to read into.
+   * @param name Name of the subgroup from which the `std::tuple` is read.
+   * @param tup `std::tuple` to read into.
    */
   template <typename... Ts>
   void h5_read(group g, std::string const &name, std::tuple<Ts...> &tup) {

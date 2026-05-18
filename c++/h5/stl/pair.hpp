@@ -16,7 +16,7 @@
 
 /**
  * @file
- * @brief Provides functions to read/write std::pair objects from/to HDF5.
+ * @brief Provides functions to read/write `std::pair` objects from/to HDF5.
  */
 
 #ifndef LIBH5_STL_PAIR_HPP
@@ -36,22 +36,22 @@ namespace h5 {
    * @{
    */
 
-  /// Specialization of h5::hdf5_format_impl for std::pair.
+  /// Specialization of h5::hdf5_format_impl for `std::pair`.
   template <typename T1, typename T2>
   struct hdf5_format_impl<std::pair<T1, T2>> {
     static std::string invoke() { return "PythonTupleWrap"; }
   };
 
   /**
-   * @brief Write a std::pair to an HDF5 subgroup.
+   * @brief Write a `std::pair` to an HDF5 subgroup.
    *
-   * @details Calls the specialized `h5_write` function for both values of the std::pair.
+   * @details Calls the specialized `h5_write` function for both values of the `std::pair`.
    *
    * @tparam T1 Value type #1.
    * @tparam T1 Value type #2.
    * @param g h5::group in which the subgroup is created.
-   * @param name Name of the subgroup to which the std::pair is written.
-   * @param p std::pair to be written.
+   * @param name Name of the subgroup to which the `std::pair` is written.
+   * @param p `std::pair` to be written.
    */
   template <typename T1, typename T2>
   void h5_write(group g, std::string const &name, std::pair<T1, T2> const &p) {
@@ -62,15 +62,15 @@ namespace h5 {
   }
 
   /**
-   * @brief Read a std::pair from an HDF5 subgroup.
+   * @brief Read a `std::pair` from an HDF5 subgroup.
    *
-   * @details Calls the specialized `h5_read` function for both values of the std::pair.
+   * @details Calls the specialized `h5_read` function for both values of the `std::pair`.
    *
    * @tparam T1 Value type #1.
    * @tparam T1 Value type #2.
    * @param g h5::group containing the subgroup.
-   * @param name Name of the subgroup from which the std::pair is read.
-   * @param p std::pair to read into.
+   * @param name Name of the subgroup from which the `std::pair` is read.
+   * @param p `std::pair` to read into.
    */
   template <typename T1, typename T2>
   void h5_read(group g, std::string const &name, std::pair<T1, T2> &p) {

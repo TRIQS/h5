@@ -38,16 +38,16 @@ namespace h5 {
    * @brief ID type used in HDF5.
    *
    * @details This is just a copy from the HDF5 library (see the official
-   * <a href="https://docs.hdfgroup.org/hdf5/develop/_h5_ipublic_8h.html#a0045db7ff9c22ad35db6ae91662e1943">documentation</a>).
-   * It is used to completely isolate our header from the HDF5 headers. In the object.cpp file a `static_assert` is used to verify
-   * its validity.
+   * <a href="https://docs.hdfgroup.org/hdf5/develop/_h5_ipublic_8h.html#a0045db7ff9c22ad35db6ae91662e1943">
+   * documentation</a>). It is used to completely isolate our header from the HDF5 headers. In the object.cpp file a 
+   * `static_assert` is used to verify its validity.
    */
   using hid_t = int64_t;
 
   /**
    * @brief Size type used in HDF5.
-   * @details This is just a copy from the HDF5 library. It is used to completely isolate our header from the HDF5 headers.
-   * In the object.cpp file a `static_assert` is used to verify its validity.
+   * @details This is just a copy from the HDF5 library. It is used to completely isolate our header from the HDF5 
+   * headers. In the object.cpp file a `static_assert` is used to verify its validity.
    */
 #ifdef H5_VER_GE_113
   using hsize_t = uint64_t;
@@ -59,11 +59,11 @@ namespace h5 {
   using v_t = std::vector<hsize_t>;
 
   /**
-   * @brief Create a std::runtime_error with an error message constructed from the given arguments.
+   * @brief Create a `std::runtime_error` with an error message constructed from the given arguments.
    *
    * @tparam Ts Types of the arguments.
    * @param ts Arguments streamed into the error message string.
-   * @return std::runtime_error.
+   * @return `std::runtime_error`.
    */
   template <typename... Ts>
   [[nodiscard]] std::runtime_error make_runtime_error(Ts const &...ts) {

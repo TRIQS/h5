@@ -114,7 +114,7 @@ namespace h5 {
   /**
    * @brief Write a scalar to an HDF5 attribute.
    *
-   * @details The scalar type needs to be either arithmetic or std::complex.
+   * @details The scalar type needs to be either arithmetic or `std::complex`.
    *
    * @tparam T Scalar type.
    * @param obj h5::object to which the attribute is attached.
@@ -129,7 +129,7 @@ namespace h5 {
   /**
    * @brief Read a scalar from an HDF5 attribute.
    *
-   * @details The scalar type needs to be either arithmetic or std::complex.
+   * @details The scalar type needs to be either arithmetic or `std::complex`.
    *
    * @tparam T Scalar type.
    * @param obj h5::object to which the attribute is attached.

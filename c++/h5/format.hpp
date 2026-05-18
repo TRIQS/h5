@@ -17,6 +17,7 @@
 /**
  * @file
  * @brief Provides utilities for reading and writing `hdf5_format` tags.
+ * 
  * @details An `hdf5_format` tag is a string that describes the type of object stored in an HDF5 file. A type `T` which 
  * is HDF5 readable/writeable should do one of the following:
  * - implement a static member function `static hdf5_format() -> std::string` or
@@ -53,7 +54,7 @@ namespace h5 {
   };
 
 #define H5_SPECIALIZE_FORMAT2(X, Y)                                                                                                                  \
-  /** @brief Specialization of h5::hdf5_format_impl for X. */                                                                                        \
+  /** @brief Specialization of h5::hdf5_format_impl for `X`. */                                                                                      \
   template <>                                                                                                                                        \
   struct hdf5_format_impl<X> {                                                                                                                       \
     static std::string invoke() { return H5_AS_STRING(Y); }                                                                                          \
@@ -76,8 +77,8 @@ namespace h5 {
   /**
    * @brief Get the `hdf5_format` tag of type `T`.
    *
-   * @tparam T Type for which the `hdf5_format` tag is to be retrieved..
-   * @return std::string containing the `hdf5_format` tag.
+   * @tparam T Type for which the `hdf5_format` tag is to be retrieved.
+   * @return `std::string` containing the `hdf5_format` tag.
    */
   template <typename T>
   std::string get_hdf5_format() {
@@ -89,7 +90,7 @@ namespace h5 {
    *
    * @tparam T Type for which the `hdf5_format` tag is to be retrieved.
    * @param t Instance of type T (used for template argument deduction only).
-   * @return std::string containing the `hdf5_format` tag.
+   * @return `std::string` containing the `hdf5_format` tag.
    */
   template <typename T>
   std::string get_hdf5_format([[maybe_unused]] T const &t) {
@@ -97,10 +98,10 @@ namespace h5 {
   }
 
   /**
-   * @brief Write a std::string to an HDF5 attribute with the name 'Format'.
+   * @brief Write a `std::string` to an HDF5 attribute with the name 'Format'.
    *
    * @param obj h5::object to which the attribute is attached.
-   * @param s String to be written.
+   * @param s `std::string` to be written.
    */
   inline void write_hdf5_format_as_string(object obj, std::string const &s) { h5_write_attribute(obj, "Format", s); }
 
@@ -132,7 +133,7 @@ namespace h5 {
    * @brief Read an `hdf5_format` tag from an HDF5 attribute with the name 'Format'.
    *
    * @param obj h5::object from which the attribute is read.
-   * @param s String to be read into.
+   * @param s `std::string` to be read into.
    */
   void read_hdf5_format(object obj, std::string &s);
 
@@ -140,7 +141,7 @@ namespace h5 {
    * @brief Read an `hdf5_format` tag from an HDF5 attribute with the name 'Format'.
    *
    * @param obj h5::object from which the attribute is read.
-   * @return String containing the `hdf5_format` tag.
+   * @return `std::string` containing the `hdf5_format` tag.
    */
   std::string read_hdf5_format(object obj);
 
@@ -149,14 +150,14 @@ namespace h5 {
    *
    * @param g h5::group containing the HDF5 object from which the attribute is read.
    * @param key Name of the object.
-   * @param s String to be read into.
+   * @param s `std::string` to be read into.
    */
   void read_hdf5_format_from_key(group g, std::string const &key, std::string &s);
 
   /**
    * @brief Assert that the `hdf5_format` tag attached to the given object is the same as the given tag.
    *
-   * @details Throws a std::runtime_error if the tags don't match.
+   * @details Throws a `std::runtime_error` if the tags don't match.
    *
    * @param obj h5::object to be checked.
    * @param tag_expected Expected `hdf5_format` tag.
@@ -168,7 +169,7 @@ namespace h5 {
    * @brief Assert that the `hdf5_format` tag attached to the given object is the same as the `hdf5_format` tag of the 
    * type `T`.
    *
-   * @details Throws a std::runtime_error if the tags don't match.
+   * @details Throws a `std::runtime_error` if the tags don't match.
    *
    * @tparam T Type for which the `hdf5_format` tag is to be checked.
    * @param obj h5::object to be checked.
@@ -183,7 +184,7 @@ namespace h5 {
    * @brief Assert that the `hdf5_format` tag attached to the given object is the same as the `hdf5_format` tag of the 
    * type `T` using template argument deduction.
    *
-   * @details Throws a std::runtime_error if the tags don't match.
+   * @details Throws a `std::runtime_error` if the tags don't match.
    *
    * @tparam T Type for which the `hdf5_format` tag is to be checked.
    * @param obj h5::object to be checked.

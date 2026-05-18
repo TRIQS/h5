@@ -97,12 +97,12 @@ namespace h5 {
     return {id};
   }
 
-  object::object(object const &x) : id(x.id) { xincref(id); }
+  object::object(object const &other) : id(other.id) { xincref(id); }
 
-  object &object::operator=(object &&x) noexcept {
+  object &object::operator=(object &&rhs) noexcept {
     xdecref(id);
-    id   = x.id;
-    x.id = 0;
+    id     = rhs.id;
+    rhs.id = 0;
     return *this;
   }
 

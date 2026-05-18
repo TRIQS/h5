@@ -16,7 +16,7 @@
 
 /**
  * @file
- * @brief Provides functions to read/write std::vector objects from/to HDF5.
+ * @brief Provides functions to read/write `std::vector` objects from/to HDF5.
  */
 
 #ifndef LIBH5_STL_VECTOR_HPP
@@ -39,10 +39,10 @@ namespace h5 {
 
     /**
      * @ingroup rw_arrayinterface
-     * @brief Create an h5::array_interface::array_view for a std::vector.
+     * @brief Create an h5::array_interface::array_view for a `std::vector`.
      *
-     * @tparam T Value type of std::vector.
-     * @param v std::vector.
+     * @tparam T Value type of `std::vector`.
+     * @param v `std::vector`.
      * @return h5::array_interface::array_view of rank 1.
      */
     template <typename T>
@@ -63,7 +63,7 @@ namespace h5 {
   // Specialization of h5::hdf5_format_impl for std::vector<std::string>.
   H5_SPECIALIZE_FORMAT2(std::vector<std::string>, vector<string>);
 
-  /// Specialization of h5::hdf5_format_impl for std::vector.
+  /// Specialization of h5::hdf5_format_impl for `std::vector`.
   template <typename T>
   struct hdf5_format_impl<std::vector<T>> {
     static std::string invoke() { return "List"; }
@@ -102,18 +102,18 @@ namespace h5 {
   void from_char_buf(char_buf const &cb, std::vector<std::vector<std::string>> &v);
 
   /**
-   * @brief Write a std::vector to an HDF5 dataset/subgroup.
+   * @brief Write a `std::vector` to an HDF5 dataset/subgroup.
    *
    * @details Depending on the type of `T`, the following is written:
    * - If `T` is a simple type (arithmetic or complex), a 1d dataset is written.
-   * - If `T` is `std::string`, an h5::char_buf is written, i.e. a 2d dataset of char with dimensions
-   * (length of vector, max length of strings).
+   * - If `T` is `std::string`, an h5::char_buf is written, i.e. a 2d dataset of `char` with dimensions (length of 
+   * vector, max. length of strings).
    * - Otherwise, it creates a subgroup and writes each element to the subgroup.
    *
-   * @tparam T Value tupe of std::vector.
+   * @tparam T Value tupe of `std::vector`.
    * @param g h5::group in which the dataset/subgroup is created.
-   * @param name Name of the dataset/subgroup to which the std::vector is written.
-   * @param v std::vector to be written.
+   * @param name Name of the dataset/subgroup to which the `std::vector` is written.
+   * @param v `std::vector` to be written.
    */
   template <typename T>
   void h5_write(group g, std::string const &name, std::vector<T> const &v) {
@@ -132,18 +132,18 @@ namespace h5 {
   }
 
   /**
-   * @brief Read a std::vector from an HDF5 dataset/subgroup.
+   * @brief Read a `std::vector` from an HDF5 dataset/subgroup.
    *
    * @details Depending on the type of `T`, the following is read:
    * - If `T` is a simple type (arithmetic or complex), a 1d dataset is read.
-   * - If `T` is `std::string`, an h5::char_buf is read, i.e. a 2d dataset of char with dimensions
-   * (length of vector, max length of strings).
+   * - If `T` is `std::string`, an h5::char_buf is read, i.e. a 2d dataset of `char` with dimensions (length of vector, 
+   * max. length of strings).
    * - Otherwise, it opens a subgroup and reads each element from the subgroup.
    *
-   * @tparam T Value tupe of std::vector.
+   * @tparam T Value tupe of `std::vector`.
    * @param g h5::group containing the dataset/subgroup.
-   * @param name Name of the dataset/subgroup from which the std::vector is read.
-   * @param v std::vector to read into.
+   * @param name Name of the dataset/subgroup from which the `std::vector` is read.
+   * @param v `std::vector` to read into.
    */
   template <typename T>
   void h5_read(group g, std::string name, std::vector<T> &v) {
