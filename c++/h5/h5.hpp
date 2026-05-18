@@ -30,6 +30,7 @@
 #include "./group.hpp"
 #include "./object.hpp"
 #include "./scalar.hpp"
+#include "./serialization.hpp"
 #include "./storable.hpp"
 #include "./utils.hpp"
 #include "./stl/string.hpp"
