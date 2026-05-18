@@ -91,7 +91,7 @@ namespace h5 {
    *
    * @param obj h5::object to which the attribute is attached.
    * @param name Name of the attribute.
-   * @param s 'const char*' to be written.
+   * @param s `const char*` to be written.
    */
   inline void h5_write_attribute(object obj, std::string const &name, const char *s) { h5_write_attribute(obj, name, std::string{s}); }
 

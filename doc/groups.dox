@@ -40,7 +40,6 @@
  * ```
  */
 
-
 /**
  * @defgroup h5_types h5 types
  * @brief Map C++ datatypes to their corresponding HDF5 datatypes and other related functionality.
@@ -495,7 +494,7 @@
  * @details @ref ex3 shows a simple example how this interface could be used in practice.
  */
 
- /**
+/**
  * @defgroup utilities Utilities
  * @brief A collection of convenience functions, definitions and various other tools used throughout the **h5** library.
  */

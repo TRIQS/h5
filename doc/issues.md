@@ -13,7 +13,7 @@ In order to make it easier for us to solve the issue please follow these guideli
    your operating system and the compiler you are using. Include the outputs of
    the `cmake` and `make` commands as well as the `CMakeCache.txt` file
    which is in the build directory. Please include these outputs in a
-   [gist](http://gist.github.com/>) file referenced in the issue.
+   [gist](https://gist.github.com/) file referenced in the issue.
 
 3. If you are experiencing a problem during the execution of the application, provide
    a script which allows to quickly reproduce the problem.
