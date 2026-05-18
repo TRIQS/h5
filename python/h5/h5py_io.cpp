@@ -79,36 +79,26 @@ namespace h5 {
       return pos->hdf5_type;
     }
 
-    //--------------------------------------
-
-    // Make a array_view from the numpy object
+    // Make an h5::array_interface::array_view from a given numpy array object.
     array_interface::array_view make_av_from_npy(PyArrayObject *arr_obj) {
+      // get element type and rank of numpy array
+      int numpy_type = PyArray_DESCR(arr_obj)->type_num;
+      int rank       = PyArray_NDIM(arr_obj);
 
-#ifdef PYTHON_NUMPY_VERSION_LT_17
-      int elementsType = arr_obj->descr->type_num;
-      int rank         = arr_obj->nd;
-#else
-      int elementsType = PyArray_DESCR(arr_obj)->type_num;
-      int rank         = PyArray_NDIM(arr_obj);
-#endif
-      datatype dt           = npy_to_h5(elementsType);
-      const bool is_complex = (elementsType == NPY_CDOUBLE) or (elementsType == NPY_CLONGDOUBLE) or (elementsType == NPY_CFLOAT);
+      // get corresponding HDF5 type
+      datatype dt           = npy_to_h5(numpy_type);
+      const bool is_complex = (numpy_type == NPY_CDOUBLE) or (numpy_type == NPY_CLONGDOUBLE) or (numpy_type == NPY_CFLOAT);
 
+      // initialize array view and get the shape of the array and the numpy strides
       array_interface::array_view res{dt, PyArray_DATA(arr_obj), rank, is_complex};
       std::vector<long> c_strides(rank + is_complex, 0), c_shape(rank + is_complex, 2);
-
       for (int i = 0; i < rank; ++i) {
-#ifdef PYTHON_NUMPY_VERSION_LT_17
-        res.slab.count[i] = size_t(arr_obj->dimensions[i]);
-        c_strides[i]      = std::ptrdiff_t(arr_obj->strides[i]) / h5_c_size(dt);
-#else
-        res.slab.count[i] = size_t(PyArray_DIMS(arr_obj)[i]);
-        c_strides[i]      = std::ptrdiff_t(PyArray_STRIDES(arr_obj)[i]) / h5_c_size(dt);
-#endif
-        c_shape[i] = long(res.slab.count[i]);
+        c_shape[i]        = PyArray_DIMS(arr_obj)[i];
+        res.slab.count[i] = static_cast<size_t>(c_shape[i]);
+        c_strides[i]      = PyArray_STRIDES(arr_obj)[i] / static_cast<long>(h5_c_size(dt));
       }
 
-      // be careful to consider the last dim if complex, but do NOT copy it
+      // get the parent shape and HDF5 strides from the numpy strides
       auto [Ltot, stri] = h5::array_interface::get_parent_shape_and_h5_strides(c_strides.data(), rank + is_complex, c_shape.data());
       for (int i = 0; i < rank; ++i) {
         res.parent_shape[i] = Ltot[i];
