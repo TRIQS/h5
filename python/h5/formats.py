@@ -4,7 +4,7 @@
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
-#     http:#www.apache.org/licenses/LICENSE-2.0.txt
+#     http://www.apache.org/licenses/LICENSE-2.0.txt
 #
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
@@ -17,10 +17,15 @@ from copy import deepcopy
 
 class FormatInfo:
     """
-    This class encapsulates essential information about for a particular h5 format.
-    The information includes classname, modulename, documentaiton, the function to read.
-    Further it provides information about the hdf5_format strings of subgroup keys,
-    which is relevant for providing backward compatible reads.
+    Metadata describing how to reconstruct a Python class from an HDF5 group.
+
+    Created and stored in a module-level registry by :func:`register_class`,
+    and looked up at read time by :func:`get_format_info` from the
+    ``Format`` attribute of the HDF5 group. Carries the qualified class
+    name and module to import, the docstring, an optional custom read
+    function, and a ``backward_compat`` mapping populated when a regex
+    registered via :func:`register_backward_compatibility_method` matches
+    the stored format string.
     """
     def __init__(self, classname, modulename, doc, hdf5_format, read_fun) :
         self.classname, self.modulename, self.doc, self.read_fun = classname, modulename, doc, read_fun
@@ -65,7 +70,16 @@ def register_backward_compatibility_method(regex, clsname, fun = lambda s: {}):
 
 def get_format_info(hdf5_format):
     """
-    Given an hdf5_format string, return the associated FormatInfo object.
+    Look up the :class:`FormatInfo` registered for ``hdf5_format``.
+
+    If an exact match is found in the registry it is returned directly.
+    Otherwise the backward-compatibility patterns registered via
+    :func:`register_backward_compatibility_method` are tried in order; the
+    first regex match yields a copy of the target class's
+    :class:`FormatInfo` with its ``backward_compat`` field filled in.
+
+    Raises :class:`KeyError` if no exact or compatible match is found, or
+    if more than one compatibility pattern matches.
     """
     # If present exactly, we return it
     if hdf5_format in _formats_dict:
