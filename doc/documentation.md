@@ -74,3 +74,7 @@ Furthermore, the generic design of the read/write functionality makes it easily 
 
 @ref utilities is a collection of convenience functions, definitions and various other tools which do not fit
 into any other category above but are used throughout the **h5** library.
+
+## Python interface utilities
+
+@ref python-utils provides helper functions used in the Python interface of the **h5** library.

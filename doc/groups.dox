@@ -498,3 +498,8 @@
  * @defgroup utilities Utilities
  * @brief A collection of convenience functions, definitions and various other tools used throughout the **h5** library.
  */
+
+/**
+ * @defgroup python-utils Python interface utilities
+ * @brief Helper functions used in the Python interface of the **h5** library.
+ */
