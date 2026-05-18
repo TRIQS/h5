@@ -12,26 +12,7 @@
  * The following code shows how one can use those basic types to create a file ("file.h5") and write a number ("e") to
  * the root ("/") group. Then a subgroup ("mydata") is created in the root group and the number "pi" is written to it:
  *
- * ```cpp
- * #include <h5/h5.hpp>
- *
- * int main() {
- *   // create file in write mode
- *   h5::file file("file.h5", 'w');
- *
- *   // write Euler number
- *   h5::write(file, "e", 2.7182);
- *
- *   // create root group
- *   h5::group root(file);
- *
- *   // create a subgroup of root
- *   auto subgroup = root.create_group("mydata");
- *
- *   // write pi to subgroup
- *   h5::write(subgroup, "pi", 3.1415);
- * }
- * ```
+ * @include data_model.cpp
  *
  * Contents of `file.h5`:
  *
@@ -82,27 +63,7 @@
  *
  * The following code writes a `std::complex<double>` to an HDF5 file, reads the same number and outputs it to stdout:
  *
- * @code{.cpp}
- * #include <h5/h5.hpp>
- * #include <complex>
- * #include <iostream>
- *
- * int main() {
- *   // create file in read/write mode
- *   h5::file file("complex.h5", 'w');
- *
- *   // write complex number
- *   std::complex<double> z { 1.0, 2.0 };
- *   h5::write(file, "z", z);
- *
- *   // read into complex number
- *   std::complex<double> z_rd;
- *   h5::read(file, "z", z_rd);
- *
- *   // output complex number
- *   std::cout << z_rd << std::endl;
- * }
- * @endcode
+ * @include scalar.cpp
  *
  * Output:
  *
@@ -182,26 +143,7 @@
  *
  * @details The following code writes a `std::array` to an HDF5 file, reads the same array and outputs it to stdout:
  *
- * @code{.cpp}
- * #include <h5/h5.hpp>
- * #include <iostream>
- * #include <array>
- *
- * int main() {
- *   // create file in read/write mode
- *   h5::file file("array.h5", 'w');
- *
- *  // write array
- *  h5::write(file, "myarray", std::array { 1, 2, 3, 4 , 5 });
- *
- *   // read into array
- *   std::array<int, 5> arr;
- *   h5::read(file, "myarray", arr);
- *
- *   // output array
- *   for (auto x : arr) std::cout << x << std::endl;
- * }
- * @endcode
+ * @include std_array.cpp
  *
  * Output:
  *
@@ -237,27 +179,7 @@
  *
  * @details The following code writes a `std::map` to an HDF5 file, reads the same map and outputs it to stdout:
  *
- * @code{.cpp}
- * #include <h5/h5.hpp>
- * #include <iostream>
- * #include <map>
- * #include <string>
- *
- * int main() {
- *   // create file in read/write mode
- *   h5::file file("map.h5", 'w');
- *
- *  // write map
- *  h5::write(file, "mymap", std::map<std::string, int> { { "a", 1 }, { "b", 2 }, { "c", 3 } });
- *
- *   // read into map
- *   std::map<std::string, int> map;
- *   h5::read(file, "mymap", map);
- *
- *   // output map
- *   for (auto [x, y] : map) std::cout << "(" << x << ", " << y << ")" << std::endl;
- * }
- * @endcode
+ * @include std_map.cpp
  *
  * Output:
  *
@@ -319,26 +241,7 @@
  *
  * @details The following code writes a `std::optional` to an HDF5 file, reads the same value and outputs it to stdout:
  *
- * @code{.cpp}
- * #include <h5/h5.hpp>
- * #include <iostream>
- * #include <optional>
- *
- * int main() {
- *   // create file in read/write mode
- *   h5::file file("optional.h5", 'w');
- *
- *   // write optional
- *   h5::write(file, "myoptional", std::optional<float> { 3.1415f });
- *
- *   // read into optional
- *   std::optional<float> val;
- *   h5::read(file, "myoptional", val);
- *
- *   // output optional value
- *   std::cout << *val << std::endl;
- * }
- * @endcode
+ * @include std_optional.cpp
  *
  * Output:
  *
@@ -370,26 +273,7 @@
  *
  * @details The following code writes a `std::pair` to an HDF5 file, reads the same pair and outputs it to stdout:
  *
- * @code{.cpp}
- * #include <h5/h5.hpp>
- * #include <iostream>
- * #include <utility>
- *
- * int main() {
- *   // create file in read/write mode
- *   h5::file file("pair.h5", 'w');
- *
- *  // write pair
- *  h5::write(file, "mypair", std::pair { 3.1415f, 291827ul });
- *
- *   // read into pair
- *   std::pair<float, unsigned long> p;
- *   h5::read(file, "mypair", p);
- *
- *   // output pair
- *   std::cout << "(" << p.first << ", " << p.second << ")" << std::endl;
- * }
- * @endcode
+ * @include std_pair.cpp
  *
  * Output:
  *
@@ -443,26 +327,7 @@
  *
  * @details The following code writes a string to an HDF5 file, reads the same string and outputs it to stdout:
  *
- * @code{.cpp}
- * #include <h5/h5.hpp>
- * #include <iostream>
- * #include <string>
- *
- * int main() {
- *   // create file in read/write mode
- *   h5::file file("string.h5", 'w');
- *
- *  // write string
- *  h5::write(file, "mystring", "Hello world!");
- *
- *   // read into string
- *   std::string str;
- *   h5::read(file, "mystring", str);
- *
- *   // output string
- *   std::cout << str << std::endl;
- * }
- * @endcode
+ * @include std_string.cpp
  *
  * Output:
  *
@@ -499,28 +364,7 @@
  *
  * @details The following code writes a `std::tuple` to an HDF5 file, reads the same tuple and outputs it to stdout:
  *
- * @code{.cpp}
- * #include <h5/h5.hpp>
- * #include <iostream>
- * #include <tuple>
- *
- * int main() {
- *   // create file in read/write mode
- *   h5::file file("tuple.h5", 'w');
- *
- *  // write tuple
- *  h5::write(file, "mytuple", std::tuple { 3.1415f, 291827ul, 'a' });
- *
- *   // read into tuple
- *   std::tuple<float, unsigned long, char> tup;
- *   h5::read(file, "mytuple", tup);
- *
- *   // output tuple
- *   std::apply([](auto f, auto u, auto c) {
- *     std::cout << "(" << f << ", " << u << ", " << c << ")" << std::endl;
- *   }, tup);
- * }
- * @endcode
+ * @include std_tuple.cpp
  *
  * Output:
  *
@@ -580,27 +424,7 @@
  *
  * @details The following code writes a `std::variant` to an HDF5 file, reads the same variant and outputs it to stdout:
  *
- * @code{.cpp}
- * #include <h5/h5.hpp>
- * #include <iostream>
- * #include <variant>
- * #include <string>
- *
- * int main() {
- *   // create file in read/write mode
- *   h5::file file("variant.h5", 'w');
- *
- *  // write variant
- *  h5::write(file, "myvariant", std::variant<double, std::string> { "Hello, World!" });
- *
- *   // read into variant
- *   std::variant<double, std::string> var;
- *   h5::read(file, "myvariant", var);
- *
- *   // output variant
- *   std::visit([](const auto& x) { std::cout << x << std::endl; }, var);
- * }
- * @endcode
+ * @include std_variant.cpp
  *
  * Output:
  *
@@ -637,26 +461,7 @@
  *
  * @details The following code writes a `std::vector` to an HDF5 file, reads the same vector and outputs it to stdout:
  *
- * @code{.cpp}
- * #include <h5/h5.hpp>
- * #include <iostream>
- * #include <vector>
- *
- * int main() {
- *   // create file in read/write mode
- *   h5::file file("vec.h5", 'w');
- *
- *  // write vector
- *  h5::write(file, "myvec", std::vector<double> { 1.1, 2.2, 3.3 });
- *
- *   // read into vector
- *   std::vector<double> vec;
- *   h5::read(file, "myvec", vec);
- *
- *   // output vector
- *   for (auto x : vec) std::cout << x << std::endl;
- * }
- * @endcode
+ * @include std_vector.cpp
  *
  * Output:
  *
