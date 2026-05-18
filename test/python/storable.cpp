@@ -32,3 +32,5 @@ class storable {
 };
 
 static_assert(h5::Storable<storable>);
+
+#include "storable.wrap.cxx"

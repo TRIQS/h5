@@ -4,3 +4,5 @@
 
 #include <h5/file.hpp>
 #include <h5/group.hpp>
+
+#include "_h5py.wrap.cxx"
