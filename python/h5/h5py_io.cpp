@@ -1,12 +1,21 @@
+/**
+ * @file
+ * @brief Implementation details for h5py_io.hpp.
+ */
+
+// Don't import array API here - it's imported in the main module (module.wrap.cxx)
+#define NO_IMPORT_ARRAY
+#define PY_ARRAY_UNIQUE_SYMBOL _cpp2py_ARRAY_API
 #include <Python.h>
 #include <numpy/arrayobject.h>
+#include <c2py/c2py.hpp>
 
-#include "h5py_io.hpp"
-#include <h5/h5.hpp>
-
-#include <cpp2py/cpp2py.hpp>
-#include <cpp2py/converters/vector.hpp>
-#include <cpp2py/converters/string.hpp>
+#include "./h5py_io.hpp"
+#include <h5/generic.hpp>
+#include <h5/object.hpp>
+#include <h5/scalar.hpp>
+#include <h5/stl/string.hpp>
+#include <h5/stl/vector.hpp>
 
 #include <hdf5.h>
 #include <hdf5_hl.h>
@@ -108,15 +117,6 @@ namespace h5 {
       return res;
     }
 
-    // Import numpy (only once) to use its C API.
-    void import_numpy() {
-      static bool init = false;
-      if (!init) {
-        _import_array();
-        init = true;
-      }
-    }
-
     // Read any integer type from HDF5 and return a Python long.
     PyObject *h5_read_any_int(group g, std::string const &name, datatype ty) {
       if (H5Tequal(ty, H5T_NATIVE_SHORT)) {
@@ -144,14 +144,12 @@ namespace h5 {
   } // namespace
 
   void h5_write_bare(group g, std::string const &name, PyObject *ob) {
-    import_numpy();
-
     if (PyArray_Check(ob)) {
       auto *arr_obj = (PyArrayObject *)ob; // NOLINT
-      write(g, name, make_av_from_npy(arr_obj), true);
+      array_interface::write(g, name, make_av_from_npy(arr_obj), true);
     } else if (PyArray_CheckScalar(ob)) {
       // treat numpy scalars as 0-dimensional ndarrays
-      cpp2py::pyref obsc = PyArray_FromScalar(ob, nullptr);
+      c2py::pyref obsc = PyArray_FromScalar(ob, nullptr);
       h5_write_bare(g, name, obsc);
     } else if (PyFloat_Check(ob)) {
       h5_write(g, name, PyFloat_AsDouble(ob));
@@ -169,9 +167,7 @@ namespace h5 {
     }
   }
 
-  PyObject *h5_read_bare(group g, std::string const &name) {
-    import_numpy();
-
+  c2py::pyref h5_read_bare(group g, std::string const &name) {
     auto ds_info = array_interface::get_dataset_info(g, name);
 
     // rank 0 - scalar case
@@ -223,12 +219,12 @@ namespace h5 {
     if (H5Tget_class(ds_info.ty) == H5T_STRING) {
       if (ds_info.rank() == 1) {
         auto x = h5_read<std::vector<std::string>>(g, name);
-        return cpp2py::convert_to_python(x);
+        return c2py::cxx2py(x);
       }
 
       if (ds_info.rank() == 2) {
         auto x = h5_read<std::vector<std::vector<std::string>>>(g, name);
-        return cpp2py::convert_to_python(x);
+        return c2py::cxx2py(x);
       }
 
       PyErr_SetString(PyExc_RuntimeError, "h5::h5_read_bare: String dataset with rank > 2 is not allowed");
@@ -245,7 +241,7 @@ namespace h5 {
     // create numpy array and read into it
     PyObject *ob = PyArray_SimpleNewFromDescr(int(shape.size()), &shape[0], PyArray_DescrFromType(numpy_type));
     if (PyErr_Occurred()) return nullptr;
-    read(g, name, make_av_from_npy((PyArrayObject *)ob)); // NOLINT
+    array_interface::read(g, name, make_av_from_npy((PyArrayObject *)ob)); // NOLINT
     return ob;
   }
 

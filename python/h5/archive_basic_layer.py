@@ -74,13 +74,13 @@ class HDFArchiveGroupBasicLayer:
         self._group.write_attribute(key, val)
 
     def _read (self, key):
-        return h5.h5_read(self._group, key)
+        return h5.h5_read_bare(self._group, key)
 
     def _write(self, key, val) :
-        h5.h5_write(self._group, key, val)
+        h5.h5_write_bare(self._group, key, val)
 
     def _flush(self):
-        if bool(self._group): self._group.file.flush()
+        if bool(self._group): self._group.get_file().flush()
 
     def create_group (self,key):
         self._group.create_group(key)

@@ -14,26 +14,39 @@
 
 import unittest
 import numpy as np
+import pickle
 
 from storable import Storable
 from h5 import HDFArchive
 
 class TestStorable(unittest.TestCase):
 
-    def test_storable(self):
+    def test_h5(self):
+        with HDFArchive("storable.h5", 'w') as h:
+            obj = Storable()
+            obj.vec = [1, 2, 3, 4]
+            obj.s = "a string"
+            h['obj'] = obj
+
+        with HDFArchive("storable.h5", 'r') as h:
+            obj2 = h['obj']
+            
+        self.assertTrue(all(np.array(obj.vec)== np.array(obj2.vec)))
+        self.assertEqual(obj.s, obj2.s)
+
+    def test_pickle(self):
 
         obj = Storable()
         obj.vec = [1, 2, 4, 5]
         obj.s = "some other string"
 
-        with HDFArchive('h5_class.h5','w') as arch:
-            arch['obj'] = obj
+        s = pickle.dumps(obj)
+        obj_in = pickle.loads(s)
 
-        with HDFArchive('h5_class.h5','r') as arch:
-            obj_in = arch['obj']
-
-        self.assertTrue(all(obj.vec == obj_in.vec))
+        self.assertTrue(all(np.array(obj.vec)== np.array(obj_in.vec)))
         self.assertEqual(obj.s, obj_in.s)
+
 
 if __name__ == '__main__':
     unittest.main()
+    
