@@ -129,7 +129,7 @@ namespace h5::array_interface {
     /// Get the shape of the selected hyperslab.
     [[nodiscard]] v_t shape() const {
       v_t shape(rank());
-      std::transform(count.begin(), count.end(), block.begin(), shape.begin(), std::multiplies<>());
+      std::ranges::transform(count, block, shape.begin(), std::multiplies<>());
       return shape;
     }
 
