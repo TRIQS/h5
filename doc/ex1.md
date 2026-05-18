@@ -17,9 +17,6 @@ Finally, we output the result to stdout.
 #include <numeric>
 #include <vector>
 
-// this is only needed to avoid issues with doxygen
-#include <H5Tpublic.h>
-
 int main() {
   // data to be written
   std::vector<int> data (25, 0);
@@ -60,11 +57,8 @@ int main() {
   read_slab.stride[0] = 1;
   read_slab.stride[1] = 2;
 
-  // get dataset_info from the dataset in the file
-  auto ds_info = h5::array_interface::get_dataset_info(file, "view");
-
   // read data from file
-  h5::array_interface::read(file, "view", read_view, ds_info, read_slab);
+  h5::array_interface::read(file, "view", read_view, read_slab);
 
   // output data
   for (int i = 0; i < rows_r; ++i) {

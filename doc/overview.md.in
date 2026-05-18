@@ -31,7 +31,6 @@ Storing and loading a vector of strings and a vector of doubles is as easy as
 #include <vector>
 
 int main(){
-
   {
     // Open file in write mode
     h5::file file("vec.h5", 'w');

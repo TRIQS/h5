@@ -71,28 +71,6 @@
  */
 
 /**
- * @defgroup rw_generic Generic read/write
- * @ingroup readwrite
- * @brief The generic functions (h5::read, h5::write, h5::read_attribute, ...) call their more specialized counterparts
- * (h5::h5_read, h5::h5_write, h5::h5_read_attribute, ...) which find the correct implementation using ADL.
- *
- * @details Users can define their own specialized `h5_write` and `h5_read` functions for types which are not natively
- * supported by **h5**. @ref ex2 shows how this can be done.
- */
-
-/**
- * @defgroup rw_arrayinterface Array interface
- * @ingroup readwrite
- * @brief Specialized functions to read/write n-dimensional arrays from/to HDF5.
- *
- * @details It provides specialized functions to read/write an h5::array_interface::array_view from/to HDF5. An
- * array view mimics a view on a generic n-dimensional array. It uses HDF5's hyperslab concept to perform the
- * reading/writing.
- *
- * @ref ex1 shows how to use the array interface to write and read a 2-dimensional array.
- */
-
-/**
  * @defgroup rw_scalar Arithmetic scalar types
  * @ingroup readwrite
  * @brief Specialized functions to read/write arithmetic scalar types from/to HDF5.
@@ -162,68 +140,47 @@
  */
 
 /**
- * @defgroup rw_string std::string, const char* and char_buf
+ * @defgroup rw_arrayinterface Array interface
  * @ingroup readwrite
- * @brief Specialized functions to read/write std::string, `const char *` and a generic character buffer (h5::char_buf)
- * from/to HDF5.
+ * @brief Specialized functions to read/write n-dimensional arrays from/to HDF5.
  *
- * @details The following code writes a string to an HDF5 file, reads the same string and outputs it to stdout:
+ * @details It provides specialized functions to read/write an h5::array_interface::array_view from/to HDF5. An
+ * array view mimics a view on a generic n-dimensional array. It uses HDF5's hyperslab concept to perform the
+ * reading/writing.
  *
- * @code{.cpp}
- * #include <h5/h5.hpp>
- * #include <iostream>
- * #include <string>
+ * @ref ex1 shows how to use the array interface to write and read a 2-dimensional array.
+ */
+
+/**
+ * @defgroup format Format tags
+ * @ingroup readwrite
+ * @brief Specialized functions to read/write `hdf5_format` tags from/to HDF5 attributes.
  *
- * int main() {
- *   // create file in read/write mode
- *   h5::file file("string.h5", 'w');
+ * @details An `hdf5_format` tag is a string that describes the type of object stored in an HDF5 file. A type `T` which is
+ * HDF5 readable/writeable should do one of the following:
+ * - implement a static member function `static hdf5_format() -> std::string` or
+ * - specialize the `hdf5_format_impl` struct for `T` and provide an implementation for the member `static invoke() -> std::string`.
  *
- *  // write string
- *  h5::write(file, "mystring", "Hello world!");
+ * The specialized `h5_write` function for type `T` should write the format tag to file (see h5::write_hdf5_format and h5::write_hdf5_format_as_string)
+ * and the `h5_read` function should check that the format tag is correct (see h5::assert_hdf5_format and h5::assert_hdf5_format_as_string).
+ */
+
+/**
+ * @defgroup rw_generic Generic read/write
+ * @ingroup readwrite
+ * @brief The generic functions (h5::read, h5::write, h5::read_attribute, ...) call their more specialized counterparts
+ * (h5::h5_read, h5::h5_write, h5::h5_read_attribute, ...) which find the correct implementation using ADL.
  *
- *   // read into string
- *   std::string str;
- *   h5::read(file, "mystring", str);
- *
- *   // output string
- *   std::cout << str << std::endl;
- * }
- * @endcode
- *
- * Output:
- *
- * ```
- * Hello world!
- * ```
- *
- * Contents of `string.h5`:
- *
- * ```
- * HDF5 "string.h5" {
- * GROUP "/" {
- *    DATASET "mystring" {
- *       DATATYPE  H5T_STRING {
- *          STRSIZE H5T_VARIABLE;
- *          STRPAD H5T_STR_NULLTERM;
- *          CSET H5T_CSET_UTF8;
- *          CTYPE H5T_C_S1;
- *       }
- *       DATASPACE  SCALAR
- *       DATA {
- *       (0): "Hello world!"
- *       }
- *    }
- * }
- * }
- * ```
+ * @details Users can define their own specialized `h5_write` and `h5_read` functions for types which are not natively
+ * supported by **h5**. @ref ex2 shows how this can be done.
  */
 
 /**
  * @defgroup rw_array std::array
  * @ingroup readwrite
- * @brief Specialized functions to read/write a std::array from/to HDF5.
+ * @brief Specialized functions to read/write a `std::array` from/to HDF5.
  *
- * @details The following code writes a std::array to an HDF5 file, reads the same array and outputs it to stdout:
+ * @details The following code writes a `std::array` to an HDF5 file, reads the same array and outputs it to stdout:
  *
  * @code{.cpp}
  * #include <h5/h5.hpp>
@@ -276,9 +233,9 @@
 /**
  * @defgroup rw_map std::map
  * @ingroup readwrite
- * @brief Specialized functions to read/write a std::map from/to HDF5.
+ * @brief Specialized functions to read/write a `std::map` from/to HDF5.
  *
- * @details The following code writes a std::map to an HDF5 file, reads the same map and outputs it to stdout:
+ * @details The following code writes a `std::map` to an HDF5 file, reads the same map and outputs it to stdout:
  *
  * @code{.cpp}
  * #include <h5/h5.hpp>
@@ -358,9 +315,9 @@
 /**
  * @defgroup rw_optional std::optional
  * @ingroup readwrite
- * @brief Specialized functions to read/write a std::optional from/to HDF5.
+ * @brief Specialized functions to read/write a `std::optional` from/to HDF5.
  *
- * @details The following code writes a std::optional to an HDF5 file, reads the same value and outputs it to stdout:
+ * @details The following code writes a `std::optional` to an HDF5 file, reads the same value and outputs it to stdout:
  *
  * @code{.cpp}
  * #include <h5/h5.hpp>
@@ -409,9 +366,9 @@
 /**
  * @defgroup rw_pair std::pair
  * @ingroup readwrite
- * @brief Specialized functions to read/write a std::pair from/to HDF5.
+ * @brief Specialized functions to read/write a `std::pair` from/to HDF5.
  *
- * @details The following code writes a std::pair to an HDF5 file, reads the same pair and outputs it to stdout:
+ * @details The following code writes a `std::pair` to an HDF5 file, reads the same pair and outputs it to stdout:
  *
  * @code{.cpp}
  * #include <h5/h5.hpp>
@@ -479,11 +436,68 @@
  */
 
 /**
+ * @defgroup rw_string std::string, const char* and char_buf
+ * @ingroup readwrite
+ * @brief Specialized functions to read/write `std::string`, `const char *` and a generic character buffer 
+ * (h5::char_buf) from/to HDF5.
+ *
+ * @details The following code writes a string to an HDF5 file, reads the same string and outputs it to stdout:
+ *
+ * @code{.cpp}
+ * #include <h5/h5.hpp>
+ * #include <iostream>
+ * #include <string>
+ *
+ * int main() {
+ *   // create file in read/write mode
+ *   h5::file file("string.h5", 'w');
+ *
+ *  // write string
+ *  h5::write(file, "mystring", "Hello world!");
+ *
+ *   // read into string
+ *   std::string str;
+ *   h5::read(file, "mystring", str);
+ *
+ *   // output string
+ *   std::cout << str << std::endl;
+ * }
+ * @endcode
+ *
+ * Output:
+ *
+ * ```
+ * Hello world!
+ * ```
+ *
+ * Contents of `string.h5`:
+ *
+ * ```
+ * HDF5 "string.h5" {
+ * GROUP "/" {
+ *    DATASET "mystring" {
+ *       DATATYPE  H5T_STRING {
+ *          STRSIZE H5T_VARIABLE;
+ *          STRPAD H5T_STR_NULLTERM;
+ *          CSET H5T_CSET_UTF8;
+ *          CTYPE H5T_C_S1;
+ *       }
+ *       DATASPACE  SCALAR
+ *       DATA {
+ *       (0): "Hello world!"
+ *       }
+ *    }
+ * }
+ * }
+ * ```
+ */
+
+/**
  * @defgroup rw_tuple std::tuple
  * @ingroup readwrite
- * @brief Specialized functions to read/write a std::tuple from/to HDF5.
+ * @brief Specialized functions to read/write a `std::tuple` from/to HDF5.
  *
- * @details The following code writes a std::tuple to an HDF5 file, reads the same tuple and outputs it to stdout:
+ * @details The following code writes a `std::tuple` to an HDF5 file, reads the same tuple and outputs it to stdout:
  *
  * @code{.cpp}
  * #include <h5/h5.hpp>
@@ -562,9 +576,9 @@
 /**
  * @defgroup rw_variant std::variant
  * @ingroup readwrite
- * @brief Specialized functions to read/write a std::variant from/to HDF5.
+ * @brief Specialized functions to read/write a `std::variant` from/to HDF5.
  *
- * @details The following code writes a std::variant to an HDF5 file, reads the same variant and outputs it to stdout:
+ * @details The following code writes a `std::variant` to an HDF5 file, reads the same variant and outputs it to stdout:
  *
  * @code{.cpp}
  * #include <h5/h5.hpp>
@@ -619,9 +633,9 @@
 /**
  * @defgroup rw_vector std::vector
  * @ingroup readwrite
- * @brief Specialized functions to read/write a std::vector from/to HDF5.
+ * @brief Specialized functions to read/write a `std::vector` from/to HDF5.
  *
- * @details The following code writes a std::vector to an HDF5 file, reads the same vector and outputs it to stdout:
+ * @details The following code writes a `std::vector` to an HDF5 file, reads the same vector and outputs it to stdout:
  *
  * @code{.cpp}
  * #include <h5/h5.hpp>
@@ -667,20 +681,6 @@
  * }
  * }
  * ```
- */
-
-/**
- * @defgroup format Format tags
- * @ingroup readwrite
- * @brief Specialized functions to read/write `hdf5_format` tags from/to HDF5 attributes.
- *
- * @details An `hdf5_format` tag is a string that describes the type of object stored in an HDF5 file. A type `T` which is
- * HDF5 readable/writeable should do one of the following:
- * - implement a static member function `static hdf5_format() -> std::string` or
- * - specialize the `hdf5_format_impl` struct for `T` and provide an implementation for the member `static invoke() -> std::string`.
- *
- * The specialized `h5_write` function for type `T` should write the format tag to file (see h5::write_hdf5_format and h5::write_hdf5_format_as_string)
- * and the `h5_read` function should check that the format tag is correct (see h5::assert_hdf5_format and h5::assert_hdf5_format_as_string).
  */
 
 /**
