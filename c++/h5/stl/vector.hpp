@@ -110,7 +110,7 @@ namespace h5 {
    * vector, max. length of strings).
    * - Otherwise, it creates a subgroup and writes each element to the subgroup.
    *
-   * @tparam T Value tupe of `std::vector`.
+   * @tparam T Value type of `std::vector`.
    * @param g h5::group in which the dataset/subgroup is created.
    * @param name Name of the dataset/subgroup to which the `std::vector` is written.
    * @param v `std::vector` to be written.
@@ -140,7 +140,7 @@ namespace h5 {
    * max. length of strings).
    * - Otherwise, it opens a subgroup and reads each element from the subgroup.
    *
-   * @tparam T Value tupe of `std::vector`.
+   * @tparam T Value type of `std::vector`.
    * @param g h5::group containing the dataset/subgroup.
    * @param name Name of the dataset/subgroup from which the `std::vector` is read.
    * @param v `std::vector` to read into.

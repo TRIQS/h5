@@ -15,19 +15,21 @@ If you want to skip the installation step, you can go directly to @ref integrati
 
 The dependencies of the C++ **h5** library are as follows:
 
-* gcc version 12 or later OR clang version 15 or later OR IntelLLVM (icx) 2023.1.0 or later
-* CMake version 3.20 or later (for installation or integration into an existing project via CMake)
-* HDF5 library version 1.8.2 or later
+* C++20 compatible compiler 
+* CMake version 3.20
+* HDF5 library
 
-For the Python interface, additional dependencies are required:
+The Python interface requires additional dependencies:
 
-* Python version 3.6 or later
-* numpy version 1.11.0 or later
-* mako version 0.9.1 or later
-* scipy (version 1.11.3 is tested but older/newer versions should work as well)
+* Python
+* numpy
 
-The Python interface is built with [TRIQS/cpp2py](https://github.com/TRIQS/cpp2py).
-Please refer to the [GitHub repository](https://github.com/TRIQS/cpp2py) for further information.
+The Python extension module is compiled with the help of [c2py](https://github.com/flatironinstitute/c2py) which is
+fetched automatically when running CMake with ``PythonSupport=ON``.
+
+We do not provide explicit version requirements.
+Instead, we refer the user to the **h5** CI builds on [GitHub Actions](https://github.com/TRIQS/h5/actions), where 
+recent OS, HDF5 and compiler versions are tested.
 
 
 @section install_steps Installation steps

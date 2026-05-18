@@ -40,7 +40,7 @@ namespace h5 {
       case 'r': id = H5Fopen(name, H5F_ACC_RDONLY, H5P_DEFAULT); break;
       // create new or overwrite existing file in read-write mode
       case 'w': id = H5Fcreate(name, H5F_ACC_TRUNC, H5P_DEFAULT, H5P_DEFAULT); break;
-      // create new or append to exisiting file in read-write mode
+      // create new or append to existing file in read-write mode
       case 'a': {
         // turn off error handling
         herr_t (*old_func)(void *) = nullptr;

@@ -258,7 +258,7 @@ namespace h5::array_interface {
    *
    * @param obj h5::object to which the attribute is attached.
    * @param name Name of the attribute.
-   * @param v v h5::array_interface::array_view to be written.
+   * @param v h5::array_interface::array_view to be written.
    */
   void write_attribute(object obj, std::string const &name, array_view v);
 

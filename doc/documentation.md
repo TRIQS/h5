@@ -7,7 +7,7 @@ It is not intended as a full replacement for the HDF5 C implementation.
 Instead it tries to help the user with the most common tasks like opening/closing files, creating groups/datasets
 and writing/reading data to/from HDF5 files.
 
-The following provides a detailed reference documentation grouped into logical units.
+The following provides detailed reference documentation grouped into logical units.
 
 If you are looking for a specific function, class, etc., try using the search bar in the top left corner.
 
@@ -27,9 +27,9 @@ or as a type alias for
 
 * @ref h5::dataset
 * @ref h5::datatype
+* @ref h5::dataspace
 * @ref h5::attribute
 * @ref h5::proplist
-* @ref h5::attribute
 
 For the average user, the two important types are the h5::file and h5::group.
 They simplify basic tasks like creating, opening and manipulating HDF5 files, groups, subgroups, datasets and links.
@@ -39,11 +39,11 @@ They simplify basic tasks like creating, opening and manipulating HDF5 files, gr
 @ref h5_types offers various functionality related to HDF5 datatypes, e.g. mapping C++ types to their corresponding
 HDF5 datatypes (see h5::hdf5_type) or getting the type stored in an HDF5 dataset (see h5::get_hdf5_type).
 
-## Read and write from/to HDF5
+## Read and write to/from HDF5
 
 @ref readwrite contains all the tools to actually read or write HDF5 files.
 
-At the highest level it provides a @ref rw_generic "generic interface" for reading/writing from/to HDF5.
+At the highest level it provides a @ref rw_generic "generic interface" for reading/writing to/from HDF5.
 Internally, the generic functions call more specialized implementations depending on what types are being passed to
 the interface.
 
