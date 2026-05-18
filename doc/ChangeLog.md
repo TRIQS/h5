@@ -1,5 +1,44 @@
 @page changelog Changelog
 
+## Version 2.0.0
+
+This is version 2.0.0 of h5, a high-level C++ interface to the hdf5 library.
+
+We thank all contributors: Thomas Hahn, Henri Menke, Dylan Simon, Nils Wentzell, Alexander Hampel
+
+Find below an itemized list of changes in this release.
+
+### General
+* Port h5 to c2py + clair and remove any cpp2py references
+* Add serialization.hpp to h5.hpp
+* Add additional group methods used to generate c2py/clair bindings
+* Add hdf5_format_impl specialization for char_buf
+* Use "Tuple" as a format string for std::pair and std::tuple
+* Generalize Storable concept
+* Remove support for numpy versions < 1.17
+* Remove unused pybind11 bindings
+* Add example codes to doc folder and make sure they compile
+* Use requires instead of H5_REQUIRES macro
+* Use h5::object instead of h5::group in format functions
+* Add overloads for write_hdf5_format and assert_hdf5_format without deducing storage type
+* Generalize std::map interface to allow for aribtrary comparison types
+* Bug fix in h5::array_interface::get_parent_shape_and_h5_strides
+
+### doc
+* Update documentation of python layer
+* Add Python interface utilities to doxygen
+* Add FI support notice to README.md
+
+### fix
+* #28: make compile def H5_VER_GE_113 PUBLIC
+
+### cmake
+* Work around issue in FindHDF5 for cmake 3.25 or older
+* Add cmake workaround for hdf5 version detection when using hdf5 with subversion (#26)
+* Fix hdf5 linkeage in python layer
+* Directly use imported targets provided for hdf5
+
+
 ## Version 1.3.0
 
 This is version 1.3.0 of h5, a high-level C++ interface to the hdf5 library.
@@ -68,7 +107,7 @@ Find below an itemized list of changes in this release.
 
 ### fixes
 * Fix hsize_t for hdf5 versions >=1.13
-* Loosen type-check of hsize_t to restore hdf5 1.13 compatibility Fix #11
+* Loosen type-check of hsize_t to restore hdf5 1.13 compatibility. Fix #11
 * Fix #10: Do not exceed maximum chunk size in h5::array_interface::write
 * Fix signature of generic h5::read_attribute and h5::write_attribute
 * Allow reading vector<string> when stored as subgroup with numbered keys
@@ -87,7 +126,7 @@ Find below an itemized list of changes in this release.
 * Allow creation of softlinks
 * Fix logic error in test/python/archive.py
 * Make test on byte buffer less stringent, compare only archive contents for memory files
-* Minor correction in error msg when constructing HDFArchiveGroup as as new memory file
+* Minor correction in error msg when constructing HDFArchiveGroup as a new memory file
 * Add function as_bytes to HDFArchive class and extend the wrapped File class as necessary
 * Allow creation HDFArchive as a memory-file only
 * Consistently use std::byte instead of char for memory files
