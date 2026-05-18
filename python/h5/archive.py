@@ -4,7 +4,7 @@
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
-#     http:#www.apache.org/licenses/LICENSE-2.0.txt
+#     http://www.apache.org/licenses/LICENSE-2.0.txt
 #
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
@@ -67,6 +67,13 @@ register_backward_compatibility_method('PythonDictWrap', 'Dict')
 
 class HDFArchiveGroup(HDFArchiveGroupBasicLayer):
     """
+    A view on a subgroup of an :class:`HDFArchive`.
+
+    Exposes a dict-like interface (``__getitem__``, ``__setitem__``,
+    ``__delitem__``, ``__iter__``, ``keys``, ``values``, ``items``) over the
+    keys of one HDF5 group. On read, registered Python classes are
+    automatically reconstructed via their ``__factory_from_dict__`` (see
+    :mod:`h5.formats`); use :meth:`get_raw` to bypass reconstruction.
     """
     _wrappedType = {
         list : List,
@@ -76,6 +83,9 @@ class HDFArchiveGroup(HDFArchiveGroupBasicLayer):
     _MaxLengthKey = 500
 
     def __init__(self, parent, subpath) :
+        """Open the subgroup ``subpath`` of ``parent`` (which is either an
+        :class:`HDFArchive` or another :class:`HDFArchiveGroup`). If
+        ``subpath`` is falsy, this group aliases ``parent``'s group."""
         # We want to hold a reference to the parent group, if we are not at the root
         # This will prevent a premature destruction of the root HDFArchive object
         if not self is parent: self.parent = parent
@@ -216,7 +226,7 @@ class HDFArchiveGroup(HDFArchiveGroupBasicLayer):
         elif self.is_data(key) :
             bare_return = lambda: self._read(key)
         else :
-            raise KeyError("Key %s is of unknown type !!"%Key)
+            raise KeyError("Key %s is of unknown type !!"%key)
 
         if not reconstruct_python_object : return bare_return()
 
@@ -229,7 +239,7 @@ class HDFArchiveGroup(HDFArchiveGroupBasicLayer):
         try :
             fmt_info = get_format_info(hdf5_format)
         except KeyError:
-            warnings.warn(f"The hdf5 format {hdf5_format} is not recognized. Returning as a group. Did you forgot to import this python class ?")
+            warnings.warn(f"The hdf5 format {hdf5_format} is not recognized. Returning as a group. Did you forget to import this python class ?")
             return bare_return()
 
         r_class_name  = fmt_info.classname
@@ -298,6 +308,14 @@ class HDFArchiveGroup(HDFArchiveGroupBasicLayer):
 
 class HDFArchive(HDFArchiveGroup):
     """
+    Top-level handle to an HDF5 file.
+
+    Opens a local path, a remote URL (read-only), an in-memory buffer, or a
+    fresh in-memory file, and exposes its contents through the
+    :class:`HDFArchiveGroup` dict-like interface. Supports ``with`` blocks
+    and a context-managed lifetime; the underlying file is closed in
+    ``__del__`` / ``__exit__``. See :meth:`__init__` for the full parameter
+    list.
     """
     _class_version = 1
 
