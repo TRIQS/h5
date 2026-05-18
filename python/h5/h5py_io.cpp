@@ -23,92 +23,46 @@ namespace h5 {
   // anonymous namespace for internal functions/types
   namespace {
 
-    struct h5_c_size_t {
-      datatype hdf5_type; // type in hdf5
-      int c_size;         // size of the corresponding C object
-    };
-
-    std::vector<h5_c_size_t> h5_c_size_table;
-
-    void init_h5_c_size_table() {
-      h5_c_size_table = std::vector<h5_c_size_t>{
-         {hdf5_type<char>(), sizeof(char)},
-         {hdf5_type<signed char>(), sizeof(signed char)},
-         {hdf5_type<unsigned char>(), sizeof(unsigned char)},
-         {hdf5_type<bool>(), sizeof(bool)},
-         {hdf5_type<short>(), sizeof(short)},
-         {hdf5_type<unsigned short>(), sizeof(unsigned short)},
-         {hdf5_type<int>(), sizeof(int)},
-         {hdf5_type<unsigned int>(), sizeof(unsigned int)},
-         {hdf5_type<long>(), sizeof(long)},
-         {hdf5_type<unsigned long>(), sizeof(unsigned long)},
-         {hdf5_type<long long>(), sizeof(long long)},
-         {hdf5_type<unsigned long long>(), sizeof(unsigned long long)},
-         {hdf5_type<float>(), sizeof(float)},
-         {hdf5_type<double>(), sizeof(double)},
-         {hdf5_type<long double>(), sizeof(long double)},
-         {hdf5_type<std::complex<float>>(), sizeof(std::complex<float>)},
-         {hdf5_type<std::complex<double>>(), sizeof(std::complex<double>)},
-         {hdf5_type<std::complex<long double>>(), sizeof(std::complex<long double>)} //
-      };
-    }
-
-    // h5 -> numpy type conversion
-    //FIXME we could sort the table and use binary_search
-    int h5_c_size(datatype t) {
-      if (h5_c_size_table.empty()) init_h5_c_size_table();
-      auto _end = h5_c_size_table.end();
-      auto pos  = std::find_if(h5_c_size_table.begin(), _end, [t](auto const &x) { return hdf5_type_equal(x.hdf5_type, t); });
-      if (pos == _end) throw std::runtime_error("HDF5/Python Internal Error : can not find the numpy type from the HDF5 type");
-      return pos->c_size;
-    }
-
-    //---------------------------------------
-
+    // Mapping between an HDF5 type and its numpy type.
     struct h5_py_type_t {
-      datatype hdf5_type; // type in hdf5
-      int numpy_type;     // For a Python object, we will always use the numpy type
+      datatype hdf5_type;
+      int numpy_type;
       size_t size;
     };
 
-    //--------------------------------------
+    // Table of mappings between basic HDF5 types and numpy types.
+    const auto h5_py_type_table = std::vector<h5_py_type_t>{
+       {hdf5_type<char>(), NPY_STRING, sizeof(char)},
+       {hdf5_type<signed char>(), NPY_BYTE, sizeof(signed char)},
+       {hdf5_type<unsigned char>(), NPY_UBYTE, sizeof(unsigned char)},
+       {hdf5_type<bool>(), NPY_BOOL, sizeof(bool)},
+       {hdf5_type<short>(), NPY_SHORT, sizeof(short)},
+       {hdf5_type<unsigned short>(), NPY_USHORT, sizeof(unsigned short)},
+       {hdf5_type<int>(), NPY_INT, sizeof(int)},
+       {hdf5_type<unsigned int>(), NPY_UINT, sizeof(unsigned int)},
+       {hdf5_type<long>(), NPY_LONG, sizeof(long)},
+       {hdf5_type<unsigned long>(), NPY_ULONG, sizeof(unsigned long)},
+       {hdf5_type<long long>(), NPY_LONGLONG, sizeof(long long)},
+       {hdf5_type<unsigned long long>(), NPY_ULONGLONG, sizeof(unsigned long long)},
+       {hdf5_type<float>(), NPY_FLOAT, sizeof(float)},
+       {hdf5_type<double>(), NPY_DOUBLE, sizeof(double)},
+       {hdf5_type<long double>(), NPY_LONGDOUBLE, sizeof(long double)},
+       {hdf5_type<std::complex<float>>(), NPY_CFLOAT, sizeof(std::complex<float>)},
+       {hdf5_type<std::complex<double>>(), NPY_CDOUBLE, sizeof(std::complex<double>)},
+       {hdf5_type<std::complex<long double>>(), NPY_CLONGDOUBLE, sizeof(std::complex<long double>)} //
+    };
 
-    std::vector<h5_py_type_t> h5_py_type_table;
-
-    //--------------------------------------
-
-    void init_h5py() {
-      h5_py_type_table = std::vector<h5_py_type_t>{
-         {hdf5_type<char>(), NPY_STRING, sizeof(char)},
-         {hdf5_type<signed char>(), NPY_BYTE, sizeof(signed char)},
-         {hdf5_type<unsigned char>(), NPY_UBYTE, sizeof(unsigned char)},
-         {hdf5_type<bool>(), NPY_BOOL, sizeof(bool)},
-         {hdf5_type<short>(), NPY_SHORT, sizeof(short)},
-         {hdf5_type<unsigned short>(), NPY_USHORT, sizeof(unsigned short)},
-         {hdf5_type<int>(), NPY_INT, sizeof(int)},
-         {hdf5_type<unsigned int>(), NPY_UINT, sizeof(unsigned int)},
-         {hdf5_type<long>(), NPY_LONG, sizeof(long)},
-         {hdf5_type<unsigned long>(), NPY_ULONG, sizeof(unsigned long)},
-         {hdf5_type<long long>(), NPY_LONGLONG, sizeof(long long)},
-         {hdf5_type<unsigned long long>(), NPY_ULONGLONG, sizeof(unsigned long long)},
-         {hdf5_type<float>(), NPY_FLOAT, sizeof(float)},
-         {hdf5_type<double>(), NPY_DOUBLE, sizeof(double)},
-         {hdf5_type<long double>(), NPY_LONGDOUBLE, sizeof(long double)},
-         {hdf5_type<std::complex<float>>(), NPY_CFLOAT, sizeof(std::complex<float>)},
-         {hdf5_type<std::complex<double>>(), NPY_CDOUBLE, sizeof(std::complex<double>)},
-         {hdf5_type<std::complex<long double>>(), NPY_CLONGDOUBLE, sizeof(std::complex<long double>)} //
-      };
+    // Given an HDF5 datatype, return the size of the corresponding C data type in bytes.
+    long h5_c_size(datatype t) {
+      auto pos = std::ranges::find_if(h5_py_type_table, [t](auto const &x) { return hdf5_type_equal(x.hdf5_type, t); });
+      if (pos == h5_py_type_table.end()) throw std::runtime_error("HDF5/Python Error: HDF5 type not supported");
+      return static_cast<long>(pos->size);
     }
 
-    //--------------------------------------
-
-    // h5 -> numpy type conversion
+    // Given an HDF5 datatype, return the corresponding numpy type.
     int h5_to_npy(datatype t, bool is_complex) {
-
-      if (h5_py_type_table.empty()) init_h5py();
-      auto _end = h5_py_type_table.end();
-      auto pos  = std::find_if(h5_py_type_table.begin(), _end, [t](auto const &x) { return hdf5_type_equal(x.hdf5_type, t); });
-      if (pos == _end) throw std::runtime_error("HDF5/Python Internal Error : can not find the numpy type from the HDF5 type");
+      auto pos = std::ranges::find_if(h5_py_type_table, [t](auto const &x) { return hdf5_type_equal(x.hdf5_type, t); });
+      if (pos == h5_py_type_table.end()) throw std::runtime_error("HDF5/Python Error: HDF5 type not supported");
       int res = pos->numpy_type;
       if (is_complex) {
         if (res == NPY_DOUBLE) res = NPY_CDOUBLE;
@@ -118,14 +72,10 @@ namespace h5 {
       return res;
     }
 
-    //--------------------------------------
-
-    // numpy -> h5 type conversion
+    // Given a numpy type, return the corresponding HDF5 type.
     datatype npy_to_h5(int t) {
-      if (h5_py_type_table.empty()) init_h5py();
-      auto _end = h5_py_type_table.end();
-      auto pos  = std::find_if(h5_py_type_table.begin(), _end, [t](auto const &x) { return x.numpy_type == t; });
-      if (pos == _end) throw std::runtime_error("HDF5/Python Internal Error : can not find the numpy type from the HDF5 type");
+      auto pos = std::ranges::find_if(h5_py_type_table, [t](auto const &x) { return x.numpy_type == t; });
+      if (pos == h5_py_type_table.end()) throw std::runtime_error("HDF5/Python Error: Numpy type not supported");
       return pos->hdf5_type;
     }
 
