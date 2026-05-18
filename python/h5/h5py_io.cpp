@@ -108,7 +108,7 @@ namespace h5 {
       return res;
     }
 
-    // -------------------------
+    // Import numpy (only once) to use its C API.
     void import_numpy() {
       static bool init = false;
       if (!init) {
@@ -116,103 +116,110 @@ namespace h5 {
         init = true;
       }
     }
-    // -------------------------
 
-    // Read any integer type from hdf5 and return a Python long
-    PyObject *h5_read_any_int(group g, std::string const &name, auto h5type) {
-      if (H5Tequal(h5type, H5T_NATIVE_SHORT)) {
+    // Read any integer type from HDF5 and return a Python long.
+    PyObject *h5_read_any_int(group g, std::string const &name, datatype ty) {
+      if (H5Tequal(ty, H5T_NATIVE_SHORT)) {
         return PyLong_FromLong(h5_read<short>(g, name));
-      } else if (H5Tequal(h5type, H5T_NATIVE_INT)) {
+      } else if (H5Tequal(ty, H5T_NATIVE_INT)) {
         return PyLong_FromLong(h5_read<int>(g, name));
-      } else if (H5Tequal(h5type, H5T_NATIVE_LONG)) {
+      } else if (H5Tequal(ty, H5T_NATIVE_LONG)) {
         return PyLong_FromLong(h5_read<long>(g, name));
-      } else if (H5Tequal(h5type, H5T_NATIVE_LLONG)) {
+      } else if (H5Tequal(ty, H5T_NATIVE_LLONG)) {
         return PyLong_FromLongLong(h5_read<long long>(g, name));
-      } else if (H5Tequal(h5type, H5T_NATIVE_USHORT)) {
+      } else if (H5Tequal(ty, H5T_NATIVE_USHORT)) {
         return PyLong_FromUnsignedLong(h5_read<unsigned short>(g, name));
-      } else if (H5Tequal(h5type, H5T_NATIVE_UINT)) {
+      } else if (H5Tequal(ty, H5T_NATIVE_UINT)) {
         return PyLong_FromUnsignedLong(h5_read<unsigned int>(g, name));
-      } else if (H5Tequal(h5type, H5T_NATIVE_ULONG)) {
+      } else if (H5Tequal(ty, H5T_NATIVE_ULONG)) {
         return PyLong_FromUnsignedLong(h5_read<unsigned long>(g, name));
-      } else if (H5Tequal(h5type, H5T_NATIVE_ULLONG)) {
+      } else if (H5Tequal(ty, H5T_NATIVE_ULLONG)) {
         return PyLong_FromUnsignedLongLong(h5_read<unsigned long long>(g, name));
       } else {
-        PyErr_SetString(PyExc_RuntimeError, "h5_read to Python: unknown integer type");
-        return NULL;
+        PyErr_SetString(PyExc_RuntimeError, "h5::h5_read_bare: Integer type can not be read from HDF5");
+        return nullptr;
       }
     }
 
   } // namespace
 
   void h5_write_bare(group g, std::string const &name, PyObject *ob) {
-
     import_numpy();
 
     if (PyArray_Check(ob)) {
-      PyArrayObject *arr_obj = (PyArrayObject *)ob;
+      auto *arr_obj = (PyArrayObject *)ob; // NOLINT
       write(g, name, make_av_from_npy(arr_obj), true);
     } else if (PyArray_CheckScalar(ob)) {
-      // Treat numpy scalars as 0-dimensional ndarrays
-      cpp2py::pyref obsc = PyArray_FromScalar(ob, NULL);
+      // treat numpy scalars as 0-dimensional ndarrays
+      cpp2py::pyref obsc = PyArray_FromScalar(ob, nullptr);
       h5_write_bare(g, name, obsc);
     } else if (PyFloat_Check(ob)) {
       h5_write(g, name, PyFloat_AsDouble(ob));
     } else if (PyBool_Check(ob)) {
-      h5_write(g, name, bool(PyLong_AsLong(ob)));
+      h5_write(g, name, static_cast<bool>(PyLong_AsLong(ob)));
     } else if (PyLong_Check(ob)) {
-      h5_write(g, name, long(PyLong_AsLong(ob)));
+      h5_write(g, name, static_cast<long>(PyLong_AsLong(ob)));
     } else if (PyUnicode_Check(ob)) {
-      h5_write(g, name, (const char *)PyUnicode_AsUTF8(ob));
+      h5_write(g, name, static_cast<const char *>(PyUnicode_AsUTF8(ob)));
     } else if (PyComplex_Check(ob)) {
       h5_write(g, name, std::complex<double>{PyComplex_RealAsDouble(ob), PyComplex_ImagAsDouble(ob)});
     } else {
-      PyErr_SetString(PyExc_RuntimeError, "The Python object can not be written in HDF5");
+      PyErr_SetString(PyExc_RuntimeError, "h5::h5_write_bare: Python object can not be written to HDF5");
       return;
     }
   }
 
-  // -------------------------
-
-  PyObject *h5_read_bare(group g, std::string const &name) { // There should be no errors from h5 reading
+  PyObject *h5_read_bare(group g, std::string const &name) {
     import_numpy();
 
-    array_interface::dataset_info ds_info = array_interface::get_dataset_info(g, name);
+    auto ds_info = array_interface::get_dataset_info(g, name);
 
-    // First case, we have a scalar
+    // rank 0 - scalar case
     if (ds_info.rank() == 0) {
+      // float
       if (H5Tget_class(ds_info.ty) == H5T_FLOAT) {
-        double x;
+        double x{};
         h5_read(g, name, x);
         return PyFloat_FromDouble(x);
       }
+
+      // integer
       if (H5Tget_class(ds_info.ty) == H5T_INTEGER) { return h5_read_any_int(g, name, ds_info.ty); }
+
+      // bool
       if (H5Tequal(ds_info.ty, h5::hdf5_type<bool>())) {
-        bool x;
+        bool x{};
         h5_read(g, name, x);
         return PyBool_FromLong(long(x));
       }
+
+      // string
       if (H5Tget_class(ds_info.ty) == H5T_STRING) {
         std::string x;
         h5_read(g, name, x);
         return PyUnicode_FromString(x.c_str());
       }
+
+      // complex
       if (H5Tequal(ds_info.ty, hdf5_type<dcplx_t>())) {
-        dcplx_t x;
+        dcplx_t x{};
         h5_read(g, name, x);
         return PyComplex_FromDoubles(x.r, x.i);
       }
-      // Default case : error, we can not read
-      PyErr_SetString(PyExc_RuntimeError, "h5_read to Python: unknown scalar type");
-      return NULL;
+
+      // otherwise throw and error and return nullptr
+      PyErr_SetString(PyExc_RuntimeError, "h5::h5_read_bare: Scalar type can not be read from HDF5");
+      return nullptr;
     }
 
-    // A scalar complex is a special case
+    // rank 1 - complex scalar case
     if ((ds_info.rank() == 1) and ds_info.has_complex_attribute) {
-      std::complex<double> z;
+      std::complex<double> z{};
       h5_read(g, name, z);
       return PyComplex_FromDoubles(z.real(), z.imag());
     }
 
+    // rank 1 or 2 - string array case
     if (H5Tget_class(ds_info.ty) == H5T_STRING) {
       if (ds_info.rank() == 1) {
         auto x = h5_read<std::vector<std::string>>(g, name);
@@ -224,24 +231,21 @@ namespace h5 {
         return cpp2py::convert_to_python(x);
       }
 
-      PyErr_SetString(PyExc_RuntimeError, "Unknown string dataset format");
-      return NULL;
+      PyErr_SetString(PyExc_RuntimeError, "h5::h5_read_bare: String dataset with rank > 2 is not allowed");
+      return nullptr;
     }
 
-    // Last case : it is an array
-    std::vector<npy_intp> L(ds_info.rank());                                 // Make the lengths
-    std::copy(ds_info.lengths.begin(), ds_info.lengths.end(), L.begin());    //npy_intp and size_t may differ, so I can not use =
-    int elementsType = h5_to_npy(ds_info.ty, ds_info.has_complex_attribute); // element_type in Python from the hdf5 type and complex tag
-    if (ds_info.has_complex_attribute) L.pop_back();                         // remove the last dim which is 2 in complex case,
-                                                                             // since we are going to build a array of complex
+    // rank > 0 - general array case
+    auto shape      = std::vector<npy_intp>(ds_info.lengths.begin(), ds_info.lengths.end());
+    auto numpy_type = h5_to_npy(ds_info.ty, ds_info.has_complex_attribute);
 
-    // make a new numpy array
-    PyObject *ob = PyArray_SimpleNewFromDescr(int(L.size()), &L[0], PyArray_DescrFromType(elementsType));
-    if (PyErr_Occurred()) return NULL;
-    // in case of allocation error
+    // get rid of complex h5 dimension if necessary
+    if (ds_info.has_complex_attribute) shape.pop_back();
 
-    // read from the file
-    read(g, name, make_av_from_npy((PyArrayObject *)ob));
+    // create numpy array and read into it
+    PyObject *ob = PyArray_SimpleNewFromDescr(int(shape.size()), &shape[0], PyArray_DescrFromType(numpy_type));
+    if (PyErr_Occurred()) return nullptr;
+    read(g, name, make_av_from_npy((PyArrayObject *)ob)); // NOLINT
     return ob;
   }
 
