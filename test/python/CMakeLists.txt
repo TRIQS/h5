@@ -2,13 +2,7 @@
 set(all_tests interface archive test_storable issue_multifile)
 
 # Build the storable C++ module
-Python_add_library(storable MODULE storable.cpp)
-target_link_libraries(storable PRIVATE h5_c c2py::c2py)
-
-if(Update_Python_Bindings)
-  clair_c2py_generate_bindings(storable)
-  add_dependencies(storable_bindings_generation _h5py)
-endif()
+c2py_add_module(storable LINK_LIBRARIES h5_c DEPENDS_ON_BINDINGS _h5py)
 
 # Add tests
 find_package(Python COMPONENTS Interpreter)

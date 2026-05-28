@@ -145,7 +145,7 @@ if(PythonSupport)
     EXCLUDE_FROM_ALL # exclude from all so that c2py is NOT installed.
   )
   FetchContent_MakeAvailable(c2py)
-  include(${c2py_SOURCE_DIR}/share/cmake/clair_c2py_generate_bindings.cmake)
+  include(${c2py_SOURCE_DIR}/share/cmake/c2py_add_module.cmake)
 
   add_subdirectory(python/${PROJECT_NAME})
 endif()
