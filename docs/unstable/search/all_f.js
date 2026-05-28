@@ -1,8 +1,4 @@
 var searchData=
 [
-  ['macros_2ehpp_0',['macros.hpp',['../macros_8hpp.html',1,'']]],
-  ['make_5fruntime_5ferror_1',['make_runtime_error',['../group__utilities.html#ga533849e07bf3ba2cca1f3a831a2df9af',1,'h5']]],
-  ['map_2ehpp_2',['map.hpp',['../map_8hpp.html',1,'']]],
-  ['model_3',['model',['../group__data__model.html',1,'h5 data model'],['../documentation.html#autotoc_md14',1,'h5 data model']]],
-  ['motivating_20example_4',['Motivating example',['../index.html#motivation',1,'']]]
+  ['lengths_0',['lengths',['../structh5_1_1array__interface_1_1dataset__info.html#a5dcf7ac23a235d21d27c0956b9a625ac',1,'h5::array_interface::dataset_info::lengths'],['../structh5_1_1char__buf.html#a3a79f3d0a9f0840f6c8371cea6698af1',1,'h5::char_buf::lengths']]]
 ];

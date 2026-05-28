@@ -57,29 +57,11 @@ var menudata={children:[
 {text:"hdf5_type_equal",url:"group__h5__types.html#ga1f1926665da46101206e6ffdddb19600"},
 {text:"is_complex_v",url:"group__h5__types.html#ga55e04870d75c17e740a6e757ac25fa7b"}]},
 {text:"Read and write from/to HDF5",url:"group__readwrite.html",children:[
-{text:"Generic read/write",url:"group__rw__generic.html"},
+{text:"Arithmetic scalar types",url:"group__rw__scalar.html"},
 {text:"Array interface",url:"group__rw__arrayinterface.html",children:[
 {text:"array_view",url:"structh5_1_1array__interface_1_1array__view.html"},
 {text:"dataset_info",url:"structh5_1_1array__interface_1_1dataset__info.html"},
 {text:"hyperslab",url:"structh5_1_1array__interface_1_1hyperslab.html"}]},
-{text:"Arithmetic scalar types",url:"group__rw__scalar.html"},
-{text:"std::string, const char* and char_buf",url:"group__rw__string.html",children:[
-{text:"char_buf",url:"structh5_1_1char__buf.html"},
-{text:"hdf5_format_impl<std::string>",url:"structh5_1_1hdf5__format__impl_3_01std_1_1string_01_4.html"}]},
-{text:"std::array",url:"group__rw__array.html"},
-{text:"std::map",url:"group__rw__map.html",children:[
-{text:"hdf5_format_impl<std::map>",url:"structh5_1_1hdf5__format__impl.html"}]},
-{text:"std::optional",url:"group__rw__optional.html",children:[
-{text:"hdf5_format_impl<std::optional>",url:"structh5_1_1hdf5__format__impl_3_01std_1_1optional_3_01_t_01_4_01_4.html"}]},
-{text:"std::pair",url:"group__rw__pair.html",children:[
-{text:"hdf5_format_impl<std::pair>",url:"structh5_1_1hdf5__format__impl_3_01std_1_1pair_3_01_t1_00_01_t2_01_4_01_4.html"}]},
-{text:"std::tuple",url:"group__rw__tuple.html",children:[
-{text:"hdf5_format_impl<std::tuple>",url:"structh5_1_1hdf5__format__impl_3_01std_1_1tuple_3_01_t_8_8_8_01_4_01_4.html"}]},
-{text:"std::variant",url:"group__rw__variant.html",children:[
-{text:"hdf5_format_impl<std::variant>",url:"structh5_1_1hdf5__format__impl_3_01std_1_1variant_3_01_t_8_8_8_01_4_01_4.html"}]},
-{text:"std::vector",url:"group__rw__vector.html",children:[
-{text:"hdf5_format_impl<std::vector>",url:"structh5_1_1hdf5__format__impl_3_01std_1_1vector_3_01_t_01_4_01_4.html"},
-{text:"hdf5_format_impl<std::vector<std::string>>",url:"structh5_1_1hdf5__format__impl_3_01std_1_1vector_3_01std_1_1string_01_4_01_4.html"}]},
 {text:"Format tags",url:"group__format.html",children:[
 {text:"hdf5_format_impl<T>",url:"structh5_1_1hdf5__format__impl.html"},
 {text:"hdf5_format_impl<bool>",url:"structh5_1_1hdf5__format__impl_3_01bool_01_4.html"},
@@ -92,16 +74,31 @@ var menudata={children:[
 {text:"hdf5_format_impl<std::complex<double>>",url:"structh5_1_1hdf5__format__impl_3_01std_1_1complex_3_01double_01_4_01_4.html"},
 {text:"hdf5_format_impl<unsigned int>",url:"structh5_1_1hdf5__format__impl_3_01unsigned_01int_01_4.html"},
 {text:"hdf5_format_impl<unsigned long>",url:"structh5_1_1hdf5__format__impl_3_01unsigned_01long_01_4.html"},
-{text:"hdf5_format_impl<unsigned long long>",url:"structh5_1_1hdf5__format__impl_3_01unsigned_01long_01long_01_4.html"}]}]},
+{text:"hdf5_format_impl<unsigned long long>",url:"structh5_1_1hdf5__format__impl_3_01unsigned_01long_01long_01_4.html"}]},
+{text:"Generic read/write",url:"group__rw__generic.html"},
+{text:"std::array",url:"group__rw__array.html"},
+{text:"std::map",url:"group__rw__map.html",children:[
+{text:"hdf5_format_impl< std::map >",url:"structh5_1_1hdf5__format__impl_3_01std_1_1map_3_01_key_00_01_t_00_01_compare_01_4_01_4.html"}]},
+{text:"std::optional",url:"group__rw__optional.html",children:[
+{text:"hdf5_format_impl< std::optional >",url:"structh5_1_1hdf5__format__impl_3_01std_1_1optional_3_01_t_01_4_01_4.html"}]},
+{text:"std::pair",url:"group__rw__pair.html",children:[
+{text:"hdf5_format_impl< std::pair >",url:"structh5_1_1hdf5__format__impl_3_01std_1_1pair_3_01_t1_00_01_t2_01_4_01_4.html"}]},
+{text:"std::string, const char* and char_buf",url:"group__rw__string.html",children:[
+{text:"char_buf",url:"structh5_1_1char__buf.html"},
+{text:"hdf5_format_impl< std::string >",url:"structh5_1_1hdf5__format__impl_3_01std_1_1string_01_4.html"}]},
+{text:"std::tuple",url:"group__rw__tuple.html",children:[
+{text:"hdf5_format_impl< std::tuple >",url:"structh5_1_1hdf5__format__impl_3_01std_1_1tuple_3_01_t_8_8_8_01_4_01_4.html"}]},
+{text:"std::variant",url:"group__rw__variant.html",children:[
+{text:"hdf5_format_impl< std::variant >",url:"structh5_1_1hdf5__format__impl_3_01std_1_1variant_3_01_t_8_8_8_01_4_01_4.html"}]},
+{text:"std::vector",url:"group__rw__vector.html",children:[
+{text:"hdf5_format_impl< std::vector >",url:"structh5_1_1hdf5__format__impl_3_01std_1_1vector_3_01_t_01_4_01_4.html"},
+{text:"hdf5_format_impl< std::vector< std::string > >",url:"structh5_1_1hdf5__format__impl_3_01std_1_1vector_3_01std_1_1string_01_4_01_4.html"}]}]},
 {text:"Serialize/Deserialize",url:"group__serialize.html",children:[
 {text:"serialize",url:"group__serialize.html#gad2bcd8f6dac5f1b4d3726c5ba86b0ee6"},
 {text:"deserialize",url:"group__serialize.html#gaaaf280034cc7cb7233216238d956a0ad"}]},
 {text:"Utilities",url:"group__utilities.html",children:[
-{text:"hid_t",url:"group__utilities.html#gac5ce7c09ddf854e73e5bd847e2b067e6"},
-{text:"hsize_t",url:"group__utilities.html#ga18c60c084dcd9a6e60485eff3bfdfdbb"},
-{text:"v_t",url:"group__utilities.html#ga0133dae33fa46580049cc43ab40f66cc"},
-{text:"make_runtime_error",url:"group__utilities.html#ga533849e07bf3ba2cca1f3a831a2df9af"},
 {text:"Storable",url:"concepth5_1_1_storable.html"}]},
+{text:"Python interface utilities",url:"group__python-utils.html"},
 {text:"File List",url:"files.html"}]},
 {text:"Changelog",url:"changelog.html"},
 {text:"Issues",url:"issues.html"}]}

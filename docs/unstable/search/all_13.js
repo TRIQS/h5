@@ -1,13 +1,8 @@
 var searchData=
 [
-  ['r_0',['r',['../structh5_1_1dcplx__t.html#a134d94defdbbe392e6c38a31da424cd1',1,'h5::dcplx_t']]],
-  ['rank_1',['rank',['../structh5_1_1array__interface_1_1dataset__info.html#a0fc80dbc508c3e2b43828d4b99243d55',1,'h5::array_interface::dataset_info::rank()'],['../structh5_1_1array__interface_1_1hyperslab.html#aff49a217940d2714b3348ec18099970c',1,'h5::array_interface::hyperslab::rank()'],['../structh5_1_1array__interface_1_1array__view.html#ac1398ca13cc0d8b87c456171058c79cd',1,'h5::array_interface::array_view::rank()']]],
-  ['read_2',['read',['../group__rw__arrayinterface.html#ga31fd36bfc407821a00d20f2105c1684e',1,'h5::array_interface::read()'],['../group__rw__generic.html#gabf688ff83a3b4c62d1bfea507d30b077',1,'h5::read(group g, std::string const &amp;key)'],['../group__rw__generic.html#ga630837c909b20edca6a7a43085daf093',1,'h5::read(group g, std::string const &amp;key, T &amp;x, auto const &amp;...args)']]],
-  ['read_20a_202_20dimensional_20array_3',['Example 1: Write/Read a 2-dimensional array',['../ex1.html',1,'']]],
-  ['read_20a_20custom_20c_20type_4',['Example 2: Write/Read a custom C++ type',['../ex2.html',1,'']]],
-  ['read_20and_20write_20from_20to_20hdf5_5',['Read and write from to HDF5',['../group__readwrite.html',1,'Read and write from/to HDF5'],['../documentation.html#autotoc_md16',1,'Read and write from/to HDF5']]],
-  ['read_20write_6',['Generic read/write',['../group__rw__generic.html',1,'']]],
-  ['read_5fattribute_7',['read_attribute',['../group__rw__arrayinterface.html#ga21edb3ab3635dbd5dd00617cde0bbd34',1,'h5::array_interface::read_attribute()'],['../group__rw__generic.html#gac4aa5bd61dff8357205c67619bc8aed9',1,'h5::read_attribute(object obj, std::string const &amp;key)'],['../group__rw__generic.html#ga0559402f9239bea8bc290f01e55e354b',1,'h5::read_attribute(object obj, std::string const &amp;key, T &amp;x)']]],
-  ['read_5fhdf5_5fformat_8',['read_hdf5_format',['../group__format.html#gac9b5e2d04a3501fe65bd9566f68451c1',1,'h5::read_hdf5_format(object obj, std::string &amp;s)'],['../group__format.html#ga1f1aaf105f4d08f1e0e23dce4be3a9cd',1,'h5::read_hdf5_format(object obj)']]],
-  ['read_5fhdf5_5fformat_5ffrom_5fkey_9',['read_hdf5_format_from_key',['../group__format.html#gadd5cf864d70631a4038ebc1b7a305674',1,'h5']]]
+  ['pair_2ehpp_0',['pair.hpp',['../pair_8hpp.html',1,'']]],
+  ['parent_5fshape_1',['parent_shape',['../structh5_1_1array__interface_1_1array__view.html#a6afc653e8f3f998c7f1de7b0429ebe9f',1,'h5::array_interface::array_view']]],
+  ['projects_2',['Integration in C++ projects',['../integration.html',1,'']]],
+  ['proplist_3',['proplist',['../group__data__model.html#gaaeba12898bf632f53beb56f017165142',1,'h5']]],
+  ['python_20interface_20utilities_4',['Python interface utilities',['../group__python-utils.html',1,'Python interface utilities'],['../documentation.html#autotoc_md24',1,'Python interface utilities']]]
 ];

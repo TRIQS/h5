@@ -1,6 +1,8 @@
 var searchData=
 [
-  ['serialize_0',['serialize',['../group__serialize.html#gad2bcd8f6dac5f1b4d3726c5ba86b0ee6',1,'h5']]],
-  ['shape_1',['shape',['../structh5_1_1array__interface_1_1hyperslab.html#aedf629d6a7106753636b53c02fef52e4',1,'h5::array_interface::hyperslab']]],
-  ['size_2',['size',['../structh5_1_1array__interface_1_1hyperslab.html#a3da1a6f01c8e55e911f0cbc07d4f7814',1,'h5::array_interface::hyperslab']]]
+  ['rank_0',['rank',['../structh5_1_1array__interface_1_1dataset__info.html#a0fc80dbc508c3e2b43828d4b99243d55',1,'h5::array_interface::dataset_info::rank()'],['../structh5_1_1array__interface_1_1hyperslab.html#aff49a217940d2714b3348ec18099970c',1,'h5::array_interface::hyperslab::rank()'],['../structh5_1_1array__interface_1_1array__view.html#ac1398ca13cc0d8b87c456171058c79cd',1,'h5::array_interface::array_view::rank()']]],
+  ['read_1',['read',['../group__rw__arrayinterface.html#ga31fd36bfc407821a00d20f2105c1684e',1,'h5::array_interface::read()'],['../group__rw__generic.html#gabf688ff83a3b4c62d1bfea507d30b077',1,'h5::read(group g, std::string const &amp;key)'],['../group__rw__generic.html#ga630837c909b20edca6a7a43085daf093',1,'h5::read(group g, std::string const &amp;key, T &amp;x, auto const &amp;...args)']]],
+  ['read_5fattribute_2',['read_attribute',['../classh5_1_1group.html#a82259ce6cb8844541759494b8caec33f',1,'h5::group::read_attribute()'],['../group__rw__arrayinterface.html#ga21edb3ab3635dbd5dd00617cde0bbd34',1,'h5::array_interface::read_attribute()'],['../group__rw__generic.html#gac4aa5bd61dff8357205c67619bc8aed9',1,'h5::read_attribute(object obj, std::string const &amp;key)'],['../group__rw__generic.html#ga0559402f9239bea8bc290f01e55e354b',1,'h5::read_attribute(object obj, std::string const &amp;key, T &amp;x)']]],
+  ['read_5fhdf5_5fformat_3',['read_hdf5_format',['../group__format.html#gac9b5e2d04a3501fe65bd9566f68451c1',1,'h5::read_hdf5_format(object obj, std::string &amp;s)'],['../group__format.html#ga1f1aaf105f4d08f1e0e23dce4be3a9cd',1,'h5::read_hdf5_format(object obj)']]],
+  ['read_5fhdf5_5fformat_5ffrom_5fkey_4',['read_hdf5_format_from_key',['../classh5_1_1group.html#ae92ccad49a3f6654ee4697367409afeb',1,'h5::group::read_hdf5_format_from_key()'],['../group__format.html#gadd5cf864d70631a4038ebc1b7a305674',1,'h5::read_hdf5_format_from_key()']]]
 ];

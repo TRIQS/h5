@@ -5,12 +5,14 @@ var searchData=
   ['file_2ecpp_2',['file.cpp',['../file_8cpp.html',1,'']]],
   ['file_2ehpp_3',['file.hpp',['../file_8hpp.html',1,'']]],
   ['find_5fpackage_4',['find_package',['../integration.html#find_package',1,'']]],
-  ['fixes_5',['fixes',['../changelog.html#autotoc_md8',1,'']]],
-  ['flush_6',['flush',['../classh5_1_1file.html#aa500f2d00caaa3d805c47e5b5df79aaf',1,'h5::file']]],
-  ['format_20tags_7',['Format tags',['../group__format.html',1,'']]],
-  ['format_2ecpp_8',['format.cpp',['../format_8cpp.html',1,'']]],
-  ['format_2ehpp_9',['format.hpp',['../format_8hpp.html',1,'']]],
-  ['from_20to_20hdf5_10',['from to HDF5',['../group__readwrite.html',1,'Read and write from/to HDF5'],['../documentation.html#autotoc_md16',1,'Read and write from/to HDF5']]],
-  ['from_5fborrowed_11',['from_borrowed',['../classh5_1_1object.html#ad135921dec5ce61f826a229171560da5',1,'h5::object']]],
-  ['from_5fchar_5fbuf_12',['from_char_buf',['../group__rw__vector.html#ga83718503f95287c96893b583d46cb46e',1,'h5::from_char_buf(char_buf const &amp;cb, std::vector&lt; std::string &gt; &amp;v)'],['../group__rw__vector.html#ga0be3a9e3f0e5c6204b5a538159fad3b5',1,'h5::from_char_buf(char_buf const &amp;cb, std::vector&lt; std::vector&lt; std::string &gt; &gt; &amp;v)']]]
+  ['fix_5',['fix',['../changelog.html#autotoc_md3',1,'']]],
+  ['fixes_6',['fixes',['../changelog.html#autotoc_md13',1,'']]],
+  ['flush_7',['flush',['../classh5_1_1file.html#aa500f2d00caaa3d805c47e5b5df79aaf',1,'h5::file']]],
+  ['format_20tags_8',['Format tags',['../group__format.html',1,'']]],
+  ['format_2ecpp_9',['format.cpp',['../format_8cpp.html',1,'']]],
+  ['format_2ehpp_10',['format.hpp',['../format_8hpp.html',1,'']]],
+  ['from_20hdf5_11',['Read and write to/from HDF5',['../documentation.html#autotoc_md21',1,'']]],
+  ['from_20to_20hdf5_12',['Read and write from/to HDF5',['../group__readwrite.html',1,'']]],
+  ['from_5fborrowed_13',['from_borrowed',['../classh5_1_1object.html#ad135921dec5ce61f826a229171560da5',1,'h5::object']]],
+  ['from_5fchar_5fbuf_14',['from_char_buf',['../group__rw__vector.html#ga83718503f95287c96893b583d46cb46e',1,'h5::from_char_buf(char_buf const &amp;cb, std::vector&lt; std::string &gt; &amp;v)'],['../group__rw__vector.html#ga0be3a9e3f0e5c6204b5a538159fad3b5',1,'h5::from_char_buf(char_buf const &amp;cb, std::vector&lt; std::vector&lt; std::string &gt; &gt; &amp;v)']]]
 ];
