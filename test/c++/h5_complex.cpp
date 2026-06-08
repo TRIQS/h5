@@ -44,6 +44,23 @@ TEST(H5, ComplexBackwardCompatibility) {
   }
 };
 
+TEST(H5, ComplexAttribute) {
+  // write and read a std::complex<double> scalar as an HDF5 attribute
+  std::complex<double> z{1.0, 2.0};
+
+  {
+    h5::file file("complex_attr.h5", 'w');
+    h5::write_attribute(file, "z", z);
+  }
+
+  {
+    h5::file file("complex_attr.h5", 'r');
+    std::complex<double> z_in;
+    h5::read_attribute(file, "z", z_in);
+    EXPECT_EQ(z, z_in);
+  }
+};
+
 TEST(H5, ComplexCompoundType) {
   // write an array of h5::dxplx_t and read it into an array of std::complex<double>
   std::array<h5::dcplx_t, 4> arr = {h5::dcplx_t{0.0, 0.0}, h5::dcplx_t{0.0, 1.0}, h5::dcplx_t{1.0, 0.0}, h5::dcplx_t{1.0, 1.0}};
