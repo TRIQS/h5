@@ -60,28 +60,10 @@ namespace h5 {
     std::visit([&](auto const &x) { h5_write(g, name, x); }, v);
   }
 
-  namespace detail {
-
-    // Helper function to read a `std::variant` from HDF5.
-    template <typename VT, typename U, typename... Ts>
-    void h5_read_variant_helper(VT &v, datatype dt, group g, std::string const &name) {
-      // finds the correct h5_read recursively
-      if (hdf5_type_equal(hdf5_type<U>(), dt)) {
-        v = VT{h5_read<U>(g, name)};
-        return;
-      }
-      if constexpr (sizeof...(Ts) > 0)
-        h5_read_variant_helper<VT, Ts...>(v, dt, g, name);
-      else
-        throw std::runtime_error("Error in h5_read_variant_helper: Type stored in the variant has no corresponding HDF5 datatype");
-    }
-
-  } // namespace detail
-
   /**
    * @brief Read a `std::variant` from an HDF5 dataset.
    *
-   * @warning This function only works, if name points to a dataset and not a group. Depending on the HDF5 datatype of 
+   * @warning This function only works, if name points to a dataset and not a group. Depending on the HDF5 datatype of
    * the dataset, it calls the specialized `h5_read`.
    *
    * @tparam Ts Variant types.
@@ -93,9 +75,15 @@ namespace h5 {
   void h5_read(group g, std::string const &name, std::variant<Ts...> &v) {
     // name is a group --> triqs object
     // assume for the moment, name is a dataset.
-    dataset ds  = g.open_dataset(name);
-    datatype dt = get_hdf5_type(ds);
-    detail::h5_read_variant_helper<std::variant<Ts...>, Ts...>(v, dt, g, name);
+    dataset ds    = g.open_dataset(name);
+    datatype dt   = get_hdf5_type(ds);
+    auto try_read = [&]<typename T>(std::type_identity<T>) {
+      if (!hdf5_type_equal(hdf5_type<T>(), dt)) return false;
+      v = h5_read<T>(g, name);
+      return true;
+    };
+    if ((try_read(std::type_identity<Ts>{}) || ...)) return;
+    throw std::runtime_error("Error in h5_read for std::variant: stored HDF5 datatype matches no variant alternative");
   }
 
   /**
@@ -128,7 +116,7 @@ namespace h5 {
     datatype dt   = get_hdf5_attribute_type(obj, name);
     auto try_read = [&]<typename U>(std::type_identity<U>) {
       if (!hdf5_type_equal(hdf5_type<U>(), dt)) return false;
-      v = std::variant<Ts...>{h5_read_attribute<U>(obj, name)};
+      v = h5_read_attribute<U>(obj, name);
       return true;
     };
     if ((try_read(std::type_identity<Ts>{}) || ...)) return;
