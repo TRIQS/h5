@@ -24,6 +24,7 @@
 #include "./object.hpp"
 #include "./utils.hpp"
 
+#include <H5Apublic.h>
 #include <H5Ipublic.h>
 #include <H5Fpublic.h>
 #include <H5Gpublic.h>
@@ -194,6 +195,11 @@ namespace h5 {
   }
 
   datatype get_hdf5_type(dataset ds) { return H5Dget_type(ds); }
+
+  datatype get_hdf5_attribute_type(object obj, std::string const &name) {
+    attribute attr = H5Aopen(obj, name.c_str(), H5P_DEFAULT);
+    return H5Aget_type(attr);
+  }
 
   bool hdf5_type_equal(datatype dt1, datatype dt2) {
     // for strings check only if they are both of the class H5T_STRING

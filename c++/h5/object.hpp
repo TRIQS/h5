@@ -176,6 +176,15 @@ namespace h5 {
   [[nodiscard]] datatype get_hdf5_type(dataset ds);
 
   /**
+   * @brief Get the HDF5 type of a named attribute attached to a given h5::object.
+   *
+   * @param obj h5::object to which the attribute is attached.
+   * @param name Name of the attribute.
+   * @return h5::datatype of the given attribute.
+   */
+  [[nodiscard]] datatype get_hdf5_attribute_type(object obj, std::string const &name);
+
+  /**
    * @brief Check if two HDF5 datatypes are equal.
    *
    * @details For string types, this function only checks if they are both of the class `H5T_STRING`.
