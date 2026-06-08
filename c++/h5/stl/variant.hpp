@@ -29,6 +29,7 @@
 
 #include <stdexcept>
 #include <string>
+#include <type_traits>
 #include <variant>
 
 namespace h5 {
@@ -95,6 +96,43 @@ namespace h5 {
     dataset ds  = g.open_dataset(name);
     datatype dt = get_hdf5_type(ds);
     detail::h5_read_variant_helper<std::variant<Ts...>, Ts...>(v, dt, g, name);
+  }
+
+  /**
+   * @brief Write a `std::variant` to an HDF5 attribute.
+   *
+   * @details Calls the specialized `h5_write_attribute` for the type currently stored in the `std::variant`.
+   *
+   * @tparam Ts Variant types.
+   * @param obj h5::object to which the attribute is attached.
+   * @param name Name of the attribute.
+   * @param v `std::variant` to be written.
+   */
+  template <typename... Ts>
+  void h5_write_attribute(object obj, std::string const &name, std::variant<Ts...> const &v) {
+    std::visit([&](auto const &x) { h5_write_attribute(obj, name, x); }, v);
+  }
+
+  /**
+   * @brief Read a `std::variant` from an HDF5 attribute.
+   *
+   * @details Depending on the HDF5 datatype of the attribute, it calls the specialized `h5_read_attribute`.
+   *
+   * @tparam Ts Variant types.
+   * @param obj h5::object to which the attribute is attached.
+   * @param name Name of the attribute.
+   * @param v `std::variant` to read into.
+   */
+  template <typename... Ts>
+  void h5_read_attribute(object obj, std::string const &name, std::variant<Ts...> &v) {
+    datatype dt   = get_hdf5_attribute_type(obj, name);
+    auto try_read = [&]<typename U>(std::type_identity<U>) {
+      if (!hdf5_type_equal(hdf5_type<U>(), dt)) return false;
+      v = std::variant<Ts...>{h5_read_attribute<U>(obj, name)};
+      return true;
+    };
+    if ((try_read(std::type_identity<Ts>{}) || ...)) return;
+    throw std::runtime_error("Error in h5_read_attribute for std::variant: stored HDF5 datatype matches no variant alternative");
   }
 
   /** @} */
