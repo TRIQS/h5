@@ -262,10 +262,13 @@ namespace h5::array_interface {
     attribute attr = H5Aopen(obj, name.c_str(), H5P_DEFAULT);
     if (!attr.is_valid()) throw std::runtime_error("Error in h5::array_interface::read_attribute: Opening the attribute " + name + " failed");
 
-    // get dataspace information
+    // check that the attribute's rank matches the view's rank (write_attribute writes v.rank(), which is 1
+    // for complex scalars due to the trailing-2 FLOAT convention)
     dataspace space = H5Aget_space(attr);
     int rank        = H5Sget_simple_extent_ndims(space);
-    if (rank != 0) throw std::runtime_error("Error in h5::array_interface::read_attribute: Attribute " + name + " has a rank != 0");
+    if (rank != v.rank())
+      throw std::runtime_error("Error in h5::array_interface::read_attribute: Attribute " + name + " has rank " + std::to_string(rank)
+                               + " but the view has rank " + std::to_string(v.rank()));
 
     // get datatype information
     auto eq = H5Tequal(H5Aget_type(attr), v.ty);
