@@ -66,24 +66,23 @@ namespace h5 {
    * @warning This function only works, if name points to a dataset and not a group. Depending on the HDF5 datatype of
    * the dataset, it calls the specialized `h5_read`.
    *
-   * @tparam Ts Variant types.
+   * @tparam T,Ts Variant alternative types.
    * @param g h5::group containing the dataset.
    * @param name Name of the dataset from which the `std::variant` is read.
    * @param v `std::variant` to read into.
    */
-  template <typename... Ts>
-  void h5_read(group g, std::string const &name, std::variant<Ts...> &v) {
-    // name is a group --> triqs object
-    // assume for the moment, name is a dataset.
+  template <typename T, typename... Ts>
+  void h5_read(group g, std::string const &name, std::variant<T, Ts...> &v) {
     dataset ds    = g.open_dataset(name);
     datatype dt   = get_hdf5_type(ds);
-    auto try_read = [&]<typename T>(std::type_identity<T>) {
-      if (!hdf5_type_equal(hdf5_type<T>(), dt)) return false;
-      v = h5_read<T>(g, name);
+    auto try_read = [&]<typename U>(std::type_identity<U>) {
+      if (!hdf5_type_equal(hdf5_type<U>(), dt)) return false;
+      v = h5_read<U>(g, name);
       return true;
     };
-    if ((try_read(std::type_identity<Ts>{}) || ...)) return;
-    throw std::runtime_error("Error in h5_read for std::variant: stored HDF5 datatype matches no variant alternative");
+    if ((try_read(std::type_identity<T>{}) || ... || try_read(std::type_identity<Ts>{}))) return;
+    throw std::runtime_error("Error in h5_read for std::variant: stored HDF5 datatype matches no variant alternative (allowed: "
+                             + (get_name_of_h5_type<T>() + ... + (", " + get_name_of_h5_type<Ts>())) + ")");
   }
 
   /**
@@ -106,21 +105,22 @@ namespace h5 {
    *
    * @details Depending on the HDF5 datatype of the attribute, it calls the specialized `h5_read_attribute`.
    *
-   * @tparam Ts Variant types.
+   * @tparam T,Ts Variant alternative types.
    * @param obj h5::object to which the attribute is attached.
    * @param name Name of the attribute.
    * @param v `std::variant` to read into.
    */
-  template <typename... Ts>
-  void h5_read_attribute(object obj, std::string const &name, std::variant<Ts...> &v) {
+  template <typename T, typename... Ts>
+  void h5_read_attribute(object obj, std::string const &name, std::variant<T, Ts...> &v) {
     datatype dt   = get_hdf5_attribute_type(obj, name);
     auto try_read = [&]<typename U>(std::type_identity<U>) {
       if (!hdf5_type_equal(hdf5_type<U>(), dt)) return false;
       v = h5_read_attribute<U>(obj, name);
       return true;
     };
-    if ((try_read(std::type_identity<Ts>{}) || ...)) return;
-    throw std::runtime_error("Error in h5_read_attribute for std::variant: stored HDF5 datatype matches no variant alternative");
+    if ((try_read(std::type_identity<T>{}) || ... || try_read(std::type_identity<Ts>{}))) return;
+    throw std::runtime_error("Error in h5_read_attribute for std::variant: stored HDF5 datatype matches no variant alternative (allowed: "
+                             + (get_name_of_h5_type<T>() + ... + (", " + get_name_of_h5_type<Ts>())) + ")");
   }
 
   /** @} */
