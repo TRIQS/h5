@@ -183,21 +183,27 @@ Classes</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-func-members" class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:ga7492178ba09ec065658b644a882a6418" id="r_ga7492178ba09ec065658b644a882a6418"><td class="memTemplParams" colspan="2">template&lt;typename... Ts&gt; </td></tr>
-<tr class="memitem:ga7492178ba09ec065658b644a882a6418 template"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#ga7492178ba09ec065658b644a882a6418">h5::h5_read</a> (<a class="el" href="classh5_1_1group.html">group</a> g, std::string const &amp;name, std::variant&lt; Ts... &gt; &amp;v)</td></tr>
-<tr class="memdesc:ga7492178ba09ec065658b644a882a6418"><td class="mdescLeft">&#160;</td><td class="mdescRight">Read a <span class="tt">std::variant</span> from an HDF5 dataset.  <br /></td></tr>
+<tr class="memitem:gafe9febe58b4edbb70d307769ae365127" id="r_gafe9febe58b4edbb70d307769ae365127"><td class="memTemplParams" colspan="2">template&lt;typename T, typename... Ts&gt; </td></tr>
+<tr class="memitem:gafe9febe58b4edbb70d307769ae365127 template"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#gafe9febe58b4edbb70d307769ae365127">h5::h5_read</a> (<a class="el" href="classh5_1_1group.html">group</a> g, std::string const &amp;name, std::variant&lt; T, Ts... &gt; &amp;v)</td></tr>
+<tr class="memdesc:gafe9febe58b4edbb70d307769ae365127"><td class="mdescLeft">&#160;</td><td class="mdescRight">Read a <span class="tt">std::variant</span> from an HDF5 dataset.  <br /></td></tr>
+<tr class="memitem:gae1ba086286340cce5873faf6872a73b9" id="r_gae1ba086286340cce5873faf6872a73b9"><td class="memTemplParams" colspan="2">template&lt;typename T, typename... Ts&gt; </td></tr>
+<tr class="memitem:gae1ba086286340cce5873faf6872a73b9 template"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#gae1ba086286340cce5873faf6872a73b9">h5::h5_read_attribute</a> (<a class="el" href="classh5_1_1object.html">object</a> obj, std::string const &amp;name, std::variant&lt; T, Ts... &gt; &amp;v)</td></tr>
+<tr class="memdesc:gae1ba086286340cce5873faf6872a73b9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Read a <span class="tt">std::variant</span> from an HDF5 attribute.  <br /></td></tr>
 <tr class="memitem:gaf8ca71b6a52d8382ccca1396f1423eb8" id="r_gaf8ca71b6a52d8382ccca1396f1423eb8"><td class="memTemplParams" colspan="2">template&lt;typename... Ts&gt; </td></tr>
 <tr class="memitem:gaf8ca71b6a52d8382ccca1396f1423eb8 template"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#gaf8ca71b6a52d8382ccca1396f1423eb8">h5::h5_write</a> (<a class="el" href="classh5_1_1group.html">group</a> g, std::string const &amp;name, std::variant&lt; Ts... &gt; const &amp;v)</td></tr>
 <tr class="memdesc:gaf8ca71b6a52d8382ccca1396f1423eb8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Write a <span class="tt">std::variant</span> to an HDF5 dataset/subgroup.  <br /></td></tr>
+<tr class="memitem:ga887ea1972df7d9f38d7bb679409271d3" id="r_ga887ea1972df7d9f38d7bb679409271d3"><td class="memTemplParams" colspan="2">template&lt;typename... Ts&gt; </td></tr>
+<tr class="memitem:ga887ea1972df7d9f38d7bb679409271d3 template"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#ga887ea1972df7d9f38d7bb679409271d3">h5::h5_write_attribute</a> (<a class="el" href="classh5_1_1object.html">object</a> obj, std::string const &amp;name, std::variant&lt; Ts... &gt; const &amp;v)</td></tr>
+<tr class="memdesc:ga887ea1972df7d9f38d7bb679409271d3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Write a <span class="tt">std::variant</span> to an HDF5 attribute.  <br /></td></tr>
 </table>
 <a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Function Documentation</h2>
-<a id="ga7492178ba09ec065658b644a882a6418" name="ga7492178ba09ec065658b644a882a6418"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ga7492178ba09ec065658b644a882a6418">&#9670;&#160;</a></span>h5_read()</h2>
+<a id="gafe9febe58b4edbb70d307769ae365127" name="gafe9febe58b4edbb70d307769ae365127"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gafe9febe58b4edbb70d307769ae365127">&#9670;&#160;</a></span>h5_read()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename... Ts&gt; </div>
+template&lt;typename T, typename... Ts&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">void h5::h5_read </td>
@@ -212,7 +218,7 @@ template&lt;typename... Ts&gt; </div>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">std::variant&lt; Ts... &gt; &amp;</td>          <td class="paramname"><span class="paramname"><em>v</em></span>&#160;)</td>
+          <td class="paramtype">std::variant&lt; T, Ts... &gt; &amp;</td>          <td class="paramname"><span class="paramname"><em>v</em></span>&#160;)</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -223,7 +229,7 @@ template&lt;typename... Ts&gt; </div>
 <dl class="section warning"><dt>Warning</dt><dd>This function only works, if name points to a dataset and not a group. Depending on the HDF5 datatype of the dataset, it calls the specialized <span class="tt"><a class="el" href="group__rw__generic.html#ga4b45370a6f04082744435a3a91e3f977" title="Generic implementation for reading from an HDF5 dataset/subgroup.">h5_read</a></span>.</dd></dl>
 <dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
-    <tr><td class="paramname">Ts</td><td>Variant types. </td></tr>
+    <tr><td class="paramname">T,Ts</td><td>Variant alternative types. </td></tr>
   </table>
   </dd>
 </dl>
@@ -236,7 +242,56 @@ template&lt;typename... Ts&gt; </div>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="variant_8hpp_source.html#l00092">92</a> of file <a class="el" href="variant_8hpp_source.html">variant.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="variant_8hpp_source.html#l00075">75</a> of file <a class="el" href="variant_8hpp_source.html">variant.hpp</a>.</p>
+
+</div>
+</div>
+<a id="gae1ba086286340cce5873faf6872a73b9" name="gae1ba086286340cce5873faf6872a73b9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gae1ba086286340cce5873faf6872a73b9">&#9670;&#160;</a></span>h5_read_attribute()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T, typename... Ts&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">void h5::h5_read_attribute </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classh5_1_1object.html">object</a></td>          <td class="paramname"><span class="paramname"><em>obj</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::string const &amp;</td>          <td class="paramname"><span class="paramname"><em>name</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::variant&lt; T, Ts... &gt; &amp;</td>          <td class="paramname"><span class="paramname"><em>v</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p><code>#include &lt;<a class="el" href="variant_8hpp.html">h5/stl/variant.hpp</a>&gt;</code></p>
+
+<p>Read a <span class="tt">std::variant</span> from an HDF5 attribute. </p>
+<p>Depending on the HDF5 datatype of the attribute, it calls the specialized <span class="tt"><a class="el" href="group__rw__generic.html#gafe03e145254638a3cec1cc59f3b0e857" title="Generic implementation for reading an HDF5 attribute.">h5_read_attribute</a></span>.</p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">T,Ts</td><td>Variant alternative types. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">obj</td><td><a class="el" href="classh5_1_1object.html" title="A generic handle for HDF5 objects.">h5::object</a> to which the attribute is attached. </td></tr>
+    <tr><td class="paramname">name</td><td>Name of the attribute. </td></tr>
+    <tr><td class="paramname">v</td><td><span class="tt">std::variant</span> to read into. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="variant_8hpp_source.html#l00114">114</a> of file <a class="el" href="variant_8hpp_source.html">variant.hpp</a>.</p>
 
 </div>
 </div>
@@ -285,7 +340,56 @@ template&lt;typename... Ts&gt; </div>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="variant_8hpp_source.html#l00058">58</a> of file <a class="el" href="variant_8hpp_source.html">variant.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="variant_8hpp_source.html#l00059">59</a> of file <a class="el" href="variant_8hpp_source.html">variant.hpp</a>.</p>
+
+</div>
+</div>
+<a id="ga887ea1972df7d9f38d7bb679409271d3" name="ga887ea1972df7d9f38d7bb679409271d3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga887ea1972df7d9f38d7bb679409271d3">&#9670;&#160;</a></span>h5_write_attribute()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename... Ts&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">void h5::h5_write_attribute </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classh5_1_1object.html">object</a></td>          <td class="paramname"><span class="paramname"><em>obj</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::string const &amp;</td>          <td class="paramname"><span class="paramname"><em>name</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::variant&lt; Ts... &gt; const &amp;</td>          <td class="paramname"><span class="paramname"><em>v</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p><code>#include &lt;<a class="el" href="variant_8hpp.html">h5/stl/variant.hpp</a>&gt;</code></p>
+
+<p>Write a <span class="tt">std::variant</span> to an HDF5 attribute. </p>
+<p>Calls the specialized <span class="tt"><a class="el" href="group__rw__string.html#gad482781810b69ada2b827be10cfa3512" title="Write a std::string to an HDF5 attribute.">h5_write_attribute</a></span> for the type currently stored in the <span class="tt">std::variant</span>.</p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">Ts</td><td>Variant types. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">obj</td><td><a class="el" href="classh5_1_1object.html" title="A generic handle for HDF5 objects.">h5::object</a> to which the attribute is attached. </td></tr>
+    <tr><td class="paramname">name</td><td>Name of the attribute. </td></tr>
+    <tr><td class="paramname">v</td><td><span class="tt">std::variant</span> to be written. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="variant_8hpp_source.html#l00099">99</a> of file <a class="el" href="variant_8hpp_source.html">variant.hpp</a>.</p>
 
 </div>
 </div>

@@ -136,6 +136,7 @@ document.addEventListener('DOMContentLoaded',() => { initNavTree('variant_8hpp.h
 <code>#include &quot;<a class="el" href="string_8hpp_source.html">./string.hpp</a>&quot;</code><br />
 <code>#include &lt;stdexcept&gt;</code><br />
 <code>#include &lt;string&gt;</code><br />
+<code>#include &lt;type_traits&gt;</code><br />
 <code>#include &lt;variant&gt;</code><br />
 </div><a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Provides functions to read/write <span class="tt">std::variant</span> object from/to HDF5. </p>
@@ -151,12 +152,18 @@ Classes</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-func-members" class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:ga7492178ba09ec065658b644a882a6418" id="r_ga7492178ba09ec065658b644a882a6418"><td class="memTemplParams" colspan="2">template&lt;typename... Ts&gt; </td></tr>
-<tr class="memitem:ga7492178ba09ec065658b644a882a6418 template"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="group__rw__variant.html#ga7492178ba09ec065658b644a882a6418">h5::h5_read</a> (<a class="el" href="classh5_1_1group.html">group</a> g, std::string const &amp;name, std::variant&lt; Ts... &gt; &amp;v)</td></tr>
-<tr class="memdesc:ga7492178ba09ec065658b644a882a6418"><td class="mdescLeft">&#160;</td><td class="mdescRight">Read a <span class="tt">std::variant</span> from an HDF5 dataset.  <br /></td></tr>
+<tr class="memitem:gafe9febe58b4edbb70d307769ae365127" id="r_gafe9febe58b4edbb70d307769ae365127"><td class="memTemplParams" colspan="2">template&lt;typename T, typename... Ts&gt; </td></tr>
+<tr class="memitem:gafe9febe58b4edbb70d307769ae365127 template"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="group__rw__variant.html#gafe9febe58b4edbb70d307769ae365127">h5::h5_read</a> (<a class="el" href="classh5_1_1group.html">group</a> g, std::string const &amp;name, std::variant&lt; T, Ts... &gt; &amp;v)</td></tr>
+<tr class="memdesc:gafe9febe58b4edbb70d307769ae365127"><td class="mdescLeft">&#160;</td><td class="mdescRight">Read a <span class="tt">std::variant</span> from an HDF5 dataset.  <br /></td></tr>
+<tr class="memitem:gae1ba086286340cce5873faf6872a73b9" id="r_gae1ba086286340cce5873faf6872a73b9"><td class="memTemplParams" colspan="2">template&lt;typename T, typename... Ts&gt; </td></tr>
+<tr class="memitem:gae1ba086286340cce5873faf6872a73b9 template"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="group__rw__variant.html#gae1ba086286340cce5873faf6872a73b9">h5::h5_read_attribute</a> (<a class="el" href="classh5_1_1object.html">object</a> obj, std::string const &amp;name, std::variant&lt; T, Ts... &gt; &amp;v)</td></tr>
+<tr class="memdesc:gae1ba086286340cce5873faf6872a73b9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Read a <span class="tt">std::variant</span> from an HDF5 attribute.  <br /></td></tr>
 <tr class="memitem:gaf8ca71b6a52d8382ccca1396f1423eb8" id="r_gaf8ca71b6a52d8382ccca1396f1423eb8"><td class="memTemplParams" colspan="2">template&lt;typename... Ts&gt; </td></tr>
 <tr class="memitem:gaf8ca71b6a52d8382ccca1396f1423eb8 template"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="group__rw__variant.html#gaf8ca71b6a52d8382ccca1396f1423eb8">h5::h5_write</a> (<a class="el" href="classh5_1_1group.html">group</a> g, std::string const &amp;name, std::variant&lt; Ts... &gt; const &amp;v)</td></tr>
 <tr class="memdesc:gaf8ca71b6a52d8382ccca1396f1423eb8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Write a <span class="tt">std::variant</span> to an HDF5 dataset/subgroup.  <br /></td></tr>
+<tr class="memitem:ga887ea1972df7d9f38d7bb679409271d3" id="r_ga887ea1972df7d9f38d7bb679409271d3"><td class="memTemplParams" colspan="2">template&lt;typename... Ts&gt; </td></tr>
+<tr class="memitem:ga887ea1972df7d9f38d7bb679409271d3 template"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="group__rw__variant.html#ga887ea1972df7d9f38d7bb679409271d3">h5::h5_write_attribute</a> (<a class="el" href="classh5_1_1object.html">object</a> obj, std::string const &amp;name, std::variant&lt; Ts... &gt; const &amp;v)</td></tr>
+<tr class="memdesc:ga887ea1972df7d9f38d7bb679409271d3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Write a <span class="tt">std::variant</span> to an HDF5 attribute.  <br /></td></tr>
 </table>
 </div><!-- contents -->
 </div><!-- doc-content -->

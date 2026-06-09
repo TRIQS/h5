@@ -140,8 +140,13 @@ Classes</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-func-members" class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
+<tr class="memitem:ga3e22dda1735a1c28aeef30284219fc7d" id="r_ga3e22dda1735a1c28aeef30284219fc7d"><td class="memItemLeft"><a class="el" href="group__data__model.html#ga177e858254a3d1ab84a707a225fa4b1f">datatype</a>&#160;</td><td class="memItemRight"><a class="el" href="#ga3e22dda1735a1c28aeef30284219fc7d">h5::get_hdf5_attribute_type</a> (<a class="el" href="classh5_1_1object.html">object</a> obj, std::string const &amp;name)</td></tr>
+<tr class="memdesc:ga3e22dda1735a1c28aeef30284219fc7d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the HDF5 type of a named attribute attached to a given <a class="el" href="classh5_1_1object.html" title="A generic handle for HDF5 objects.">h5::object</a>.  <br /></td></tr>
 <tr class="memitem:ga9663a6cefb9589bafc7185f7c45563fc" id="r_ga9663a6cefb9589bafc7185f7c45563fc"><td class="memItemLeft"><a class="el" href="group__data__model.html#ga177e858254a3d1ab84a707a225fa4b1f">datatype</a>&#160;</td><td class="memItemRight"><a class="el" href="#ga9663a6cefb9589bafc7185f7c45563fc">h5::get_hdf5_type</a> (<a class="el" href="group__data__model.html#ga4ebc846edbef1306c242c2d3fad9d786">dataset</a> ds)</td></tr>
 <tr class="memdesc:ga9663a6cefb9589bafc7185f7c45563fc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the HDF5 type stored in a given <a class="el" href="group__data__model.html#ga4ebc846edbef1306c242c2d3fad9d786" title="Type alias for an HDF5 dataset.">h5::dataset</a>.  <br /></td></tr>
+<tr class="memitem:ga9ff570e8fc0a7937424ac3d8a075129c" id="r_ga9ff570e8fc0a7937424ac3d8a075129c"><td class="memTemplParams" colspan="2">template&lt;typename T&gt; </td></tr>
+<tr class="memitem:ga9ff570e8fc0a7937424ac3d8a075129c template"><td class="memItemLeft">std::string&#160;</td><td class="memItemRight"><a class="el" href="#ga9ff570e8fc0a7937424ac3d8a075129c">h5::get_name_of_h5_type</a> ()</td></tr>
+<tr class="memdesc:ga9ff570e8fc0a7937424ac3d8a075129c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the name of the HDF5 datatype corresponding to a C++ type.  <br /></td></tr>
 <tr class="memitem:ga9b4181108d25ba467cf17dd150d9fb9a" id="r_ga9b4181108d25ba467cf17dd150d9fb9a"><td class="memItemLeft">std::string&#160;</td><td class="memItemRight"><a class="el" href="#ga9b4181108d25ba467cf17dd150d9fb9a">h5::get_name_of_h5_type</a> (<a class="el" href="group__data__model.html#ga177e858254a3d1ab84a707a225fa4b1f">datatype</a> dt)</td></tr>
 <tr class="memdesc:ga9b4181108d25ba467cf17dd150d9fb9a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the name of an <a class="el" href="group__data__model.html#ga177e858254a3d1ab84a707a225fa4b1f" title="Type alias for an HDF5 datatype.">h5::datatype</a> (for error messages).  <br /></td></tr>
 <tr class="memitem:ga92724d6ad97c1cbab14a73477693620d" id="r_ga92724d6ad97c1cbab14a73477693620d"><td class="memTemplParams" colspan="2">template&lt;typename T&gt; </td></tr>
@@ -157,6 +162,49 @@ Variables</h2></td></tr>
 <tr class="memdesc:ga55e04870d75c17e740a6e757ac25fa7b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Boolean type trait set to true for <span class="tt">std::complex</span> types.  <br /></td></tr>
 </table>
 <a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Function Documentation</h2>
+<a id="ga3e22dda1735a1c28aeef30284219fc7d" name="ga3e22dda1735a1c28aeef30284219fc7d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga3e22dda1735a1c28aeef30284219fc7d">&#9670;&#160;</a></span>get_hdf5_attribute_type()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="group__data__model.html#ga177e858254a3d1ab84a707a225fa4b1f">datatype</a> h5::get_hdf5_attribute_type </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classh5_1_1object.html">object</a></td>          <td class="paramname"><span class="paramname"><em>obj</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::string const &amp;</td>          <td class="paramname"><span class="paramname"><em>name</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel nodiscard">nodiscard</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p><code>#include &lt;<a class="el" href="object_8cpp.html">h5/object.cpp</a>&gt;</code></p>
+
+<p>Get the HDF5 type of a named attribute attached to a given <a class="el" href="classh5_1_1object.html" title="A generic handle for HDF5 objects.">h5::object</a>. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">obj</td><td><a class="el" href="classh5_1_1object.html" title="A generic handle for HDF5 objects.">h5::object</a> to which the attribute is attached. </td></tr>
+    <tr><td class="paramname">name</td><td>Name of the attribute. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><a class="el" href="group__data__model.html#ga177e858254a3d1ab84a707a225fa4b1f" title="Type alias for an HDF5 datatype.">h5::datatype</a> of the given attribute. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="object_8cpp_source.html#l00199">199</a> of file <a class="el" href="object_8cpp_source.html">object.cpp</a>.</p>
+
+</div>
+</div>
 <a id="ga9663a6cefb9589bafc7185f7c45563fc" name="ga9663a6cefb9589bafc7185f7c45563fc"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ga9663a6cefb9589bafc7185f7c45563fc">&#9670;&#160;</a></span>get_hdf5_type()</h2>
 
@@ -191,12 +239,52 @@ Variables</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd><a class="el" href="group__data__model.html#ga177e858254a3d1ab84a707a225fa4b1f" title="Type alias for an HDF5 datatype.">h5::datatype</a> of the given <a class="el" href="group__data__model.html#ga4ebc846edbef1306c242c2d3fad9d786" title="Type alias for an HDF5 dataset.">h5::dataset</a>. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="object_8cpp_source.html#l00196">196</a> of file <a class="el" href="object_8cpp_source.html">object.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="object_8cpp_source.html#l00197">197</a> of file <a class="el" href="object_8cpp_source.html">object.cpp</a>.</p>
+
+</div>
+</div>
+<a id="ga9ff570e8fc0a7937424ac3d8a075129c" name="ga9ff570e8fc0a7937424ac3d8a075129c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga9ff570e8fc0a7937424ac3d8a075129c">&#9670;&#160;</a></span>get_name_of_h5_type() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string h5::get_name_of_h5_type </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel nodiscard">nodiscard</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p><code>#include &lt;<a class="el" href="object_8hpp.html">h5/object.hpp</a>&gt;</code></p>
+
+<p>Get the name of the HDF5 datatype corresponding to a C++ type. </p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">T</td><td>C++ type with a registered HDF5 datatype. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>String representation of the datatype. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="object_8hpp_source.html#l00177">177</a> of file <a class="el" href="object_8hpp_source.html">object.hpp</a>.</p>
 
 </div>
 </div>
 <a id="ga9b4181108d25ba467cf17dd150d9fb9a" name="ga9b4181108d25ba467cf17dd150d9fb9a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ga9b4181108d25ba467cf17dd150d9fb9a">&#9670;&#160;</a></span>get_name_of_h5_type()</h2>
+<h2 class="memtitle"><span class="permalink"><a href="#ga9b4181108d25ba467cf17dd150d9fb9a">&#9670;&#160;</a></span>get_name_of_h5_type() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -230,7 +318,7 @@ Variables</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>String representation of the datatype. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="object_8cpp_source.html#l00183">183</a> of file <a class="el" href="object_8cpp_source.html">object.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="object_8cpp_source.html#l00184">184</a> of file <a class="el" href="object_8cpp_source.html">object.cpp</a>.</p>
 
 </div>
 </div>
@@ -315,7 +403,7 @@ template&lt;typename T&gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>True, if the two datatypes are equal. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="object_8cpp_source.html#l00198">198</a> of file <a class="el" href="object_8cpp_source.html">object.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="object_8cpp_source.html#l00204">204</a> of file <a class="el" href="object_8cpp_source.html">object.cpp</a>.</p>
 
 </div>
 </div>
