@@ -168,6 +168,17 @@ namespace h5 {
   [[nodiscard]] std::string get_name_of_h5_type(datatype dt);
 
   /**
+   * @brief Get the name of the HDF5 datatype corresponding to a C++ type.
+   *
+   * @tparam T C++ type with a registered HDF5 datatype.
+   * @return String representation of the datatype.
+   */
+  template <typename T>
+  [[nodiscard]] std::string get_name_of_h5_type() {
+    return get_name_of_h5_type(hdf5_type<T>());
+  }
+
+  /**
    * @brief Get the HDF5 type stored in a given h5::dataset.
    *
    * @param ds h5::dataset.
