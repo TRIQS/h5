@@ -152,6 +152,8 @@ General</h3>
 <li>Add overloads for write_hdf5_format and assert_hdf5_format without deducing storage type</li>
 <li>Generalize std::map interface to allow for aribtrary comparison types</li>
 <li>Bug fix in <a class="el" href="group__rw__arrayinterface.html#ga78f90eb58218f72ee27f1ca9a2b14862" title="Given a view on an n-dimensional array (dataspace) by specifying its numpy/nda-style strides and its ...">h5::array_interface::get_parent_shape_and_h5_strides</a></li>
+<li>Read complex datasets written by Julia HDF5.jl and h5py that use the standard {r:double, i:double} HDF5 compound type (#13)</li>
+<li>Breaking: rename array_view::is_complex to has_cplx_trailing_dim to reflect the trailing-2-dim buffer-layout convention</li>
 </ul>
 <h3 class="doxsection"><a class="anchor" id="autotoc_md2"></a>
 doc</h3>

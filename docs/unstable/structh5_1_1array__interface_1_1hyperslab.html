@@ -166,8 +166,8 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ace87d943cb88861d74a6c573471cd27b" id="r_ace87d943cb88861d74a6c573471cd27b"><td class="memItemLeft"><a id="ace87d943cb88861d74a6c573471cd27b" name="ace87d943cb88861d74a6c573471cd27b"></a>
 &#160;</td><td class="memItemRight"><b>hyperslab</b> ()=default</td></tr>
 <tr class="memdesc:ace87d943cb88861d74a6c573471cd27b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default constructor leaves the hyperslab empty (uninitialized). <br /></td></tr>
-<tr class="memitem:acf3ef763b555242fcddb38a9e87e3664" id="r_acf3ef763b555242fcddb38a9e87e3664"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#acf3ef763b555242fcddb38a9e87e3664">hyperslab</a> (int rank, bool is_complex)</td></tr>
-<tr class="memdesc:acf3ef763b555242fcddb38a9e87e3664"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a new empty hyperslab for a dataspace of a given rank.  <br /></td></tr>
+<tr class="memitem:a838551b23cf79eeebe7aa5703d871d02" id="r_a838551b23cf79eeebe7aa5703d871d02"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#a838551b23cf79eeebe7aa5703d871d02">hyperslab</a> (int rank, bool has_cplx_trailing_dim)</td></tr>
+<tr class="memdesc:a838551b23cf79eeebe7aa5703d871d02"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a new empty hyperslab for a dataspace of a given rank.  <br /></td></tr>
 <tr class="memitem:a82054f634165800854078cbf0be1b3d9" id="r_a82054f634165800854078cbf0be1b3d9"><td class="memItemLeft"><a id="a82054f634165800854078cbf0be1b3d9" name="a82054f634165800854078cbf0be1b3d9"></a>
 bool&#160;</td><td class="memItemRight"><b>empty</b> () const</td></tr>
 <tr class="memdesc:a82054f634165800854078cbf0be1b3d9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check whether the hyperslab is empty (has been initialized). <br /></td></tr>
@@ -197,8 +197,8 @@ Public Attributes</h2></td></tr>
 <tr class="memdesc:a96339ebd637a1433dda2108eeed44092"><td class="mdescLeft">&#160;</td><td class="mdescRight">Stride in each dimension (in the HDF5 sense). <br /></td></tr>
 </table>
 <a name="doc-constructors" id="doc-constructors"></a><h2 id="header-doc-constructors" class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="acf3ef763b555242fcddb38a9e87e3664" name="acf3ef763b555242fcddb38a9e87e3664"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#acf3ef763b555242fcddb38a9e87e3664">&#9670;&#160;</a></span>hyperslab()</h2>
+<a id="a838551b23cf79eeebe7aa5703d871d02" name="a838551b23cf79eeebe7aa5703d871d02"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a838551b23cf79eeebe7aa5703d871d02">&#9670;&#160;</a></span>hyperslab()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -214,7 +214,7 @@ Public Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>is_complex</em></span>&#160;)</td>
+          <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>has_cplx_trailing_dim</em></span>&#160;)</td>
         </tr>
       </table>
   </td>
@@ -225,16 +225,16 @@ Public Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Construct a new empty hyperslab for a dataspace of a given rank. </p>
-<p>A complex hyperslab has an additional dimension for the imaginary part. By default, <span class="tt"><a class="el" href="#a968d4f8eef8d995c685b9baa36b2fbbc" title="Index offset for each dimension.">offset</a></span> and <span class="tt"><a class="el" href="#aaa36e57f142cadd243f3d55617cd3e26" title="Number of elements or blocks to select along each dimension.">count</a></span> are set to zero and <span class="tt"><a class="el" href="#a96339ebd637a1433dda2108eeed44092" title="Stride in each dimension (in the HDF5 sense).">stride</a></span> and <span class="tt"><a class="el" href="#a7c8ea18e6e325ca987d9911208b59ec3" title="Shape of a single block selected from the dataspace.">block</a></span> are set to one. If complex valued, <span class="tt">count.back() = 2</span>.</p>
+<p>If <span class="tt">has_cplx_trailing_dim</span> is true, the hyperslab gets an extra trailing dimension of size 2 to encode the imaginary part (TRIQS trailing-2 FLOAT convention for complex data). By default, <span class="tt"><a class="el" href="#a968d4f8eef8d995c685b9baa36b2fbbc" title="Index offset for each dimension.">offset</a></span> and <span class="tt"><a class="el" href="#aaa36e57f142cadd243f3d55617cd3e26" title="Number of elements or blocks to select along each dimension.">count</a></span> are set to zero and <span class="tt"><a class="el" href="#a96339ebd637a1433dda2108eeed44092" title="Stride in each dimension (in the HDF5 sense).">stride</a></span> and <span class="tt"><a class="el" href="#a7c8ea18e6e325ca987d9911208b59ec3" title="Shape of a single block selected from the dataspace.">block</a></span> are set to one. If <span class="tt">has_cplx_trailing_dim</span>, <span class="tt">count.back() = 2</span>.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">rank</td><td>Rank of the underlying dataspace (excluding the possible added imaginary dimension). </td></tr>
-    <tr><td class="paramname">is_complex</td><td>Whether the data is complex valued. </td></tr>
+    <tr><td class="paramname">has_cplx_trailing_dim</td><td>True if the buffer encodes complex values via a trailing dim of size 2 (TRIQS convention). </td></tr>
   </table>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="array__interface_8hpp_source.html#l00112">112</a> of file <a class="el" href="array__interface_8hpp_source.html">array_interface.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="array__interface_8hpp_source.html#l00113">113</a> of file <a class="el" href="array__interface_8hpp_source.html">array_interface.hpp</a>.</p>
 
 </div>
 </div>

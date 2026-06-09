@@ -13,5 +13,5 @@ var searchData=
   ['has_5fsubgroup_10',['has_subgroup',['../classh5_1_1group.html#a2c5d766c3f528b5ec6d0bc6d44d6e6e7',1,'h5::group']]],
   ['hdf5_5ftype_11',['hdf5_type',['../group__h5__types.html#ga92724d6ad97c1cbab14a73477693620d',1,'h5']]],
   ['hdf5_5ftype_5fequal_12',['hdf5_type_equal',['../group__h5__types.html#ga1f1926665da46101206e6ffdddb19600',1,'h5']]],
-  ['hyperslab_13',['hyperslab',['../structh5_1_1array__interface_1_1hyperslab.html#acf3ef763b555242fcddb38a9e87e3664',1,'h5::array_interface::hyperslab::hyperslab(int rank, bool is_complex)'],['../structh5_1_1array__interface_1_1hyperslab.html#ace87d943cb88861d74a6c573471cd27b',1,'h5::array_interface::hyperslab::hyperslab()=default']]]
+  ['hyperslab_13',['hyperslab',['../structh5_1_1array__interface_1_1hyperslab.html#a838551b23cf79eeebe7aa5703d871d02',1,'h5::array_interface::hyperslab::hyperslab(int rank, bool has_cplx_trailing_dim)'],['../structh5_1_1array__interface_1_1hyperslab.html#ace87d943cb88861d74a6c573471cd27b',1,'h5::array_interface::hyperslab::hyperslab()=default']]]
 ];

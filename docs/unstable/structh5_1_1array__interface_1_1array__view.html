@@ -136,23 +136,21 @@ document.addEventListener('DOMContentLoaded',() => { initNavTree('structh5_1_1ar
 <div class="textblock"><p>Struct representing a view on an n-dimensional array/dataspace. </p>
 <p>A view consists of the parent array and of an <a class="el" href="structh5_1_1array__interface_1_1hyperslab.html" title="Struct representing an HDF5 hyperslab.">h5::array_interface::hyperslab</a> specifying a selection. The parent array is defined by a pointer to its data and its shape.</p>
 <p>Note that the shape of the parent array does not necessarily have to correspond to the actual shape and size of the underlying memory. It is only used to select the correct elements in the hyperslab.</p>
-<p>If the data of the array is complex, its imaginary part is treated as just another dimension. </p>
+<p>If the buffer encodes complex values via the TRIQS trailing-2 FLOAT convention, the imaginary part is treated as just another dimension. </p>
 
-<p class="definition">Definition at line <a class="el" href="array__interface_8hpp_source.html#l00154">154</a> of file <a class="el" href="array__interface_8hpp_source.html">array_interface.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="array__interface_8hpp_source.html#l00159">159</a> of file <a class="el" href="array__interface_8hpp_source.html">array_interface.hpp</a>.</p>
 </div><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pub-methods" class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a3a7d2b2cd3f181abc3f1c9ba283d2601" id="r_a3a7d2b2cd3f181abc3f1c9ba283d2601"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#a3a7d2b2cd3f181abc3f1c9ba283d2601">array_view</a> (<a class="el" href="group__data__model.html#ga177e858254a3d1ab84a707a225fa4b1f">datatype</a> ty, void *start, int rank, bool is_complex)</td></tr>
-<tr class="memdesc:a3a7d2b2cd3f181abc3f1c9ba283d2601"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a new empty array view.  <br /></td></tr>
+<tr class="memitem:ad77470b668d8aebc90514d6efb791364" id="r_ad77470b668d8aebc90514d6efb791364"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#ad77470b668d8aebc90514d6efb791364">array_view</a> (<a class="el" href="group__data__model.html#ga177e858254a3d1ab84a707a225fa4b1f">datatype</a> ty, void *start, int rank, bool has_cplx_trailing_dim)</td></tr>
+<tr class="memdesc:ad77470b668d8aebc90514d6efb791364"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a new empty array view.  <br /></td></tr>
 <tr class="memitem:ac1398ca13cc0d8b87c456171058c79cd" id="r_ac1398ca13cc0d8b87c456171058c79cd"><td class="memItemLeft"><a id="ac1398ca13cc0d8b87c456171058c79cd" name="ac1398ca13cc0d8b87c456171058c79cd"></a>
 int&#160;</td><td class="memItemRight"><b>rank</b> () const</td></tr>
 <tr class="memdesc:ac1398ca13cc0d8b87c456171058c79cd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the rank of the view (including the possible added imaginary dimension). <br /></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pub-attribs" class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
-<tr class="memitem:aa370eda5d771c560af7604a4d36d52e2" id="r_aa370eda5d771c560af7604a4d36d52e2"><td class="memItemLeft"><a id="aa370eda5d771c560af7604a4d36d52e2" name="aa370eda5d771c560af7604a4d36d52e2"></a>
-bool&#160;</td><td class="memItemRight"><b>is_complex</b></td></tr>
-<tr class="memdesc:aa370eda5d771c560af7604a4d36d52e2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Whether the data is complex valued. <br /></td></tr>
+<tr class="memitem:a6f36b25286405610149d0ec1d2ca8447" id="r_a6f36b25286405610149d0ec1d2ca8447"><td class="memItemLeft">bool&#160;</td><td class="memItemRight"><a class="el" href="#a6f36b25286405610149d0ec1d2ca8447">has_cplx_trailing_dim</a></td></tr>
 <tr class="memitem:a6afc653e8f3f998c7f1de7b0429ebe9f" id="r_a6afc653e8f3f998c7f1de7b0429ebe9f"><td class="memItemLeft"><a id="a6afc653e8f3f998c7f1de7b0429ebe9f" name="a6afc653e8f3f998c7f1de7b0429ebe9f"></a>
 <a class="el" href="group__utilities.html#ga0133dae33fa46580049cc43ab40f66cc">v_t</a>&#160;</td><td class="memItemRight"><b>parent_shape</b></td></tr>
 <tr class="memdesc:a6afc653e8f3f998c7f1de7b0429ebe9f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Shape of the (contiguous) parent array. <br /></td></tr>
@@ -167,8 +165,8 @@ void *&#160;</td><td class="memItemRight"><b>start</b></td></tr>
 <tr class="memdesc:a942f91d5b78c6a8d94cd023e9d05615e"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="group__data__model.html#ga177e858254a3d1ab84a707a225fa4b1f" title="Type alias for an HDF5 datatype.">h5::datatype</a> stored in the array. <br /></td></tr>
 </table>
 <a name="doc-constructors" id="doc-constructors"></a><h2 id="header-doc-constructors" class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a3a7d2b2cd3f181abc3f1c9ba283d2601" name="a3a7d2b2cd3f181abc3f1c9ba283d2601"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3a7d2b2cd3f181abc3f1c9ba283d2601">&#9670;&#160;</a></span>array_view()</h2>
+<a id="ad77470b668d8aebc90514d6efb791364" name="ad77470b668d8aebc90514d6efb791364"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad77470b668d8aebc90514d6efb791364">&#9670;&#160;</a></span>array_view()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -194,7 +192,7 @@ void *&#160;</td><td class="memItemRight"><b>start</b></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>is_complex</em></span>&#160;)</td>
+          <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>has_cplx_trailing_dim</em></span>&#160;)</td>
         </tr>
       </table>
   </td>
@@ -205,18 +203,36 @@ void *&#160;</td><td class="memItemRight"><b>start</b></td></tr>
 </div><div class="memdoc">
 
 <p>Construct a new empty array view. </p>
-<p>A complex view has an additional dimension for the imaginary part. The shape of the parent array is left uninitialized and the <a class="el" href="structh5_1_1array__interface_1_1hyperslab.html" title="Struct representing an HDF5 hyperslab.">h5::array_interface::hyperslab</a> is empty.</p>
+<p>If <span class="tt"><a class="el" href="#a6f36b25286405610149d0ec1d2ca8447">has_cplx_trailing_dim</a></span> is true, the view gets an extra trailing dimension of size 2 to encode the imaginary part. The shape of the parent array is left uninitialized and the <a class="el" href="structh5_1_1array__interface_1_1hyperslab.html" title="Struct representing an HDF5 hyperslab.">h5::array_interface::hyperslab</a> is empty.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">ty</td><td><a class="el" href="group__data__model.html#ga177e858254a3d1ab84a707a225fa4b1f" title="Type alias for an HDF5 datatype.">h5::datatype</a> of the array. </td></tr>
     <tr><td class="paramname">start</td><td>Pointer to the data of the parent array. </td></tr>
     <tr><td class="paramname">rank</td><td>Rank of the parent array (excluding the possible added imaginary dimension). </td></tr>
-    <tr><td class="paramname">is_complex</td><td>Whether the data is complex valued. </td></tr>
+    <tr><td class="paramname">has_cplx_trailing_dim</td><td>True if the buffer encodes complex values via a trailing dim of size 2 (TRIQS convention). </td></tr>
   </table>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="array__interface_8hpp_source.html#l00181">181</a> of file <a class="el" href="array__interface_8hpp_source.html">array_interface.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="array__interface_8hpp_source.html#l00188">188</a> of file <a class="el" href="array__interface_8hpp_source.html">array_interface.hpp</a>.</p>
+
+</div>
+</div>
+<a name="doc-variable-members" id="doc-variable-members"></a><h2 id="header-doc-variable-members" class="groupheader">Member Data Documentation</h2>
+<a id="a6f36b25286405610149d0ec1d2ca8447" name="a6f36b25286405610149d0ec1d2ca8447"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6f36b25286405610149d0ec1d2ca8447">&#9670;&#160;</a></span>has_cplx_trailing_dim</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool h5::array_interface::array_view::has_cplx_trailing_dim</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>True if the buffer encodes complex values via a trailing dim of size 2 (TRIQS convention, e.g. <span class="tt">std::complex&lt;double&gt;</span> viewed as a <span class="tt">double</span> array with a trailing dim of size 2). </p>
+
+<p class="definition">Definition at line <a class="el" href="array__interface_8hpp_source.html#l00174">174</a> of file <a class="el" href="array__interface_8hpp_source.html">array_interface.hpp</a>.</p>
 
 </div>
 </div>
