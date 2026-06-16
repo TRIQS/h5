@@ -136,16 +136,19 @@ if(PythonSupport)
   find_package(Python COMPONENTS Interpreter Development NumPy)
   string(REGEX REPLACE "/.*/lib" "lib" PYTHON_LIB_DEST_ROOT ${Python_SITEARCH})
 
-  # fetch c2py
-  include(FetchContent)
-  FetchContent_Declare(
-    c2py
-    GIT_REPOSITORY  https://github.com/flatironinstitute/c2py
-    GIT_TAG         unstable
-    EXCLUDE_FROM_ALL # exclude from all so that c2py is NOT installed.
-  )
-  FetchContent_MakeAvailable(c2py)
-  include(${c2py_SOURCE_DIR}/share/cmake/c2py_add_module.cmake)
+  # fetch c2py (skip if a parent project already provides the target; this makes
+  # c2py resolution order-independent when h5 is built as a sub-project)
+  if(NOT TARGET c2py)
+    include(FetchContent)
+    FetchContent_Declare(
+      c2py
+      GIT_REPOSITORY  https://github.com/flatironinstitute/c2py
+      GIT_TAG         unstable
+      EXCLUDE_FROM_ALL # exclude from all so that c2py is NOT installed.
+    )
+    FetchContent_MakeAvailable(c2py)
+    include(${c2py_SOURCE_DIR}/share/cmake/c2py_add_module.cmake)
+  endif()
 
   add_subdirectory(python/${PROJECT_NAME})
 endif()
