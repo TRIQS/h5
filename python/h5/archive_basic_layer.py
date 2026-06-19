@@ -24,8 +24,13 @@ class HDFArchiveGroupBasicLayer:
         """  """
         self.options = parent.options
         self._group = parent._group.open_group(subpath) if subpath else parent._group
-        self.ignored_keys = [] 
-        self.cached_keys = list(self._group.keys())
+        self.ignored_keys = []
+        # Sort the keys so that group iteration order is deterministic and
+        # independent of the HDF5 native link iteration order, which is not
+        # stable across HDF5/Python versions. This guarantees, e.g., that block
+        # Green's functions reconstructed from an archive have a reproducible
+        # (alphabetical) block order.
+        self.cached_keys = sorted(self._group.keys())
 
     def _init_root(self, descriptor, open_flag) :
         if descriptor is None:
