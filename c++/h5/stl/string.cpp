@@ -21,6 +21,7 @@
 
 #include "./string.hpp"
 #include "../macros.hpp"
+#include "../transfer.hpp"
 #include "../utils.hpp"
 
 #include <hdf5.h>
@@ -60,7 +61,7 @@ namespace h5 {
 
     // write the string to dataset
     auto *s_ptr = s.c_str();
-    auto err    = H5Dwrite(ds, dt, H5S_ALL, H5S_ALL, H5P_DEFAULT, (void const *)&s_ptr);
+    auto err    = H5Dwrite(ds, dt, H5S_ALL, H5S_ALL, default_transfer_plist(), (void const *)&s_ptr);
     if (err < 0) throw std::runtime_error("Error in h5_write: Writing a string to the dataset " + name + " in the group " + g.name() + " failed");
   }
 
@@ -81,16 +82,16 @@ namespace h5 {
     if (H5Tis_variable_str(dt)) {
       // first read into a char* pointer, then copy into the string
       std::array<char *, 1> rd_ptr{nullptr};
-      auto err = H5Dread(ds, dt, H5S_ALL, H5S_ALL, H5P_DEFAULT, (void *)rd_ptr.data());
+      auto err = H5Dread(ds, dt, H5S_ALL, H5S_ALL, default_transfer_plist(), (void *)rd_ptr.data());
       if (err < 0) throw std::runtime_error("Error in h5_read: Reading a string from the dataset " + name + " in the group " + g.name() + " failed");
       s.append(rd_ptr[0]);
 
       // free the resources allocated in the variable-length read
-      err = H5Dvlen_reclaim(dt, dspace, H5P_DEFAULT, (void *)rd_ptr.data());
+      err = H5Dvlen_reclaim(dt, dspace, default_transfer_plist(), (void *)rd_ptr.data());
       if (err < 0) throw std::runtime_error("Error in h5_read: Freeing resources after reading a variable-length string failed");
     } else { // fixed-sized string
       std::vector<char> buf(H5Tget_size(dt) + 1, 0x00);
-      auto err = H5Dread(ds, dt, H5S_ALL, H5S_ALL, H5P_DEFAULT, &buf[0]);
+      auto err = H5Dread(ds, dt, H5S_ALL, H5S_ALL, default_transfer_plist(), &buf[0]);
       if (err < 0) throw std::runtime_error("Error in h5_read: Reading a string from the dataset " + name + " in the group " + g.name() + " failed");
       s.append(&buf.front());
     }
@@ -134,7 +135,7 @@ namespace h5 {
       s.append(rd_ptr[0]);
 
       // free the resources allocated in the variable-length read
-      err = H5Dvlen_reclaim(dt, dspace, H5P_DEFAULT, (void *)rd_ptr.data());
+      err = H5Dvlen_reclaim(dt, dspace, default_transfer_plist(), (void *)rd_ptr.data());
       if (err < 0) throw std::runtime_error("Error in h5_read_attribute: Freeing resources after reading a variable-length string failed");
     } else { // fixed-sized string
       std::vector<char> buf(H5Tget_size(dt) + 1, 0x00);
@@ -181,7 +182,7 @@ namespace h5 {
       s.append(rd_ptr[0]);
 
       // free the resources allocated in the variable-length read
-      err = H5Dvlen_reclaim(dt, dspace, H5P_DEFAULT, (void *)rd_ptr.data());
+      err = H5Dvlen_reclaim(dt, dspace, default_transfer_plist(), (void *)rd_ptr.data());
       if (err < 0) throw std::runtime_error("Error in h5_read_attribute_to_key: Rreeing resources after reading a variable-length string failed");
     } else { // fixed-sized string
       std::vector<char> buf(H5Tget_size(dt) + 1, 0x00);
@@ -208,7 +209,7 @@ namespace h5 {
     dataset ds  = g.create_dataset(name, dt, dspace);
 
     // write to the dataset
-    auto err = H5Dwrite(ds, dt, dspace, H5S_ALL, H5P_DEFAULT, (void *)cb.buffer.data());
+    auto err = H5Dwrite(ds, dt, dspace, H5S_ALL, default_transfer_plist(), (void *)cb.buffer.data());
     if (err < 0) throw make_runtime_error("Error in h5_write: Writing a char_buf to the dataset ", name, " in the group ", g.name(), " failed");
   }
 
@@ -233,7 +234,7 @@ namespace h5 {
 
     // read into the buffer
     H5_ASSERT(hdf5_type_equal(ty, cb_out.dtype()));
-    auto err = H5Dread(ds, ty, cb_out.dspace(), H5S_ALL, H5P_DEFAULT, (void *)cb_out.buffer.data());
+    auto err = H5Dread(ds, ty, cb_out.dspace(), H5S_ALL, default_transfer_plist(), (void *)cb_out.buffer.data());
     if (err < 0) throw make_runtime_error("Error in h5_read: Reading a char_buf from the dataset ", name, " in the group ", g.name(), " failed");
 
     // move to output char_buf

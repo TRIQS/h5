@@ -23,12 +23,12 @@
 #include "./complex.hpp"
 #include "./macros.hpp"
 #include "./stl/string.hpp"
+#include "./transfer.hpp"
 
 #include <hdf5.h>
 #include <hdf5_hl.h>
 
 #include <algorithm>
-#include <iostream>
 #include <numeric>
 #include <stdexcept>
 #include <utility>
@@ -152,7 +152,7 @@ namespace h5::array_interface {
 
     // write to the file dataset
     if (H5Sget_simple_extent_npoints(mem_dspace) > 0) { // avoid writing empty arrays
-      herr_t err = H5Dwrite(ds, v.ty, mem_dspace, H5S_ALL, H5P_DEFAULT, v.start);
+      herr_t err = H5Dwrite(ds, v.ty, mem_dspace, H5S_ALL, default_transfer_plist(), v.start);
       if (err < 0)
         throw std::runtime_error("Error in h5::array_interface::write: Writing to the dataset " + name + " in the group" + g.name() + " failed");
     }
@@ -169,9 +169,7 @@ namespace h5::array_interface {
     if (v.slab.size() != sl.size()) throw std::runtime_error("Error in h5::array_interface::write_slice: Incompatible sizes");
 
     auto ds_info = get_dataset_info(g, name);
-    if (not hdf5_type_equal(v.ty, ds_info.ty))
-      throw std::runtime_error("Error in h5::array_interface::write_slice: Incompatible HDF5 types: " + get_name_of_h5_type(v.ty)
-                               + " != " + get_name_of_h5_type(ds_info.ty));
+    if (not hdf5_type_equal(v.ty, ds_info.ty)) { detail::handle_type_conversion_callback(v.ty, ds_info.ty, "Error in h5::array_interface::write_slice"); }
 
     // open existing dataset, get dataspace and select hyperslab
     dataset ds            = g.open_dataset(name);
@@ -185,9 +183,10 @@ namespace h5::array_interface {
 
     // write to the selected hyperslab of the file dataset
     if (H5Sget_simple_extent_npoints(file_dspace) > 0) {
-      err = H5Dwrite(ds, v.ty, mem_dspace, file_dspace, H5P_DEFAULT, v.start);
+      err = H5Dwrite(ds, v.ty, mem_dspace, file_dspace, default_transfer_plist(), v.start);
       if (err < 0)
-        throw std::runtime_error("Error in h5::array_interface::write_slice: Writing the dataset " + name + " in the group " + g.name() + " failed");
+        throw std::runtime_error("Error in h5::array_interface::write_slice: Writing the dataset " + name + " in the group " + g.name()
+                                 + " failed (converting " + get_name_of_h5_type(v.ty) + " -> " + get_name_of_h5_type(ds_info.ty) + ")");
     }
   }
 
@@ -203,7 +202,8 @@ namespace h5::array_interface {
     attribute attr = H5Acreate2(obj, name.c_str(), v.ty, mem_dspace, H5P_DEFAULT, H5P_DEFAULT);
     if (!attr.is_valid()) throw std::runtime_error("Error in h5::array_interface::write_attribute: Creating the attribute " + name + " failed");
 
-    // write to the attribute
+    // write to the attribute (H5Awrite takes no transfer property list, so attribute conversions cannot be
+    // routed through the global dataset transfer property list / conversion callback)
     herr_t err = H5Awrite(attr, v.ty, v.start);
     if (err < 0) throw std::runtime_error("Error in h5::array_interface::write_attribute: Writing to the attribute " + name + " failed");
   }
@@ -220,7 +220,6 @@ namespace h5::array_interface {
       if (err < 0) throw std::runtime_error("Error in h5::array_interface::read: selecting the hyperslab failed");
     }
 
-    // check consistency of input
     auto ds_info = get_dataset_info(g, name);
 
     // file dataset uses the {r:double, i:double} compound type (Julia HDF5.jl, h5py): retype the view to dcplx_t and drop the trailing-2 dim
@@ -234,13 +233,7 @@ namespace h5::array_interface {
       v.slab.block.pop_back();
     }
 
-    if (H5Tget_class(v.ty) != H5Tget_class(ds_info.ty))
-      throw std::runtime_error("Error in h5::array_interface::read: Incompatible HDF5 types: " + get_name_of_h5_type(v.ty)
-                               + " != " + get_name_of_h5_type(ds_info.ty));
-
-    if (not hdf5_type_equal(v.ty, ds_info.ty))
-      std::cerr << "WARNING: HDF5 type mismatch while reading into an array_view: " + get_name_of_h5_type(v.ty)
-            + " != " + get_name_of_h5_type(ds_info.ty) + "\n";
+    if (not hdf5_type_equal(v.ty, ds_info.ty)) { detail::handle_type_conversion_callback(ds_info.ty, v.ty, "Error in h5::array_interface::read"); }
 
     auto sl_size = sl.size();
     if (sl.empty()) { sl_size = std::accumulate(ds_info.lengths.begin(), ds_info.lengths.end(), (hsize_t)1, std::multiplies<>()); }
@@ -251,9 +244,10 @@ namespace h5::array_interface {
 
     // read the selected hyperslab from the file dataset
     if (H5Sget_simple_extent_npoints(file_dspace) > 0) {
-      herr_t err = H5Dread(ds, v.ty, mem_dspace, file_dspace, H5P_DEFAULT, v.start);
+      herr_t err = H5Dread(ds, v.ty, mem_dspace, file_dspace, default_transfer_plist(), v.start);
       if (err < 0)
-        throw std::runtime_error("Error in h5::array_interface::read: Reading the dataset " + name + " in the group " + g.name() + " failed");
+        throw std::runtime_error("Error in h5::array_interface::read: Reading the dataset " + name + " in the group " + g.name()
+                                 + " failed (converting " + get_name_of_h5_type(ds_info.ty) + " -> " + get_name_of_h5_type(v.ty) + ")");
     }
   }
 
