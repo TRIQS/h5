@@ -1,0 +1,8 @@
+/* h5 does not build anything on Jenkins. This pipeline exists only as a
+ * lightweight job that runs on every push, so that downstream projects which
+ * depend on h5 (e.g. nda) can use it as an upstream push-trigger. */
+properties([
+  disableConcurrentBuilds(),
+  buildDiscarder(logRotator(numToKeepStr: '10', daysToKeepStr: '30')),
+  pipelineTriggers([githubPush()])
+])

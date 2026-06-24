@@ -29,7 +29,7 @@ jobs:
           - { os: ubuntu-24.04, cxx: clang++-20, clang_cxx: clang++-20 }
           - { os: ubuntu-24.04, cxx: g++-14, clang_cxx: clang++-20 }
           - { os: macos-15, cxx: clang++, clang_cxx: clang++ }
-          - { os: macos-15, cxx: g++-15, clang_cxx: clang++ }
+          - { os: macos-15, cxx: g++, clang_cxx: clang++ }
 
     runs-on: ${{ matrix.os }}
 
@@ -83,12 +83,18 @@ jobs:
       run: |
         brew update
         brew install ccache gcc llvm hdf5 openblas doxygen
+        # Set CXX from the matrix; for gcc, resolve unversioned 'g++' to whatever g++-NN Homebrew installed
+        CXX=${{ matrix.cxx }}
+        if [[ $CXX == g++ ]]; then
+          CXX=$(basename "$(ls $(brew --prefix)/bin/g++-* | sort -V | tail -1)")
+        fi
+        echo "CXX=$CXX" >> $GITHUB_ENV
         pip install numpy scipy
         pip install -r requirements.txt
         echo "PATH=$(brew --prefix llvm)/bin:$(brew --prefix gcc)/bin:$PATH" >> $GITHUB_ENV
         echo "PYTHONPATH=$(brew --prefix llvm)/lib/python3.13/site-packages" >> $GITHUB_ENV
         echo "SDKROOT=$(xcrun --show-sdk-path)" >> $GITHUB_ENV
-        echo "LDFLAGS=-L$(brew --prefix llvm)/lib/c++ -L/opt/homebrew/opt/llvm/lib/unwind -lunwind" >> $GITHUB_ENV
+        echo "LDFLAGS=-L$(brew --prefix llvm)/lib/c++ -L$(brew --prefix llvm)/lib/unwind -lunwind" >> $GITHUB_ENV
 
     - name: Add clang CXXFLAGS
       if: ${{ contains(matrix.cxx, 'clang') }}
