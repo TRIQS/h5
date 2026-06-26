@@ -154,6 +154,8 @@ General</h3>
 <li>Bug fix in <a class="el" href="group__rw__arrayinterface.html#ga78f90eb58218f72ee27f1ca9a2b14862" title="Given a view on an n-dimensional array (dataspace) by specifying its numpy/nda-style strides and its ...">h5::array_interface::get_parent_shape_and_h5_strides</a></li>
 <li>Read complex datasets written by Julia HDF5.jl and h5py that use the standard {r:double, i:double} HDF5 compound type (#13)</li>
 <li>Breaking: rename array_view::is_complex to has_cplx_trailing_dim to reflect the trailing-2-dim buffer-layout convention</li>
+<li>Support read/write of std::variant as an HDF5 attribute</li>
+<li>List allowed alternatives in std::variant read error messages</li>
 </ul>
 <h3 class="doxsection"><a class="anchor" id="autotoc_md2"></a>
 doc</h3>
@@ -166,6 +168,7 @@ doc</h3>
 fix</h3>
 <ul>
 <li>#28: make compile def H5_VER_GE_113 PUBLIC</li>
+<li>Fix complex scalar attribute read: allow non-zero rank</li>
 </ul>
 <h3 class="doxsection"><a class="anchor" id="autotoc_md4"></a>
 cmake</h3>
@@ -174,6 +177,10 @@ cmake</h3>
 <li>Add cmake workaround for hdf5 version detection when using hdf5 with subversion (#26)</li>
 <li>Fix hdf5 linkeage in python layer</li>
 <li>Directly use imported targets provided for hdf5</li>
+<li>Guard c2py FetchContent against a duplicate target when built as a sub-project</li>
+<li>Disable C++20 module scanning for clair-c2py compatibility</li>
+<li>Suppress -Wc2y-extensions / c++26-extension warnings for Clang</li>
+<li>Fix target_link_directories to use the directory where the project library is compiled</li>
 </ul>
 <h2 class="doxsection"><a class="anchor" id="autotoc_md5"></a>
 Version 1.3.0</h2>
