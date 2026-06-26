@@ -25,6 +25,8 @@ Find below an itemized list of changes in this release.
 * Bug fix in h5::array_interface::get_parent_shape_and_h5_strides
 * Read complex datasets written by Julia HDF5.jl and h5py that use the standard {r:double, i:double} HDF5 compound type (#13)
 * Breaking: rename array_view::is_complex to has_cplx_trailing_dim to reflect the trailing-2-dim buffer-layout convention
+* Support read/write of std::variant as an HDF5 attribute
+* List allowed alternatives in std::variant read error messages
 
 ### doc
 * Update documentation of python layer
@@ -33,12 +35,17 @@ Find below an itemized list of changes in this release.
 
 ### fix
 * #28: make compile def H5_VER_GE_113 PUBLIC
+* Fix complex scalar attribute read: allow non-zero rank
 
 ### cmake
 * Work around issue in FindHDF5 for cmake 3.25 or older
 * Add cmake workaround for hdf5 version detection when using hdf5 with subversion (#26)
 * Fix hdf5 linkeage in python layer
 * Directly use imported targets provided for hdf5
+* Guard c2py FetchContent against a duplicate target when built as a sub-project
+* Disable C++20 module scanning for clair-c2py compatibility
+* Suppress -Wc2y-extensions / c++26-extension warnings for Clang
+* Fix target_link_directories to use the directory where the project library is compiled
 
 
 ## Version 1.3.0
