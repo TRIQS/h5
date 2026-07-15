@@ -74,6 +74,20 @@ TEST(H5, GroupOperations) {
   for (const auto &n : names) { EXPECT_TRUE(n == gname || n == dsname); }
 };
 
+TEST(H5, GroupNameOrdering) {
+  // names should be returned in increasing-name order, independent of insertion order
+  h5::file file("group_order.h5", 'w');
+  h5::group root(file);
+
+  // create subgroups and datasets in a deliberately unsorted insertion order
+  for (const auto &n : {"gc", "ga", "gb"}) std::ignore = root.create_group(n);
+  for (const auto &n : {"dz", "dx", "dy"}) h5::write(root, n, 0);
+
+  EXPECT_EQ(root.get_all_subgroup_names(), (std::vector<std::string>{"ga", "gb", "gc"}));
+  EXPECT_EQ(root.get_all_dataset_names(), (std::vector<std::string>{"dx", "dy", "dz"}));
+  EXPECT_EQ(root.get_all_subgroup_dataset_names(), (std::vector<std::string>{"dx", "dy", "dz", "ga", "gb", "gc"}));
+}
+
 TEST(H5, GroupWriteRead) {
   // test writing/reading datasets in groups
   {
