@@ -47,6 +47,20 @@ else()
   endif()
 endif()
 
+# -- c2py --
+# Resolve first: c2py runs find_package(Python) and exposes the interpreter and the
+# install-layout variables (Python_EXECUTABLE, PYTHON_LIB_DEST_ROOT, PYTHON_MODULE_EXT)
+# that python/ and share/ consume. The NOT TARGET guard makes resolution order-independent
+# when h5 is built as a sub-project (a parent project may already provide c2py).
+if(PythonSupport AND NOT TARGET c2py)
+  external_dependency(c2py
+    GIT_REPO https://github.com/flatironinstitute/c2py
+    GIT_TAG unstable
+    BUILD_ALWAYS
+    EXCLUDE_FROM_ALL
+  )
+endif()
+
 # -- GTest --
 external_dependency(GTest
   GIT_REPO https://github.com/google/googletest
