@@ -17,6 +17,21 @@ import numpy as np
 from math import isnan
 
 from h5 import HDFArchive
+from h5.formats import register_class
+
+class OrderReliantReduce:
+    """A __reduce_to_dict__/__factory_from_dict__ class (not a plain dict) whose
+    reconstruction depends on the stored key order, used to check that key
+    ordering is preserved for any reduce-based type, not only dict."""
+    def __init__(self, order):
+        self.order = list(order)
+    def __reduce_to_dict__(self):
+        return {k: i for i, k in enumerate(self.order)}
+    @classmethod
+    def __factory_from_dict__(cls, name, D):
+        return cls(D.keys())
+
+register_class(OrderReliantReduce)
 
 def assert_arrays_are_close(a, b, precision = 1.e-6):
     d = np.amax(np.abs(a - b))
@@ -184,6 +199,82 @@ class TestHdf5Io(unittest.TestCase):
         with HDFArchive(filename, 'a') as a:
             with self.assertRaises(RuntimeError) :
                 a.create_softlink('data', 'link', delete_if_exists = False)
+
+    def _assert_dict_restored(self, actual, expected):
+        """Fail unless `actual` reproduces `expected` exactly: identical key
+        order, identical key types, and identical value types/values
+        (recursing into nested dicts, comparing arrays elementwise)."""
+        self.assertIsInstance(actual, dict)
+        # 1. same ordering (and same key values)
+        self.assertEqual(list(actual.keys()), list(expected.keys()))
+        # 2. same key types
+        for ka, ke in zip(actual.keys(), expected.keys()):
+            self.assertIs(type(ka), type(ke), "key %r vs %r: type mismatch"%(ka, ke))
+        # 3. same value types/values
+        for k in expected:
+            va, ve = actual[k], expected[k]
+            if isinstance(ve, np.ndarray):
+                self.assertIsInstance(va, np.ndarray)
+                assert_arrays_are_close(va, ve)
+            elif isinstance(ve, dict):
+                self._assert_dict_restored(va, ve)
+            else:
+                self.assertIs(type(va), type(ve), "value for key %r: type mismatch"%(k,))
+                self.assertEqual(va, ve)
+
+    def _roundtrip(self, filename, obj):
+        with HDFArchive(filename, 'w') as a:
+            a['d'] = obj
+        with HDFArchive(filename, 'r') as a:
+            return a['d']
+
+    def test_dict_ordering(self):
+        # insertion order differs from lexicographic order
+        d = {'c': 1, 'a': 2, 'b': 3, 'delta': 4}
+        self.assertNotEqual(list(d.keys()), sorted(d.keys()))
+        self._assert_dict_restored(self._roundtrip('h5_dict_ordering.h5', d), d)
+
+    def test_dict_value_types(self):
+        # heterogeneous value types under (deliberately unsorted) string keys
+        d = {
+            'i': 5,
+            'f': 2.5,
+            's': 'text',
+            'b': True,
+            'lst': [1, 'a', 2.5],
+            'nested': {'x': 1, 'y': 2},
+            'arr': np.array([1.0, 2.0, 3.0]),
+        }
+        self._assert_dict_restored(self._roundtrip('h5_dict_valtypes.h5', d), d)
+
+    def test_dict_nested_ordering(self):
+        # order must be preserved recursively for nested dicts
+        d = {'z': {'q': 1, 'a': 2}, 'y': 3, 'x': {'m': 4, 'b': 5}}
+        self._assert_dict_restored(self._roundtrip('h5_dict_nested.h5', d), d)
+
+    def test_reduce_class_key_order(self):
+        # key order is preserved for any __reduce_to_dict__ class, not only dict
+        obj = OrderReliantReduce(['z', 'a', 'm', 'b'])
+        r = self._roundtrip('h5_reduce_order.h5', obj)
+        self.assertIsInstance(r, OrderReliantReduce)
+        self.assertEqual(r.order, obj.order)
+
+    def test_dict_non_string_keys_raise(self):
+        # Dict storage is limited to string keys: non-string keys must fail
+        # loudly rather than be silently stringified (which loses the key type
+        # and collapses collisions like 1 vs '1').
+        bad = [
+            {1: 'a'},              # int
+            {1.5: 'a'},            # float
+            {(1, 2): 'a'},         # tuple
+            {None: 'a'},           # None
+            {True: 'a'},           # bool
+            {'ok': 1, 2: 'b'},     # mixed string + non-string
+        ]
+        for d in bad:
+            with HDFArchive('h5_dict_badkeys.h5', 'w') as a:
+                with self.assertRaises(TypeError):
+                    a['d'] = d
 
 if __name__ == '__main__':
     unittest.main()
