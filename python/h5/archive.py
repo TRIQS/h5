@@ -13,7 +13,7 @@
 # limitations under the License.
 
 
-import sys,numpy, warnings
+import sys,numpy, warnings, json
 from importlib import import_module
 from .archive_basic_layer import HDFArchiveGroupBasicLayer
 from .formats import register_class, register_backward_compatibility_method, get_format_info
@@ -45,7 +45,10 @@ class Dict:
     def __init__(self,ob) :
         self.ob = ob
     def __reduce_to_dict__(self) :
-        return {str(n):v for n,v in list(self.ob.items())}
+        # Only string keys are supported, Non-string keys are rejected
+        bad = sorted({type(k).__name__ for k in self.ob if not isinstance(k, str)})
+        if bad : raise TypeError("HDFArchive can only store dicts with string keys, found key type(s): %s"%", ".join(bad))
+        return dict(self.ob)
     @classmethod
     def __factory_from_dict__(cls, name, D) :
         return {n:x for n,x in list(D.items())}
@@ -174,12 +177,16 @@ class HDFArchiveGroup(HDFArchiveGroupBasicLayer):
             #SubGroup = HDFArchiveGroup(self,key)
             #write_attributes(SubGroup)
         elif hasattr(val,'__reduce_to_dict__') : # Is it a HDF_compliant object
-            self.create_group(key) # create a new group
             d = val.__reduce_to_dict__()
             if not isinstance(d,dict) : raise ValueError(" __reduce_to_dict__ method does not return a dict. See the doc !")
+            self.create_group(key) # create a new group
             SubGroup = HDFArchiveGroup(self,key)
             for k, v in list(d.items()) : SubGroup[k] = v
             write_attributes(SubGroup)
+            # Preserve the key order of the reduced dict, which HDF5 does not (it
+            # iterates group members by name). This covers plain dicts and any
+            # __factory_from_dict__ class whose reconstruction depends on the order.
+            SubGroup.write_attr('__dict_key_order__', json.dumps(list(d.keys()), ensure_ascii=False))
         elif isinstance(val,numpy.ndarray) : # it is a numpy
             try :
                self._write( key, numpy.array(val,copy=1,order='C') )
@@ -255,10 +262,23 @@ class HDFArchiveGroup(HDFArchiveGroupBasicLayer):
         if hasattr(r_class,"__factory_from_dict__"):
             assert self.is_group(key), "__factory_from_dict__ requires a subgroup"
             reconstruct = lambda k: SubGroup.__getitem1__(k, reconstruct_python_object, fmt_info.backward_compat.get(k, None))
-            values = {k: reconstruct(k) for k in SubGroup}
+            values = {k: reconstruct(k) for k in SubGroup._reconstruction_key_order()}
             return r_class.__factory_from_dict__(key, values)
 
         raise ValueError("Impossible to reread the class %s for group %s and key %s"%(r_class_name,self, key))
+
+    #-------------------------------------------------------------------------
+    def _reconstruction_key_order(self):
+        """Order the keys for python-object reconstruction. Reduced objects store
+        their key order at write time (see __setitem__); when present it must list
+        exactly the group's keys, and we return that order. Absent (older archives,
+        files from other tools) we keep the group's deterministic name order."""
+        order_str = self._group.read_attribute('__dict_key_order__')
+        if not order_str : return list(self.keys())
+        order = json.loads(order_str)
+        if set(order) != set(self.keys()) :
+            raise ValueError("Corrupt archive: __dict_key_order__ %r does not match the group keys %r"%(order, list(self.keys())))
+        return order
 
     #---------------------------------------------------------------------------
     def __str__(self) :
