@@ -1,37 +1,50 @@
-# ############
-# Doxygen
-find_package(Doxygen REQUIRED)
+# Fail early if a doc dependency is missing (import names, not distribution names)
+find_package(Python COMPONENTS Interpreter REQUIRED)
 
-# Configure Doxyfile
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Doxyfile.in ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile @ONLY)
+foreach(_module numpydoc nbsphinx myst_parser linkify_it sphinx_rtd_theme matplotlib)
+  execute_process(
+    COMMAND ${Python_EXECUTABLE} -c "import ${_module}"
+    RESULT_VARIABLE _rc OUTPUT_QUIET ERROR_QUIET)
+  if(_rc)
+    message(FATAL_ERROR "Building the documentation requires the python module '${_module}' (see requirements.txt).")
+  endif()
+endforeach()
 
-# Configure markdown files
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/overview.md.in ${CMAKE_CURRENT_BINARY_DIR}/overview.md @ONLY)
+# Generate the sphinx config file
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/conf.py.in ${CMAKE_CURRENT_BINARY_DIR}/conf.py @ONLY)
 
-# Fetch doxygen-awesome-css
-include(FetchContent)
-FetchContent_Declare(doxyawesome
-  GIT_REPOSITORY https://github.com/jothepro/doxygen-awesome-css.git
-  GIT_TAG v2.3.2)
-FetchContent_MakeAvailable(doxyawesome)
-file(COPY ${doxyawesome_SOURCE_DIR}/doxygen-awesome.css DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
-file(COPY ${doxyawesome_SOURCE_DIR}/doxygen-awesome-sidebar-only.css DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
+# ---------------------------------
+# Top Sphinx target
+# ---------------------------------
+if(NOT DEFINED SPHINXBUILD_EXECUTABLE)
+  find_package(Sphinx)
+endif()
 
-# Add custom target for Doxygen
-add_custom_target(doxygen ALL
-  COMMAND ${DOXYGEN_EXECUTABLE} ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile
-  WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-  COMMENT "Generating Doxygen documentation"
-  VERBATIM
+# Sphinx has internal caching, always run it
+add_custom_target(${PROJECT_NAME}_docs_sphinx ALL)
+add_custom_command(
+  TARGET ${PROJECT_NAME}_docs_sphinx POST_BUILD
+  COMMAND PYTHONPATH=${PROJECT_BINARY_DIR}/python:$ENV{PYTHONPATH} ${SPHINXBUILD_EXECUTABLE} -j auto -c . -b html ${CMAKE_CURRENT_SOURCE_DIR} html
 )
 
-# Compile example codes
-add_subdirectory(examples)
+option(Sphinx_Only "When building the documentation, skip building the Python modules that autodoc imports" OFF)
+if(NOT Sphinx_Only AND TARGET _h5py)
+  # Autodoc/autosummary of the Python layer requires the compiled module to be
+  # built and importable first. h5 has no aggregate python-modules target, so
+  # depend on the c2py extension module (and the C library it links) directly.
+  add_dependencies(${PROJECT_NAME}_docs_sphinx ${PROJECT_NAME}_c _h5py)
+endif()
 
-# ############
+# ---------------------------------
 # Install
+# ---------------------------------
 install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/html/ COMPONENT documentation DESTINATION share/doc/${PROJECT_NAME}
   FILES_MATCHING
   REGEX "\\.(html|pdf|png|gif|jpg|svg|ico|js|xsl|css|py|txt|inv|bib|ttf|woff2|eot|sh)$"
   PATTERN "_*"
 )
+
+# ---------------------------------
+# Build doxygen documentation
+# ---------------------------------
+add_subdirectory(doxygen)

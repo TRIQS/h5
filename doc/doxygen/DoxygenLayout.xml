@@ -98,8 +98,8 @@
       <tab type="user" url="@ref python-utils" title="Python interface utilities"/>
       <tab type="filelist" visible="yes" title="" intro=""/>
     </tab>
-    <tab type="user" url="@ref changelog" title="Changelog"/>
-    <tab type="user" url="@ref issues" title="Issues"/>
+    <tab type="user" url="../ChangeLog.html" title="Changelog"/>
+    <tab type="user" url="../issues.html" title="Issues"/>
   </navindex>
 
   <!-- Layout definition for a class page -->
