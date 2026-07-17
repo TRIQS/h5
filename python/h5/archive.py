@@ -528,32 +528,6 @@ class HDFArchiveGroup(HDFArchiveGroupBasicLayer):
         """Return the same listing as :meth:`__str__`."""
         return self.__str__()
 
-    #-------------------------------------------------------------------------
-    def apply_on_leaves (self,f) :
-        """
-        Apply a function to every leaf of the archive tree in place.
-
-        The tree is walked recursively; for each named leaf ``(name, value)`` the
-        callable ``f`` is invoked.
-
-        Parameters
-        ----------
-        f : callable
-            A function ``f(name, value)`` whose return value controls the leaf:
-
-            - ``None``               : no action is taken
-            - an empty tuple ``()``  : the leaf is removed from the tree
-            - an hdf-compliant value : the leaf is replaced by the value
-        """
-        def visit_tree(n,d):
-          for k in d:# Loop over the subgroups in d
-              if d.is_group(k) : visit_tree(k,d[k])
-              else :
-                  r = f(k,d[k])
-                  if not r is None : d[k] = r
-                  elif r == () : del d[k]
-        visit_tree('/',self['/'])
-
     # These two methods are necessary for "with"
     def __enter__(self):
         """Enter a ``with`` block and return this group."""
