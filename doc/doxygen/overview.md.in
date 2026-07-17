@@ -68,4 +68,4 @@ it can simplify basic HDF5 tasks.
 
 Furthermore, we provide a detailed reference @ref documentation to answer your questions.
 
-If you experience any problem with the library, you can post an @ref issues "Issue" on GitHub.
+If you experience any problem with the library, you can post an [Issue](https://github.com/TRIQS/h5/issues) on GitHub.
