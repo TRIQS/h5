@@ -185,5 +185,39 @@ class TestHdf5Io(unittest.TestCase):
             with self.assertRaises(RuntimeError) :
                 a.create_softlink('data', 'link', delete_if_exists = False)
 
+    def test_same_session_dataset_readback(self):
+        # Writing a dataset (scalar or ndarray) must update the key cache so the
+        # entry is visible for keys()/'in'/read within the same open session,
+        # not only after closing and reopening the file.
+        with HDFArchive('same_session.h5', 'w') as arch:
+            arch['x'] = 1.0
+            arch['arr'] = np.array([1, 2, 3])
+
+            self.assertIn('x', arch)
+            self.assertIn('arr', arch)
+            self.assertEqual(sorted(arch.keys()), ['arr', 'x'])
+            self.assertEqual(arch['x'], 1.0)
+            assert_arrays_are_close(arch['arr'], np.array([1, 2, 3]))
+
+            # overwriting an existing dataset must not duplicate its key
+            arch['x'] = 2.0
+            self.assertEqual(arch['x'], 2.0)
+            self.assertEqual(sorted(arch.keys()).count('x'), 1)
+
+        # contents remain correct after reopening
+        with HDFArchive('same_session.h5', 'r') as arch:
+            self.assertEqual(sorted(arch.keys()), ['arr', 'x'])
+            self.assertEqual(arch['x'], 2.0)
+
+    def test_in_memory_dataset_readback(self):
+        # Same-session readback for an in-memory archive (descriptor=None).
+        arch = HDFArchive()
+        arch['s'] = 42
+        arch['v'] = np.array([1.0, 2.0])
+        self.assertIn('s', arch)
+        self.assertEqual(arch['s'], 42)
+        assert_arrays_are_close(arch['v'], np.array([1.0, 2.0]))
+        self.assertEqual(sorted(arch.keys()), ['s', 'v'])
+
 if __name__ == '__main__':
     unittest.main()
