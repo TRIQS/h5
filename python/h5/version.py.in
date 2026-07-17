@@ -19,11 +19,34 @@
 #
 ################################################################################
 
+"""
+Version information for the @PROJECT_NAME@ package.
+
+Exposes the package version string and the git hash of the build, together with
+helper functions to print them.
+"""
+
+#: The @PROJECT_NAME@ version string.
 version = "@PROJECT_VERSION@"
+#: The git hash of the @PROJECT_NAME@ build.
 @PROJECT_NAME@_hash = "@PROJECT_GIT_HASH@"
 
 def show_version():
+  """
+  Print the @PROJECT_NAME@ version string to standard output.
+
+  Returns
+  -------
+  None
+  """
   print("\nYou are using @PROJECT_NAME@ version %s\n"%version)
 
 def show_git_hash():
+  """
+  Print the git hash of the @PROJECT_NAME@ build to standard output.
+
+  Returns
+  -------
+  None
+  """
   print("\nYou are using @PROJECT_NAME@ git hash %s\n"%("@PROJECT_GIT_HASH@"))

@@ -14,21 +14,11 @@
 
 
 r"""
-Python interface to the h5 library.
+Python interface to the h5 library: a dict-like API for reading and writing HDF5
+files.
 
-This package exposes a dict-like API for reading and writing HDF5 files:
-
-* :class:`HDFArchive` — open an HDF5 file (or in-memory buffer) for
-  reading/writing. Supports the modes ``'r'``, ``'w'``, ``'a'``, ``'r+'``.
-* :class:`HDFArchiveGroup` — a view onto a subgroup of an
-  :class:`HDFArchive`. Same dict-like interface, scoped to that subgroup.
-* :class:`HDFArchiveInert` — a no-op stand-in used in MPI contexts so that
-  non-root ranks can execute archive code without performing any I/O.
-
-Custom Python classes can be made archive-compatible by registering them
-with :func:`h5.formats.register_class` and providing
-``__reduce_to_dict__`` / ``__factory_from_dict__`` (or ``__write_hdf5__``)
-methods.
+See :mod:`h5.archive` for the main archive classes and :mod:`h5.formats` for
+registering custom classes.
 """
 
 from .archive import HDFArchive, HDFArchiveGroup, HDFArchiveInert

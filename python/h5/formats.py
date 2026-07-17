@@ -12,6 +12,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+Registration mechanism for archive-compatible Python classes.
+
+To be written to and reconstructed from an HDF5 archive, a Python class is
+associated with an HDF5 *format* string. This module maintains the registry that
+maps format strings to the information needed to rebuild the corresponding
+objects, together with the functions to populate and query it.
+"""
+
 import re
 from copy import deepcopy
 
@@ -21,11 +30,37 @@ class FormatInfo:
 
     Created and stored in a module-level registry by :func:`register_class`,
     and looked up at read time by :func:`get_format_info` from the
-    ``Format`` attribute of the HDF5 group. Carries the qualified class
-    name and module to import, the docstring, an optional custom read
-    function, and a ``backward_compat`` mapping populated when a regex
-    registered via :func:`register_backward_compatibility_method` matches
-    the stored format string.
+    ``Format`` attribute of the HDF5 group.
+
+    Parameters
+    ----------
+    classname : str
+        Name of the Python class to reconstruct.
+    modulename : str
+        Name of the module the class must be imported from.
+    doc : str or dict
+        Documentation associated with the format.
+    hdf5_format : str
+        The HDF5 format string this info is registered under. Stored on the
+        instance as the ``format_name`` attribute.
+    read_fun : callable or None
+        Optional custom read function ``read_fun(group, key)``.
+
+    Attributes
+    ----------
+    classname : str
+        Name of the Python class to reconstruct.
+    modulename : str
+        Name of the module the class must be imported from.
+    doc : str or dict
+        Documentation associated with the format.
+    read_fun : callable or None
+        Optional custom read function ``read_fun(group, key)``.
+    format_name : str
+        The HDF5 format string (from the ``hdf5_format`` argument).
+    backward_compat : dict
+        Backward-compatibility mapping ``field_name -> hdf5_format``; empty for an
+        exact match.
     """
     def __init__(self, classname, modulename, doc, hdf5_format, read_fun) :
         self.classname, self.modulename, self.doc, self.read_fun = classname, modulename, doc, read_fun
@@ -45,11 +80,34 @@ _formats_backward_compat = [] # List of (regex, format, lambda)
 
 def register_class (cls, doc = None, read_fun = None, hdf5_format = None):
     """
-     For each class, register it with::
+    Register a Python class so it can be written to and read back from an archive.
 
-         from h5.formats import register_class
-         register_class (GfImFreq, doc= doc_if_different_from cls._hdf5_format_doc_ )
+    The class is stored in the module-level registry keyed by its HDF5 format
+    string, which defaults to ``cls._hdf5_format_`` (if defined) or the class name.
 
+    Parameters
+    ----------
+    cls : type
+        The class to register.
+    doc : str or dict, optional
+        Documentation for the format. Defaults to ``cls._hdf5_format_doc_`` if
+        defined, otherwise an empty dict.
+    read_fun : callable, optional
+        Custom read function ``read_fun(group, key)`` used to reconstruct the
+        object instead of ``cls.__factory_from_dict__``.
+    hdf5_format : str, optional
+        Explicit format string to register under. Defaults to
+        ``cls._hdf5_format_`` or ``cls.__name__``.
+
+    Raises
+    ------
+    AssertionError
+        If a class is already registered under the same format string.
+
+    Examples
+    --------
+    >>> from h5.formats import register_class
+    >>> register_class(GfImFreq, doc=doc_if_different_from_cls._hdf5_format_doc_)
     """
     hdf5_format = hdf5_format or (cls._hdf5_format_ if hasattr(cls,"_hdf5_format_") else cls.__name__)
     assert hdf5_format not in _formats_dict, "class %s is already registered"%hdf5_format
@@ -59,11 +117,17 @@ def register_class (cls, doc = None, read_fun = None, hdf5_format = None):
 
 def register_backward_compatibility_method(regex, clsname, fun = lambda s: {}):
     """
-    regex : the regular expression to match the hdf5_format (e.g. "Gf" for GfImfreq_x_whatever....)
-    clsname : the class name that it corresponds to
-    fun : a lambda taking hdf5_format and returning a dict
-          field_name -> hdf5_format
-          to read old data where not every subobjects have a hdf5_format.
+    Register a backward-compatibility method for reading old data.
+
+    Parameters
+    ----------
+    regex : str
+        The regular expression to match the HDF5 format tag.
+    clsname : str
+        The class name that it corresponds to.
+    fun : callable
+        A lambda taking an HDF5 format tag and returning a dict that maps field
+        names to HDF5 format tags.
     """
     _formats_backward_compat.append((regex, clsname, fun))
 
@@ -75,11 +139,25 @@ def get_format_info(hdf5_format):
     If an exact match is found in the registry it is returned directly.
     Otherwise the backward-compatibility patterns registered via
     :func:`register_backward_compatibility_method` are tried in order; the
-    first regex match yields a copy of the target class's
-    :class:`FormatInfo` with its ``backward_compat`` field filled in.
+    first regex match yields a copy of the target class's :class:`FormatInfo`
+    with its ``backward_compat`` field filled in.
 
-    Raises :class:`KeyError` if no exact or compatible match is found, or
-    if more than one compatibility pattern matches.
+    Parameters
+    ----------
+    hdf5_format : str
+        The HDF5 format string to look up.
+
+    Returns
+    -------
+    FormatInfo
+        The format info for an exact match, or a copy augmented with
+        backward-compatibility information for a regex match.
+
+    Raises
+    ------
+    KeyError
+        If no exact or compatible match is found, or if more than one
+        compatibility pattern matches.
     """
     # If present exactly, we return it
     if hdf5_format in _formats_dict:
