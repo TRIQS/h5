@@ -2,3 +2,12 @@
 mako
 numpy
 scipy
+
+# Documentation build (see doc/CMakeLists.txt)
+sphinx
+numpydoc
+nbsphinx
+myst-parser
+linkify-it-py
+sphinx-rtd-theme
+matplotlib
