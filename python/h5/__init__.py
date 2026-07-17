@@ -19,6 +19,29 @@ files.
 
 See :mod:`h5.archive` for the main archive classes and :mod:`h5.formats` for
 registering custom classes.
+
+Examples
+--------
+
+Values are written and read back by key, and standard Python containers as well
+as numpy arrays are supported out of the box:
+
+.. code-block:: python
+
+    import numpy as np
+    from h5 import HDFArchive
+
+    # write some data to an archive
+    with HDFArchive("example.h5", 'w') as ar:
+        ar['x'] = 1.0
+        ar['vec'] = np.array([1, 2, 3])
+        ar['params'] = {'beta': 10.0, 'n': 5}
+
+    # read it back
+    with HDFArchive("example.h5", 'r') as ar:
+        print(ar.keys())      # ['params', 'vec', 'x']
+        print(ar['x'])        # 1.0
+        print(ar['params'])   # {'beta': 10.0, 'n': 5}
 """
 
 from .archive import HDFArchive, HDFArchiveGroup, HDFArchiveInert
