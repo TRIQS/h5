@@ -176,19 +176,25 @@ namespace h5 {
 
     /**
      * @brief Get all the names of the subgroups in the current group.
-     * @return A vector with the names of all the subgroups.
+     * @return A vector with the names of all the subgroups, in ascending (increasing) name order
+     * (`H5_ITER_INC`). The order is independent of the insertion/native order and stable across
+     * HDF5 versions.
      */
     [[nodiscard]] std::vector<std::string> get_all_subgroup_names() const;
 
     /**
      * @brief Get all the names of the datasets in the current group.
-     * @return A vector with the names of all the datasets.
+     * @return A vector with the names of all the datasets, in ascending (increasing) name order
+     * (`H5_ITER_INC`). The order is independent of the insertion/native order and stable across
+     * HDF5 versions.
      */
     [[nodiscard]] std::vector<std::string> get_all_dataset_names() const;
 
     /**
      * @brief Get all the names of the subgroups and datasets in the current group.
-     * @return A vector with the names of all the subgroups and datasets.
+     * @return A vector with the names of all the subgroups and datasets, in ascending (increasing)
+     * name order (`H5_ITER_INC`). The order is independent of the insertion/native order and stable
+     * across HDF5 versions.
      */
     [[nodiscard]] std::vector<std::string> get_all_subgroup_dataset_names() const;
 
