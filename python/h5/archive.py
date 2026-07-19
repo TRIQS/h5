@@ -77,6 +77,24 @@ class HDFArchiveGroup(HDFArchiveGroupBasicLayer):
     keys of one HDF5 group. On read, registered Python classes are
     automatically reconstructed via their ``__factory_from_dict__`` (see
     :mod:`h5.formats`); use :meth:`get_raw` to bypass reconstruction.
+
+    Ordering
+    --------
+    Group members are iterated in ascending name order (HDF5 is queried with
+    ``H5_ITER_INC``), which is deterministic and stable across HDF5/Python
+    versions -- unlike the previous native iteration order.
+
+    A ``dict`` (or any object reconstructed via ``__reduce_to_dict__`` /
+    ``__factory_from_dict__`` whose result depends on ordering) round-trips in
+    its original insertion order rather than name order: the key order is
+    recorded in a ``__dict_key_order__`` attribute on write and replayed on
+    read. Archives that lack this attribute (older files, or files written by
+    other tools) fall back to name order. On read the attribute must list
+    exactly the group's keys; a mismatch indicates a corrupt or externally
+    edited archive and raises :class:`ValueError`.
+
+    Only string keys are supported for stored ``dict`` objects; non-string keys
+    raise :class:`TypeError` on write rather than being silently stringified.
     """
     _wrappedType = {
         list : List,
