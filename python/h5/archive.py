@@ -582,19 +582,19 @@ class HDFArchive(HDFArchiveGroup):
     Examples
     --------
     >>> # retrieve a remote archive (in read-only mode)
-    >>> h = HDFArchive('http://ipht.cea.fr/triqs/data/single_site_bethe.output.h5')
+    >>> h = HDFArchive('https://example.com/archive.h5', 'r')
     >>>
     >>> # full copy of an archive
     >>> HDFArchive(f, 'w', init = HDFArchive(fmp, 'r').items())
     >>>
     >>> # partial copy of the file fmp, keeping only the key 'G'
-    >>> HDFArchive(f, 'w', init = [(k, v) for (k, v) in HDFArchive(fmp, 'r') if k in ['G']])
+    >>> HDFArchive(f, 'w', init = [(k, v) for (k, v) in HDFArchive(fmp, 'r').items() if k in ['G']])
     >>>
     >>> # faster: objects are retrieved lazily (generator instead of list)
-    >>> HDFArchive(f, 'w', init = ((k, v) for (k, v) in HDFArchive(fmp, 'r') if k in ['G']))
+    >>> HDFArchive(f, 'w', init = ((k, v) for (k, v) in HDFArchive(fmp, 'r').items() if k in ['G']))
     >>>
     >>> # partial copy with on-the-fly processing via a function P
-    >>> HDFArchive(f, 'w', init = ((k, P(v)) for (k, v) in HDFArchive(fmp, 'r') if k in ['G']))
+    >>> HDFArchive(f, 'w', init = ((k, P(v)) for (k, v) in HDFArchive(fmp, 'r').items() if k in ['G']))
     """
     _class_version = 1
 
