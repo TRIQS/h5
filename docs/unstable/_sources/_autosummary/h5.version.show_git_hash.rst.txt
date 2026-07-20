@@ -1,0 +1,6 @@
+h5.version.show\_git\_hash
+==========================
+
+.. currentmodule:: h5.version
+
+.. autofunction:: show_git_hash

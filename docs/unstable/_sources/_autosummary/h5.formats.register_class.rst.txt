@@ -1,0 +1,6 @@
+h5.formats.register\_class
+==========================
+
+.. currentmodule:: h5.formats
+
+.. autofunction:: register_class

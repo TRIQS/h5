@@ -1,0 +1,33 @@
+h5.archive.HDFArchive
+=====================
+
+.. currentmodule:: h5.archive
+
+.. autoclass:: HDFArchive
+
+  
+   .. HACK -- the point here is that we don't want this to appear in the output, but the autosummary should still generate the pages.
+      .. autosummary::
+         :toctree:
+      
+         HDFArchive.__getitem__
+         HDFArchive.__len__
+         HDFArchive.as_bytes
+         HDFArchive.create_group
+         HDFArchive.create_softlink
+         HDFArchive.get_raw
+         HDFArchive.is_data
+         HDFArchive.is_group
+         HDFArchive.items
+         HDFArchive.keys
+         HDFArchive.update
+         HDFArchive.values
+         HDFArchive.write_attr
+      
+         HDFArchive.__getitem__
+         HDFArchive.__len__
+  
+
+  
+  
+  

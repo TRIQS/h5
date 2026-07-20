@@ -1,0 +1,6 @@
+h5.archive.HDFArchiveGroup.is\_group
+====================================
+
+.. currentmodule:: h5.archive
+
+.. automethod:: HDFArchiveGroup.is_group

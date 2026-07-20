@@ -1,0 +1,6 @@
+h5.archive.HDFArchiveGroup.get\_raw
+===================================
+
+.. currentmodule:: h5.archive
+
+.. automethod:: HDFArchiveGroup.get_raw

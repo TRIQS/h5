@@ -1,0 +1,6 @@
+h5.archive.HDFArchiveGroup.values
+=================================
+
+.. currentmodule:: h5.archive
+
+.. automethod:: HDFArchiveGroup.values

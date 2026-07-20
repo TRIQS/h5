@@ -1,0 +1,27 @@
+var searchData=
+[
+  ['scalar_20types_0',['Arithmetic scalar types',['../group__rw__scalar.html',1,'']]],
+  ['scalar_2ehpp_1',['scalar.hpp',['../scalar_8hpp.html',1,'']]],
+  ['serialization_2',['Example 3: Serialization',['../ex3.html',1,'']]],
+  ['serialization_2ehpp_3',['serialization.hpp',['../serialization_8hpp.html',1,'']]],
+  ['serialize_4',['serialize',['../group__serialize.html#gad2bcd8f6dac5f1b4d3726c5ba86b0ee6',1,'h5']]],
+  ['serialize_20deserialize_5',['Serialize Deserialize',['../group__serialize.html',1,'Serialize/Deserialize'],['../documentation.html#autotoc_md3',1,'Serialize/Deserialize']]],
+  ['shape_6',['shape',['../structh5_1_1array__interface_1_1hyperslab.html#aedf629d6a7106753636b53c02fef52e4',1,'h5::array_interface::hyperslab']]],
+  ['size_7',['size',['../structh5_1_1array__interface_1_1hyperslab.html#a3da1a6f01c8e55e911f0cbc07d4f7814',1,'h5::array_interface::hyperslab']]],
+  ['slab_8',['slab',['../structh5_1_1array__interface_1_1array__view.html#afdccd091cfba38919a24f80dc6ea0329',1,'h5::array_interface::array_view']]],
+  ['start_9',['start',['../structh5_1_1array__interface_1_1array__view.html#a1bdb16892065f8b42346ea2d791d408c',1,'h5::array_interface::array_view::start'],['../index.html#start',1,'Where to start?']]],
+  ['std_3a_3aarray_10',['std::array',['../group__rw__array.html',1,'']]],
+  ['std_3a_3amap_11',['std::map',['../group__rw__map.html',1,'']]],
+  ['std_3a_3aoptional_12',['std::optional',['../group__rw__optional.html',1,'']]],
+  ['std_3a_3apair_13',['std::pair',['../group__rw__pair.html',1,'']]],
+  ['std_3a_3astring_20const_20char_20and_20char_5fbuf_14',['std::string, const char* and char_buf',['../group__rw__string.html',1,'']]],
+  ['std_3a_3atuple_15',['std::tuple',['../group__rw__tuple.html',1,'']]],
+  ['std_3a_3avariant_16',['std::variant',['../group__rw__variant.html',1,'']]],
+  ['std_3a_3avector_17',['std::vector',['../group__rw__vector.html',1,'']]],
+  ['steps_18',['Installation steps',['../installation.html#install_steps',1,'']]],
+  ['storable_19',['Storable',['../concepth5_1_1_storable.html',1,'h5']]],
+  ['storable_2ehpp_20',['storable.hpp',['../storable_8hpp.html',1,'']]],
+  ['stride_21',['stride',['../structh5_1_1array__interface_1_1hyperslab.html#a96339ebd637a1433dda2108eeed44092',1,'h5::array_interface::hyperslab']]],
+  ['string_2ecpp_22',['string.cpp',['../string_8cpp.html',1,'']]],
+  ['string_2ehpp_23',['string.hpp',['../string_8hpp.html',1,'']]]
+];

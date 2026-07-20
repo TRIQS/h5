@@ -1,0 +1,6 @@
+h5.archive\_basic\_layer.HDFArchiveGroupBasicLayer.create\_softlink
+===================================================================
+
+.. currentmodule:: h5.archive_basic_layer
+
+.. automethod:: HDFArchiveGroupBasicLayer.create_softlink

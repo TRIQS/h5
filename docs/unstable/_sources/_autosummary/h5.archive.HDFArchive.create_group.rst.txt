@@ -1,0 +1,6 @@
+h5.archive.HDFArchive.create\_group
+===================================
+
+.. currentmodule:: h5.archive
+
+.. automethod:: HDFArchive.create_group

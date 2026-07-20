@@ -1,0 +1,6 @@
+h5.archive.HDFArchiveGroup.write\_attr
+======================================
+
+.. currentmodule:: h5.archive
+
+.. automethod:: HDFArchiveGroup.write_attr

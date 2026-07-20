@@ -1,0 +1,6 @@
+h5.archive.HDFArchive.as\_bytes
+===============================
+
+.. currentmodule:: h5.archive
+
+.. automethod:: HDFArchive.as_bytes

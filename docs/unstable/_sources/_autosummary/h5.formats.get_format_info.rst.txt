@@ -1,0 +1,6 @@
+h5.formats.get\_format\_info
+============================
+
+.. currentmodule:: h5.formats
+
+.. autofunction:: get_format_info

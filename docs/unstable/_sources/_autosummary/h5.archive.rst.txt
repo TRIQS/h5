@@ -1,0 +1,37 @@
+h5.archive
+==========
+
+.. automodule:: h5.archive
+
+
+
+
+
+
+
+
+
+
+
+.. rubric:: Classes
+
+.. autosummary::
+    :toctree:                                         
+    :template: autosummary_class_template.rst
+    
+    Dict
+    HDFArchive
+    HDFArchiveGroup
+    HDFArchiveInert
+    List
+    Tuple
+
+
+
+
+
+
+
+
+
+

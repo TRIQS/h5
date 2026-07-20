@@ -1,0 +1,304 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>h5.archive.HDFArchive &mdash; h5  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/custom.css?v=f7f783a0" />
+      <link rel="stylesheet" type="text/css" href="../_static/plot_directive.css" />
+
+  
+    <link rel="canonical" href="https://triqs.github.io/h5/latest/_autosummary/h5.archive.HDFArchive.html" />
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="h5.archive.HDFArchive.as_bytes" href="h5.archive.HDFArchive.as_bytes.html" />
+    <link rel="prev" title="h5.archive.Dict" href="h5.archive.Dict.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #7E588A" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            h5
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Install h5</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../install.html#compiling-h5-from-source">Compiling h5 from source</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../install.html#prerequisites">Prerequisites</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../install.html#installation-steps">Installation steps</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../install.html#version-compatibility">Version compatibility</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../install.html#custom-cmake-options">Custom CMake options</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="reference internal" href="../documentation.html">Documentation</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../documentation.html#c-reference-manual">C++ reference manual</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../documentation.html#python-reference-manual">Python reference manual</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="h5.html">h5</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="h5.html#examples">Examples</a></li>
+<li class="toctree-l4 current"><a class="reference internal" href="h5.archive.html">h5.archive</a><ul class="current">
+<li class="toctree-l5"><a class="reference internal" href="h5.archive.Dict.html">h5.archive.Dict</a></li>
+<li class="toctree-l5 current"><a class="current reference internal" href="#">h5.archive.HDFArchive</a></li>
+<li class="toctree-l5"><a class="reference internal" href="h5.archive.HDFArchiveGroup.html">h5.archive.HDFArchiveGroup</a></li>
+<li class="toctree-l5"><a class="reference internal" href="h5.archive.HDFArchiveInert.html">h5.archive.HDFArchiveInert</a></li>
+<li class="toctree-l5"><a class="reference internal" href="h5.archive.List.html">h5.archive.List</a></li>
+<li class="toctree-l5"><a class="reference internal" href="h5.archive.Tuple.html">h5.archive.Tuple</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="h5.archive_basic_layer.html">h5.archive_basic_layer</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="h5.archive_basic_layer.HDFArchiveGroupBasicLayer.html">h5.archive_basic_layer.HDFArchiveGroupBasicLayer</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="h5.formats.html">h5.formats</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="h5.formats.get_format_info.html">h5.formats.get_format_info</a></li>
+<li class="toctree-l5"><a class="reference internal" href="h5.formats.register_backward_compatibility_method.html">h5.formats.register_backward_compatibility_method</a></li>
+<li class="toctree-l5"><a class="reference internal" href="h5.formats.register_class.html">h5.formats.register_class</a></li>
+<li class="toctree-l5"><a class="reference internal" href="h5.formats.FormatInfo.html">h5.formats.FormatInfo</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="h5.version.html">h5.version</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="h5.version.show_git_hash.html">h5.version.show_git_hash</a></li>
+<li class="toctree-l5"><a class="reference internal" href="h5.version.show_version.html">h5.version.show_version</a></li>
+<li class="toctree-l5"><a class="reference internal" href="h5.version.version.html">h5.version.version</a></li>
+<li class="toctree-l5"><a class="reference internal" href="h5.version.h5_hash.html">h5.version.h5_hash</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../issues.html">Reporting issues</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ChangeLog.html">Changelog</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../ChangeLog.html#version-2-0-0">Version 2.0.0</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../ChangeLog.html#general">General</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../ChangeLog.html#doc">doc</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../ChangeLog.html#fix">fix</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../ChangeLog.html#cmake">cmake</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../ChangeLog.html#version-1-3-0">Version 1.3.0</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../ChangeLog.html#id1">General</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../ChangeLog.html#id2">doc</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../ChangeLog.html#id3">cmake</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../ChangeLog.html#version-1-2-0">Version 1.2.0</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../ChangeLog.html#id4">General</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../ChangeLog.html#id5">cmake</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../ChangeLog.html#jenkins">jenkins</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../ChangeLog.html#fixes">fixes</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../ChangeLog.html#version-1-1-0">Version 1.1.0</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../ChangeLog.html#id6">General</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../ChangeLog.html#id7">doc</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../ChangeLog.html#id8">cmake</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../ChangeLog.html#version-1-0-0">Version 1.0.0</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../about.html">About h5</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../about.html#license">License</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #7E588A" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">h5</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../documentation.html">Documentation</a></li>
+          <li class="breadcrumb-item"><a href="h5.html">h5</a></li>
+          <li class="breadcrumb-item"><a href="h5.archive.html">h5.archive</a></li>
+      <li class="breadcrumb-item active">h5.archive.HDFArchive</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/_autosummary/h5.archive.HDFArchive.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="h5-archive-hdfarchive">
+<h1>h5.archive.HDFArchive<a class="headerlink" href="#h5-archive-hdfarchive" title="Link to this heading"></a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="h5.archive.HDFArchive">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">h5.archive.</span></span><span class="sig-name descname"><span class="pre">HDFArchive</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">descriptor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">open_flag</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'a'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key_as_string_only</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reconstruct_python_object</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">init</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/h5/archive.html#HDFArchive"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#h5.archive.HDFArchive" title="Link to this definition"></a></dt>
+<dd><p>Top-level handle to an HDF5 file.</p>
+<p>Opens a local path, a remote URL (read-only), an in-memory buffer, or a fresh 
+in-memory file, and exposes its contents through the <a class="reference internal" href="h5.archive.HDFArchiveGroup.html#h5.archive.HDFArchiveGroup" title="h5.archive.HDFArchiveGroup"><code class="xref py py-class docutils literal notranslate"><span class="pre">HDFArchiveGroup</span></code></a> 
+dict-like interface.</p>
+<p>Supports <code class="docutils literal notranslate"><span class="pre">with</span></code> blocks and a context-managed lifetime.</p>
+<p>The underlying file is closed in <code class="docutils literal notranslate"><span class="pre">__del__</span></code> / <code class="docutils literal notranslate"><span class="pre">__exit__</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>descriptor</strong><span class="classifier">str or bytes, optional</span></dt><dd><ul class="simple">
+<li><p>If <code class="docutils literal notranslate"><span class="pre">descriptor</span></code> is a simple string, it is interpreted as a local file name.</p></li>
+<li><p>If <code class="docutils literal notranslate"><span class="pre">descriptor</span></code> is a remote url (e.g.
+<code class="docutils literal notranslate"><span class="pre">http://ipht.cea.fr/triqs/data/single_site_bethe.output.h5</span></code>) then the h5
+file is downloaded as a temporary file and opened. In that case,
+<code class="docutils literal notranslate"><span class="pre">open_flag</span></code> must be <code class="docutils literal notranslate"><span class="pre">'r'</span></code> (read-only). The temporary file is deleted at exit.</p></li>
+<li><p>If <code class="docutils literal notranslate"><span class="pre">descriptor</span></code> is a bytes object, the bytes are interpreted as an hdf5
+file and opened in memory only. Here <code class="docutils literal notranslate"><span class="pre">open_flag</span></code> must keep its default <code class="docutils literal notranslate"><span class="pre">'a'</span></code>.</p></li>
+<li><p>If <code class="docutils literal notranslate"><span class="pre">descriptor</span></code> is None (default), a new hdf5 file is created in memory only.
+Here <code class="docutils literal notranslate"><span class="pre">open_flag</span></code> must keep its default <code class="docutils literal notranslate"><span class="pre">'a'</span></code>.</p></li>
+</ul>
+</dd>
+<dt><strong>open_flag</strong><span class="classifier">str, optional</span></dt><dd><p>Opening mode, one of <code class="docutils literal notranslate"><span class="pre">'r'</span></code> (read-only), <code class="docutils literal notranslate"><span class="pre">'w'</span></code> (truncate/write) or <code class="docutils literal notranslate"><span class="pre">'a'</span></code> 
+(read-write, default). Memory files require <code class="docutils literal notranslate"><span class="pre">'a'</span></code>.</p>
+</dd>
+<dt><strong>key_as_string_only</strong><span class="classifier">bool, optional</span></dt><dd><p>If True (default), keys are stored as plain strings.</p>
+</dd>
+<dt><strong>reconstruct_python_object</strong><span class="classifier">bool, optional</span></dt><dd><p>If True (default), registered Python classes are reconstructed on read. If False, 
+entries are returned as raw datasets / subgroups.</p>
+</dd>
+<dt><strong>init</strong><span class="classifier">iterable of (key, value), optional</span></dt><dd><p>Any generator of <code class="docutils literal notranslate"><span class="pre">(key,</span> <span class="pre">value)</span></code> tuples, e.g. <code class="docutils literal notranslate"><span class="pre">dict.items()</span></code>. The archive is 
+filled with these values on construction.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Methods</p>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="h5.archive.HDFArchive.as_bytes.html#h5.archive.HDFArchive.as_bytes" title="h5.archive.HDFArchive.as_bytes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">as_bytes</span></code></a>()</p></td>
+<td><p>Serialize the underlying HDF5 file to an in-memory byte buffer.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="h5.archive.HDFArchive.create_group.html#h5.archive.HDFArchive.create_group" title="h5.archive.HDFArchive.create_group"><code class="xref py py-obj docutils literal notranslate"><span class="pre">create_group</span></code></a>(key)</p></td>
+<td><p>Create a new empty subgroup.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="h5.archive.HDFArchive.create_softlink.html#h5.archive.HDFArchive.create_softlink" title="h5.archive.HDFArchive.create_softlink"><code class="xref py py-obj docutils literal notranslate"><span class="pre">create_softlink</span></code></a>(target_key, key[, ...])</p></td>
+<td><p>Create an HDF5 soft link <code class="docutils literal notranslate"><span class="pre">key</span></code> pointing at <code class="docutils literal notranslate"><span class="pre">target_key</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="h5.archive.HDFArchive.get_raw.html#h5.archive.HDFArchive.get_raw" title="h5.archive.HDFArchive.get_raw"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_raw</span></code></a>(key)</p></td>
+<td><p>Return the entry at <code class="docutils literal notranslate"><span class="pre">key</span></code> without reconstructing a Python object.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="h5.archive.HDFArchive.is_data.html#h5.archive.HDFArchive.is_data" title="h5.archive.HDFArchive.is_data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_data</span></code></a>(p)</p></td>
+<td><p>Return whether <code class="docutils literal notranslate"><span class="pre">p</span></code> names a dataset (leaf) of this group.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="h5.archive.HDFArchive.is_group.html#h5.archive.HDFArchive.is_group" title="h5.archive.HDFArchive.is_group"><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_group</span></code></a>(p)</p></td>
+<td><p>Return whether <code class="docutils literal notranslate"><span class="pre">p</span></code> names a subgroup of this group.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="h5.archive.HDFArchive.items.html#h5.archive.HDFArchive.items" title="h5.archive.HDFArchive.items"><code class="xref py py-obj docutils literal notranslate"><span class="pre">items</span></code></a>()</p></td>
+<td><p>Iterate over the <code class="docutils literal notranslate"><span class="pre">(key,</span> <span class="pre">value)</span></code> pairs stored in the group.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="h5.archive.HDFArchive.keys.html#h5.archive.HDFArchive.keys" title="h5.archive.HDFArchive.keys"><code class="xref py py-obj docutils literal notranslate"><span class="pre">keys</span></code></a>()</p></td>
+<td><p>Return the names of the entries in this group.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="h5.archive.HDFArchive.update.html#h5.archive.HDFArchive.update" title="h5.archive.HDFArchive.update"><code class="xref py py-obj docutils literal notranslate"><span class="pre">update</span></code></a>(object_with_dict_protocol)</p></td>
+<td><p>Copy all <code class="docutils literal notranslate"><span class="pre">(key,</span> <span class="pre">value)</span></code> pairs of a mapping into the group.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="h5.archive.HDFArchive.values.html#h5.archive.HDFArchive.values" title="h5.archive.HDFArchive.values"><code class="xref py py-obj docutils literal notranslate"><span class="pre">values</span></code></a>()</p></td>
+<td><p>Iterate over the values stored in the group.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="h5.archive.HDFArchive.write_attr.html#h5.archive.HDFArchive.write_attr" title="h5.archive.HDFArchive.write_attr"><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_attr</span></code></a>(key, val)</p></td>
+<td><p>Write an HDF5 attribute on this group.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># retrieve a remote archive (in read-only mode)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">h</span> <span class="o">=</span> <span class="n">HDFArchive</span><span class="p">(</span><span class="s1">&#39;https://example.com/archive.h5&#39;</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># full copy of an archive</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">HDFArchive</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">,</span> <span class="n">init</span> <span class="o">=</span> <span class="n">HDFArchive</span><span class="p">(</span><span class="n">fmp</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">items</span><span class="p">())</span>
+<span class="gp">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># partial copy of the file fmp, keeping only the key &#39;G&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">HDFArchive</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">,</span> <span class="n">init</span> <span class="o">=</span> <span class="p">[(</span><span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span> <span class="ow">in</span> <span class="n">HDFArchive</span><span class="p">(</span><span class="n">fmp</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">k</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;G&#39;</span><span class="p">]])</span>
+<span class="gp">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># faster: objects are retrieved lazily (generator instead of list)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">HDFArchive</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">,</span> <span class="n">init</span> <span class="o">=</span> <span class="p">((</span><span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span> <span class="ow">in</span> <span class="n">HDFArchive</span><span class="p">(</span><span class="n">fmp</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">k</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;G&#39;</span><span class="p">]))</span>
+<span class="gp">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># partial copy with on-the-fly processing via a function P</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">HDFArchive</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">,</span> <span class="n">init</span> <span class="o">=</span> <span class="p">((</span><span class="n">k</span><span class="p">,</span> <span class="n">P</span><span class="p">(</span><span class="n">v</span><span class="p">))</span> <span class="k">for</span> <span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span> <span class="ow">in</span> <span class="n">HDFArchive</span><span class="p">(</span><span class="n">fmp</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">k</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;G&#39;</span><span class="p">]))</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="h5.archive.Dict.html" class="btn btn-neutral float-left" title="h5.archive.Dict" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="h5.archive.HDFArchive.as_bytes.html" class="btn btn-neutral float-right" title="h5.archive.HDFArchive.as_bytes" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2018-present, The Simons Foundation, authors: O. Parcollet, D. Simon, N. Wentzell, T. Hahn.</p>
+  </div>
+
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  
+<div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    <span class="fa fa-book"> Versions</span>
+    v: 2.0.0
+    <span class="fa fa-caret-down"></span>
+  </span>
+  <div class="rst-other-versions">
+    <dl>
+      <dt>Versions</dt>
+      <dd><a href="https://triqs.github.io/h5/latest/">latest</a></dd>
+      <dd><a href="https://triqs.github.io/h5/unstable/">unstable</a></dd>
+      <dd><a href="https://triqs.github.io/h5/2.0.x/">2.0.x</a></dd>
+    </dl>
+  </div>
+</div><script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

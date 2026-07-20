@@ -1,0 +1,6 @@
+h5.archive.HDFArchiveInert.HDFArchive\_Inert
+============================================
+
+.. currentmodule:: h5.archive
+
+.. automethod:: HDFArchiveInert.HDFArchive_Inert

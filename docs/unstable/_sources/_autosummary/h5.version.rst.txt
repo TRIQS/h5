@@ -1,0 +1,40 @@
+h5.version
+==========
+
+.. automodule:: h5.version
+
+
+
+.. rubric:: Functions
+
+.. autosummary::
+    :toctree:                             
+    
+    show_git_hash
+    show_version
+
+
+
+
+
+.. rubric:: Module Attributes
+
+.. autosummary::
+    :toctree:                             
+    
+    version
+    h5_hash
+
+
+
+
+
+
+
+
+
+
+
+
+
+

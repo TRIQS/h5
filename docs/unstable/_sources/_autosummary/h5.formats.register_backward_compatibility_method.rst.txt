@@ -1,0 +1,6 @@
+h5.formats.register\_backward\_compatibility\_method
+====================================================
+
+.. currentmodule:: h5.formats
+
+.. autofunction:: register_backward_compatibility_method

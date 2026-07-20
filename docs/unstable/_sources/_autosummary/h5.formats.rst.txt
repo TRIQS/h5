@@ -1,0 +1,41 @@
+h5.formats
+==========
+
+.. automodule:: h5.formats
+
+
+
+.. rubric:: Functions
+
+.. autosummary::
+    :toctree:                             
+    
+    get_format_info
+    register_backward_compatibility_method
+    register_class
+
+
+
+
+
+
+
+
+
+.. rubric:: Classes
+
+.. autosummary::
+    :toctree:                                         
+    :template: autosummary_class_template.rst
+    
+    FormatInfo
+
+
+
+
+
+
+
+
+
+

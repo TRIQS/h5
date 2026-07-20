@@ -1,0 +1,6 @@
+h5.version.h5\_hash
+===================
+
+.. currentmodule:: h5.version
+
+.. autodata:: h5_hash

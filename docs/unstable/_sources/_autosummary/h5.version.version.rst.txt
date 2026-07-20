@@ -1,0 +1,6 @@
+h5.version.version
+==================
+
+.. currentmodule:: h5.version
+
+.. autodata:: version

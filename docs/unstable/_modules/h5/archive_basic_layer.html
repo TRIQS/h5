@@ -1,0 +1,412 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>h5.archive_basic_layer &mdash; h5  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/custom.css?v=f7f783a0" />
+      <link rel="stylesheet" type="text/css" href="../../_static/plot_directive.css" />
+
+  
+    <link rel="canonical" href="https://triqs.github.io/h5/latest/_modules/h5/archive_basic_layer.html" />
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="author" title="About these documents" href="../../about.html" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #7E588A" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            h5
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../install.html">Install h5</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../install.html#compiling-h5-from-source">Compiling h5 from source</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../install.html#prerequisites">Prerequisites</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../install.html#installation-steps">Installation steps</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../install.html#version-compatibility">Version compatibility</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../install.html#custom-cmake-options">Custom CMake options</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../documentation.html">Documentation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../documentation.html#c-reference-manual">C++ reference manual</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../documentation.html#python-reference-manual">Python reference manual</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../_autosummary/h5.html">h5</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../_autosummary/h5.html#examples">Examples</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../_autosummary/h5.archive.html">h5.archive</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="../../_autosummary/h5.archive.Dict.html">h5.archive.Dict</a></li>
+<li class="toctree-l5"><a class="reference internal" href="../../_autosummary/h5.archive.HDFArchive.html">h5.archive.HDFArchive</a></li>
+<li class="toctree-l5"><a class="reference internal" href="../../_autosummary/h5.archive.HDFArchiveGroup.html">h5.archive.HDFArchiveGroup</a></li>
+<li class="toctree-l5"><a class="reference internal" href="../../_autosummary/h5.archive.HDFArchiveInert.html">h5.archive.HDFArchiveInert</a></li>
+<li class="toctree-l5"><a class="reference internal" href="../../_autosummary/h5.archive.List.html">h5.archive.List</a></li>
+<li class="toctree-l5"><a class="reference internal" href="../../_autosummary/h5.archive.Tuple.html">h5.archive.Tuple</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="../../_autosummary/h5.archive_basic_layer.html">h5.archive_basic_layer</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="../../_autosummary/h5.archive_basic_layer.HDFArchiveGroupBasicLayer.html">h5.archive_basic_layer.HDFArchiveGroupBasicLayer</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="../../_autosummary/h5.formats.html">h5.formats</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="../../_autosummary/h5.formats.get_format_info.html">h5.formats.get_format_info</a></li>
+<li class="toctree-l5"><a class="reference internal" href="../../_autosummary/h5.formats.register_backward_compatibility_method.html">h5.formats.register_backward_compatibility_method</a></li>
+<li class="toctree-l5"><a class="reference internal" href="../../_autosummary/h5.formats.register_class.html">h5.formats.register_class</a></li>
+<li class="toctree-l5"><a class="reference internal" href="../../_autosummary/h5.formats.FormatInfo.html">h5.formats.FormatInfo</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="../../_autosummary/h5.version.html">h5.version</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="../../_autosummary/h5.version.show_git_hash.html">h5.version.show_git_hash</a></li>
+<li class="toctree-l5"><a class="reference internal" href="../../_autosummary/h5.version.show_version.html">h5.version.show_version</a></li>
+<li class="toctree-l5"><a class="reference internal" href="../../_autosummary/h5.version.version.html">h5.version.version</a></li>
+<li class="toctree-l5"><a class="reference internal" href="../../_autosummary/h5.version.h5_hash.html">h5.version.h5_hash</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../issues.html">Reporting issues</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../ChangeLog.html">Changelog</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../ChangeLog.html#version-2-0-0">Version 2.0.0</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../ChangeLog.html#general">General</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../ChangeLog.html#doc">doc</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../ChangeLog.html#fix">fix</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../ChangeLog.html#cmake">cmake</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../ChangeLog.html#version-1-3-0">Version 1.3.0</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../ChangeLog.html#id1">General</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../ChangeLog.html#id2">doc</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../ChangeLog.html#id3">cmake</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../ChangeLog.html#version-1-2-0">Version 1.2.0</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../ChangeLog.html#id4">General</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../ChangeLog.html#id5">cmake</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../ChangeLog.html#jenkins">jenkins</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../ChangeLog.html#fixes">fixes</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../ChangeLog.html#version-1-1-0">Version 1.1.0</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../ChangeLog.html#id6">General</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../ChangeLog.html#id7">doc</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../ChangeLog.html#id8">cmake</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../ChangeLog.html#version-1-0-0">Version 1.0.0</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../about.html">About h5</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../about.html#license">License</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #7E588A" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">h5</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">h5.archive_basic_layer</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for h5.archive_basic_layer</h1><div class="highlight"><pre>
+<span></span><span class="c1"># Copyright (c) 2019-2020 Simons Foundation</span>
+<span class="c1">#</span>
+<span class="c1"># Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
+<span class="c1"># you may not use this file except in compliance with the License.</span>
+<span class="c1"># You may obtain a copy of the License at</span>
+<span class="c1">#</span>
+<span class="c1">#     http://www.apache.org/licenses/LICENSE-2.0.txt</span>
+<span class="c1">#</span>
+<span class="c1"># Unless required by applicable law or agreed to in writing, software</span>
+<span class="c1"># distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span>
+<span class="c1"># WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="c1"># See the License for the specific language governing permissions and</span>
+<span class="c1"># limitations under the License.</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Low-level bridge between :mod:`h5.archive` and the compiled ``_h5py`` module.</span>
+
+<span class="sd">This module translates the high-level, dict-like archive operations into calls</span>
+<span class="sd">on the C++ HDF5 handles exposed by the compiled ``h5._h5py`` extension: opening</span>
+<span class="sd">groups, reading and writing datasets and attributes, and creating groups and</span>
+<span class="sd">soft links. It is an implementation detail -- users interact with</span>
+<span class="sd">:class:`~h5.archive.HDFArchive` rather than with this layer directly.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="o">,</span><span class="nn">string</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.archive</span><span class="w"> </span><span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.</span><span class="w"> </span><span class="kn">import</span> <span class="n">_h5py</span> <span class="k">as</span> <span class="n">h5</span>
+ 
+<div class="viewcode-block" id="HDFArchiveGroupBasicLayer">
+<a class="viewcode-back" href="../../_autosummary/h5.archive_basic_layer.HDFArchiveGroupBasicLayer.html#h5.archive.HDFArchiveGroupBasicLayer">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">HDFArchiveGroupBasicLayer</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Low-level group operations backing :class:`~h5.archive.HDFArchiveGroup`.</span>
+
+<span class="sd">    Wraps a single HDF5 group handle from the compiled ``h5._h5py`` extension and</span>
+<span class="sd">    exposes the primitive operations (querying, reading/writing datasets and</span>
+<span class="sd">    attributes, creating groups and soft links) that the high-level dict-like</span>
+<span class="sd">    interface is built on. </span>
+<span class="sd">    </span>
+<span class="sd">    This is the base class of :class:`~h5.archive.HDFArchiveGroup`. Users should not </span>
+<span class="sd">    instantiate it directly.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    parent : HDFArchive or HDFArchiveGroup</span>
+<span class="sd">        Object whose ``_group`` handle and ``options`` are used as the base.</span>
+<span class="sd">    subpath : str</span>
+<span class="sd">        Name of the subgroup to open; if empty, ``parent``&#39;s group is reused.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">_class_version</span> <span class="o">=</span> <span class="mi">1</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="n">subpath</span> <span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">options</span> <span class="o">=</span> <span class="n">parent</span><span class="o">.</span><span class="n">options</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_group</span> <span class="o">=</span> <span class="n">parent</span><span class="o">.</span><span class="n">_group</span><span class="o">.</span><span class="n">open_group</span><span class="p">(</span><span class="n">subpath</span><span class="p">)</span> <span class="k">if</span> <span class="n">subpath</span> <span class="k">else</span> <span class="n">parent</span><span class="o">.</span><span class="n">_group</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ignored_keys</span> <span class="o">=</span> <span class="p">[]</span> 
+        <span class="bp">self</span><span class="o">.</span><span class="n">cached_keys</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_group</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_init_root</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">descriptor</span><span class="p">,</span> <span class="n">open_flag</span><span class="p">)</span> <span class="p">:</span>
+        <span class="k">if</span> <span class="n">descriptor</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">try</span> <span class="p">:</span>
+                <span class="n">fich</span> <span class="o">=</span> <span class="n">h5</span><span class="o">.</span><span class="n">File</span><span class="p">()</span>
+            <span class="k">except</span> <span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Cannot open the HDF file in memory&quot;</span><span class="p">)</span>
+                <span class="k">raise</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">descriptor</span><span class="p">,</span> <span class="nb">bytes</span><span class="p">):</span>
+            <span class="k">try</span> <span class="p">:</span>
+                <span class="n">fich</span> <span class="o">=</span> <span class="n">h5</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="n">descriptor</span><span class="p">)</span>
+            <span class="k">except</span> <span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Cannot open the HDF file in memory from the provided bytes&quot;</span><span class="p">)</span>
+                <span class="k">raise</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">assert</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">descriptor</span><span class="p">,</span> <span class="nb">str</span><span class="p">))</span>
+            <span class="k">try</span> <span class="p">:</span>
+                <span class="n">fich</span> <span class="o">=</span> <span class="n">h5</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="n">descriptor</span><span class="p">,</span> <span class="n">open_flag</span><span class="p">)</span>
+            <span class="k">except</span> <span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Cannot open the HDF file </span><span class="si">%s</span><span class="s2">&quot;</span><span class="o">%</span><span class="n">descriptor</span><span class="p">)</span>
+                <span class="k">raise</span>
+
+        <span class="c1"># checking the version</span>
+        <span class="k">if</span> <span class="n">open_flag</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;r&#39;</span><span class="p">,</span><span class="s1">&#39;r+&#39;</span><span class="p">,</span><span class="s1">&#39;a&#39;</span><span class="p">]</span> <span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_version</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_class_version</span>
+        <span class="k">else</span> <span class="p">:</span>
+            <span class="k">try</span> <span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_version</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">fich</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s1">&#39;HDFArchive_Version&#39;</span><span class="p">])</span>
+            <span class="k">except</span> <span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_version</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_version</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">_class_version</span> <span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">IOError</span><span class="p">(</span><span class="s2">&quot;File </span><span class="si">%s</span><span class="s2"> is too recent for this version of HDFArchive module&quot;</span><span class="o">%</span><span class="n">descriptor</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_group</span> <span class="o">=</span> <span class="n">h5</span><span class="o">.</span><span class="n">Group</span><span class="p">(</span><span class="n">fich</span><span class="p">)</span>
+
+<div class="viewcode-block" id="HDFArchiveGroupBasicLayer.is_group">
+<a class="viewcode-back" href="../../_autosummary/h5.archive_basic_layer.HDFArchiveGroupBasicLayer.is_group.html#h5.archive.HDFArchiveGroupBasicLayer.is_group">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">is_group</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">p</span><span class="p">)</span> <span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return whether ``p`` names a subgroup of this group.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        p : str</span>
+<span class="sd">            Entry name (must be non-empty and not start with ``&#39;/&#39;``).</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        bool</span>
+<span class="sd">            True if ``p`` exists and is an HDF5 subgroup.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">p</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">0</span> <span class="ow">and</span> <span class="n">p</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">!=</span><span class="s1">&#39;/&#39;</span>
+        <span class="k">return</span> <span class="n">p</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">cached_keys</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_group</span><span class="o">.</span><span class="n">has_subgroup</span><span class="p">(</span><span class="n">p</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="HDFArchiveGroupBasicLayer.is_data">
+<a class="viewcode-back" href="../../_autosummary/h5.archive_basic_layer.HDFArchiveGroupBasicLayer.is_data.html#h5.archive.HDFArchiveGroupBasicLayer.is_data">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">is_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">p</span><span class="p">)</span> <span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return whether ``p`` names a dataset (leaf) of this group.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        p : str</span>
+<span class="sd">            Entry name (must be non-empty and not start with ``&#39;/&#39;``).</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        bool</span>
+<span class="sd">            True if ``p`` exists and is an HDF5 dataset.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">p</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">0</span> <span class="ow">and</span> <span class="n">p</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">!=</span><span class="s1">&#39;/&#39;</span>
+        <span class="k">return</span> <span class="n">p</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">cached_keys</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_group</span><span class="o">.</span><span class="n">has_dataset</span><span class="p">(</span><span class="n">p</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="HDFArchiveGroupBasicLayer.write_attr">
+<a class="viewcode-back" href="../../_autosummary/h5.archive_basic_layer.HDFArchiveGroupBasicLayer.write_attr.html#h5.archive.HDFArchiveGroupBasicLayer.write_attr">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">write_attr</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">val</span><span class="p">)</span> <span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Write an HDF5 attribute on this group.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        key : str</span>
+<span class="sd">            Attribute name.</span>
+<span class="sd">        val : object</span>
+<span class="sd">            Attribute value.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_group</span><span class="o">.</span><span class="n">write_attribute</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">val</span><span class="p">)</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_read</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">h5</span><span class="o">.</span><span class="n">h5_read_bare</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_group</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_write</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">val</span><span class="p">)</span> <span class="p">:</span>
+        <span class="n">h5</span><span class="o">.</span><span class="n">h5_write_bare</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_group</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">val</span><span class="p">)</span>
+        <span class="c1"># keep the key cache in sync so the dataset is visible in the same session</span>
+        <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">cached_keys</span> <span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">cached_keys</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_flush</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">bool</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_group</span><span class="p">):</span> <span class="bp">self</span><span class="o">.</span><span class="n">_group</span><span class="o">.</span><span class="n">get_file</span><span class="p">()</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
+
+<div class="viewcode-block" id="HDFArchiveGroupBasicLayer.create_group">
+<a class="viewcode-back" href="../../_autosummary/h5.archive_basic_layer.HDFArchiveGroupBasicLayer.create_group.html#h5.archive.HDFArchiveGroupBasicLayer.create_group">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">create_group</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">key</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create a new empty subgroup.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        key : str</span>
+<span class="sd">            Name of the subgroup to create.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_group</span><span class="o">.</span><span class="n">create_group</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cached_keys</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">key</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="HDFArchiveGroupBasicLayer.create_softlink">
+<a class="viewcode-back" href="../../_autosummary/h5.archive_basic_layer.HDFArchiveGroupBasicLayer.create_softlink.html#h5.archive.HDFArchiveGroupBasicLayer.create_softlink">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">create_softlink</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">target_key</span><span class="p">,</span><span class="n">key</span><span class="p">,</span><span class="n">delete_if_exists</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create an HDF5 soft link ``key`` pointing at ``target_key``.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        target_key : str</span>
+<span class="sd">            Path the link should point to.</span>
+<span class="sd">        key : str</span>
+<span class="sd">            Name of the soft link to create.</span>
+<span class="sd">        delete_if_exists : bool, optional</span>
+<span class="sd">            If True (default), replace an existing entry named ``key``.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_group</span><span class="o">.</span><span class="n">create_softlink</span><span class="p">(</span><span class="n">target_key</span><span class="p">,</span><span class="n">key</span><span class="p">,</span><span class="n">delete_if_exists</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cached_keys</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">key</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="HDFArchiveGroupBasicLayer.keys">
+<a class="viewcode-back" href="../../_autosummary/h5.archive_basic_layer.HDFArchiveGroupBasicLayer.keys.html#h5.archive.HDFArchiveGroupBasicLayer.keys">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">keys</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return the names of the entries in this group.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        list of str</span>
+<span class="sd">            The (cached) keys of the group&#39;s subgroups and datasets.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">cached_keys</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_clean_key</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">key</span><span class="p">,</span> <span class="n">report_error</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="p">:</span>
+        <span class="k">if</span> <span class="n">report_error</span> <span class="ow">and</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">cached_keys</span> <span class="p">:</span>
+             <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="s2">&quot;Key </span><span class="si">%s</span><span class="s2"> is not in archive !!&quot;</span><span class="o">%</span><span class="n">key</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">cached_keys</span> <span class="p">:</span>
+          <span class="bp">self</span><span class="o">.</span><span class="n">_group</span><span class="o">.</span><span class="n">unlink</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+          <span class="bp">self</span><span class="o">.</span><span class="n">cached_keys</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span> <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="s2">&quot;Key </span><span class="si">%s</span><span class="s2"> is not in archive !!&quot;</span><span class="o">%</span><span class="n">key</span><span class="p">)</span></div>
+
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2018-present, The Simons Foundation, authors: O. Parcollet, D. Simon, N. Wentzell, T. Hahn.</p>
+  </div>
+
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  
+<div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    <span class="fa fa-book"> Versions</span>
+    v: 2.0.0
+    <span class="fa fa-caret-down"></span>
+  </span>
+  <div class="rst-other-versions">
+    <dl>
+      <dt>Versions</dt>
+      <dd><a href="https://triqs.github.io/h5/latest/">latest</a></dd>
+      <dd><a href="https://triqs.github.io/h5/unstable/">unstable</a></dd>
+      <dd><a href="https://triqs.github.io/h5/2.0.x/">2.0.x</a></dd>
+    </dl>
+  </div>
+</div><script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

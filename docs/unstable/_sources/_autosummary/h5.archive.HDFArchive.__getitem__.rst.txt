@@ -1,0 +1,6 @@
+h5.archive.HDFArchive.\_\_getitem\_\_
+=====================================
+
+.. currentmodule:: h5.archive
+
+.. automethod:: HDFArchive.__getitem__

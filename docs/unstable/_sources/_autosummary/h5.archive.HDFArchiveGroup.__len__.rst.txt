@@ -1,0 +1,6 @@
+h5.archive.HDFArchiveGroup.\_\_len\_\_
+======================================
+
+.. currentmodule:: h5.archive
+
+.. automethod:: HDFArchiveGroup.__len__

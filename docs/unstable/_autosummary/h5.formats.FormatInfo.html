@@ -1,0 +1,258 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>h5.formats.FormatInfo &mdash; h5  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/custom.css?v=f7f783a0" />
+      <link rel="stylesheet" type="text/css" href="../_static/plot_directive.css" />
+
+  
+    <link rel="canonical" href="https://triqs.github.io/h5/latest/_autosummary/h5.formats.FormatInfo.html" />
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="h5.version" href="h5.version.html" />
+    <link rel="prev" title="h5.formats.register_class" href="h5.formats.register_class.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #7E588A" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            h5
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Install h5</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../install.html#compiling-h5-from-source">Compiling h5 from source</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../install.html#prerequisites">Prerequisites</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../install.html#installation-steps">Installation steps</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../install.html#version-compatibility">Version compatibility</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../install.html#custom-cmake-options">Custom CMake options</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="reference internal" href="../documentation.html">Documentation</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../documentation.html#c-reference-manual">C++ reference manual</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../documentation.html#python-reference-manual">Python reference manual</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="h5.html">h5</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="h5.html#examples">Examples</a></li>
+<li class="toctree-l4"><a class="reference internal" href="h5.archive.html">h5.archive</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="h5.archive.Dict.html">h5.archive.Dict</a></li>
+<li class="toctree-l5"><a class="reference internal" href="h5.archive.HDFArchive.html">h5.archive.HDFArchive</a></li>
+<li class="toctree-l5"><a class="reference internal" href="h5.archive.HDFArchiveGroup.html">h5.archive.HDFArchiveGroup</a></li>
+<li class="toctree-l5"><a class="reference internal" href="h5.archive.HDFArchiveInert.html">h5.archive.HDFArchiveInert</a></li>
+<li class="toctree-l5"><a class="reference internal" href="h5.archive.List.html">h5.archive.List</a></li>
+<li class="toctree-l5"><a class="reference internal" href="h5.archive.Tuple.html">h5.archive.Tuple</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="h5.archive_basic_layer.html">h5.archive_basic_layer</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="h5.archive_basic_layer.HDFArchiveGroupBasicLayer.html">h5.archive_basic_layer.HDFArchiveGroupBasicLayer</a></li>
+</ul>
+</li>
+<li class="toctree-l4 current"><a class="reference internal" href="h5.formats.html">h5.formats</a><ul class="current">
+<li class="toctree-l5"><a class="reference internal" href="h5.formats.get_format_info.html">h5.formats.get_format_info</a></li>
+<li class="toctree-l5"><a class="reference internal" href="h5.formats.register_backward_compatibility_method.html">h5.formats.register_backward_compatibility_method</a></li>
+<li class="toctree-l5"><a class="reference internal" href="h5.formats.register_class.html">h5.formats.register_class</a></li>
+<li class="toctree-l5 current"><a class="current reference internal" href="#">h5.formats.FormatInfo</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="h5.version.html">h5.version</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="h5.version.show_git_hash.html">h5.version.show_git_hash</a></li>
+<li class="toctree-l5"><a class="reference internal" href="h5.version.show_version.html">h5.version.show_version</a></li>
+<li class="toctree-l5"><a class="reference internal" href="h5.version.version.html">h5.version.version</a></li>
+<li class="toctree-l5"><a class="reference internal" href="h5.version.h5_hash.html">h5.version.h5_hash</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../issues.html">Reporting issues</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ChangeLog.html">Changelog</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../ChangeLog.html#version-2-0-0">Version 2.0.0</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../ChangeLog.html#general">General</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../ChangeLog.html#doc">doc</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../ChangeLog.html#fix">fix</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../ChangeLog.html#cmake">cmake</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../ChangeLog.html#version-1-3-0">Version 1.3.0</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../ChangeLog.html#id1">General</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../ChangeLog.html#id2">doc</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../ChangeLog.html#id3">cmake</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../ChangeLog.html#version-1-2-0">Version 1.2.0</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../ChangeLog.html#id4">General</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../ChangeLog.html#id5">cmake</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../ChangeLog.html#jenkins">jenkins</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../ChangeLog.html#fixes">fixes</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../ChangeLog.html#version-1-1-0">Version 1.1.0</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../ChangeLog.html#id6">General</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../ChangeLog.html#id7">doc</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../ChangeLog.html#id8">cmake</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../ChangeLog.html#version-1-0-0">Version 1.0.0</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../about.html">About h5</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../about.html#license">License</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #7E588A" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">h5</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../documentation.html">Documentation</a></li>
+          <li class="breadcrumb-item"><a href="h5.html">h5</a></li>
+          <li class="breadcrumb-item"><a href="h5.formats.html">h5.formats</a></li>
+      <li class="breadcrumb-item active">h5.formats.FormatInfo</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/_autosummary/h5.formats.FormatInfo.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="h5-formats-formatinfo">
+<h1>h5.formats.FormatInfo<a class="headerlink" href="#h5-formats-formatinfo" title="Link to this heading"></a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="h5.formats.FormatInfo">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">h5.formats.</span></span><span class="sig-name descname"><span class="pre">FormatInfo</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">classname</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">modulename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">doc</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hdf5_format</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">read_fun</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/h5/formats.html#FormatInfo"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#h5.formats.FormatInfo" title="Link to this definition"></a></dt>
+<dd><p>Metadata describing how to reconstruct a Python class from an HDF5 group.</p>
+<p>Created and stored in a module-level registry by <a class="reference internal" href="h5.formats.register_class.html#h5.formats.register_class" title="h5.formats.register_class"><code class="xref py py-func docutils literal notranslate"><span class="pre">register_class()</span></code></a>,
+and looked up at read time by <a class="reference internal" href="h5.formats.get_format_info.html#h5.formats.get_format_info" title="h5.formats.get_format_info"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_format_info()</span></code></a> from the
+<code class="docutils literal notranslate"><span class="pre">Format</span></code> attribute of the HDF5 group.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>classname</strong><span class="classifier">str</span></dt><dd><p>Name of the Python class to reconstruct.</p>
+</dd>
+<dt><strong>modulename</strong><span class="classifier">str</span></dt><dd><p>Name of the module the class must be imported from.</p>
+</dd>
+<dt><strong>doc</strong><span class="classifier">str or dict</span></dt><dd><p>Documentation associated with the format.</p>
+</dd>
+<dt><strong>hdf5_format</strong><span class="classifier">str</span></dt><dd><p>The HDF5 format string this info is registered under. Stored on the
+instance as the <code class="docutils literal notranslate"><span class="pre">format_name</span></code> attribute.</p>
+</dd>
+<dt><strong>read_fun</strong><span class="classifier">callable or None</span></dt><dd><p>Optional custom read function <code class="docutils literal notranslate"><span class="pre">read_fun(group,</span> <span class="pre">key)</span></code>.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Attributes</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><strong>classname</strong></p></td>
+<td><p>(str) Name of the Python class to reconstruct.</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>modulename</strong></p></td>
+<td><p>(str) Name of the module the class must be imported from.</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>doc</strong></p></td>
+<td><p>(str or dict) Documentation associated with the format.</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>read_fun</strong></p></td>
+<td><p>(callable or None) Optional custom read function <code class="docutils literal notranslate"><span class="pre">read_fun(group,</span> <span class="pre">key)</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>format_name</strong></p></td>
+<td><p>(str) The HDF5 format string (from the <code class="docutils literal notranslate"><span class="pre">hdf5_format</span></code> argument).</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>backward_compat</strong></p></td>
+<td><p>(dict) Backward-compatibility mapping <code class="docutils literal notranslate"><span class="pre">field_name</span> <span class="pre">-&gt;</span> <span class="pre">hdf5_format</span></code>; empty for an exact match.</p></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="h5.formats.register_class.html" class="btn btn-neutral float-left" title="h5.formats.register_class" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="h5.version.html" class="btn btn-neutral float-right" title="h5.version" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2018-present, The Simons Foundation, authors: O. Parcollet, D. Simon, N. Wentzell, T. Hahn.</p>
+  </div>
+
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  
+<div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    <span class="fa fa-book"> Versions</span>
+    v: 2.0.0
+    <span class="fa fa-caret-down"></span>
+  </span>
+  <div class="rst-other-versions">
+    <dl>
+      <dt>Versions</dt>
+      <dd><a href="https://triqs.github.io/h5/latest/">latest</a></dd>
+      <dd><a href="https://triqs.github.io/h5/unstable/">unstable</a></dd>
+      <dd><a href="https://triqs.github.io/h5/2.0.x/">2.0.x</a></dd>
+    </dl>
+  </div>
+</div><script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

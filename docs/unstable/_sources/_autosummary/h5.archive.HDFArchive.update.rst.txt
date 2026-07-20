@@ -1,0 +1,6 @@
+h5.archive.HDFArchive.update
+============================
+
+.. currentmodule:: h5.archive
+
+.. automethod:: HDFArchive.update

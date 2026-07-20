@@ -1,0 +1,6 @@
+h5.archive.HDFArchiveGroup.create\_softlink
+===========================================
+
+.. currentmodule:: h5.archive
+
+.. automethod:: HDFArchiveGroup.create_softlink
