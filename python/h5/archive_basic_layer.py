@@ -79,7 +79,7 @@ class HDFArchiveGroupBasicLayer:
     def _write(self, key, val) :
         h5.h5_write_bare(self._group, key, val)
         # keep the key cache in sync so the dataset is visible in the same session
-        self.cached_keys.append(key)
+        if key not in self.cached_keys : self.cached_keys.append(key)
 
     def _flush(self):
         if bool(self._group): self._group.get_file().flush()
