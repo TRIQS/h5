@@ -188,6 +188,7 @@ class HDFArchiveGroup(HDFArchiveGroupBasicLayer):
                raise
         elif isinstance(val, HDFArchiveGroup) : # will copy the group recursively
             # we could add this for any object that has .items() in fact...
+            self.create_group(key) # create the target group first (open_group requires it to exist)
             SubGroup = HDFArchiveGroup(self, key)
             for k,v in list(val.items()) : SubGroup[k]=v
         else : # anything else... expected to be a scalar

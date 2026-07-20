@@ -219,5 +219,20 @@ class TestHdf5Io(unittest.TestCase):
         assert_arrays_are_close(arch['v'], np.array([1.0, 2.0]))
         self.assertEqual(sorted(arch.keys()), ['s', 'v'])
 
+    def test_assign_group_copies_recursively(self):
+        # Assigning an HDFArchiveGroup to a new key must create the target group
+        # and copy its contents recursively (open_group requires the group to
+        # exist, so the target has to be created first).
+        with HDFArchive('h5_group_copy.h5', 'w') as a:
+            a['src'] = {'x': 1, 'y': np.array([1, 2, 3]), 'sub': {'nested': 2}}
+            a['copy'] = a.get_raw('src')            # HDFArchiveGroup copy branch
+            self.assertIn('copy', a)                # visible in the same session
+            self.assertEqual(a['copy']['x'], 1)
+            assert_arrays_are_close(a['copy']['y'], np.array([1, 2, 3]))
+            self.assertEqual(a['copy']['sub']['nested'], 2)
+        with HDFArchive('h5_group_copy.h5', 'r') as a:
+            self.assertEqual(a['copy']['x'], 1)
+            self.assertEqual(a['copy']['sub']['nested'], 2)
+
 if __name__ == '__main__':
     unittest.main()
