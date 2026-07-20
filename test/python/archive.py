@@ -234,5 +234,20 @@ class TestHdf5Io(unittest.TestCase):
             self.assertEqual(a['copy']['x'], 1)
             self.assertEqual(a['copy']['sub']['nested'], 2)
 
+    def test_delitem_persists_to_disk(self):
+        # Deleting a key must unlink it from the HDF5 file, not merely drop it
+        # from the in-memory cache; the deletion must survive a reopen. Covers
+        # both a dataset and a subgroup (TRIQS/h5 issue #14).
+        with HDFArchive('h5_delitem.h5', 'w') as a:
+            a['dset'] = np.array([1, 2])
+            a['grp'] = {'k': 1}
+            a['keep'] = 0
+        with HDFArchive('h5_delitem.h5', 'a') as a:
+            del a['dset']       # delete a dataset
+            del a['grp']        # delete a subgroup
+            self.assertEqual(list(a.keys()), ['keep'])
+        with HDFArchive('h5_delitem.h5', 'r') as a:
+            self.assertEqual(sorted(a.keys()), ['keep'])
+
 if __name__ == '__main__':
     unittest.main()
