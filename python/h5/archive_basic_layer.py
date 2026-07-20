@@ -187,8 +187,7 @@ class HDFArchiveGroupBasicLayer:
         if report_error and key not in self.cached_keys :
              raise KeyError("Key %s is not in archive !!"%key)
         if key in self.cached_keys :
-          # FIXME
-          # del self._group[key]
+          self._group.unlink(key)
           self.cached_keys.remove(key)
         else: raise KeyError("Key %s is not in archive !!"%key)
 
