@@ -20,6 +20,7 @@
 #include <complex>
 #include <map>
 #include <string>
+#include <utility>
 #include <vector>
 
 TEST(H5, MapWithStringKeyType) {
@@ -44,6 +45,64 @@ TEST(H5, MapWithStringKeyType) {
     EXPECT_EQ(m_int, m_int_in);
     EXPECT_EQ(m_vec, m_vec_in);
   }
+}
+
+TEST(H5, MapWithNonStrKeyType) {
+  // write/read maps with non-string keys (stored with the "DictNonStrKey" tag): pairs of
+  // strings and plain scalars. This also writes the reference archive read by the Python
+  // test_dict_*_from_cpp tests (regenerated via test/c++/gen_dict_nonstrkey_refs.sh).
+  std::map<std::pair<std::string, std::string>, int> m_int                 = {{{"a", "b"}, 1}, {{"c", "d"}, 2}};
+  std::map<std::pair<std::string, std::string>, std::vector<double>> m_vec = {{{"a", "b"}, {1.0, 2.0}}, {{"c", "d"}, {3.0, 4.0}}};
+  std::map<int, int> m_scalar                                              = {{1, 10}, {2, 20}};
+
+  {
+    h5::file file{"test_map_pairkey.h5", 'w'};
+    h5::write(file, "map_int", m_int);
+    h5::write(file, "map_vec", m_vec);
+    h5::write(file, "map_scalar", m_scalar);
+  }
+
+  {
+    h5::file file{"test_map_pairkey.h5", 'r'};
+
+    // a non-string key type uses the "DictNonStrKey" tag (vs. "Dict" for string keys)
+    h5::group root(file);
+    EXPECT_EQ(root.read_hdf5_format_from_key("map_int"), "DictNonStrKey");
+    EXPECT_EQ(root.read_hdf5_format_from_key("map_scalar"), "DictNonStrKey");
+
+    std::map<std::pair<std::string, std::string>, int> m_int_in;
+    std::map<std::pair<std::string, std::string>, std::vector<double>> m_vec_in;
+    std::map<int, int> m_scalar_in;
+    h5::read(file, "map_int", m_int_in);
+    h5::read(file, "map_vec", m_vec_in);
+    h5::read(file, "map_scalar", m_scalar_in);
+
+    EXPECT_EQ(m_int, m_int_in);
+    EXPECT_EQ(m_vec, m_vec_in);
+    EXPECT_EQ(m_scalar, m_scalar_in);
+  }
+}
+
+TEST(H5, MapWithNonStrKeyFromPython) {
+  // cross-language read: a DictNonStrKey archive written by the Python h5 module
+  // (test/c++/gen_dict_tuplekey.py) must read back into the equivalent std::map, for
+  // both tuple keys (std::pair) and scalar keys.
+  std::map<std::pair<std::string, std::string>, long> const m_int_ref                = {{{"a", "b"}, 1}, {{"c", "d"}, 2}};
+  std::map<std::pair<std::string, std::string>, std::vector<double>> const m_vec_ref = {{{"a", "b"}, {1.0, 2.0}}, {{"c", "d"}, {3.0, 4.0}}};
+  std::map<long, long> const m_scalar_ref                                            = {{1, 10}, {2, 20}};
+
+  h5::file file{"dict_tuplekey.ref.h5", 'r'};
+
+  std::map<std::pair<std::string, std::string>, long> m_int;
+  std::map<std::pair<std::string, std::string>, std::vector<double>> m_vec;
+  std::map<long, long> m_scalar;
+  h5::read(file, "map_int", m_int);
+  h5::read(file, "map_vec", m_vec);
+  h5::read(file, "map_scalar", m_scalar);
+
+  EXPECT_EQ(m_int, m_int_ref);
+  EXPECT_EQ(m_vec, m_vec_ref);
+  EXPECT_EQ(m_scalar, m_scalar_ref);
 }
 
 TEST(H5, MapWithGreaterComparison) {
