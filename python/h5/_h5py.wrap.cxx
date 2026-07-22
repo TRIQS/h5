@@ -293,7 +293,9 @@ Get all the names of the datasets in the current group.
 Returns
 -------
 {ret_0}
-   A vector with the names of all the datasets.
+   A vector with the names of all the datasets, in ascending (increasing) name order
+   (`H5_ITER_INC`). The order is independent of the insertion/native order and stable across
+   HDF5 versions.
 )DOC",
                                                  {}, {c2py::python_typename<std::vector<std::string>>()});
 static const auto _c2py_doc_10 = _c2py_fun_10.doc(R"DOC(
@@ -302,7 +304,9 @@ Get all the names of the subgroups and datasets in the current group.
 Returns
 -------
 {ret_0}
-   A vector with the names of all the subgroups and datasets.
+   A vector with the names of all the subgroups and datasets, in ascending (increasing)
+   name order (`H5_ITER_INC`). The order is independent of the insertion/native order and stable
+   across HDF5 versions.
 )DOC",
                                                   {}, {c2py::python_typename<std::vector<std::string>>()});
 static const auto _c2py_doc_11 = _c2py_fun_11.doc(R"DOC(
@@ -311,7 +315,9 @@ Get all the names of the subgroups in the current group.
 Returns
 -------
 {ret_0}
-   A vector with the names of all the subgroups.
+   A vector with the names of all the subgroups, in ascending (increasing) name order
+   (`H5_ITER_INC`). The order is independent of the insertion/native order and stable across
+   HDF5 versions.
 )DOC",
                                                   {}, {c2py::python_typename<std::vector<std::string>>()});
 static const auto _c2py_doc_12 = _c2py_fun_12.doc(R"DOC(
