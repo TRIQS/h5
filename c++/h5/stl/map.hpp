@@ -39,9 +39,13 @@ namespace h5 {
    */
 
   /// Specialization of h5::hdf5_format_impl for `std::map`.
+  ///
+  /// A map with `std::string` keys uses the "Dict" tag (values stored directly under their key). A map with any other
+  /// key type uses the "DictNonStrKey" tag (numbered subgroups, each holding a "key" and a "val"); the two tags let a
+  /// type-erased reader (e.g. the Python HDFArchive) tell the layouts apart.
   template <typename Key, typename T, typename Compare>
   struct hdf5_format_impl<std::map<Key, T, Compare>> {
-    static std::string invoke() { return "Dict"; }
+    static std::string invoke() { return std::is_same_v<Key, std::string> ? "Dict" : "DictNonStrKey"; }
   };
 
   /**

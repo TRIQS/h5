@@ -259,22 +259,76 @@ class TestHdf5Io(unittest.TestCase):
         self.assertIsInstance(r, OrderReliantReduce)
         self.assertEqual(r.order, obj.order)
 
-    def test_dict_non_string_keys_raise(self):
-        # Dict storage is limited to string keys: non-string keys must fail
-        # loudly rather than be silently stringified (which loses the key type
-        # and collapses collisions like 1 vs '1').
+    def test_dict_bad_keys_raise(self):
+        # Keys must be strings, scalars, or tuples of scalars (Dict/DictNonStrKey);
+        # anything else must fail loudly rather than be silently stringified (which
+        # loses the key type and collapses collisions like 1 vs '1').
         bad = [
-            {1: 'a'},              # int
-            {1.5: 'a'},            # float
-            {(1, 2): 'a'},         # tuple
-            {None: 'a'},           # None
-            {True: 'a'},           # bool
-            {'ok': 1, 2: 'b'},     # mixed string + non-string
+            {None: 'a'},               # None is not a scalar
+            {b'x': 'a'},               # bytes is not an allowed scalar
+            {(('a', 'b'), 'c'): 'x'},  # tuple key with a non-scalar (nested-tuple) element
         ]
         for d in bad:
             with HDFArchive('h5_dict_badkeys.h5', 'w') as a:
                 with self.assertRaises(TypeError):
                     a['d'] = d
+
+    def test_dict_scalar_keys(self):
+        # dicts with scalar (non-string) keys round-trip to the identical mapping with
+        # native key types, stored in the C++ std::map non-string-key "DictNonStrKey" layout.
+        for d in ({1: 'a', 2: 'b'},              # int
+                  {1.5: 'x', 2.5: 'y'},          # float
+                  {1 + 2j: 'p', 3 + 4j: 'q'},    # complex
+                  {True: 'a', False: 'b'}):      # bool
+            r = self._roundtrip('h5_dict_scalarkeys.h5', d)
+            self.assertEqual(r, d)
+            self.assertEqual([type(k) for k in r], [type(k) for k in d])  # key type + order preserved
+
+    def test_dict_mixed_keys(self):
+        # permissive: a dict may mix string, scalar and tuple keys; it round-trips in
+        # Python even though such a dict has no single corresponding C++ std::map.
+        d = {'a': 1, 2: 'b', ('c', 'd'): 3}
+        r = self._roundtrip('h5_dict_mixedkeys.h5', d)
+        self.assertEqual(r, d)
+
+    def test_dict_tuple_keys(self):
+        # dicts keyed by tuples of scalars round-trip to the identical mapping with
+        # tuple keys (stored in the C++ std::map non-string-key "DictNonStrKey" layout).
+        d = {('a', 'b'): 1, ('c', 'd'): 2}
+        r = self._roundtrip('h5_dict_tuplekeys.h5', d)
+        self.assertEqual(r, d)
+        self.assertTrue(all(isinstance(k, tuple) for k in r))
+        self.assertEqual(list(r.keys()), list(d.keys()))  # insertion order preserved
+
+    def test_dict_tuple_keys_mixed_scalars(self):
+        # tuple elements may be any scalar (str/int/float) and values heterogeneous
+        d = {(1, 2): 'x', ('a', 3): [1.0, 2.0], (2.5, 'z'): 5}
+        r = self._roundtrip('h5_dict_tuplekeys_mixed.h5', d)
+        self.assertEqual(r, d)
+        self.assertTrue(all(isinstance(k, tuple) for k in r))
+
+    def test_dict_tuple_keys_from_cpp(self):
+        # cross-language read: a DictNonStrKey archive written by C++
+        # (std::map<std::pair<std::string,std::string>, ...>, see test/c++/h5_map.cpp
+        # MapWithNonStrKeyType, regenerated via test/c++/gen_dict_nonstrkey_refs.sh)
+        # must read back into the equivalent tuple-keyed dict.
+        with HDFArchive('map_pairkey.ref.h5', 'r') as a:
+            m_int = a['map_int']
+            m_vec = a['map_vec']
+        self.assertEqual(m_int, {('a', 'b'): 1, ('c', 'd'): 2})
+        self.assertTrue(all(isinstance(k, tuple) for k in m_int))
+        self.assertEqual(sorted(m_vec.keys()), [('a', 'b'), ('c', 'd')])
+        np.testing.assert_array_equal(m_vec[('a', 'b')], np.array([1.0, 2.0]))
+        np.testing.assert_array_equal(m_vec[('c', 'd')], np.array([3.0, 4.0]))
+
+    def test_dict_scalar_keys_from_cpp(self):
+        # cross-language read: a scalar-int-keyed std::map written by C++
+        # (std::map<int, int>, see test/c++/h5_map.cpp MapWithNonStrKeyType) must read
+        # back into an int-keyed dict.
+        with HDFArchive('map_pairkey.ref.h5', 'r') as a:
+            m_scalar = a['map_scalar']
+        self.assertEqual(m_scalar, {1: 10, 2: 20})
+        self.assertTrue(all(isinstance(k, int) for k in m_scalar))
 
     def test_same_session_dataset_readback(self):
         # Writing a dataset (scalar or ndarray) must update the key cache so the

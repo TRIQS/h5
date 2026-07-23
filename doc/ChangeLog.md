@@ -22,6 +22,7 @@ Find below an itemized list of changes in this release.
 * Use h5::object instead of h5::group in format functions
 * Add overloads for write_hdf5_format and assert_hdf5_format without deducing storage type
 * Generalize std::map interface to allow for aribtrary comparison types
+* Support std::map / Python dict with non-string keys (scalars or tuples of scalars) via a distinct "DictNonStrKey" format tag, interoperable between C++ and Python
 * Bug fix in h5::array_interface::get_parent_shape_and_h5_strides
 * Read complex datasets written by Julia HDF5.jl and h5py that use the standard {r:double, i:double} HDF5 compound type (#13)
 * Breaking: rename array_view::is_complex to has_cplx_trailing_dim to reflect the trailing-2-dim buffer-layout convention

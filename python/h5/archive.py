@@ -89,9 +89,12 @@ class Dict:
     Archive wrapper for a Python ``dict``.
 
     Adapts a dict to the archive reduce/reconstruct protocol, storing each
-    ``key -> value`` pair in an HDF5 subgroup. 
-    
-    Instances are created internally by :class:`HDFArchiveGroup` and the class 
+    ``key -> value`` pair in an HDF5 subgroup. Only string keys are supported
+    (format tag ``"Dict"``); dicts with non-string keys use
+    :class:`DictNonStrKey` instead, selected by the write-side routing in
+    :meth:`HDFArchiveGroup.__setitem__`.
+
+    Instances are created internally by :class:`HDFArchiveGroup` and the class
     is registered with :mod:`h5.formats`.
 
     Parameters
@@ -112,6 +115,52 @@ class Dict:
         """Rebuild the dict from the stored ``{key -> value}`` mapping ``D``."""
         return {n:x for n,x in list(D.items())}
 
+class DictNonStrKey:
+    """
+    Archive wrapper for a Python ``dict`` with non-string keys.
+
+    Stored in the same layout as a C++ ``std::map`` with non-string keys (format tag
+    ``"DictNonStrKey"``): each ``(key, value)`` pair is written into a numbered subgroup
+    holding a ``key`` and a ``val``. The key is stored raw -- a scalar key as a scalar
+    dataset, a tuple key as a ``Tuple`` subgroup -- so a dict with homogeneous keys is
+    byte-compatible with the corresponding C++ ``std::map<Key, T>`` (an int-keyed dict
+    with ``std::map<long, T>``, a pair-keyed dict with ``std::map<std::pair<...>, T>``,
+    etc.) and round-trips back to the identical mapping.
+
+    Keys may be scalars or tuples of scalars and may be mixed within one dict; a mixed
+    dict round-trips in Python but has no single C++ ``std::map`` counterpart. String-keyed
+    dicts use :class:`Dict` (tag ``"Dict"``) instead; the write-side routing in
+    :meth:`HDFArchiveGroup.__setitem__` selects the wrapper by key type.
+
+    Instances are created internally by :class:`HDFArchiveGroup` and the class is
+    registered with :mod:`h5.formats`.
+
+    Parameters
+    ----------
+    ob : dict
+        The dict to wrap. Every key must be a scalar (``str``, ``bool``, ``int``,
+        ``float`` or ``complex``) or a tuple of such scalars.
+    """
+    _scalar_types = (str, bool, int, float, complex)
+
+    def __init__(self,ob) :
+        self.ob = ob
+    def __reduce_to_dict__(self) :
+        """Return the pairs as a ``{index -> {'key': key, 'val': value}}`` dict for storage."""
+        # A key is a scalar or a tuple of scalars; validate element types, treating a scalar
+        # key as a single element. The key is stored raw (scalar -> scalar dataset, tuple ->
+        # Tuple subgroup) so the layout matches the corresponding C++ std::map.
+        def elems(k) : return k if isinstance(k, tuple) else (k,)
+        bad = sorted({type(e).__name__ for k in self.ob for e in elems(k) if not isinstance(e, self._scalar_types)})
+        if bad : raise TypeError("HDFArchive can only store dicts with scalar keys or tuples of scalars, found element type(s): %s"%", ".join(bad))
+        return {str(n): {'key': k, 'val': v} for n, (k, v) in enumerate(self.ob.items())}
+    @classmethod
+    def __factory_from_dict__(cls, name, D) :
+        """Rebuild the dict from the stored ``{index -> {'key','val'}}`` mapping ``D``."""
+        # Keys round-trip as-is: scalars stay scalars, and both Python tuple keys and C++
+        # std::pair/std::tuple keys reconstruct via the "Tuple" factory as tuples (hashable).
+        return {e['key']: e['val'] for e in D.values()}
+
 register_class(List)
 register_backward_compatibility_method('PythonListWrap', 'List')
 
@@ -120,6 +169,8 @@ register_backward_compatibility_method('PythonTupleWrap', 'Tuple')
 
 register_class(Dict)
 register_backward_compatibility_method('PythonDictWrap', 'Dict')
+
+register_class(DictNonStrKey)
 
 # -------------------------------------------
 #
@@ -152,8 +203,12 @@ class HDFArchiveGroup(HDFArchiveGroupBasicLayer):
     exactly the group's keys; a mismatch indicates a corrupt or externally
     edited archive and raises :class:`ValueError`.
 
-    Only string keys are supported for stored ``dict`` objects; non-string keys
-    raise :class:`TypeError` on write rather than being silently stringified.
+    Stored ``dict`` objects with string keys use the ``"Dict"`` format (values keyed
+    directly by name). Dicts with non-string keys -- scalars or tuples of scalars -- use
+    the ``"DictNonStrKey"`` format, the C++ ``std::map`` non-string-key layout, and
+    round-trip back to the identical mapping. A key that is neither a string, a scalar,
+    nor a tuple of scalars raises :class:`TypeError` on write rather than being silently
+    stringified.
 
     Parameters
     ----------
@@ -165,8 +220,7 @@ class HDFArchiveGroup(HDFArchiveGroupBasicLayer):
     """
     _wrappedType = {
         list : List,
-        tuple : Tuple,
-        dict : Dict
+        tuple : Tuple
     }
     _MaxLengthKey = 500
 
@@ -315,8 +369,14 @@ class HDFArchiveGroup(HDFArchiveGroupBasicLayer):
             if self.options['do_not_overwrite_entries'] : raise KeyError("key %s already exist."%key)
             self._clean_key(key) # clean things
 
-        # Transform list, dict, etc... into a wrapped type that will allow HDF reduction
-        if type(val) in self._wrappedType: val = self._wrappedType[type(val)](val)
+        # Transform list, dict, etc... into a wrapped type that will allow HDF reduction.
+        # A dict is routed by key type: all-string keys use the Dict layout (values keyed
+        # directly by name); any other key (scalar or tuple of scalars) uses the non-string-key
+        # map layout (DictNonStrKey, matching the corresponding C++ std::map).
+        if type(val) is dict:
+            val = Dict(val) if all(isinstance(k, str) for k in val) else DictNonStrKey(val)
+        elif type(val) in self._wrappedType:
+            val = self._wrappedType[type(val)](val)
 
         # write the attributes
         def write_attributes(g) :
