@@ -157,8 +157,9 @@ class DictNonStrKey:
     @classmethod
     def __factory_from_dict__(cls, name, D) :
         """Rebuild the dict from the stored ``{index -> {'key','val'}}`` mapping ``D``."""
-        def as_key(k) : return tuple(k) if isinstance(k, list) else k
-        return {as_key(e['key']): e['val'] for e in D.values()}
+        # Keys round-trip as-is: scalars stay scalars, and both Python tuple keys and C++
+        # std::pair/std::tuple keys reconstruct via the "Tuple" factory as tuples (hashable).
+        return {e['key']: e['val'] for e in D.values()}
 
 register_class(List)
 register_backward_compatibility_method('PythonListWrap', 'List')
