@@ -61,6 +61,7 @@
 <li class="toctree-l4"><a class="reference internal" href="../../_autosummary/h5.html#examples">Examples</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../_autosummary/h5.archive.html">h5.archive</a><ul>
 <li class="toctree-l5"><a class="reference internal" href="../../_autosummary/h5.archive.Dict.html">h5.archive.Dict</a></li>
+<li class="toctree-l5"><a class="reference internal" href="../../_autosummary/h5.archive.DictNonStrKey.html">h5.archive.DictNonStrKey</a></li>
 <li class="toctree-l5"><a class="reference internal" href="../../_autosummary/h5.archive.HDFArchive.html">h5.archive.HDFArchive</a></li>
 <li class="toctree-l5"><a class="reference internal" href="../../_autosummary/h5.archive.HDFArchiveGroup.html">h5.archive.HDFArchiveGroup</a></li>
 <li class="toctree-l5"><a class="reference internal" href="../../_autosummary/h5.archive.HDFArchiveInert.html">h5.archive.HDFArchiveInert</a></li>
@@ -253,9 +254,12 @@
 <span class="sd">    Archive wrapper for a Python ``dict``.</span>
 
 <span class="sd">    Adapts a dict to the archive reduce/reconstruct protocol, storing each</span>
-<span class="sd">    ``key -&gt; value`` pair in an HDF5 subgroup. </span>
-<span class="sd">    </span>
-<span class="sd">    Instances are created internally by :class:`HDFArchiveGroup` and the class </span>
+<span class="sd">    ``key -&gt; value`` pair in an HDF5 subgroup. Only string keys are supported</span>
+<span class="sd">    (format tag ``&quot;Dict&quot;``); dicts with non-string keys use</span>
+<span class="sd">    :class:`DictNonStrKey` instead, selected by the write-side routing in</span>
+<span class="sd">    :meth:`HDFArchiveGroup.__setitem__`.</span>
+
+<span class="sd">    Instances are created internally by :class:`HDFArchiveGroup` and the class</span>
 <span class="sd">    is registered with :mod:`h5.formats`.</span>
 
 <span class="sd">    Parameters</span>
@@ -277,6 +281,55 @@
         <span class="k">return</span> <span class="p">{</span><span class="n">n</span><span class="p">:</span><span class="n">x</span> <span class="k">for</span> <span class="n">n</span><span class="p">,</span><span class="n">x</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">D</span><span class="o">.</span><span class="n">items</span><span class="p">())}</span></div>
 
 
+<div class="viewcode-block" id="DictNonStrKey">
+<a class="viewcode-back" href="../../_autosummary/h5.archive.DictNonStrKey.html#h5.archive.DictNonStrKey">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">DictNonStrKey</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Archive wrapper for a Python ``dict`` with non-string keys.</span>
+
+<span class="sd">    Stored in the same layout as a C++ ``std::map`` with non-string keys (format tag</span>
+<span class="sd">    ``&quot;DictNonStrKey&quot;``): each ``(key, value)`` pair is written into a numbered subgroup</span>
+<span class="sd">    holding a ``key`` and a ``val``. The key is stored raw -- a scalar key as a scalar</span>
+<span class="sd">    dataset, a tuple key as a ``Tuple`` subgroup -- so a dict with homogeneous keys is</span>
+<span class="sd">    byte-compatible with the corresponding C++ ``std::map&lt;Key, T&gt;`` (an int-keyed dict</span>
+<span class="sd">    with ``std::map&lt;long, T&gt;``, a pair-keyed dict with ``std::map&lt;std::pair&lt;...&gt;, T&gt;``,</span>
+<span class="sd">    etc.) and round-trips back to the identical mapping.</span>
+
+<span class="sd">    Keys may be scalars or tuples of scalars and may be mixed within one dict; a mixed</span>
+<span class="sd">    dict round-trips in Python but has no single C++ ``std::map`` counterpart. String-keyed</span>
+<span class="sd">    dicts use :class:`Dict` (tag ``&quot;Dict&quot;``) instead; the write-side routing in</span>
+<span class="sd">    :meth:`HDFArchiveGroup.__setitem__` selects the wrapper by key type.</span>
+
+<span class="sd">    Instances are created internally by :class:`HDFArchiveGroup` and the class is</span>
+<span class="sd">    registered with :mod:`h5.formats`.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    ob : dict</span>
+<span class="sd">        The dict to wrap. Every key must be a scalar (``str``, ``bool``, ``int``,</span>
+<span class="sd">        ``float`` or ``complex``) or a tuple of such scalars.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">_scalar_types</span> <span class="o">=</span> <span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="nb">bool</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">complex</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">ob</span><span class="p">)</span> <span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ob</span> <span class="o">=</span> <span class="n">ob</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">__reduce_to_dict__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the pairs as a ``{index -&gt; {&#39;key&#39;: key, &#39;val&#39;: value}}`` dict for storage.&quot;&quot;&quot;</span>
+        <span class="c1"># A key is a scalar or a tuple of scalars; validate element types, treating a scalar</span>
+        <span class="c1"># key as a single element. The key is stored raw (scalar -&gt; scalar dataset, tuple -&gt;</span>
+        <span class="c1"># Tuple subgroup) so the layout matches the corresponding C++ std::map.</span>
+        <span class="k">def</span><span class="w"> </span><span class="nf">elems</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="p">:</span> <span class="k">return</span> <span class="n">k</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)</span> <span class="k">else</span> <span class="p">(</span><span class="n">k</span><span class="p">,)</span>
+        <span class="n">bad</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">({</span><span class="nb">type</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">ob</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">elems</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_scalar_types</span><span class="p">)})</span>
+        <span class="k">if</span> <span class="n">bad</span> <span class="p">:</span> <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;HDFArchive can only store dicts with scalar keys or tuples of scalars, found element type(s): </span><span class="si">%s</span><span class="s2">&quot;</span><span class="o">%</span><span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">bad</span><span class="p">))</span>
+        <span class="k">return</span> <span class="p">{</span><span class="nb">str</span><span class="p">(</span><span class="n">n</span><span class="p">):</span> <span class="p">{</span><span class="s1">&#39;key&#39;</span><span class="p">:</span> <span class="n">k</span><span class="p">,</span> <span class="s1">&#39;val&#39;</span><span class="p">:</span> <span class="n">v</span><span class="p">}</span> <span class="k">for</span> <span class="n">n</span><span class="p">,</span> <span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ob</span><span class="o">.</span><span class="n">items</span><span class="p">())}</span>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">__factory_from_dict__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">D</span><span class="p">)</span> <span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Rebuild the dict from the stored ``{index -&gt; {&#39;key&#39;,&#39;val&#39;}}`` mapping ``D``.&quot;&quot;&quot;</span>
+        <span class="c1"># Keys round-trip as-is: scalars stay scalars, and both Python tuple keys and C++</span>
+        <span class="c1"># std::pair/std::tuple keys reconstruct via the &quot;Tuple&quot; factory as tuples (hashable).</span>
+        <span class="k">return</span> <span class="p">{</span><span class="n">e</span><span class="p">[</span><span class="s1">&#39;key&#39;</span><span class="p">]:</span> <span class="n">e</span><span class="p">[</span><span class="s1">&#39;val&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">D</span><span class="o">.</span><span class="n">values</span><span class="p">()}</span></div>
+
+
 <span class="n">register_class</span><span class="p">(</span><span class="n">List</span><span class="p">)</span>
 <span class="n">register_backward_compatibility_method</span><span class="p">(</span><span class="s1">&#39;PythonListWrap&#39;</span><span class="p">,</span> <span class="s1">&#39;List&#39;</span><span class="p">)</span>
 
@@ -285,6 +338,8 @@
 
 <span class="n">register_class</span><span class="p">(</span><span class="n">Dict</span><span class="p">)</span>
 <span class="n">register_backward_compatibility_method</span><span class="p">(</span><span class="s1">&#39;PythonDictWrap&#39;</span><span class="p">,</span> <span class="s1">&#39;Dict&#39;</span><span class="p">)</span>
+
+<span class="n">register_class</span><span class="p">(</span><span class="n">DictNonStrKey</span><span class="p">)</span>
 
 <span class="c1"># -------------------------------------------</span>
 <span class="c1">#</span>
@@ -319,8 +374,12 @@
 <span class="sd">    exactly the group&#39;s keys; a mismatch indicates a corrupt or externally</span>
 <span class="sd">    edited archive and raises :class:`ValueError`.</span>
 
-<span class="sd">    Only string keys are supported for stored ``dict`` objects; non-string keys</span>
-<span class="sd">    raise :class:`TypeError` on write rather than being silently stringified.</span>
+<span class="sd">    Stored ``dict`` objects with string keys use the ``&quot;Dict&quot;`` format (values keyed</span>
+<span class="sd">    directly by name). Dicts with non-string keys -- scalars or tuples of scalars -- use</span>
+<span class="sd">    the ``&quot;DictNonStrKey&quot;`` format, the C++ ``std::map`` non-string-key layout, and</span>
+<span class="sd">    round-trip back to the identical mapping. A key that is neither a string, a scalar,</span>
+<span class="sd">    nor a tuple of scalars raises :class:`TypeError` on write rather than being silently</span>
+<span class="sd">    stringified.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -332,8 +391,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">_wrappedType</span> <span class="o">=</span> <span class="p">{</span>
         <span class="nb">list</span> <span class="p">:</span> <span class="n">List</span><span class="p">,</span>
-        <span class="nb">tuple</span> <span class="p">:</span> <span class="n">Tuple</span><span class="p">,</span>
-        <span class="nb">dict</span> <span class="p">:</span> <span class="n">Dict</span>
+        <span class="nb">tuple</span> <span class="p">:</span> <span class="n">Tuple</span>
     <span class="p">}</span>
     <span class="n">_MaxLengthKey</span> <span class="o">=</span> <span class="mi">500</span>
 
@@ -494,8 +552,14 @@
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="p">[</span><span class="s1">&#39;do_not_overwrite_entries&#39;</span><span class="p">]</span> <span class="p">:</span> <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="s2">&quot;key </span><span class="si">%s</span><span class="s2"> already exist.&quot;</span><span class="o">%</span><span class="n">key</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_clean_key</span><span class="p">(</span><span class="n">key</span><span class="p">)</span> <span class="c1"># clean things</span>
 
-        <span class="c1"># Transform list, dict, etc... into a wrapped type that will allow HDF reduction</span>
-        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">val</span><span class="p">)</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_wrappedType</span><span class="p">:</span> <span class="n">val</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_wrappedType</span><span class="p">[</span><span class="nb">type</span><span class="p">(</span><span class="n">val</span><span class="p">)](</span><span class="n">val</span><span class="p">)</span>
+        <span class="c1"># Transform list, dict, etc... into a wrapped type that will allow HDF reduction.</span>
+        <span class="c1"># A dict is routed by key type: all-string keys use the Dict layout (values keyed</span>
+        <span class="c1"># directly by name); any other key (scalar or tuple of scalars) uses the non-string-key</span>
+        <span class="c1"># map layout (DictNonStrKey, matching the corresponding C++ std::map).</span>
+        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">val</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">dict</span><span class="p">:</span>
+            <span class="n">val</span> <span class="o">=</span> <span class="n">Dict</span><span class="p">(</span><span class="n">val</span><span class="p">)</span> <span class="k">if</span> <span class="nb">all</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">val</span><span class="p">)</span> <span class="k">else</span> <span class="n">DictNonStrKey</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">val</span><span class="p">)</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_wrappedType</span><span class="p">:</span>
+            <span class="n">val</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_wrappedType</span><span class="p">[</span><span class="nb">type</span><span class="p">(</span><span class="n">val</span><span class="p">)](</span><span class="n">val</span><span class="p">)</span>
 
         <span class="c1"># write the attributes</span>
         <span class="k">def</span><span class="w"> </span><span class="nf">write_attributes</span><span class="p">(</span><span class="n">g</span><span class="p">)</span> <span class="p">:</span>

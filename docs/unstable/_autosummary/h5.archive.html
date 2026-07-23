@@ -64,6 +64,7 @@
 <li class="toctree-l4"><a class="reference internal" href="h5.html#examples">Examples</a></li>
 <li class="toctree-l4 current"><a class="current reference internal" href="#">h5.archive</a><ul>
 <li class="toctree-l5"><a class="reference internal" href="h5.archive.Dict.html">h5.archive.Dict</a></li>
+<li class="toctree-l5"><a class="reference internal" href="h5.archive.DictNonStrKey.html">h5.archive.DictNonStrKey</a></li>
 <li class="toctree-l5"><a class="reference internal" href="h5.archive.HDFArchive.html">h5.archive.HDFArchive</a></li>
 <li class="toctree-l5"><a class="reference internal" href="h5.archive.HDFArchiveGroup.html">h5.archive.HDFArchiveGroup</a></li>
 <li class="toctree-l5"><a class="reference internal" href="h5.archive.HDFArchiveInert.html">h5.archive.HDFArchiveInert</a></li>
@@ -173,19 +174,22 @@ registering them with <a class="reference internal" href="h5.formats.html#module
 <tr class="row-odd"><td><p><a class="reference internal" href="h5.archive.Dict.html#h5.archive.Dict" title="h5.archive.Dict"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Dict</span></code></a>(ob)</p></td>
 <td><p>Archive wrapper for a Python <code class="docutils literal notranslate"><span class="pre">dict</span></code>.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="h5.archive.HDFArchive.html#h5.archive.HDFArchive" title="h5.archive.HDFArchive"><code class="xref py py-obj docutils literal notranslate"><span class="pre">HDFArchive</span></code></a>([descriptor, open_flag, ...])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="h5.archive.DictNonStrKey.html#h5.archive.DictNonStrKey" title="h5.archive.DictNonStrKey"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DictNonStrKey</span></code></a>(ob)</p></td>
+<td><p>Archive wrapper for a Python <code class="docutils literal notranslate"><span class="pre">dict</span></code> with non-string keys.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="h5.archive.HDFArchive.html#h5.archive.HDFArchive" title="h5.archive.HDFArchive"><code class="xref py py-obj docutils literal notranslate"><span class="pre">HDFArchive</span></code></a>([descriptor, open_flag, ...])</p></td>
 <td><p>Top-level handle to an HDF5 file.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="h5.archive.HDFArchiveGroup.html#h5.archive.HDFArchiveGroup" title="h5.archive.HDFArchiveGroup"><code class="xref py py-obj docutils literal notranslate"><span class="pre">HDFArchiveGroup</span></code></a>(parent, subpath)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="h5.archive.HDFArchiveGroup.html#h5.archive.HDFArchiveGroup" title="h5.archive.HDFArchiveGroup"><code class="xref py py-obj docutils literal notranslate"><span class="pre">HDFArchiveGroup</span></code></a>(parent, subpath)</p></td>
 <td><p>A view on a subgroup of an <a class="reference internal" href="h5.archive.HDFArchive.html#h5.archive.HDFArchive" title="h5.archive.HDFArchive"><code class="xref py py-class docutils literal notranslate"><span class="pre">HDFArchive</span></code></a>.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="h5.archive.HDFArchiveInert.html#h5.archive.HDFArchiveInert" title="h5.archive.HDFArchiveInert"><code class="xref py py-obj docutils literal notranslate"><span class="pre">HDFArchiveInert</span></code></a>()</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="h5.archive.HDFArchiveInert.html#h5.archive.HDFArchiveInert" title="h5.archive.HDFArchiveInert"><code class="xref py py-obj docutils literal notranslate"><span class="pre">HDFArchiveInert</span></code></a>()</p></td>
 <td><p>A fake class for the node in MPI. It does nothing, but permits to write simply::.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="h5.archive.List.html#h5.archive.List" title="h5.archive.List"><code class="xref py py-obj docutils literal notranslate"><span class="pre">List</span></code></a>(ob)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="h5.archive.List.html#h5.archive.List" title="h5.archive.List"><code class="xref py py-obj docutils literal notranslate"><span class="pre">List</span></code></a>(ob)</p></td>
 <td><p>Archive wrapper for a Python <code class="docutils literal notranslate"><span class="pre">list</span></code>.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="h5.archive.Tuple.html#h5.archive.Tuple" title="h5.archive.Tuple"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Tuple</span></code></a>(ob)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="h5.archive.Tuple.html#h5.archive.Tuple" title="h5.archive.Tuple"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Tuple</span></code></a>(ob)</p></td>
 <td><p>Archive wrapper for a Python <code class="docutils literal notranslate"><span class="pre">tuple</span></code>.</p></td>
 </tr>
 </tbody>

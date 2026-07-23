@@ -6,13 +6,13 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>h5.version.show_git_hash &mdash; h5  documentation</title>
+  <title>h5.archive.DictNonStrKey &mdash; h5  documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="../_static/css/custom.css?v=f7f783a0" />
       <link rel="stylesheet" type="text/css" href="../_static/plot_directive.css" />
 
   
-    <link rel="canonical" href="https://triqs.github.io/h5/latest/_autosummary/h5.version.show_git_hash.html" />
+    <link rel="canonical" href="https://triqs.github.io/h5/latest/_autosummary/h5.archive.DictNonStrKey.html" />
       <script src="../_static/jquery.js?v=5d32c60e"></script>
       <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
       <script src="../_static/documentation_options.js?v=5929fcd5"></script>
@@ -23,8 +23,8 @@
     <link rel="author" title="About these documents" href="../about.html" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="h5.version.show_version" href="h5.version.show_version.html" />
-    <link rel="prev" title="h5.version" href="h5.version.html" /> 
+    <link rel="next" title="h5.archive.HDFArchive" href="h5.archive.HDFArchive.html" />
+    <link rel="prev" title="h5.archive.Dict" href="h5.archive.Dict.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -62,9 +62,9 @@
 <li class="toctree-l2 current"><a class="reference internal" href="../documentation.html#python-reference-manual">Python reference manual</a><ul class="current">
 <li class="toctree-l3 current"><a class="reference internal" href="h5.html">h5</a><ul class="current">
 <li class="toctree-l4"><a class="reference internal" href="h5.html#examples">Examples</a></li>
-<li class="toctree-l4"><a class="reference internal" href="h5.archive.html">h5.archive</a><ul>
+<li class="toctree-l4 current"><a class="reference internal" href="h5.archive.html">h5.archive</a><ul class="current">
 <li class="toctree-l5"><a class="reference internal" href="h5.archive.Dict.html">h5.archive.Dict</a></li>
-<li class="toctree-l5"><a class="reference internal" href="h5.archive.DictNonStrKey.html">h5.archive.DictNonStrKey</a></li>
+<li class="toctree-l5 current"><a class="current reference internal" href="#">h5.archive.DictNonStrKey</a></li>
 <li class="toctree-l5"><a class="reference internal" href="h5.archive.HDFArchive.html">h5.archive.HDFArchive</a></li>
 <li class="toctree-l5"><a class="reference internal" href="h5.archive.HDFArchiveGroup.html">h5.archive.HDFArchiveGroup</a></li>
 <li class="toctree-l5"><a class="reference internal" href="h5.archive.HDFArchiveInert.html">h5.archive.HDFArchiveInert</a></li>
@@ -83,8 +83,8 @@
 <li class="toctree-l5"><a class="reference internal" href="h5.formats.FormatInfo.html">h5.formats.FormatInfo</a></li>
 </ul>
 </li>
-<li class="toctree-l4 current"><a class="reference internal" href="h5.version.html">h5.version</a><ul class="current">
-<li class="toctree-l5 current"><a class="current reference internal" href="#">h5.version.show_git_hash</a></li>
+<li class="toctree-l4"><a class="reference internal" href="h5.version.html">h5.version</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="h5.version.show_git_hash.html">h5.version.show_git_hash</a></li>
 <li class="toctree-l5"><a class="reference internal" href="h5.version.show_version.html">h5.version.show_version</a></li>
 <li class="toctree-l5"><a class="reference internal" href="h5.version.version.html">h5.version.version</a></li>
 <li class="toctree-l5"><a class="reference internal" href="h5.version.h5_hash.html">h5.version.h5_hash</a></li>
@@ -149,10 +149,10 @@
       <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
           <li class="breadcrumb-item"><a href="../documentation.html">Documentation</a></li>
           <li class="breadcrumb-item"><a href="h5.html">h5</a></li>
-          <li class="breadcrumb-item"><a href="h5.version.html">h5.version</a></li>
-      <li class="breadcrumb-item active">h5.version.show_git_hash</li>
+          <li class="breadcrumb-item"><a href="h5.archive.html">h5.archive</a></li>
+      <li class="breadcrumb-item active">h5.archive.DictNonStrKey</li>
       <li class="wy-breadcrumbs-aside">
-            <a href="../_sources/_autosummary/h5.version.show_git_hash.rst.txt" rel="nofollow"> View page source</a>
+            <a href="../_sources/_autosummary/h5.archive.DictNonStrKey.rst.txt" rel="nofollow"> View page source</a>
       </li>
   </ul>
   <hr/>
@@ -160,16 +160,31 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="h5-version-show-git-hash">
-<h1>h5.version.show_git_hash<a class="headerlink" href="#h5-version-show-git-hash" title="Link to this heading"></a></h1>
-<dl class="py function">
-<dt class="sig sig-object py" id="h5.version.show_git_hash">
-<span class="sig-prename descclassname"><span class="pre">h5.version.</span></span><span class="sig-name descname"><span class="pre">show_git_hash</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/h5/version.html#show_git_hash"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#h5.version.show_git_hash" title="Link to this definition"></a></dt>
-<dd><p>Print the git hash of the h5 build to standard output.</p>
+  <section id="h5-archive-dictnonstrkey">
+<h1>h5.archive.DictNonStrKey<a class="headerlink" href="#h5-archive-dictnonstrkey" title="Link to this heading"></a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="h5.archive.DictNonStrKey">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">h5.archive.</span></span><span class="sig-name descname"><span class="pre">DictNonStrKey</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ob</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/h5/archive.html#DictNonStrKey"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#h5.archive.DictNonStrKey" title="Link to this definition"></a></dt>
+<dd><p>Archive wrapper for a Python <code class="docutils literal notranslate"><span class="pre">dict</span></code> with non-string keys.</p>
+<p>Stored in the same layout as a C++ <code class="docutils literal notranslate"><span class="pre">std::map</span></code> with non-string keys (format tag
+<code class="docutils literal notranslate"><span class="pre">&quot;DictNonStrKey&quot;</span></code>): each <code class="docutils literal notranslate"><span class="pre">(key,</span> <span class="pre">value)</span></code> pair is written into a numbered subgroup
+holding a <code class="docutils literal notranslate"><span class="pre">key</span></code> and a <code class="docutils literal notranslate"><span class="pre">val</span></code>. The key is stored raw – a scalar key as a scalar
+dataset, a tuple key as a <code class="docutils literal notranslate"><span class="pre">Tuple</span></code> subgroup – so a dict with homogeneous keys is
+byte-compatible with the corresponding C++ <code class="docutils literal notranslate"><span class="pre">std::map&lt;Key,</span> <span class="pre">T&gt;</span></code> (an int-keyed dict
+with <code class="docutils literal notranslate"><span class="pre">std::map&lt;long,</span> <span class="pre">T&gt;</span></code>, a pair-keyed dict with <code class="docutils literal notranslate"><span class="pre">std::map&lt;std::pair&lt;...&gt;,</span> <span class="pre">T&gt;</span></code>,
+etc.) and round-trips back to the identical mapping.</p>
+<p>Keys may be scalars or tuples of scalars and may be mixed within one dict; a mixed
+dict round-trips in Python but has no single C++ <code class="docutils literal notranslate"><span class="pre">std::map</span></code> counterpart. String-keyed
+dicts use <a class="reference internal" href="h5.archive.Dict.html#h5.archive.Dict" title="h5.archive.Dict"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></a> (tag <code class="docutils literal notranslate"><span class="pre">&quot;Dict&quot;</span></code>) instead; the write-side routing in
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">HDFArchiveGroup.__setitem__()</span></code> selects the wrapper by key type.</p>
+<p>Instances are created internally by <a class="reference internal" href="h5.archive.HDFArchiveGroup.html#h5.archive.HDFArchiveGroup" title="h5.archive.HDFArchiveGroup"><code class="xref py py-class docutils literal notranslate"><span class="pre">HDFArchiveGroup</span></code></a> and the class is
+registered with <a class="reference internal" href="h5.formats.html#module-h5.formats" title="h5.formats"><code class="xref py py-mod docutils literal notranslate"><span class="pre">h5.formats</span></code></a>.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
-<dt>None</dt><dd></dd>
+<dt><strong>ob</strong><span class="classifier">dict</span></dt><dd><p>The dict to wrap. Every key must be a scalar (<code class="docutils literal notranslate"><span class="pre">str</span></code>, <code class="docutils literal notranslate"><span class="pre">bool</span></code>, <code class="docutils literal notranslate"><span class="pre">int</span></code>,
+<code class="docutils literal notranslate"><span class="pre">float</span></code> or <code class="docutils literal notranslate"><span class="pre">complex</span></code>) or a tuple of such scalars.</p>
+</dd>
 </dl>
 </dd>
 </dl>
@@ -181,8 +196,8 @@
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="h5.version.html" class="btn btn-neutral float-left" title="h5.version" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="h5.version.show_version.html" class="btn btn-neutral float-right" title="h5.version.show_version" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="h5.archive.Dict.html" class="btn btn-neutral float-left" title="h5.archive.Dict" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="h5.archive.HDFArchive.html" class="btn btn-neutral float-right" title="h5.archive.HDFArchive" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
