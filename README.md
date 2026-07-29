@@ -1,4 +1,5 @@
 [![build](https://github.com/TRIQS/h5/workflows/build/badge.svg?branch=unstable)](https://github.com/TRIQS/h5/actions?query=workflow%3Abuild)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.21691721.svg)](https://doi.org/10.5281/zenodo.21691721)
 
 # h5
 
