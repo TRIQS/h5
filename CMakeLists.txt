@@ -19,7 +19,7 @@ cmake_policy(VERSION ${CMAKE_VERSION})
 
 # ############
 # Define Project
-project(h5 VERSION 2.0.0 LANGUAGES CXX)
+project(h5 VERSION 2.0.1 LANGUAGES CXX)
 get_directory_property(IS_SUBPROJECT PARENT_DIRECTORY)
 
 # Get the git hash & print status
