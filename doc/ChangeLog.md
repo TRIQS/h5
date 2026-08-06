@@ -1,5 +1,37 @@
 # Changelog
 
+## Version 2.0.1
+
+h5 version 2.0.1 is a patch-release that introduces fixes to the Python `HDFArchive`
+interface, a deterministic ordering of HDF5 group-member listings, and cmake/CI
+build-system improvements.
+
+We thank all contributors: Nils Wentzell, Thomas Hahn
+
+Find below an itemized list of changes in this release.
+
+### General
+* Use `H5_ITER_INC` instead of `H5_ITER_NATIVE` so that `get_all_subgroup_names`, `get_all_dataset_names` and `get_all_subgroup_dataset_names` return names in a deterministic, ascending-name order
+
+### fix
+* Persist key deletions to the HDF5 file so that `del archive[key]` survives reopening the file, instead of only dropping the key from the in-memory cache (TRIQS/h5#14)
+* Fix missing cached keys when writing scalars or numpy arrays to an `HDFArchive`/`HDFArchiveGroup`, so freshly written datasets are visible in the same session
+* Fix assigning an `HDFArchiveGroup` to a new key, e.g. the documented archive-copy pattern `HDFArchive(f, 'w', init = HDFArchive(g, 'r').items())`
+* Guard the cached-key append in `_write` against duplicate keys
+
+### doc
+* Fix the `HDFArchive` copy examples in the class docstring so they execute as written (TRIQS/h5#14)
+* Update the doc strings in the python bindings
+* Add a Zenodo DOI badge to the README, served via shields.io
+
+### cmake
+* Compute the Python module install directory without `Python_SITEARCH`, fixing the install location on Debian (TRIQS/triqs#1022)
+* Fetch c2py from its 0.9.x release branch
+
+### ghactions
+* Deploy documentation to `docs/2.0.x` on the 2.0.x release branch
+
+
 ## Version 2.0.0
 
 This is version 2.0.0 of h5, a high-level C++ interface to the hdf5 library.
@@ -22,7 +54,6 @@ Find below an itemized list of changes in this release.
 * Use h5::object instead of h5::group in format functions
 * Add overloads for write_hdf5_format and assert_hdf5_format without deducing storage type
 * Generalize std::map interface to allow for aribtrary comparison types
-* Support std::map / Python dict with non-string keys (scalars or tuples of scalars) via a distinct "DictNonStrKey" format tag, interoperable between C++ and Python
 * Bug fix in h5::array_interface::get_parent_shape_and_h5_strides
 * Read complex datasets written by Julia HDF5.jl and h5py that use the standard {r:double, i:double} HDF5 compound type (#13)
 * Breaking: rename array_view::is_complex to has_cplx_trailing_dim to reflect the trailing-2-dim buffer-layout convention
