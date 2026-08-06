@@ -164,7 +164,7 @@ if(PythonSupport)
     FetchContent_Declare(
       c2py
       GIT_REPOSITORY  https://github.com/flatironinstitute/c2py
-      GIT_TAG         unstable
+      GIT_TAG         0.9.x
       EXCLUDE_FROM_ALL # exclude from all so that c2py is NOT installed.
     )
     FetchContent_MakeAvailable(c2py)
