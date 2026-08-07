@@ -24,8 +24,8 @@ h5.archive.HDFArchive
          HDFArchive.values
          HDFArchive.write_attr
       
-         HDFArchive.__getitem__
          HDFArchive.__len__
+         HDFArchive.__getitem__
   
 
   
