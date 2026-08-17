@@ -159,9 +159,16 @@ namespace h5 {
   }
 
   void h5_read_attribute_from_key(group g, std::string const &key, std::string const &name, std::string &s) {
-    // clear the string and return if the attribute is not present
     s = "";
-    if (H5Aexists_by_name(g, key.c_str(), name.c_str(), H5P_DEFAULT) == 0) return;
+
+    // H5Aexists_by_name fails instead of returning false if the key cannot be resolved, e.g. if it is absent
+    htri_t exists{};
+    H5E_BEGIN_TRY { exists = H5Aexists_by_name(g, key.c_str(), name.c_str(), H5P_DEFAULT); }
+    H5E_END_TRY;
+    if (exists < 0) throw std::runtime_error("Error in h5_read_attribute_from_key: " + key + " cannot be resolved in the group " + g.name());
+
+    // return an empty string if the attribute is not present
+    if (exists == 0) return;
 
     // open the attribute and get dataspace and datatype information
     attribute attr   = H5Aopen_by_name(g, key.c_str(), name.c_str(), H5P_DEFAULT, H5P_DEFAULT);

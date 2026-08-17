@@ -138,7 +138,8 @@ namespace h5 {
   /**
    * @brief Read a string from an HDF5 attribute into a `std::string`.
    *
-   * @details If the attribute does not exist, an empty string is returned.
+   * @details If the attribute does not exist, an empty string is returned. Throws an exception if the given key cannot
+   * be resolved in the given group.
    *
    * @param g h5::group containing the HDF5 object to which the attribute is attached.
    * @param key Name of the object.
