@@ -50,7 +50,14 @@ namespace h5 {
     return res;
   }
 
-  bool group::has_key(std::string const &key) const { return H5Lexists(id, key.c_str(), H5P_DEFAULT); }
+  bool group::has_key(std::string const &key) const {
+    // H5Lexists fails instead of returning false if the path traversal breaks down, e.g. for a nested
+    // key whose intermediate groups are missing, so silence the error stack and treat a failure as absent
+    htri_t res{};
+    H5E_BEGIN_TRY { res = H5Lexists(id, key.c_str(), H5P_DEFAULT); }
+    H5E_END_TRY;
+    return res > 0;
+  }
 
   bool group::has_subgroup(std::string const &key) const {
     // check if a link with the given name exists

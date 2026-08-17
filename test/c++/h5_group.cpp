@@ -74,6 +74,35 @@ TEST(H5, GroupOperations) {
   for (const auto &n : names) { EXPECT_TRUE(n == gname || n == dsname); }
 };
 
+TEST(H5, GroupHasKeyNestedPath) {
+  h5::file file("group_nested.h5", 'w');
+  h5::group root(file);
+  root.create_group("a").create_group("b");
+
+  EXPECT_TRUE(root.has_key("a/b"));
+  EXPECT_TRUE(root.has_key("/a/b"));
+  EXPECT_TRUE(root.has_subgroup("a/b"));
+
+  // intermediate group missing: H5Lexists fails rather than reporting absence
+  EXPECT_FALSE(root.has_key("nested/group"));
+  EXPECT_FALSE(root.has_key("nested/deeply/nested/group"));
+  EXPECT_FALSE(root.has_key("a/nope/c"));
+  EXPECT_FALSE(root.has_subgroup("nested/group"));
+  EXPECT_FALSE(root.has_dataset("nested/group"));
+  EXPECT_NO_THROW(root.unlink("nested/group"));
+
+  // final component missing below an existing group
+  EXPECT_FALSE(root.has_key("a/nope"));
+
+  // dangling softlink: the link exists, the path below it does not
+  root.create_softlink("/a", "lnk");
+  EXPECT_TRUE(root.has_key("lnk"));
+  EXPECT_TRUE(root.has_key("lnk/b"));
+  root.unlink("a");
+  EXPECT_TRUE(root.has_key("lnk"));
+  EXPECT_FALSE(root.has_key("lnk/b"));
+};
+
 TEST(H5, GroupNameOrdering) {
   // names should be returned in increasing-name order, independent of insertion order
   h5::file file("group_order.h5", 'w');
@@ -95,6 +124,7 @@ TEST(H5, GroupWriteRead) {
     h5::group root(file);
     h5::write(root, "vec", std::vector<int>{1, 2, 3});
     h5::write_hdf5_format(root.open_dataset("vec"), std::vector<int>{});
+    h5::write(root, "untagged", 0);
     root.write_attribute("attr_key", "attr_val");
   }
 
@@ -104,5 +134,10 @@ TEST(H5, GroupWriteRead) {
     EXPECT_EQ((std::vector<int>{1, 2, 3}), h5::read<std::vector<int>>(root, "vec"));
     EXPECT_EQ("attr_val", root.read_attribute("attr_key"));
     EXPECT_EQ(h5::get_hdf5_format(std::vector<int>{}), root.read_hdf5_format_from_key("vec"));
+
+    // an untagged dataset has no format, while an unresolvable key is an error
+    EXPECT_EQ("", root.read_hdf5_format_from_key("untagged"));
+    EXPECT_THROW(std::ignore = root.read_hdf5_format_from_key("nonexistent"), std::runtime_error);
+    EXPECT_THROW(std::ignore = root.read_hdf5_format_from_key("nested/group"), std::runtime_error);
   }
 }
