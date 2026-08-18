@@ -165,19 +165,19 @@
   <h1>Source code for h5.archive_basic_layer</h1><div class="highlight"><pre>
 <span></span><span class="c1"># Copyright (c) 2019-2020 Simons Foundation</span>
 <span class="c1">#</span>
-<span class="c1"># Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
+<span class="c1"># Licensed under the Apache License, Version 2.0 (the "License");</span>
 <span class="c1"># you may not use this file except in compliance with the License.</span>
 <span class="c1"># You may obtain a copy of the License at</span>
 <span class="c1">#</span>
 <span class="c1">#     http://www.apache.org/licenses/LICENSE-2.0.txt</span>
 <span class="c1">#</span>
 <span class="c1"># Unless required by applicable law or agreed to in writing, software</span>
-<span class="c1"># distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span>
+<span class="c1"># distributed under the License is distributed on an "AS IS" BASIS,</span>
 <span class="c1"># WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
 <span class="c1"># See the License for the specific language governing permissions and</span>
 <span class="c1"># limitations under the License.</span>
 
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 <span class="sd">Low-level bridge between :mod:`h5.archive` and the compiled ``_h5py`` module.</span>
 
 <span class="sd">This module translates the high-level, dict-like archive operations into calls</span>
@@ -185,7 +185,7 @@
 <span class="sd">groups, reading and writing datasets and attributes, and creating groups and</span>
 <span class="sd">soft links. It is an implementation detail -- users interact with</span>
 <span class="sd">:class:`~h5.archive.HDFArchive` rather than with this layer directly.</span>
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="o">,</span><span class="nn">string</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.archive</span><span class="w"> </span><span class="kn">import</span> <span class="o">*</span>
@@ -194,7 +194,7 @@
 <div class="viewcode-block" id="HDFArchiveGroupBasicLayer">
 <a class="viewcode-back" href="../../_autosummary/h5.archive_basic_layer.HDFArchiveGroupBasicLayer.html#h5.archive.HDFArchiveGroupBasicLayer">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">HDFArchiveGroupBasicLayer</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Low-level group operations backing :class:`~h5.archive.HDFArchiveGroup`.</span>
 
 <span class="sd">    Wraps a single HDF5 group handle from the compiled ``h5._h5py`` extension and</span>
@@ -210,8 +210,8 @@
 <span class="sd">    parent : HDFArchive or HDFArchiveGroup</span>
 <span class="sd">        Object whose ``_group`` handle and ``options`` are used as the base.</span>
 <span class="sd">    subpath : str</span>
-<span class="sd">        Name of the subgroup to open; if empty, ``parent``&#39;s group is reused.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">        Name of the subgroup to open; if empty, ``parent``'s group is reused.</span>
+<span class="sd">    """</span>
     <span class="n">_class_version</span> <span class="o">=</span> <span class="mi">1</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="n">subpath</span> <span class="p">):</span>
@@ -225,78 +225,78 @@
             <span class="k">try</span> <span class="p">:</span>
                 <span class="n">fich</span> <span class="o">=</span> <span class="n">h5</span><span class="o">.</span><span class="n">File</span><span class="p">()</span>
             <span class="k">except</span> <span class="p">:</span>
-                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Cannot open the HDF file in memory&quot;</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">"Cannot open the HDF file in memory"</span><span class="p">)</span>
                 <span class="k">raise</span>
         <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">descriptor</span><span class="p">,</span> <span class="nb">bytes</span><span class="p">):</span>
             <span class="k">try</span> <span class="p">:</span>
                 <span class="n">fich</span> <span class="o">=</span> <span class="n">h5</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="n">descriptor</span><span class="p">)</span>
             <span class="k">except</span> <span class="p">:</span>
-                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Cannot open the HDF file in memory from the provided bytes&quot;</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">"Cannot open the HDF file in memory from the provided bytes"</span><span class="p">)</span>
                 <span class="k">raise</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">assert</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">descriptor</span><span class="p">,</span> <span class="nb">str</span><span class="p">))</span>
             <span class="k">try</span> <span class="p">:</span>
                 <span class="n">fich</span> <span class="o">=</span> <span class="n">h5</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="n">descriptor</span><span class="p">,</span> <span class="n">open_flag</span><span class="p">)</span>
             <span class="k">except</span> <span class="p">:</span>
-                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Cannot open the HDF file </span><span class="si">%s</span><span class="s2">&quot;</span><span class="o">%</span><span class="n">descriptor</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">"Cannot open the HDF file </span><span class="si">%s</span><span class="s2">"</span><span class="o">%</span><span class="n">descriptor</span><span class="p">)</span>
                 <span class="k">raise</span>
 
         <span class="c1"># checking the version</span>
-        <span class="k">if</span> <span class="n">open_flag</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;r&#39;</span><span class="p">,</span><span class="s1">&#39;r+&#39;</span><span class="p">,</span><span class="s1">&#39;a&#39;</span><span class="p">]</span> <span class="p">:</span>
+        <span class="k">if</span> <span class="n">open_flag</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">'r'</span><span class="p">,</span><span class="s1">'r+'</span><span class="p">,</span><span class="s1">'a'</span><span class="p">]</span> <span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_version</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_class_version</span>
         <span class="k">else</span> <span class="p">:</span>
             <span class="k">try</span> <span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">_version</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">fich</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s1">&#39;HDFArchive_Version&#39;</span><span class="p">])</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_version</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">fich</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s1">'HDFArchive_Version'</span><span class="p">])</span>
             <span class="k">except</span> <span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_version</span> <span class="o">=</span> <span class="mi">1</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_version</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">_class_version</span> <span class="p">:</span>
-                <span class="k">raise</span> <span class="ne">IOError</span><span class="p">(</span><span class="s2">&quot;File </span><span class="si">%s</span><span class="s2"> is too recent for this version of HDFArchive module&quot;</span><span class="o">%</span><span class="n">descriptor</span><span class="p">)</span>
+                <span class="k">raise</span> <span class="ne">IOError</span><span class="p">(</span><span class="s2">"File </span><span class="si">%s</span><span class="s2"> is too recent for this version of HDFArchive module"</span><span class="o">%</span><span class="n">descriptor</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_group</span> <span class="o">=</span> <span class="n">h5</span><span class="o">.</span><span class="n">Group</span><span class="p">(</span><span class="n">fich</span><span class="p">)</span>
 
 <div class="viewcode-block" id="HDFArchiveGroupBasicLayer.is_group">
 <a class="viewcode-back" href="../../_autosummary/h5.archive_basic_layer.HDFArchiveGroupBasicLayer.is_group.html#h5.archive.HDFArchiveGroupBasicLayer.is_group">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">is_group</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">p</span><span class="p">)</span> <span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Return whether ``p`` names a subgroup of this group.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        p : str</span>
-<span class="sd">            Entry name (must be non-empty and not start with ``&#39;/&#39;``).</span>
+<span class="sd">            Entry name (must be non-empty and not start with ``'/'``).</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        bool</span>
 <span class="sd">            True if ``p`` exists and is an HDF5 subgroup.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">p</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">0</span> <span class="ow">and</span> <span class="n">p</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">!=</span><span class="s1">&#39;/&#39;</span>
+<span class="sd">        """</span>
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">p</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">0</span> <span class="ow">and</span> <span class="n">p</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">!=</span><span class="s1">'/'</span>
         <span class="k">return</span> <span class="n">p</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">cached_keys</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_group</span><span class="o">.</span><span class="n">has_subgroup</span><span class="p">(</span><span class="n">p</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="HDFArchiveGroupBasicLayer.is_data">
 <a class="viewcode-back" href="../../_autosummary/h5.archive_basic_layer.HDFArchiveGroupBasicLayer.is_data.html#h5.archive.HDFArchiveGroupBasicLayer.is_data">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">is_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">p</span><span class="p">)</span> <span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Return whether ``p`` names a dataset (leaf) of this group.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        p : str</span>
-<span class="sd">            Entry name (must be non-empty and not start with ``&#39;/&#39;``).</span>
+<span class="sd">            Entry name (must be non-empty and not start with ``'/'``).</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        bool</span>
 <span class="sd">            True if ``p`` exists and is an HDF5 dataset.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">p</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">0</span> <span class="ow">and</span> <span class="n">p</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">!=</span><span class="s1">&#39;/&#39;</span>
+<span class="sd">        """</span>
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">p</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">0</span> <span class="ow">and</span> <span class="n">p</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">!=</span><span class="s1">'/'</span>
         <span class="k">return</span> <span class="n">p</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">cached_keys</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_group</span><span class="o">.</span><span class="n">has_dataset</span><span class="p">(</span><span class="n">p</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="HDFArchiveGroupBasicLayer.write_attr">
 <a class="viewcode-back" href="../../_autosummary/h5.archive_basic_layer.HDFArchiveGroupBasicLayer.write_attr.html#h5.archive.HDFArchiveGroupBasicLayer.write_attr">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">write_attr</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">val</span><span class="p">)</span> <span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Write an HDF5 attribute on this group.</span>
 
 <span class="sd">        Parameters</span>
@@ -305,7 +305,7 @@
 <span class="sd">            Attribute name.</span>
 <span class="sd">        val : object</span>
 <span class="sd">            Attribute value.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_group</span><span class="o">.</span><span class="n">write_attribute</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">val</span><span class="p">)</span></div>
 
 
@@ -323,14 +323,14 @@
 <div class="viewcode-block" id="HDFArchiveGroupBasicLayer.create_group">
 <a class="viewcode-back" href="../../_autosummary/h5.archive_basic_layer.HDFArchiveGroupBasicLayer.create_group.html#h5.archive.HDFArchiveGroupBasicLayer.create_group">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">create_group</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">key</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Create a new empty subgroup.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        key : str</span>
 <span class="sd">            Name of the subgroup to create.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_group</span><span class="o">.</span><span class="n">create_group</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">cached_keys</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">key</span><span class="p">)</span></div>
 
@@ -338,7 +338,7 @@
 <div class="viewcode-block" id="HDFArchiveGroupBasicLayer.create_softlink">
 <a class="viewcode-back" href="../../_autosummary/h5.archive_basic_layer.HDFArchiveGroupBasicLayer.create_softlink.html#h5.archive.HDFArchiveGroupBasicLayer.create_softlink">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">create_softlink</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">target_key</span><span class="p">,</span><span class="n">key</span><span class="p">,</span><span class="n">delete_if_exists</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Create an HDF5 soft link ``key`` pointing at ``target_key``.</span>
 
 <span class="sd">        Parameters</span>
@@ -349,7 +349,7 @@
 <span class="sd">            Name of the soft link to create.</span>
 <span class="sd">        delete_if_exists : bool, optional</span>
 <span class="sd">            If True (default), replace an existing entry named ``key``.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_group</span><span class="o">.</span><span class="n">create_softlink</span><span class="p">(</span><span class="n">target_key</span><span class="p">,</span><span class="n">key</span><span class="p">,</span><span class="n">delete_if_exists</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">cached_keys</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">key</span><span class="p">)</span></div>
 
@@ -357,24 +357,24 @@
 <div class="viewcode-block" id="HDFArchiveGroupBasicLayer.keys">
 <a class="viewcode-back" href="../../_autosummary/h5.archive_basic_layer.HDFArchiveGroupBasicLayer.keys.html#h5.archive.HDFArchiveGroupBasicLayer.keys">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">keys</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Return the names of the entries in this group.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        list of str</span>
-<span class="sd">            The (cached) keys of the group&#39;s subgroups and datasets.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">            The (cached) keys of the group's subgroups and datasets.</span>
+<span class="sd">        """</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">cached_keys</span></div>
 
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_clean_key</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">key</span><span class="p">,</span> <span class="n">report_error</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="p">:</span>
         <span class="k">if</span> <span class="n">report_error</span> <span class="ow">and</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">cached_keys</span> <span class="p">:</span>
-             <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="s2">&quot;Key </span><span class="si">%s</span><span class="s2"> is not in archive !!&quot;</span><span class="o">%</span><span class="n">key</span><span class="p">)</span>
+             <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="s2">"Key </span><span class="si">%s</span><span class="s2"> is not in archive !!"</span><span class="o">%</span><span class="n">key</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">cached_keys</span> <span class="p">:</span>
           <span class="bp">self</span><span class="o">.</span><span class="n">_group</span><span class="o">.</span><span class="n">unlink</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
           <span class="bp">self</span><span class="o">.</span><span class="n">cached_keys</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span> <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="s2">&quot;Key </span><span class="si">%s</span><span class="s2"> is not in archive !!&quot;</span><span class="o">%</span><span class="n">key</span><span class="p">)</span></div>
+        <span class="k">else</span><span class="p">:</span> <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="s2">"Key </span><span class="si">%s</span><span class="s2"> is not in archive !!"</span><span class="o">%</span><span class="n">key</span><span class="p">)</span></div>
 
 
 </pre></div>

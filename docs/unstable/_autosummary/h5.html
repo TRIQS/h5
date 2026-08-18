@@ -180,16 +180,16 @@ as numpy arrays are supported out of the box:</p>
 <span class="kn">from</span><span class="w"> </span><span class="nn">h5</span><span class="w"> </span><span class="kn">import</span> <span class="n">HDFArchive</span>
 
 <span class="c1"># write some data to an archive</span>
-<span class="k">with</span> <span class="n">HDFArchive</span><span class="p">(</span><span class="s2">&quot;example.h5&quot;</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">ar</span><span class="p">:</span>
-    <span class="n">ar</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span>
-    <span class="n">ar</span><span class="p">[</span><span class="s1">&#39;vec&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
-    <span class="n">ar</span><span class="p">[</span><span class="s1">&#39;params&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;beta&#39;</span><span class="p">:</span> <span class="mf">10.0</span><span class="p">,</span> <span class="s1">&#39;n&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">}</span>
+<span class="k">with</span> <span class="n">HDFArchive</span><span class="p">(</span><span class="s2">"example.h5"</span><span class="p">,</span> <span class="s1">'w'</span><span class="p">)</span> <span class="k">as</span> <span class="n">ar</span><span class="p">:</span>
+    <span class="n">ar</span><span class="p">[</span><span class="s1">'x'</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span>
+    <span class="n">ar</span><span class="p">[</span><span class="s1">'vec'</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
+    <span class="n">ar</span><span class="p">[</span><span class="s1">'params'</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s1">'beta'</span><span class="p">:</span> <span class="mf">10.0</span><span class="p">,</span> <span class="s1">'n'</span><span class="p">:</span> <span class="mi">5</span><span class="p">}</span>
 
 <span class="c1"># read it back</span>
-<span class="k">with</span> <span class="n">HDFArchive</span><span class="p">(</span><span class="s2">&quot;example.h5&quot;</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">ar</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">ar</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>      <span class="c1"># [&#39;params&#39;, &#39;vec&#39;, &#39;x&#39;]</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">ar</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">])</span>        <span class="c1"># 1.0</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">ar</span><span class="p">[</span><span class="s1">&#39;params&#39;</span><span class="p">])</span>   <span class="c1"># {&#39;beta&#39;: 10.0, &#39;n&#39;: 5}</span>
+<span class="k">with</span> <span class="n">HDFArchive</span><span class="p">(</span><span class="s2">"example.h5"</span><span class="p">,</span> <span class="s1">'r'</span><span class="p">)</span> <span class="k">as</span> <span class="n">ar</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">ar</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>      <span class="c1"># ['params', 'vec', 'x']</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">ar</span><span class="p">[</span><span class="s1">'x'</span><span class="p">])</span>        <span class="c1"># 1.0</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">ar</span><span class="p">[</span><span class="s1">'params'</span><span class="p">])</span>   <span class="c1"># {'beta': 10.0, 'n': 5}</span>
 </pre></div>
 </div>
 </section>

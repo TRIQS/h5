@@ -165,26 +165,26 @@
   <h1>Source code for h5.formats</h1><div class="highlight"><pre>
 <span></span><span class="c1"># Copyright (c) 2019-2020 Simons Foundation</span>
 <span class="c1">#</span>
-<span class="c1"># Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
+<span class="c1"># Licensed under the Apache License, Version 2.0 (the "License");</span>
 <span class="c1"># you may not use this file except in compliance with the License.</span>
 <span class="c1"># You may obtain a copy of the License at</span>
 <span class="c1">#</span>
 <span class="c1">#     http://www.apache.org/licenses/LICENSE-2.0.txt</span>
 <span class="c1">#</span>
 <span class="c1"># Unless required by applicable law or agreed to in writing, software</span>
-<span class="c1"># distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span>
+<span class="c1"># distributed under the License is distributed on an "AS IS" BASIS,</span>
 <span class="c1"># WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
 <span class="c1"># See the License for the specific language governing permissions and</span>
 <span class="c1"># limitations under the License.</span>
 
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 <span class="sd">Registration mechanism for archive-compatible Python classes.</span>
 
 <span class="sd">To be written to and reconstructed from an HDF5 archive, a Python class is</span>
 <span class="sd">associated with an HDF5 *format* string. This module maintains the registry that</span>
 <span class="sd">maps format strings to the information needed to rebuild the corresponding</span>
 <span class="sd">objects, together with the functions to populate and query it.</span>
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">re</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">copy</span><span class="w"> </span><span class="kn">import</span> <span class="n">deepcopy</span>
@@ -192,7 +192,7 @@
 <div class="viewcode-block" id="FormatInfo">
 <a class="viewcode-back" href="../../_autosummary/h5.formats.FormatInfo.html#h5.formats.FormatInfo">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">FormatInfo</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Metadata describing how to reconstruct a Python class from an HDF5 group.</span>
 
 <span class="sd">    Created and stored in a module-level registry by :func:`register_class`,</span>
@@ -228,17 +228,17 @@
 <span class="sd">    backward_compat : dict</span>
 <span class="sd">        Backward-compatibility mapping ``field_name -&gt; hdf5_format``; empty for an</span>
 <span class="sd">        exact match.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">classname</span><span class="p">,</span> <span class="n">modulename</span><span class="p">,</span> <span class="n">doc</span><span class="p">,</span> <span class="n">hdf5_format</span><span class="p">,</span> <span class="n">read_fun</span><span class="p">)</span> <span class="p">:</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">classname</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">modulename</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">doc</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">read_fun</span> <span class="o">=</span> <span class="n">classname</span><span class="p">,</span> <span class="n">modulename</span><span class="p">,</span> <span class="n">doc</span><span class="p">,</span> <span class="n">read_fun</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">format_name</span> <span class="o">=</span> <span class="n">hdf5_format</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">backward_compat</span> <span class="o">=</span> <span class="p">{}</span> <span class="c1"># key -&gt;  hdf5_format</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="p">:</span>
-        <span class="k">return</span> <span class="s2">&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="s2">"""</span>
 <span class="s2">        Name of the class : </span><span class="si">%s</span>
 <span class="s2">        Name of the module : </span><span class="si">%s</span>
-<span class="s2">        Documentation : </span><span class="si">%s</span><span class="s2">&quot;&quot;&quot;</span><span class="o">%</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">classname</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">modulename</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">doc</span><span class="p">)</span></div>
+<span class="s2">        Documentation : </span><span class="si">%s</span><span class="s2">"""</span><span class="o">%</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">classname</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">modulename</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">doc</span><span class="p">)</span></div>
 
 
 <span class="c1"># Dictionary containing the FormatInfo for all hdf5_format strings</span>
@@ -249,7 +249,7 @@
 <div class="viewcode-block" id="register_class">
 <a class="viewcode-back" href="../../_autosummary/h5.formats.register_class.html#h5.formats.register_class">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">register_class</span> <span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">doc</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">read_fun</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">hdf5_format</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Register a Python class so it can be written to and read back from an archive.</span>
 
 <span class="sd">    The class is stored in the module-level registry keyed by its HDF5 format</span>
@@ -278,10 +278,10 @@
 <span class="sd">    --------</span>
 <span class="sd">    &gt;&gt;&gt; from h5.formats import register_class</span>
 <span class="sd">    &gt;&gt;&gt; register_class(GfImFreq, doc=doc_if_different_from_cls._hdf5_format_doc_)</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">hdf5_format</span> <span class="o">=</span> <span class="n">hdf5_format</span> <span class="ow">or</span> <span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">_hdf5_format_</span> <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span><span class="s2">&quot;_hdf5_format_&quot;</span><span class="p">)</span> <span class="k">else</span> <span class="bp">cls</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span>
-    <span class="k">assert</span> <span class="n">hdf5_format</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">_formats_dict</span><span class="p">,</span> <span class="s2">&quot;class </span><span class="si">%s</span><span class="s2"> is already registered&quot;</span><span class="o">%</span><span class="n">hdf5_format</span>
-    <span class="n">doc</span> <span class="o">=</span> <span class="n">doc</span> <span class="k">if</span> <span class="n">doc</span> <span class="k">else</span> <span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">_hdf5_format_doc_</span> <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span><span class="s2">&quot;_hdf5_format_doc_&quot;</span><span class="p">)</span> <span class="k">else</span> <span class="p">{})</span>
+<span class="sd">    """</span>
+    <span class="n">hdf5_format</span> <span class="o">=</span> <span class="n">hdf5_format</span> <span class="ow">or</span> <span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">_hdf5_format_</span> <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span><span class="s2">"_hdf5_format_"</span><span class="p">)</span> <span class="k">else</span> <span class="bp">cls</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">hdf5_format</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">_formats_dict</span><span class="p">,</span> <span class="s2">"class </span><span class="si">%s</span><span class="s2"> is already registered"</span><span class="o">%</span><span class="n">hdf5_format</span>
+    <span class="n">doc</span> <span class="o">=</span> <span class="n">doc</span> <span class="k">if</span> <span class="n">doc</span> <span class="k">else</span> <span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">_hdf5_format_doc_</span> <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span><span class="s2">"_hdf5_format_doc_"</span><span class="p">)</span> <span class="k">else</span> <span class="p">{})</span>
     <span class="n">_formats_dict</span><span class="p">[</span><span class="n">hdf5_format</span><span class="p">]</span> <span class="o">=</span> <span class="n">FormatInfo</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="bp">cls</span><span class="o">.</span><span class="vm">__module__</span><span class="p">,</span> <span class="n">doc</span><span class="p">,</span> <span class="n">hdf5_format</span><span class="p">,</span> <span class="n">read_fun</span><span class="p">)</span></div>
 
 
@@ -289,7 +289,7 @@
 <div class="viewcode-block" id="register_backward_compatibility_method">
 <a class="viewcode-back" href="../../_autosummary/h5.formats.register_backward_compatibility_method.html#h5.formats.register_backward_compatibility_method">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">register_backward_compatibility_method</span><span class="p">(</span><span class="n">regex</span><span class="p">,</span> <span class="n">clsname</span><span class="p">,</span> <span class="n">fun</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">s</span><span class="p">:</span> <span class="p">{}):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Register a backward-compatibility method for reading old data.</span>
 
 <span class="sd">    Parameters</span>
@@ -301,7 +301,7 @@
 <span class="sd">    fun : callable</span>
 <span class="sd">        A lambda taking an HDF5 format tag and returning a dict that maps field</span>
 <span class="sd">        names to HDF5 format tags.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">_formats_backward_compat</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">regex</span><span class="p">,</span> <span class="n">clsname</span><span class="p">,</span> <span class="n">fun</span><span class="p">))</span></div>
 
 
@@ -309,13 +309,13 @@
 <div class="viewcode-block" id="get_format_info">
 <a class="viewcode-back" href="../../_autosummary/h5.formats.get_format_info.html#h5.formats.get_format_info">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">get_format_info</span><span class="p">(</span><span class="n">hdf5_format</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Look up the :class:`FormatInfo` registered for ``hdf5_format``.</span>
 
 <span class="sd">    If an exact match is found in the registry it is returned directly.</span>
 <span class="sd">    Otherwise the backward-compatibility patterns registered via</span>
 <span class="sd">    :func:`register_backward_compatibility_method` are tried in order; the</span>
-<span class="sd">    first regex match yields a copy of the target class&#39;s :class:`FormatInfo`</span>
+<span class="sd">    first regex match yields a copy of the target class's :class:`FormatInfo`</span>
 <span class="sd">    with its ``backward_compat`` field filled in.</span>
 
 <span class="sd">    Parameters</span>
@@ -334,7 +334,7 @@
 <span class="sd">    KeyError</span>
 <span class="sd">        If no exact or compatible match is found, or if more than one</span>
 <span class="sd">        compatibility pattern matches.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="c1"># If present exactly, we return it</span>
     <span class="k">if</span> <span class="n">hdf5_format</span> <span class="ow">in</span> <span class="n">_formats_dict</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">_formats_dict</span><span class="p">[</span><span class="n">hdf5_format</span><span class="p">]</span>
@@ -342,9 +342,9 @@
     <span class="c1"># Enter compatibility mode.</span>
     <span class="n">match_lst</span> <span class="o">=</span> <span class="p">[(</span><span class="n">regex</span><span class="p">,</span><span class="n">clsname</span><span class="p">,</span><span class="n">fun</span><span class="p">)</span> <span class="k">for</span> <span class="p">(</span><span class="n">regex</span><span class="p">,</span><span class="n">clsname</span><span class="p">,</span><span class="n">fun</span><span class="p">)</span> <span class="ow">in</span> <span class="n">_formats_backward_compat</span> <span class="k">if</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">regex</span><span class="p">,</span><span class="n">hdf5_format</span><span class="p">)]</span>
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">match_lst</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="s2">&quot;H5 Format </span><span class="si">%s</span><span class="s2"> is not registered and no backward compatibility found&quot;</span><span class="o">%</span><span class="n">hdf5_format</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="s2">"H5 Format </span><span class="si">%s</span><span class="s2"> is not registered and no backward compatibility found"</span><span class="o">%</span><span class="n">hdf5_format</span><span class="p">)</span>
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">match_lst</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="s2">&quot;H5 Format </span><span class="si">%s</span><span class="s2"> : ambiguous backward compatibility layers : </span><span class="si">%s</span><span class="s2">&quot;</span><span class="o">%</span><span class="p">([</span><span class="n">regex</span> <span class="k">for</span> <span class="p">(</span><span class="n">regex</span><span class="p">,</span><span class="n">clsname</span><span class="p">,</span><span class="n">fun</span><span class="p">)</span> <span class="ow">in</span> <span class="n">match_lst</span><span class="p">]))</span>
+        <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="s2">"H5 Format </span><span class="si">%s</span><span class="s2"> : ambiguous backward compatibility layers : </span><span class="si">%s</span><span class="s2">"</span><span class="o">%</span><span class="p">([</span><span class="n">regex</span> <span class="k">for</span> <span class="p">(</span><span class="n">regex</span><span class="p">,</span><span class="n">clsname</span><span class="p">,</span><span class="n">fun</span><span class="p">)</span> <span class="ow">in</span> <span class="n">match_lst</span><span class="p">]))</span>
     <span class="n">regex</span><span class="p">,</span><span class="n">clsname</span><span class="p">,</span><span class="n">fun</span> <span class="o">=</span> <span class="n">match_lst</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
     <span class="c1"># Make a copy of the associated Format object and supplement it with backward compatibility information</span>
