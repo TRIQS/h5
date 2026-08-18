@@ -32,6 +32,7 @@
 #include "./scalar.hpp"
 #include "./serialization.hpp"
 #include "./storable.hpp"
+#include "./transfer.hpp"
 #include "./utils.hpp"
 #include "./stl/string.hpp"
 #include "./stl/array.hpp"
